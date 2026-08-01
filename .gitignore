@@ -1,0 +1,23 @@
+# macOS
+.DS_Store
+
+# Node / Expo / React Native
+node_modules/
+.expo/
+.expo-shared/
+dist/
+web-build/
+npm-debug.*
+yarn-error.*
+*.log
+
+# Env
+.env
+.env.local
+
+# Editor
+.vscode/
+.idea/
+
+# Claude Code project files
+.claude/
