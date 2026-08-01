@@ -37,6 +37,12 @@ jobs:
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
 
+          # The action has its own internal trigger check independent of the job-level
+          # `if:` above. Its default label_trigger is "claude", which does NOT match our
+          # "claude:implement" label, so without this override the action silently no-ops
+          # ("Trigger result: false") even though the job runs.
+          label_trigger: "claude:implement"
+
           # This is an optional setting that allows Claude to read CI results on PRs
           additional_permissions: |
             actions: read
