@@ -185,10 +185,7 @@ describe("copy", () => {
 
   it("throws EINVAL when copying a directory into itself", () => {
     const vfs = createVfs(ROOT_USER);
-    expectVfsError(
-      () => vfs.copy("/shared", "/shared/data", { recursive: true }),
-      "EINVAL",
-    );
+    expectVfsError(() => vfs.copy("/shared", "/shared/data", { recursive: true }), "EINVAL");
   });
 
   it("throws EEXIST before EACCES when the destination name already exists in an unwritable parent", () => {

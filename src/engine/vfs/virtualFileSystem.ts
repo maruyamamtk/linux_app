@@ -82,7 +82,7 @@ export class VirtualFileSystem {
       if (!hasPermission(current, this.user, "execute")) {
         throw new VfsError("EACCES", normalized);
       }
-      const child = current.children[segment];
+      const child: VfsNode | undefined = current.children[segment];
       if (!child) {
         throw new VfsError("ENOENT", normalized);
       }

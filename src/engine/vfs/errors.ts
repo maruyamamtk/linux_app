@@ -1,11 +1,5 @@
 export type VfsErrorCode =
-  | "ENOENT"
-  | "EEXIST"
-  | "ENOTDIR"
-  | "EISDIR"
-  | "EACCES"
-  | "ENOTEMPTY"
-  | "EINVAL";
+  "ENOENT" | "EEXIST" | "ENOTDIR" | "EISDIR" | "EACCES" | "ENOTEMPTY" | "EINVAL";
 
 export class VfsError extends Error {
   readonly code: VfsErrorCode;
