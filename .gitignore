@@ -11,6 +11,10 @@ npm-debug.*
 yarn-error.*
 *.log
 
+# expo prebuild で生成されるネイティブプロジェクト
+ios/
+android/
+
 # Env
 .env
 .env.local
