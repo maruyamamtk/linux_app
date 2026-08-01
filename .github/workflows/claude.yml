@@ -48,4 +48,37 @@ jobs:
           # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
           # or https://code.claude.com/docs/en/cli-reference for available options
           # claude_args: '--allowed-tools Bash(gh pr *)'
+          claude_args: |
+            --append-system-prompt "After you finish implementing the requested change and opening a pull request, perform a brief self-review of your own diff (correctness, security, adherence to project conventions). If you find no blocking issues, run \`gh pr edit <PR_NUMBER> --add-label claude:ready-to-merge\` on the pull request you just created. If you find any blocking issues, do NOT add that label — instead leave a PR comment explaining the concerns and stop."
+
+      - name: Auto-merge if Claude marked the PR ready
+        if: success()
+        env:
+          GH_TOKEN: ${{ secrets.ADMIN_MERGE_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -e
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          if [ -z "$PR_NUMBER" ]; then
+            ISSUE_NUMBER="${{ github.event.issue.number }}"
+            PR_NUMBER=$(gh pr list --repo "$REPO" --state open --json number,headRefName \
+              --jq "[.[] | select(.headRefName | startswith(\"claude/issue-${ISSUE_NUMBER}-\"))][0].number")
+          fi
+          if [ -z "$PR_NUMBER" ] || [ "$PR_NUMBER" = "null" ]; then
+            echo "No related pull request found; skipping auto-merge."
+            exit 0
+          fi
+
+          HEAD_REF=$(gh pr view "$PR_NUMBER" --repo "$REPO" --json headRefName --jq .headRefName)
+          if [[ "$HEAD_REF" != claude/* ]]; then
+            echo "PR #$PR_NUMBER head ref '$HEAD_REF' is not a Claude-managed branch; skipping auto-merge."
+            exit 0
+          fi
+
+          HAS_LABEL=$(gh pr view "$PR_NUMBER" --repo "$REPO" --json labels --jq '([.labels[].name] | index("claude:ready-to-merge")) != null')
+          if [ "$HAS_LABEL" = "true" ]; then
+            gh pr merge "$PR_NUMBER" --repo "$REPO" --squash --delete-branch
+          else
+            echo "PR #$PR_NUMBER is not labeled claude:ready-to-merge; leaving open for human review."
+          fi
 
