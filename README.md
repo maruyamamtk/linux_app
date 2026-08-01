@@ -6,4 +6,27 @@
 - [要件定義書](docs/requirements.md)
 
 ## ステータス
-要件定義フェーズ。実装(Expoプロジェクト雛形・VFS・コマンドインタプリタ)はこれから着手する。
+Expoプロジェクトの雛形を構築済み(#1)。VFS・コマンドインタプリタ等のエンジン実装はこれから着手する。
+
+## セットアップ
+
+```sh
+npm install
+npm start
+```
+
+## ディレクトリ構成
+
+詳細は [src/README.md](src/README.md) を参照。
+
+- `src/engine/`: シェル構文解析・VFS・コマンドインタプリタ・採点エンジン
+- `src/ui/`: 画面(`screens/`)・コンポーネント(`components/`)
+- `src/content/`: 章・演習の定義データ
+- `src/navigation/`: 画面遷移(React Navigation)
+
+## Lint / Format
+
+```sh
+npm run lint
+npm run format
+```
