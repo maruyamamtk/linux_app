@@ -54,8 +54,14 @@ jobs:
           # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
           # or https://code.claude.com/docs/en/cli-reference for available options
           # claude_args: '--allowed-tools Bash(gh pr *)'
+          #
+          # Without an explicit allow-list, Claude cannot run `npm install`/typecheck/
+          # lint/test or `gh pr create` unattended (no one is present to approve those
+          # tool calls in CI), so it can only push a branch and suggest a "create PR"
+          # link, and can never actually verify its own work before self-labeling.
           claude_args: |
-            --append-system-prompt "After you finish implementing the requested change and opening a pull request, perform a brief self-review of your own diff (correctness, security, adherence to project conventions). If you find no blocking issues, run \`gh pr edit <PR_NUMBER> --add-label claude:ready-to-merge\` on the pull request you just created. If you find any blocking issues, do NOT add that label — instead leave a PR comment explaining the concerns and stop."
+            --allowed-tools "Bash(npm install),Bash(npm ci),Bash(npm run typecheck),Bash(npm run lint),Bash(npm test),Bash(npm run format:check),Bash(gh pr create *),Bash(gh pr edit *),Bash(gh pr view *)"
+            --append-system-prompt "After implementing the requested change, you must open the pull request yourself by running \`gh pr create\` (do not just push the branch and leave a 'create PR' link for the user). Then run \`npm install && npm run typecheck && npm run lint && npm test\` yourself and only proceed if all of them pass. If they pass and your self-review of the diff (correctness, security, adherence to project conventions) finds no blocking issues, run \`gh pr edit <PR_NUMBER> --add-label claude:ready-to-merge\` on the pull request you just created. If any check fails or you find blocking issues, do NOT add that label — instead leave a PR comment explaining what failed or what concerns you, and stop."
 
       - name: Auto-merge if Claude marked the PR ready
         if: success()
