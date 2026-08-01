@@ -31,6 +31,17 @@ export function createDirectory(
   };
 }
 
+/** ノード(ディレクトリの場合は配下の全ノードも再帰的に)の所有者/グループを書き換える。 */
+export function applyOwnership(node: VfsNode, owner: string, group: string): void {
+  node.owner = owner;
+  node.group = group;
+  if (node.type === "directory") {
+    for (const child of Object.values(node.children)) {
+      applyOwnership(child, owner, group);
+    }
+  }
+}
+
 export function cloneNode<T extends VfsNode>(node: T): T {
   if (node.type === "file") {
     return { ...node } as T;

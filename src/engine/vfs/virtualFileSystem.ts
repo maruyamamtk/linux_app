@@ -2,7 +2,7 @@ import { VfsError } from "./errors";
 import { hasPermission, formatMode } from "./permissions";
 import { basename, dirname, joinPath, normalizePath, splitPath } from "./path";
 import { diffTree, type VfsDiffEntry } from "./snapshot";
-import { cloneNode, createDirectory, createFile } from "./tree";
+import { applyOwnership, cloneNode, createDirectory, createFile } from "./tree";
 import type { VfsDirectoryNode, VfsNode, VfsNodeType, VfsSnapshot, VfsUser } from "./types";
 
 export interface VfsStat {
@@ -236,12 +236,13 @@ export class VirtualFileSystem {
     const destParentPath = dirname(finalDestPath);
     const { node: destParent } = this.resolve(destParentPath);
     if (destParent.type !== "directory") throw new VfsError("ENOTDIR", destParentPath);
-    if (!hasPermission(destParent, this.user, "write")) {
-      throw new VfsError("EACCES", destParentPath);
-    }
 
     const destName = basename(finalDestPath);
     if (destName in destParent.children) throw new VfsError("EEXIST", finalDestPath);
+
+    if (!hasPermission(destParent, this.user, "write")) {
+      throw new VfsError("EACCES", destParentPath);
+    }
 
     const movedNode = cloneNode(sourceNode);
     movedNode.name = destName;
@@ -269,17 +270,17 @@ export class VirtualFileSystem {
     const destParentPath = dirname(finalDestPath);
     const { node: destParent } = this.resolve(destParentPath);
     if (destParent.type !== "directory") throw new VfsError("ENOTDIR", destParentPath);
-    if (!hasPermission(destParent, this.user, "write")) {
-      throw new VfsError("EACCES", destParentPath);
-    }
 
     const destName = basename(finalDestPath);
     if (destName in destParent.children) throw new VfsError("EEXIST", finalDestPath);
 
+    if (!hasPermission(destParent, this.user, "write")) {
+      throw new VfsError("EACCES", destParentPath);
+    }
+
     const copiedNode = cloneNode(sourceNode);
     copiedNode.name = destName;
-    copiedNode.owner = this.user.name;
-    copiedNode.group = this.user.groups[0] ?? this.user.name;
+    applyOwnership(copiedNode, this.user.name, this.user.groups[0] ?? this.user.name);
     destParent.children[destName] = copiedNode;
   }
 
