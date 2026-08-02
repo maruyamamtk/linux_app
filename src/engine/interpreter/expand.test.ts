@@ -19,10 +19,7 @@ function buildState(context: CommandContext = buildContext()): ShellState {
     context,
     lastExitCode: 0,
     runSubshell: (script) =>
-      runScript(
-        script,
-        buildState({ vfs: context.vfs, cwd: context.cwd, env: { ...context.env } }),
-      ),
+      runScript(script, buildState({ ...context, env: { ...context.env } })),
   };
   return state;
 }

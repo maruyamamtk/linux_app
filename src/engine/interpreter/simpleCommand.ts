@@ -82,9 +82,7 @@ function runExpandedCommand(
   const [name, ...args] = words;
   const stdin = redirectResolution.stdinOverride ?? incomingStdin;
   const commandContext: CommandContext = {
-    vfs: state.context.vfs,
-    cwd: state.context.cwd,
-    env: state.context.env,
+    ...state.context,
     stdin,
   };
 
