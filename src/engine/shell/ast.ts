@@ -1,7 +1,8 @@
 // シェル構文解析器(lexer/parser)が生成するASTのノード型定義。
 // 対応範囲: 変数展開・クォート・コマンド置換($())・算術展開($(()))・パイプ(|)・
-// リダイレクト(> >> < [n]>&m)・区切り(; && ||)・単語先頭の変数代入。
-// 制御構造(if/for/while/case)・関数定義・バックグラウンド実行(&)・ヒアドキュメント(<<)は対象外。
+// リダイレクト(> >> < [n]>&m)・区切り(; && ||)・単語先頭の変数代入・
+// 制御構造(if/for/while/case)・シェル関数定義。
+// サブシェル( )・バックグラウンド実行(&)・ヒアドキュメント(<<)は対象外。
 
 /** ダブルクォート内・非クォートの単語を構成する部品。 */
 export type WordPart =
@@ -90,10 +91,65 @@ export interface SimpleCommand {
   redirects: Redirect[];
 }
 
-/** `|` で連結された単純コマンドの列。 */
+/** `if`の条件1つ分。`condition`の最後の文の終了ステータスが0なら`body`を実行する。 */
+export interface IfBranch {
+  condition: ScriptItem[];
+  body: ScriptItem[];
+}
+
+/** `if ... then ... (elif ... then ...)* (else ...)? fi`。 */
+export interface IfClause {
+  type: "IfClause";
+  /** `if`本体を先頭、以降`elif`ごとの分岐が続く(1要素以上)。 */
+  branches: IfBranch[];
+  elseBody?: ScriptItem[];
+}
+
+/**
+ * `for NAME [in WORD...]; do ... done`。
+ * `words`が未指定(`in`句省略)の場合は位置パラメータ(`$@`)を順に束縛する。
+ */
+export interface ForClause {
+  type: "ForClause";
+  varName: string;
+  words?: Word[];
+  body: ScriptItem[];
+}
+
+/** `while ... do ... done`。`condition`の最後の文の終了ステータスが0の間`body`を繰り返す。 */
+export interface WhileClause {
+  type: "WhileClause";
+  condition: ScriptItem[];
+  body: ScriptItem[];
+}
+
+/** `case`の1パターン節。`patterns`のいずれかにマッチしたら`body`を実行する(`;;`相当)。 */
+export interface CaseItem {
+  patterns: Word[];
+  body: ScriptItem[];
+}
+
+/** `case WORD in PATTERN) ... ;; ... esac`。 */
+export interface CaseClause {
+  type: "CaseClause";
+  word: Word;
+  items: CaseItem[];
+}
+
+/** シェル関数定義。`NAME() { ... }` および `function NAME [()] { ... }` の両形式に対応する。 */
+export interface FunctionDefinition {
+  type: "FunctionDefinition";
+  name: string;
+  body: ScriptItem[];
+}
+
+/** パイプラインの1段を構成しうる要素。 */
+export type Command = SimpleCommand | IfClause | ForClause | WhileClause | CaseClause | FunctionDefinition;
+
+/** `|` で連結されたコマンドの列。 */
 export interface Pipeline {
   type: "Pipeline";
-  commands: SimpleCommand[];
+  commands: Command[];
 }
 
 export type LogicalOperator = "&&" | "||";

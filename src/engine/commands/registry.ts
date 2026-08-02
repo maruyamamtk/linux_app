@@ -14,8 +14,10 @@ import {
 import { chmodCommand, suCommand, sudoCommand } from "./permissions";
 import { bgCommand, fgCommand, jobsCommand, killCommand, psCommand } from "./process";
 import { grepCommand } from "./grep";
+import { colonCommand, echoCommand, falseCommand, trueCommand } from "./shellBuiltins";
 import { sedCommand } from "./sed";
 import { findCommand, helpCommand, locateCommand, manCommand, whichCommand } from "./search";
+import { bracketCommand, testCommand } from "./test";
 import {
   cutCommand,
   diffCommand,
@@ -66,6 +68,12 @@ export const commandRegistry: Readonly<Record<string, CommandHandler>> = {
   diff: diffCommand,
   sed: sedCommand,
   awk: awkCommand,
+  test: testCommand,
+  "[": bracketCommand,
+  echo: echoCommand,
+  true: trueCommand,
+  false: falseCommand,
+  ":": colonCommand,
 };
 
 export function resolveCommand(name: string): CommandHandler | undefined {

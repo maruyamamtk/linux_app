@@ -30,8 +30,12 @@ function expandPart(part: WordPart, state: ShellState): string {
 
 function lookupParameter(name: string, state: ShellState): string | undefined {
   if (name === "?") return String(state.lastExitCode);
-  if (name === "#" || name === "@" || name === "*") return "";
-  if (name === "$" || name === "!" || name === "-" || /^[0-9]+$/.test(name)) return undefined;
+  if (name === "#") return String(state.positionalParams.length);
+  // `$@`/`$*` は本来IFSで単語分割されるが、本パーサはWord単位の展開しか行わないため
+  // (ファイル冒頭コメント参照)、両者とも単純にスペース区切りで連結する近似実装とする。
+  if (name === "@" || name === "*") return state.positionalParams.join(" ");
+  if (/^[1-9][0-9]*$/.test(name)) return state.positionalParams[Number(name) - 1];
+  if (name === "0" || name === "$" || name === "!" || name === "-") return undefined;
   return state.context.env[name];
 }
 

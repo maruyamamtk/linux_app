@@ -85,6 +85,7 @@ describe("tokenize: コマンド置換・算術展開", () => {
     if (part.type !== "CommandSubstitution") throw new Error("unreachable");
     expect(part.script.body).toHaveLength(1);
     const cmd = part.script.body[0].andOr.pipelines[0].commands[0];
+    if (cmd.type !== "SimpleCommand") throw new Error("unreachable");
     expect(cmd.words.map((w) => w.parts)).toEqual([
       [{ type: "Text", value: "ls" }],
       [{ type: "Text", value: "-la" }],
@@ -96,6 +97,7 @@ describe("tokenize: コマンド置換・算術展開", () => {
     const outer = arg.word.parts[0];
     if (outer.type !== "CommandSubstitution") throw new Error("unreachable");
     const outerCmd = outer.script.body[0].andOr.pipelines[0].commands[0];
+    if (outerCmd.type !== "SimpleCommand") throw new Error("unreachable");
     const innerPart = outerCmd.words[1].parts[0];
     expect(innerPart.type).toBe("CommandSubstitution");
   });
@@ -128,6 +130,12 @@ describe("tokenize: 演算子・リダイレクト", () => {
     const tokens = tokenize("echo hi # this is a comment\necho bye");
     expect(tokens.map((t) => t.type)).toEqual(["WORD", "WORD", "NEWLINE", "WORD", "WORD", "EOF"]);
   });
+
+  it("( ) ;; を識別する(関数定義・caseで使用)", () => {
+    const tokens = tokenize("greet() { :;; } ;;");
+    const ops = tokens.filter((t) => t.type === "OPERATOR").map((t) => (t as { value: string }).value);
+    expect(ops).toEqual(["(", ")", ";;", ";;"]);
+  });
 });
 
 describe("tokenize: 未対応構文はShellSyntaxErrorになる", () => {
@@ -137,10 +145,6 @@ describe("tokenize: 未対応構文はShellSyntaxErrorになる", () => {
 
   it("ヒアドキュメント(<<)", () => {
     expect(() => tokenize("cat <<EOF")).toThrow(ShellSyntaxError);
-  });
-
-  it("サブシェル/グループコマンド()", () => {
-    expect(() => tokenize("(echo hi)")).toThrow(ShellSyntaxError);
   });
 
   it("閉じられていないシングルクォート", () => {

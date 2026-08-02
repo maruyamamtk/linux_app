@@ -15,6 +15,8 @@ export {
 } from "./fileOps";
 export { sedCommand } from "./sed";
 export { findCommand, helpCommand, locateCommand, manCommand, whichCommand } from "./search";
+export { bracketCommand, testCommand } from "./test";
+export { colonCommand, echoCommand, falseCommand, trueCommand } from "./shellBuiltins";
 export { chmodCommand, parseMode, suCommand, sudoCommand } from "./permissions";
 export { bgCommand, fgCommand, jobsCommand, killCommand, psCommand } from "./process";
 export { grepCommand } from "./grep";

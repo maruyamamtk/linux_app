@@ -9,7 +9,9 @@ import { resolveRedirects } from "./redirect";
 import type { ShellState } from "./types";
 
 function firstCommand(input: string): SimpleCommand {
-  return parseScript(input).body[0].andOr.pipelines[0].commands[0];
+  const command = parseScript(input).body[0].andOr.pipelines[0].commands[0];
+  if (command.type !== "SimpleCommand") throw new Error("expected a SimpleCommand");
+  return command;
 }
 
 function buildState(context: CommandContext): ShellState {
@@ -19,6 +21,13 @@ function buildState(context: CommandContext): ShellState {
     runSubshell: () => {
       throw new Error("not used in these tests");
     },
+    runCompoundList: () => {
+      throw new Error("not used in these tests");
+    },
+    functions: {},
+    positionalParams: [],
+    localFrames: [],
+    callDepth: 0,
   };
 }
 
@@ -211,5 +220,155 @@ describe("executeShellInput: 区切り・論理演算子・変数代入", () => 
 
     expect(context.env.FOO).toBe("/home/study/docs");
     expect(context.cwd).toBe("/home/study/docs");
+  });
+});
+
+describe("executeShellInput: 位置パラメータ", () => {
+  it("argvを渡すと $1 $2 $# $@ で参照できる", () => {
+    const context = buildContext();
+
+    const result = executeShellInput('echo "$1" "$2" "$#" "$@"', context, ["a", "b c"]);
+
+    expect(result.stdout).toBe("a b c 2 a b c\n");
+  });
+});
+
+describe("executeShellInput: if/elif/else", () => {
+  it("条件が真ならthen節を実行する", () => {
+    const context = buildContext();
+    const result = executeShellInput("if true; then echo yes; else echo no; fi", context);
+    expect(result.stdout).toBe("yes\n");
+    expect(result.exitCode).toBe(0);
+  });
+
+  it("条件が偽ならelse節を実行する", () => {
+    const context = buildContext();
+    const result = executeShellInput("if false; then echo yes; else echo no; fi", context);
+    expect(result.stdout).toBe("no\n");
+  });
+
+  it("elifを順に評価する", () => {
+    const context = buildContext();
+    const result = executeShellInput(
+      "if false; then echo a; elif false; then echo b; elif true; then echo c; else echo d; fi",
+      context,
+    );
+    expect(result.stdout).toBe("c\n");
+  });
+
+  it("該当する分岐が無く else も無い場合は何も実行せず終了ステータス0になる", () => {
+    const context = buildContext();
+    const result = executeShellInput("if false; then echo a; fi", context);
+    expect(result.stdout).toBe("");
+    expect(result.exitCode).toBe(0);
+  });
+
+  it("test/[ コマンドの判定結果をif条件として使える", () => {
+    const context = buildContext();
+    const result = executeShellInput('if [ -f /home/study/file1.txt ]; then echo found; fi', context);
+    expect(result.stdout).toBe("found\n");
+  });
+});
+
+describe("executeShellInput: for", () => {
+  it("単語リストを順に変数へ束縛して本体を実行する", () => {
+    const context = buildContext();
+    const result = executeShellInput("for f in a b c; do echo $f; done", context);
+    expect(result.stdout).toBe("a\nb\nc\n");
+  });
+
+  it("in句を省略すると位置パラメータを反復する", () => {
+    const context = buildContext();
+    const result = executeShellInput("for f; do echo $f; done", context, ["x", "y"]);
+    expect(result.stdout).toBe("x\ny\n");
+  });
+
+  it("ループ変数はループ終了後もセッションに残る(bashと同じ)", () => {
+    const context = buildContext();
+    executeShellInput("for f in a b c; do :; done", context);
+    expect(context.env.f).toBe("c");
+  });
+});
+
+describe("executeShellInput: while", () => {
+  it("条件が真の間だけ本体を繰り返す", () => {
+    const context = buildContext();
+    const result = executeShellInput(
+      'i=0; while [ "$i" -lt 3 ]; do echo $i; i=$((i + 1)); done',
+      context,
+    );
+    expect(result.stdout).toBe("0\n1\n2\n");
+    expect(context.env.i).toBe("3");
+  });
+
+  it("条件が最初から偽なら本体を実行しない", () => {
+    const context = buildContext();
+    const result = executeShellInput("while false; do echo unreachable; done", context);
+    expect(result.stdout).toBe("");
+  });
+});
+
+describe("executeShellInput: case", () => {
+  it("最初にマッチしたパターンの本体だけを実行する", () => {
+    const context = buildContext();
+    const result = executeShellInput(
+      'ans=yes; case "$ans" in y|yes) echo ok;; n|no) echo ng;; *) echo default;; esac',
+      context,
+    );
+    expect(result.stdout).toBe("ok\n");
+  });
+
+  it("*でデフォルトにフォールバックする", () => {
+    const context = buildContext();
+    const result = executeShellInput('case "zzz" in y|yes) echo ok;; *) echo default;; esac', context);
+    expect(result.stdout).toBe("default\n");
+  });
+
+  it("*等のグロブパターンでマッチする", () => {
+    const context = buildContext();
+    const result = executeShellInput('case "file.txt" in *.txt) echo text;; *) echo other;; esac', context);
+    expect(result.stdout).toBe("text\n");
+  });
+});
+
+describe("executeShellInput: シェル関数", () => {
+  it("定義した関数を呼び出せる。$1などで引数を参照できる", () => {
+    const context = buildContext();
+    const result = executeShellInput('greet() { echo "hello $1"; }; greet world', context);
+    expect(result.stdout).toBe("hello world\n");
+  });
+
+  it("returnで終了ステータスを返し、以降の文は実行しない", () => {
+    const context = buildContext();
+    const result = executeShellInput(
+      "f() { echo before; return 3; echo after; }; f; echo \"code=$?\"",
+      context,
+    );
+    expect(result.stdout).toBe("before\ncode=3\n");
+  });
+
+  it("localで宣言した変数は関数呼び出しの外に漏れない", () => {
+    const context = buildContext();
+    const result = executeShellInput(
+      'x=outer; f() { local x=inner; echo $x; }; f; echo $x',
+      context,
+    );
+    expect(result.stdout).toBe("inner\nouter\n");
+  });
+
+  it("再帰呼び出しで階乗を計算できる", () => {
+    const context = buildContext();
+    const result = executeShellInput(
+      "fact() { if [ \"$1\" -le 1 ]; then echo 1; else " +
+        'local n=$1; local rest=$(fact $(( n - 1 ))); echo $(( n * rest )); fi; }; fact 5',
+      context,
+    );
+    expect(result.stdout).toBe("120\n");
+  });
+
+  it("関数はスクリプト内の後方の呼び出しからも参照できる(先に全文パースされるため)", () => {
+    const context = buildContext();
+    const result = executeShellInput("f() { echo hi; }; f; f", context);
+    expect(result.stdout).toBe("hi\nhi\n");
   });
 });
