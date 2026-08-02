@@ -63,8 +63,7 @@ export function runScript(script: Script, state: ShellState): CommandResult {
 /** コマンド置換 `$(...)` 用のサブシェル状態を作る。`cwd`/`env` は複製し、`vfs` は共有する。 */
 function createSubshellState(parent: ShellState): ShellState {
   const subshellContext: CommandContext = {
-    vfs: parent.context.vfs,
-    cwd: parent.context.cwd,
+    ...parent.context,
     env: { ...parent.context.env },
   };
   const subshellState: ShellState = {
