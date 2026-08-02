@@ -15,3 +15,14 @@ export {
 } from "./fileOps";
 export { sedCommand } from "./sed";
 export { findCommand, helpCommand, locateCommand, manCommand, whichCommand } from "./search";
+export { grepCommand } from "./grep";
+export {
+  cutCommand,
+  diffCommand,
+  headCommand,
+  sortCommand,
+  tailCommand,
+  trCommand,
+  uniqCommand,
+  wcCommand,
+} from "./textProc";

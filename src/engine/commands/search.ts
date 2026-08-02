@@ -225,9 +225,45 @@ const MAN_PAGES: Record<string, ManPage> = {
     summary: "PATH上から実行可能なコマンドの場所を検索する",
     body: "NAME\n    which - コマンドの実体を検索する\n\nSYNOPSIS\n    which コマンド名...\n\nDESCRIPTION\n    環境変数PATHに列挙されたディレクトリを順に探索し、実行可能なコマンドの\n    パスを表示します。",
   },
+  grep: {
+    summary: "ファイルの内容を正規表現で検索する",
+    body: "NAME\n    grep - パターンにマッチする行を検索する\n\nSYNOPSIS\n    grep [-i] [-n] [-v] [-E] パターン ファイル...\n\nDESCRIPTION\n    指定したファイルから正規表現パターンにマッチする行を表示します。\n    -i  大文字小文字を区別しない\n    -n  マッチした行の行番号を表示する\n    -v  マッチしなかった行を表示する(反転)\n    -E  拡張正規表現(+ ? {m,n} () |)を使用する",
+  },
   man: {
     summary: "コマンドのマニュアルページを表示する",
     body: "NAME\n    man - マニュアルページを表示する\n\nSYNOPSIS\n    man コマンド名\n\nDESCRIPTION\n    指定したコマンドのマニュアルページを表示します。",
+  },
+  wc: {
+    summary: "行数・単語数・バイト数を数える",
+    body: "NAME\n    wc - 行数・単語数・バイト数を数える\n\nSYNOPSIS\n    wc [-l] [-w] [-c] [ファイル...]\n\nDESCRIPTION\n    指定したファイル(省略時は標準入力)の行数・単語数・バイト数を表示します。\n    -l  行数のみ表示する\n    -w  単語数のみ表示する\n    -c  バイト数のみ表示する",
+  },
+  sort: {
+    summary: "テキストの行を並び替える",
+    body: "NAME\n    sort - 行を並び替える\n\nSYNOPSIS\n    sort [-n] [-r] [-u] [-k フィールド番号] [ファイル...]\n\nDESCRIPTION\n    指定したファイル(省略時は標準入力)の各行を並び替えて表示します。\n    -n  数値として比較する\n    -r  逆順に並び替える\n    -u  重複する行をまとめる\n    -k  指定したフィールド番号を比較キーにする",
+  },
+  uniq: {
+    summary: "隣接する重複行をまとめる",
+    body: "NAME\n    uniq - 隣接する重複行をまとめる\n\nSYNOPSIS\n    uniq [-c] [ファイル]\n\nDESCRIPTION\n    連続して同じ内容の行をひとつにまとめて表示します(sortしていない入力では\n    離れた場所にある重複行はまとめられません)。\n    -c  各行の前に出現回数を表示する",
+  },
+  cut: {
+    summary: "各行から指定したフィールドを切り出す",
+    body: "NAME\n    cut - 各行からフィールドを切り出す\n\nSYNOPSIS\n    cut -f フィールドリスト [-d 区切り文字] [ファイル...]\n\nDESCRIPTION\n    指定した区切り文字(省略時はタブ)で各行を分割し、指定したフィールドのみを\n    表示します。フィールドリストは `1,3` や `2-4` のように指定できます。",
+  },
+  tr: {
+    summary: "標準入力の文字を変換・削除する",
+    body: "NAME\n    tr - 文字を変換・削除する\n\nSYNOPSIS\n    tr SET1 SET2\n    tr -d SET1\n\nDESCRIPTION\n    標準入力に含まれるSET1の文字をSET2の対応する文字に変換して表示します。\n    -d  SET1に含まれる文字を削除する\n    SET1・SET2は `a-z` のような範囲指定にも対応します。",
+  },
+  head: {
+    summary: "ファイルの先頭部分を表示する",
+    body: "NAME\n    head - ファイルの先頭部分を表示する\n\nSYNOPSIS\n    head [-n 行数] [ファイル...]\n\nDESCRIPTION\n    指定したファイル(省略時は標準入力)の先頭から指定行数(省略時は10行)を\n    表示します。",
+  },
+  tail: {
+    summary: "ファイルの末尾部分を表示する",
+    body: "NAME\n    tail - ファイルの末尾部分を表示する\n\nSYNOPSIS\n    tail [-n 行数] [-f] [ファイル...]\n\nDESCRIPTION\n    指定したファイル(省略時は標準入力)の末尾から指定行数(省略時は10行)を\n    表示します。\n    -f  ファイルへの追記を監視し続ける(本アプリでは実行時点の末尾を返す簡易的な\n        シミュレートのみ行う)",
+  },
+  diff: {
+    summary: "2つのファイルの差分を表示する",
+    body: "NAME\n    diff - 2つのファイルを比較する\n\nSYNOPSIS\n    diff ファイル1 ファイル2\n    diff -u ファイル1 ファイル2\n\nDESCRIPTION\n    2つのファイルを行単位で比較し、差分を表示します。\n    -u  ユニファイド形式(前後の文脈付き)で表示する",
   },
   help: {
     summary: "利用可能な組み込みコマンドの一覧を表示する",

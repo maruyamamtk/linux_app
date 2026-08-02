@@ -11,11 +11,24 @@ import {
   rmdirCommand,
   touchCommand,
 } from "./fileOps";
+import { grepCommand } from "./grep";
 import { sedCommand } from "./sed";
 import { findCommand, helpCommand, locateCommand, manCommand, whichCommand } from "./search";
+import {
+  cutCommand,
+  diffCommand,
+  headCommand,
+  sortCommand,
+  tailCommand,
+  trCommand,
+  uniqCommand,
+  wcCommand,
+} from "./textProc";
 import type { CommandContext, CommandHandler, CommandResult } from "./types";
 
-/** コマンド名 → 実装関数のレジストリ。要件定義書4章のCh4-6・Ch14該当コマンド群。 */
+/**
+ * コマンド名 → 実装関数のレジストリ。要件定義書4章のCh4-6・Ch11-12・Ch14該当コマンド群。
+ */
 export const commandRegistry: Readonly<Record<string, CommandHandler>> = {
   pwd: pwdCommand,
   cd: cdCommand,
@@ -29,9 +42,18 @@ export const commandRegistry: Readonly<Record<string, CommandHandler>> = {
   ln: lnCommand,
   find: findCommand,
   locate: locateCommand,
+  grep: grepCommand,
   which: whichCommand,
   man: manCommand,
   help: helpCommand,
+  wc: wcCommand,
+  sort: sortCommand,
+  uniq: uniqCommand,
+  cut: cutCommand,
+  tr: trCommand,
+  head: headCommand,
+  tail: tailCommand,
+  diff: diffCommand,
   sed: sedCommand,
   awk: awkCommand,
 };
