@@ -19,6 +19,14 @@ const EXPECTED_COMMANDS = [
   "which",
   "man",
   "help",
+  "chmod",
+  "su",
+  "sudo",
+  "ps",
+  "jobs",
+  "fg",
+  "bg",
+  "kill",
 ];
 
 describe("commandRegistry", () => {

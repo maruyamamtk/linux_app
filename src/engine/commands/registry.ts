@@ -10,10 +10,12 @@ import {
   rmdirCommand,
   touchCommand,
 } from "./fileOps";
+import { chmodCommand, suCommand, sudoCommand } from "./permissions";
+import { bgCommand, fgCommand, jobsCommand, killCommand, psCommand } from "./process";
 import { findCommand, helpCommand, locateCommand, manCommand, whichCommand } from "./search";
 import type { CommandContext, CommandHandler, CommandResult } from "./types";
 
-/** コマンド名 → 実装関数のレジストリ。要件定義書4章のCh4-6該当コマンド群。 */
+/** コマンド名 → 実装関数のレジストリ。要件定義書4章のCh4-6, Ch9-10該当コマンド群。 */
 export const commandRegistry: Readonly<Record<string, CommandHandler>> = {
   pwd: pwdCommand,
   cd: cdCommand,
@@ -30,6 +32,14 @@ export const commandRegistry: Readonly<Record<string, CommandHandler>> = {
   which: whichCommand,
   man: manCommand,
   help: helpCommand,
+  chmod: chmodCommand,
+  su: suCommand,
+  sudo: sudoCommand,
+  ps: psCommand,
+  jobs: jobsCommand,
+  fg: fgCommand,
+  bg: bgCommand,
+  kill: killCommand,
 };
 
 export function resolveCommand(name: string): CommandHandler | undefined {

@@ -1,4 +1,4 @@
-export type { CommandContext, CommandHandler, CommandResult } from "./types";
+export type { CommandContext, CommandHandler, CommandResult, MockProcess } from "./types";
 export { commandRegistry, executeCommand, isKnownCommand, resolveCommand } from "./registry";
 export {
   cdCommand,
@@ -13,3 +13,5 @@ export {
   touchCommand,
 } from "./fileOps";
 export { findCommand, helpCommand, locateCommand, manCommand, whichCommand } from "./search";
+export { chmodCommand, parseMode, suCommand, sudoCommand } from "./permissions";
+export { bgCommand, fgCommand, jobsCommand, killCommand, psCommand } from "./process";

@@ -1,9 +1,19 @@
 import { createDirectory, createFile, VirtualFileSystem } from "../vfs";
 import type { VfsSnapshot, VfsUser } from "../vfs";
-import type { CommandContext } from "./types";
+import type { CommandContext, MockProcess } from "./types";
 
 export const STUDY_USER: VfsUser = { name: "study", groups: ["study"] };
 export const ROOT_USER: VfsUser = { name: "root", groups: ["root"], isRoot: true };
+
+/** ps/jobs/fg/bg/kill のテストで共有する、モックのプロセス一覧。 */
+export function buildProcesses(): MockProcess[] {
+  return [
+    { pid: 1, command: "bash", status: "running", owner: "study" },
+    { pid: 100, jobId: 1, command: "sleep 100", status: "running", owner: "study" },
+    { pid: 101, jobId: 2, command: "vim memo.txt", status: "stopped", owner: "study" },
+    { pid: 2, command: "sshd", status: "running", owner: "root" },
+  ];
+}
 
 /** コマンド群のテストで共有する、Ch4-6演習を模した最小限のVFSスナップショット。 */
 export function buildSnapshot(): VfsSnapshot {
@@ -66,5 +76,6 @@ export function buildContext(user: VfsUser = STUDY_USER, cwd = "/home/study"): C
     vfs: new VirtualFileSystem(buildSnapshot(), user),
     cwd,
     env: { HOME: "/home/study", PATH: "/bin:/usr/bin" },
+    processes: buildProcesses(),
   };
 }
