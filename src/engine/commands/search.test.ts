@@ -89,7 +89,10 @@ describe("help", () => {
   it("lists all built-in commands", () => {
     const context = buildContext();
     const result = helpCommand([], context);
-    for (const name of ["pwd", "cd", "ls", "mkdir", "touch", "rm", "rmdir", "cp", "mv", "ln", "find", "locate", "which", "grep", "man", "help"]) {
+    for (const name of [
+      "pwd", "cd", "ls", "mkdir", "touch", "rm", "rmdir", "cp", "mv", "ln",
+      "find", "locate", "which", "grep", "man", "help", "sed", "awk",
+    ]) {
       expect(result.stdout).toContain(name);
     }
   });
