@@ -1,3 +1,4 @@
+import { awkCommand } from "./awk";
 import {
   cdCommand,
   cpCommand,
@@ -10,10 +11,11 @@ import {
   rmdirCommand,
   touchCommand,
 } from "./fileOps";
+import { sedCommand } from "./sed";
 import { findCommand, helpCommand, locateCommand, manCommand, whichCommand } from "./search";
 import type { CommandContext, CommandHandler, CommandResult } from "./types";
 
-/** コマンド名 → 実装関数のレジストリ。要件定義書4章のCh4-6該当コマンド群。 */
+/** コマンド名 → 実装関数のレジストリ。要件定義書4章のCh4-6・Ch14該当コマンド群。 */
 export const commandRegistry: Readonly<Record<string, CommandHandler>> = {
   pwd: pwdCommand,
   cd: cdCommand,
@@ -30,6 +32,8 @@ export const commandRegistry: Readonly<Record<string, CommandHandler>> = {
   which: whichCommand,
   man: manCommand,
   help: helpCommand,
+  sed: sedCommand,
+  awk: awkCommand,
 };
 
 export function resolveCommand(name: string): CommandHandler | undefined {

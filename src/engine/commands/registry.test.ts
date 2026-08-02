@@ -19,6 +19,8 @@ const EXPECTED_COMMANDS = [
   "which",
   "man",
   "help",
+  "sed",
+  "awk",
 ];
 
 describe("commandRegistry", () => {

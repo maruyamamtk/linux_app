@@ -1,5 +1,6 @@
 export type { CommandContext, CommandHandler, CommandResult } from "./types";
 export { commandRegistry, executeCommand, isKnownCommand, resolveCommand } from "./registry";
+export { awkCommand } from "./awk";
 export {
   cdCommand,
   cpCommand,
@@ -12,4 +13,5 @@ export {
   rmdirCommand,
   touchCommand,
 } from "./fileOps";
+export { sedCommand } from "./sed";
 export { findCommand, helpCommand, locateCommand, manCommand, whichCommand } from "./search";
