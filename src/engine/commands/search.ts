@@ -225,6 +225,10 @@ const MAN_PAGES: Record<string, ManPage> = {
     summary: "PATH上から実行可能なコマンドの場所を検索する",
     body: "NAME\n    which - コマンドの実体を検索する\n\nSYNOPSIS\n    which コマンド名...\n\nDESCRIPTION\n    環境変数PATHに列挙されたディレクトリを順に探索し、実行可能なコマンドの\n    パスを表示します。",
   },
+  grep: {
+    summary: "ファイルの内容を正規表現で検索する",
+    body: "NAME\n    grep - パターンにマッチする行を検索する\n\nSYNOPSIS\n    grep [-i] [-n] [-v] [-E] パターン ファイル...\n\nDESCRIPTION\n    指定したファイルから正規表現パターンにマッチする行を表示します。\n    -i  大文字小文字を区別しない\n    -n  マッチした行の行番号を表示する\n    -v  マッチしなかった行を表示する(反転)\n    -E  拡張正規表現(+ ? {m,n} () |)を使用する",
+  },
   man: {
     summary: "コマンドのマニュアルページを表示する",
     body: "NAME\n    man - マニュアルページを表示する\n\nSYNOPSIS\n    man コマンド名\n\nDESCRIPTION\n    指定したコマンドのマニュアルページを表示します。",

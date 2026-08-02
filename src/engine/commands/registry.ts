@@ -10,6 +10,7 @@ import {
   rmdirCommand,
   touchCommand,
 } from "./fileOps";
+import { grepCommand } from "./grep";
 import { findCommand, helpCommand, locateCommand, manCommand, whichCommand } from "./search";
 import type { CommandContext, CommandHandler, CommandResult } from "./types";
 
@@ -27,6 +28,7 @@ export const commandRegistry: Readonly<Record<string, CommandHandler>> = {
   ln: lnCommand,
   find: findCommand,
   locate: locateCommand,
+  grep: grepCommand,
   which: whichCommand,
   man: manCommand,
   help: helpCommand,

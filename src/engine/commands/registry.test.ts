@@ -17,6 +17,7 @@ const EXPECTED_COMMANDS = [
   "find",
   "locate",
   "which",
+  "grep",
   "man",
   "help",
 ];

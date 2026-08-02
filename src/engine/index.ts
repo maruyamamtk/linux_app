@@ -2,4 +2,5 @@
 // 詳細は要件定義書(docs/requirements.md)3〜6章、および src/README.md を参照。
 export * from "./vfs";
 export * from "./shell";
+export * from "./regex";
 export * from "./commands";

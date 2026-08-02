@@ -13,3 +13,4 @@ export {
   touchCommand,
 } from "./fileOps";
 export { findCommand, helpCommand, locateCommand, manCommand, whichCommand } from "./search";
+export { grepCommand } from "./grep";
