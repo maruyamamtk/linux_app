@@ -25,11 +25,7 @@ export interface CommandContext {
   cwd: string;
   env: Record<string, string>;
   processes: MockProcess[];
-  /**
-   * パイプ(`|`)で前段のコマンドから渡される標準入力。シェルインタプリタが
-   * 未実装のため現状は常に未設定だが、`wc`/`sort`/`uniq`/`cut`/`tr`/`head` は
-   * ファイル引数が無い場合にここを読む形で将来のパイプ対応に備える。
-   */
+  /** パイプ(`|`)やリダイレクト(`<`)で渡された標準入力。未指定時は入力が無いことを表す。 */
   stdin?: string;
 }
 

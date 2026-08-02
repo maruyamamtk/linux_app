@@ -157,6 +157,26 @@ describe("readFile / writeFile", () => {
   });
 });
 
+describe("/dev/null special behavior", () => {
+  it("discards anything written to it", () => {
+    const vfs = createVfs();
+    vfs.writeFile("/dev/null", "some content");
+    expect(vfs.readFile("/dev/null")).toBe("");
+  });
+
+  it("discards appends too", () => {
+    const vfs = createVfs();
+    vfs.appendFile("/dev/null", "some content");
+    expect(vfs.readFile("/dev/null")).toBe("");
+  });
+
+  it("always reads as empty, even without a seeded node at that path", () => {
+    const vfs = createVfs();
+    expect(vfs.exists("/dev/null")).toBe(false);
+    expect(vfs.readFile("/dev/null")).toBe("");
+  });
+});
+
 describe("move", () => {
   it("renames a file without changing its owner", () => {
     const vfs = createVfs(ROOT_USER);
