@@ -481,7 +481,7 @@ function tryParseAssignment(word: Word, raw: string): Assignment | undefined {
 }
 
 function isRedirectOperator(v: OperatorValue): boolean {
-  return v === ">" || v === ">>" || v === "<" || v === ">&" || v === "<&";
+  return v === ">" || v === ">>" || v === "<" || v === ">&" || v === "<&" || v === "<<" || v === "<<-";
 }
 
 function parseRedirectAfterIoNumber(stream: TokenStream, fd: number): Redirect {
@@ -494,10 +494,25 @@ function parseRedirectAfterIoNumber(stream: TokenStream, fd: number): Redirect {
 }
 
 function buildRedirect(stream: TokenStream, op: OperatorValue, explicitFd: number | undefined): Redirect {
-  const direction: "in" | "out" = op === "<" || op === "<&" ? "in" : "out";
+  const direction: "in" | "out" = op === "<" || op === "<&" || op === "<<" || op === "<<-" ? "in" : "out";
   const append = op === ">>";
   const dup = op === ">&" || op === "<&";
   const fd = explicitFd ?? (direction === "in" ? 0 : 1);
+
+  if (op === "<<" || op === "<<-") {
+    const t = stream.next();
+    if (t.type !== "HEREDOC") {
+      throw new ShellSyntaxError("ヒアドキュメントの区切り文字が必要です", t.start);
+    }
+    return {
+      type: "Redirect",
+      fd,
+      direction: "in",
+      append: false,
+      dup: false,
+      target: { kind: "heredoc", word: t.body },
+    };
+  }
 
   if (dup) {
     const t = stream.peek();

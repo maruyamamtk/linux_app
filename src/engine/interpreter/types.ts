@@ -29,4 +29,11 @@ export interface ShellState {
   callDepth: number;
   /** `return` が実行された際に設定され、関数呼び出し元まで巻き戻る間の各実行ループを早期終了させる。 */
   returning?: { exitCode: number };
+  /**
+   * `exit` が実行された際に設定され、関数呼び出しの境界を越えてスクリプト全体の実行を打ち切るまで
+   * 各実行ループを早期終了させる(`returning`と異なり`callFunction`では消費されず、
+   * 呼び出し元まで伝播し続ける)。コマンド置換 `$(...)` はサブシェル(別の`ShellState`)で
+   * 実行されるため、その中で`exit`が呼ばれても親シェルには伝播しない(実シェルと同じ挙動)。
+   */
+  exiting?: { exitCode: number };
 }

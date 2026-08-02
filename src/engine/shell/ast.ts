@@ -1,8 +1,8 @@
 // シェル構文解析器(lexer/parser)が生成するASTのノード型定義。
 // 対応範囲: 変数展開・クォート・コマンド置換($())・算術展開($(()))・パイプ(|)・
-// リダイレクト(> >> < [n]>&m)・区切り(; && ||)・単語先頭の変数代入・
-// 制御構造(if/for/while/case)・シェル関数定義。
-// サブシェル( )・バックグラウンド実行(&)・ヒアドキュメント(<<)は対象外。
+// リダイレクト(> >> < [n]>&m)・ヒアドキュメント(<< <<-)・区切り(; && ||)・
+// 単語先頭の変数代入・制御構造(if/for/while/case)・シェル関数定義。
+// サブシェル( )・バックグラウンド実行(&)は対象外。
 
 /** ダブルクォート内・非クォートの単語を構成する部品。 */
 export type WordPart =
@@ -28,6 +28,7 @@ export interface SingleQuotedPart {
  * パラメータ展開。`$name` `${name}` `${name:-word}` 等。
  * - `length`: `${#name}` (長さ取得)の場合true
  * - `operator`/`word`: `${name:-default}` 等の演算子付き展開の場合に設定
+ * - `quoted`: ダブルクォート内で出現した場合true(IFSによる単語分割の対象外にするため)
  */
 export interface ParameterExpansionPart {
   type: "ParameterExpansion";
@@ -35,21 +36,28 @@ export interface ParameterExpansionPart {
   length?: boolean;
   operator?: ":-" | ":=" | ":?" | ":+" | "-" | "=" | "?" | "+";
   word?: Word;
+  quoted?: boolean;
 }
 
-/** コマンド置換。`$(cmd)` および `` `cmd` `` の両方をこの形で表現する。 */
+/**
+ * コマンド置換。`$(cmd)` および `` `cmd` `` の両方をこの形で表現する。
+ * `quoted`: ダブルクォート内で出現した場合true(IFSによる単語分割の対象外にするため)
+ */
 export interface CommandSubstitutionPart {
   type: "CommandSubstitution";
   script: Script;
+  quoted?: boolean;
 }
 
 /**
  * 算術展開 `$((expr))`。
  * 式自体の評価は本パーサのスコープ外のため、生テキストのまま保持する。
+ * `quoted`: ダブルクォート内で出現した場合true(IFSによる単語分割の対象外にするため)
  */
 export interface ArithmeticExpansionPart {
   type: "ArithmeticExpansion";
   expression: string;
+  quoted?: boolean;
 }
 
 /** ダブルクォートまたは非クォートの部品列からなる単語。 */
@@ -67,12 +75,15 @@ export interface Assignment {
 
 export type RedirectTarget =
   | { kind: "word"; word: Word }
-  | { kind: "fd"; fd: number };
+  | { kind: "fd"; fd: number }
+  | { kind: "heredoc"; word: Word };
 
 /**
  * リダイレクト。`fd` はリダイレクト元のファイルディスクリプタ番号
  * (`>` `>>` はデフォルト1、`<` はデフォルト0、明示指定時は `2>` のように前置された数値)。
  * `dup` が true の場合 `N>&M` / `N<&M` 形式で、`target` は `{ kind: "fd" }` になる。
+ * `target.kind` が `"heredoc"` の場合(`<< WORD` / `<<- WORD`)、`word` はヒアドキュメント本文
+ * (区切り文字がクォートされていなければ変数展開・コマンド置換・算術展開込み)を表す。
  */
 export interface Redirect {
   type: "Redirect";

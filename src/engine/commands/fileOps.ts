@@ -11,6 +11,55 @@ function formatLongEntry(stat: VfsStat): string {
   return `${stat.formattedMode} ${stat.owner} ${stat.group} ${String(stat.size).padStart(6)} ${stat.name}`;
 }
 
+/** `cat -n` 用に各行へ行番号を付与する(実coreutilsの `%6d\t` 相当の書式)。 */
+function addLineNumbers(text: string): string {
+  if (text === "") return text;
+  const endsWithNewline = text.endsWith("\n");
+  const body = endsWithNewline ? text.slice(0, -1) : text;
+  const numbered = body
+    .split("\n")
+    .map((line, index) => `${String(index + 1).padStart(6)}\t${line}`)
+    .join("\n");
+  return endsWithNewline ? `${numbered}\n` : numbered;
+}
+
+/**
+ * `cat [-n] [file...]`。対象を省略、または`-`を指定した場合は標準入力を出力する
+ * (ヒアドキュメント `cat <<EOF ... EOF` やパイプからの入力表示に使う)。
+ */
+export const catCommand: CommandHandler = (args, context) => {
+  const { flags, positional } = parseArgs(args);
+  const numberLines = flags.has("n");
+  const targets = positional.length > 0 ? positional : ["-"];
+
+  const chunks: string[] = [];
+  const errors: string[] = [];
+
+  for (const target of targets) {
+    if (target === "-") {
+      chunks.push(context.stdin ?? "");
+      continue;
+    }
+    try {
+      const resolved = resolveArgPath(context, target);
+      if (context.vfs.stat(resolved).type === "directory") {
+        errors.push(`cat: ${target}: Is a directory`);
+        continue;
+      }
+      chunks.push(context.vfs.readFile(resolved));
+    } catch (error) {
+      errors.push(describeVfsError("cat", target, error));
+    }
+  }
+
+  const stdout = chunks.join("");
+  return {
+    stdout: numberLines ? addLineNumbers(stdout) : stdout,
+    stderr: errors.length > 0 ? `${errors.join("\n")}\n` : "",
+    exitCode: errors.length > 0 ? 1 : 0,
+  };
+};
+
 export const pwdCommand: CommandHandler = (_args, context) => ok(`${context.cwd}\n`);
 
 /** `cd` は組み込みコマンドとしてセッションの `cwd` を直接書き換える。 */

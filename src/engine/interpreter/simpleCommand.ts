@@ -4,7 +4,7 @@
 // commands/配下の通常の組み込みコマンド(CommandContextのみを受け取る)としては実装できないため)。
 import { executeCommand, type CommandContext, type CommandResult } from "../commands";
 import type { FunctionDefinition, SimpleCommand } from "../shell";
-import { expandWord } from "./expand";
+import { expandWord, expandWordToFields } from "./expand";
 import { ShellRuntimeError } from "./errors";
 import { applyOutputRedirects, resolveRedirects, type RedirectResolution } from "./redirect";
 import type { LocalFrame, ShellState } from "./types";
@@ -40,7 +40,7 @@ function withTemporaryEnv<T>(env: Record<string, string>, overrides: Map<string,
 
 export function runSimpleCommand(cmd: SimpleCommand, incomingStdin: string, state: ShellState): SimpleCommandOutcome {
   try {
-    const words = cmd.words.map((word) => expandWord(word, state));
+    const words = cmd.words.flatMap((word) => expandWordToFields(word, state));
     const isBareAssignment = words.length === 0;
 
     const persistentAssignments = new Map<string, string>();
@@ -89,6 +89,9 @@ function runExpandedCommand(
   }
   if (name === "local") {
     return finalizeOutcome(runLocalBuiltin(args, state), redirectResolution, state);
+  }
+  if (name === "exit") {
+    return finalizeOutcome(runExitBuiltin(args, state), redirectResolution, state);
   }
   const fn = state.functions[name];
   if (fn) {
@@ -147,6 +150,17 @@ function parseExitCode(raw: string | undefined, fallback: number): number {
 }
 
 /**
+ * `exit [n]`。`state.exiting` を立てて、関数呼び出しの境界を越えてスクリプト全体の実行を
+ * 打ち切るまで各実行ループを早期終了させながら巻き戻す(`return`と異なり`callFunction`では
+ * 消費されないため、関数の中から呼んでもそのまま呼び出し元・トップレベルまで伝播する)。
+ */
+function runExitBuiltin(args: string[], state: ShellState): CommandResult {
+  const exitCode = parseExitCode(args[0], state.lastExitCode);
+  state.exiting = { exitCode };
+  return { stdout: "", stderr: "", exitCode };
+}
+
+/**
  * `local NAME[=value] ...`。関数本体内でのみ有効。現在の呼び出しフレームに元の値を
  * 退避した上で、`NAME` を現在の環境に(値付き、または未設定として)束縛する。
  * 同じフレーム内で複数回 `local` された変数は最初の退避値のみを保持する(2回目以降は
@@ -185,6 +199,8 @@ function restoreLocalFrame(frame: LocalFrame, env: Record<string, string>): void
  * シェル関数を呼び出す: 位置パラメータ(`$1..`)を引数に差し替え、新しい`local`フレームを積んだ上で
  * 関数本体を実行する。`return` による早期終了(`state.returning`)を検知したらここで消費し
  * (呼び出し元の実行ループへ伝播させない)、そのステータスを呼び出し結果の終了コードとする。
+ * `exit` による早期終了(`state.exiting`)はここでは消費せず、`result`をそのまま返すことで
+ * 呼び出し元の実行ループへ伝播させ続ける(スクリプト全体を終了させるため)。
  */
 function callFunction(fn: FunctionDefinition, args: string[], state: ShellState): CommandResult {
   state.callDepth += 1;

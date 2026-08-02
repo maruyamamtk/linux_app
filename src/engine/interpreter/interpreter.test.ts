@@ -97,6 +97,44 @@ describe("executeShellInput: リダイレクト", () => {
     expect(context.vfs.readFile("/home/study/out.txt")).toBe("");
   });
 
+  it("`1>&2` は標準出力をその時点の標準エラー出力の行き先へ複製する", () => {
+    const context = buildContext();
+
+    // まず2>でfd2をファイルへ向けておき、その後1>&2でfd1をそこへ複製する。
+    const result = executeShellInput("echo hello 2> err.txt 1>&2", context);
+
+    expect(result.stdout).toBe("");
+    expect(result.stderr).toBe("");
+    expect(context.vfs.readFile("/home/study/err.txt")).toBe("hello\n");
+  });
+
+  it("ヒアドキュメント(`<<`)は標準入力として本文を渡す(変数展開込み)", () => {
+    const context = buildContext();
+    context.env.NAME = "world";
+
+    const result = executeShellInput('cat <<EOF\nhello $NAME\nEOF', context);
+
+    expect(result.stdout).toBe("hello world\n");
+    expect(result.exitCode).toBe(0);
+  });
+
+  it("区切り文字をクォートしたヒアドキュメントは変数展開しない", () => {
+    const context = buildContext();
+    context.env.NAME = "world";
+
+    const result = executeShellInput("cat <<'EOF'\nhello $NAME\nEOF", context);
+
+    expect(result.stdout).toBe("hello $NAME\n");
+  });
+
+  it("`<<-` は本文各行・区切り文字行の先頭タブを除去する", () => {
+    const context = buildContext();
+
+    const result = executeShellInput("cat <<-EOF\n\tindented\nEOF", context);
+
+    expect(result.stdout).toBe("indented\n");
+  });
+
   it("`<` は存在しないファイルを指定するとエラーになりコマンドを実行しない", () => {
     const context = buildContext();
     const state = buildState(context);
@@ -287,6 +325,86 @@ describe("executeShellInput: for", () => {
     const context = buildContext();
     executeShellInput("for f in a b c; do :; done", context);
     expect(context.env.f).toBe("c");
+  });
+
+  it("クォートされていない変数展開はIFSで単語分割され、複数回反復する", () => {
+    const context = buildContext();
+    const result = executeShellInput('LIST="a b c"; for f in $LIST; do echo $f; done', context);
+    expect(result.stdout).toBe("a\nb\nc\n");
+  });
+
+  it("ダブルクォートされた変数展開は分割されず1回だけ反復する", () => {
+    const context = buildContext();
+    const result = executeShellInput('LIST="a b c"; for f in "$LIST"; do echo $f; done', context);
+    expect(result.stdout).toBe("a b c\n");
+  });
+
+  it("IFSを変更すると、その文字を区切りとして単語分割する", () => {
+    const context = buildContext();
+    const result = executeShellInput(
+      'IFS=:; LIST="a:b:c"; for f in $LIST; do echo $f; done',
+      context,
+    );
+    expect(result.stdout).toBe("a\nb\nc\n");
+  });
+
+  it("コマンド置換の結果もIFSで単語分割される", () => {
+    const context = buildContext();
+    const result = executeShellInput("for f in $(echo a b c); do echo $f; done", context);
+    expect(result.stdout).toBe("a\nb\nc\n");
+  });
+});
+
+describe("executeShellInput: 単純コマンドの引数のIFS単語分割", () => {
+  it("クォートされていない変数展開はコマンドの引数として複数に分割される", () => {
+    const context = buildContext();
+    const result = executeShellInput('count() { echo $#; }; LIST="a b c"; count $LIST', context);
+    expect(result.stdout).toBe("3\n");
+  });
+
+  it("ダブルクォートすれば1つの引数のまま渡せる", () => {
+    const context = buildContext();
+    const result = executeShellInput('count() { echo $#; }; LIST="a b c"; count "$LIST"', context);
+    expect(result.stdout).toBe("1\n");
+  });
+});
+
+describe("executeShellInput: exit", () => {
+  it("スクリプトの実行をその時点で打ち切り、指定した終了ステータスを返す", () => {
+    const context = buildContext();
+    const result = executeShellInput("echo before; exit 3; echo after", context);
+    expect(result.stdout).toBe("before\n");
+    expect(result.exitCode).toBe(3);
+  });
+
+  it("引数省略時は直前の終了ステータスを引き継ぐ", () => {
+    const context = buildContext();
+    const result = executeShellInput("cd /nope; exit", context);
+    expect(result.exitCode).toBe(1);
+  });
+
+  it("関数の中から呼んでもreturnと違いスクリプト全体を終了させる", () => {
+    const context = buildContext();
+    const result = executeShellInput("f() { echo in-fn; exit 5; echo unreachable; }; f; echo also-unreachable", context);
+    expect(result.stdout).toBe("in-fn\n");
+    expect(result.exitCode).toBe(5);
+  });
+
+  it("ループ・if の中から呼んでもスクリプト全体を終了させる", () => {
+    const context = buildContext();
+    const result = executeShellInput(
+      'for i in 1 2 3; do if [ "$i" = 2 ]; then exit 7; fi; echo $i; done; echo unreachable',
+      context,
+    );
+    expect(result.stdout).toBe("1\n");
+    expect(result.exitCode).toBe(7);
+  });
+
+  it("コマンド置換($(...))の中のexitはサブシェルのみを終了させ、親には伝播しない", () => {
+    const context = buildContext();
+    const result = executeShellInput('x=$(echo inner; exit 2); echo "got:$x"; echo after', context);
+    expect(result.stdout).toBe("got:inner\nafter\n");
+    expect(result.exitCode).toBe(0);
   });
 });
 

@@ -1,4 +1,4 @@
-// リダイレクト(`>` `>>` `<` `2>` `2>&1` 等)の解決と適用。
+// リダイレクト(`>` `>>` `<` `2>` `2>&1` `<<`/`<<-` 等)の解決と適用。
 // `/dev/null` の特殊挙動(書き込み破棄・読み込み常に空)はVFS層(vfs/virtualFileSystem.ts)で
 // 実装済みのため、ここでは意識せず通常のファイルパスと同様に扱えばよい。
 import type { Redirect } from "../shell";
@@ -51,6 +51,12 @@ export function resolveRedirects(redirects: readonly Redirect[], state: ShellSta
     if (redirect.target.kind === "fd") {
       const source = table.get(redirect.target.fd) ?? { kind: "terminal" };
       table.set(redirect.fd, { ...source });
+      continue;
+    }
+
+    if (redirect.target.kind === "heredoc") {
+      const content = expandWord(redirect.target.word, state);
+      if (redirect.fd === 0) stdinOverride = content;
       continue;
     }
 

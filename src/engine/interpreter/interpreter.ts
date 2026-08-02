@@ -14,7 +14,7 @@ import type {
 } from "../shell";
 import { parseScript } from "../shell";
 import { matchesCasePattern } from "./caseMatch";
-import { expandWord } from "./expand";
+import { expandWord, expandWordToFields } from "./expand";
 import { ShellRuntimeError } from "./errors";
 import { runSimpleCommand } from "./simpleCommand";
 import type { ShellState } from "./types";
@@ -23,6 +23,11 @@ const EMPTY_RESULT: CommandResult = { stdout: "", stderr: "", exitCode: 0 };
 
 /** `for`/`while` の暴走(無限ループ)を防ぐための反復回数の上限。 */
 const MAX_LOOP_ITERATIONS = 100_000;
+
+/** `return`(関数からの脱出)または `exit`(スクリプト全体の終了)のどちらかで巻き戻り中かを判定する。 */
+function isUnwinding(state: ShellState): boolean {
+  return Boolean(state.returning || state.exiting);
+}
 
 /**
  * パイプラインを実行する。各コマンドのfd1が端末のまま(リダイレクトされていない)であれば、
@@ -40,7 +45,7 @@ function runPipeline(pipeline: Pipeline, state: ShellState): CommandResult {
     if (result.stderr) stderrParts.push(result.stderr);
     last = result;
     stdin = stdoutFlow;
-    if (state.returning) break;
+    if (isUnwinding(state)) break;
   }
 
   return { stdout: last.stdout, stderr: stderrParts.join(""), exitCode: last.exitCode };
@@ -85,7 +90,7 @@ function runAndOrList(list: AndOrList, state: ShellState): CommandResult {
   const stderrParts = [result.stderr];
 
   for (let i = 0; i < list.operators.length; i += 1) {
-    if (state.returning) break;
+    if (isUnwinding(state)) break;
     const shouldRun = list.operators[i] === "&&" ? result.exitCode === 0 : result.exitCode !== 0;
     if (!shouldRun) continue;
 
@@ -99,8 +104,9 @@ function runAndOrList(list: AndOrList, state: ShellState): CommandResult {
 
 /**
  * `;`/改行で区切られた文の並び(スクリプト本体、または制御構造・関数の本体)を上から順に実行する。
- * 実行中に `return`(関数本体内)が発動した場合は、その時点までの出力を保持したまま処理を打ち切る
- * (呼び出し元の関数呼び出し処理が `state.returning` を検知して最終的な終了ステータスを確定させる)。
+ * 実行中に `return`(関数本体内)または `exit` が発動した場合は、その時点までの出力を保持したまま
+ * 処理を打ち切る(`return`は呼び出し元の関数呼び出し処理が`state.returning`を検知して最終的な
+ * 終了ステータスを確定させ、`exit`はそのまま`executeShellInput`まで巻き戻って全体を終了させる)。
  */
 export function runCompoundList(items: ScriptItem[], state: ShellState): CommandResult {
   let result: CommandResult = EMPTY_RESULT;
@@ -112,7 +118,7 @@ export function runCompoundList(items: ScriptItem[], state: ShellState): Command
     state.lastExitCode = result.exitCode;
     stdoutParts.push(result.stdout);
     stderrParts.push(result.stderr);
-    if (state.returning) break;
+    if (isUnwinding(state)) break;
   }
 
   return { stdout: stdoutParts.join(""), stderr: stderrParts.join(""), exitCode: result.exitCode };
@@ -126,7 +132,7 @@ function runIfClause(node: IfClause, state: ShellState): CommandResult {
     const conditionResult = runCompoundList(branch.condition, state);
     stdoutParts.push(conditionResult.stdout);
     stderrParts.push(conditionResult.stderr);
-    if (state.returning) {
+    if (isUnwinding(state)) {
       return { stdout: stdoutParts.join(""), stderr: stderrParts.join(""), exitCode: conditionResult.exitCode };
     }
 
@@ -152,7 +158,9 @@ function runIfClause(node: IfClause, state: ShellState): CommandResult {
 }
 
 function runForClause(node: ForClause, state: ShellState): CommandResult {
-  const items = node.words ? node.words.map((word) => expandWord(word, state)) : [...state.positionalParams];
+  const items = node.words
+    ? node.words.flatMap((word) => expandWordToFields(word, state))
+    : [...state.positionalParams];
   const stdoutParts: string[] = [];
   const stderrParts: string[] = [];
   let exitCode = 0;
@@ -169,7 +177,7 @@ function runForClause(node: ForClause, state: ShellState): CommandResult {
     stdoutParts.push(bodyResult.stdout);
     stderrParts.push(bodyResult.stderr);
     exitCode = bodyResult.exitCode;
-    if (state.returning) break;
+    if (isUnwinding(state)) break;
   }
 
   state.lastExitCode = exitCode;
@@ -186,7 +194,7 @@ function runWhileClause(node: WhileClause, state: ShellState): CommandResult {
     const conditionResult = runCompoundList(node.condition, state);
     stdoutParts.push(conditionResult.stdout);
     stderrParts.push(conditionResult.stderr);
-    if (state.returning) {
+    if (isUnwinding(state)) {
       exitCode = conditionResult.exitCode;
       break;
     }
@@ -201,7 +209,7 @@ function runWhileClause(node: WhileClause, state: ShellState): CommandResult {
     stdoutParts.push(bodyResult.stdout);
     stderrParts.push(bodyResult.stderr);
     exitCode = bodyResult.exitCode;
-    if (state.returning) break;
+    if (isUnwinding(state)) break;
   }
 
   state.lastExitCode = exitCode;
@@ -225,7 +233,9 @@ function runCaseClause(node: CaseClause, state: ShellState): CommandResult {
 }
 
 export function runScript(script: Script, state: ShellState): CommandResult {
-  return runCompoundList(script.body, state);
+  const result = runCompoundList(script.body, state);
+  if (state.exiting) return { ...result, exitCode: state.exiting.exitCode };
+  return result;
 }
 
 /** コマンド置換 `$(...)` 用のサブシェル状態を作る。`cwd`/`env` は複製し、`vfs` は共有する。 */

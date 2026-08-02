@@ -5,7 +5,7 @@ import type { CommandContext } from "../commands";
 import type { Word } from "../shell";
 import { parseScript } from "../shell";
 import { ShellRuntimeError } from "./errors";
-import { expandWord } from "./expand";
+import { expandWord, expandWordToFields } from "./expand";
 import { runCompoundList, runScript } from "./interpreter";
 import type { ShellState } from "./types";
 
@@ -114,5 +114,52 @@ describe("expandWord: 位置パラメータ", () => {
     state.positionalParams = ["a", "b", "c"];
     expect(expandWord(nthWord("cmd $@", 1), state)).toBe("a b c");
     expect(expandWord(nthWord("cmd $*", 1), state)).toBe("a b c");
+  });
+});
+
+describe("expandWordToFields: IFSによる単語分割", () => {
+  it("クォートされていない変数展開の結果はデフォルトIFS(空白・タブ・改行)で分割される", () => {
+    const state = buildState();
+    state.context.env.LIST = "a b   c\td\ne";
+    expect(expandWordToFields(nthWord("cmd $LIST", 1), state)).toEqual(["a", "b", "c", "d", "e"]);
+  });
+
+  it("先頭・末尾の空白系IFSは無視され、値が空文字列なら分割結果も空になる", () => {
+    const state = buildState();
+    state.context.env.LIST = "  a b  ";
+    expect(expandWordToFields(nthWord("cmd $LIST", 1), state)).toEqual(["a", "b"]);
+
+    state.context.env.EMPTY = "   ";
+    expect(expandWordToFields(nthWord("cmd $EMPTY", 1), state)).toEqual([]);
+  });
+
+  it("ダブルクォートされた変数展開は分割されず1フィールドのまま", () => {
+    const state = buildState();
+    state.context.env.LIST = "a b c";
+    expect(expandWordToFields(nthWord('cmd "$LIST"', 1), state)).toEqual(["a b c"]);
+  });
+
+  it("リテラルなテキスト(引用符なし)は元々空白で区切られているため分割の対象にならない", () => {
+    const state = buildState();
+    expect(expandWordToFields(nthWord("cmd plain-text", 1), state)).toEqual(["plain-text"]);
+  });
+
+  it("IFSを変更すると、その文字を区切りとして分割する(非空白文字は連続すると空フィールドを生む)", () => {
+    const state = buildState();
+    state.context.env.IFS = ":";
+    state.context.env.LIST = "a::b:c";
+    expect(expandWordToFields(nthWord("cmd $LIST", 1), state)).toEqual(["a", "", "b", "c"]);
+  });
+
+  it("IFSを空文字列にすると単語分割が一切行われない", () => {
+    const state = buildState();
+    state.context.env.IFS = "";
+    state.context.env.LIST = "a b c";
+    expect(expandWordToFields(nthWord("cmd $LIST", 1), state)).toEqual(["a b c"]);
+  });
+
+  it("コマンド置換 $(...) の結果もIFSで分割される", () => {
+    const state = buildState(buildContext(undefined, "/home/study"));
+    expect(expandWordToFields(nthWord("cmd $(echo a b c)", 1), state)).toEqual(["a", "b", "c"]);
   });
 });
