@@ -1,6 +1,6 @@
 import { VfsError } from "./errors";
 import { hasPermission, formatMode } from "./permissions";
-import { basename, dirname, joinPath, normalizePath, splitPath } from "./path";
+import { basename, DEV_NULL_PATH, dirname, joinPath, normalizePath, splitPath } from "./path";
 import { diffTree, type VfsDiffEntry } from "./snapshot";
 import { applyOwnership, cloneNode, createDirectory, createFile } from "./tree";
 import type { VfsDirectoryNode, VfsNode, VfsNodeType, VfsSnapshot, VfsUser } from "./types";
@@ -121,14 +121,17 @@ export class VirtualFileSystem {
 
   readFile(path: string): string {
     const normalized = normalizePath(path);
+    if (normalized === DEV_NULL_PATH) return "";
     const { node } = this.resolve(normalized);
     if (node.type !== "file") throw new VfsError("EISDIR", normalized);
     if (!hasPermission(node, this.user, "read")) throw new VfsError("EACCES", normalized);
     return node.content;
   }
 
+  /** `/dev/null` への書き込みは特殊デバイスファイルの挙動として常に破棄する。 */
   writeFile(path: string, content: string, options: { mode?: number } = {}): void {
     const normalized = normalizePath(path);
+    if (normalized === DEV_NULL_PATH) return;
 
     if (this.exists(normalized)) {
       const { node } = this.resolve(normalized);

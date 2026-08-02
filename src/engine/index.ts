@@ -3,3 +3,4 @@
 export * from "./vfs";
 export * from "./shell";
 export * from "./commands";
+export * from "./interpreter";

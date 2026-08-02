@@ -10,6 +10,8 @@ export interface CommandContext {
   vfs: VirtualFileSystem;
   cwd: string;
   env: Record<string, string>;
+  /** パイプ(`|`)やリダイレクト(`<`)で渡された標準入力。未指定時は入力が無いことを表す。 */
+  stdin?: string;
 }
 
 export interface CommandResult {
