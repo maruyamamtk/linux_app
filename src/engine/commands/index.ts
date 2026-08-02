@@ -13,3 +13,13 @@ export {
   touchCommand,
 } from "./fileOps";
 export { findCommand, helpCommand, locateCommand, manCommand, whichCommand } from "./search";
+export {
+  cutCommand,
+  diffCommand,
+  headCommand,
+  sortCommand,
+  tailCommand,
+  trCommand,
+  uniqCommand,
+  wcCommand,
+} from "./textProc";
