@@ -269,6 +269,38 @@ const MAN_PAGES: Record<string, ManPage> = {
     summary: "利用可能な組み込みコマンドの一覧を表示する",
     body: "NAME\n    help - 組み込みコマンドの一覧を表示する\n\nSYNOPSIS\n    help\n\nDESCRIPTION\n    このアプリで利用できる組み込みコマンドとその概要を一覧表示します。",
   },
+  chmod: {
+    summary: "ファイルやディレクトリのパーミッションを変更する",
+    body: "NAME\n    chmod - パーミッションを変更する\n\nSYNOPSIS\n    chmod モード ファイル...\n\nDESCRIPTION\n    指定したファイルのパーミッションを変更します。\n    モードには755のような数値モード、u+x/go-w/a=rxのようなシンボリックモードを指定できます。",
+  },
+  su: {
+    summary: "実行ユーザーを切り替える",
+    body: "NAME\n    su - ユーザーを切り替える\n\nSYNOPSIS\n    su [ユーザー名]\n\nDESCRIPTION\n    以後のコマンドを指定したユーザー(省略時はroot)として実行するように切り替えます。\n    本アプリでは演習用の仮想的な権限昇格として認証なしで切り替わります。",
+  },
+  sudo: {
+    summary: "1つのコマンドをroot権限で実行する",
+    body: "NAME\n    sudo - コマンドをroot権限で実行する\n\nSYNOPSIS\n    sudo コマンド [引数...]\n\nDESCRIPTION\n    指定したコマンドのみをroot権限で実行し、実行後は元のユーザーに戻ります。",
+  },
+  ps: {
+    summary: "実行中のプロセス一覧を表示する",
+    body: "NAME\n    ps - プロセス一覧を表示する\n\nSYNOPSIS\n    ps [-e|-a|-A]\n\nDESCRIPTION\n    モックのプロセス一覧を表示します。オプション省略時は自分が所有するプロセスのみ、\n    -e/-a/-A指定時は全ユーザーのプロセスを表示します。",
+  },
+  jobs: {
+    summary: "現在のシェルのジョブ一覧を表示する",
+    body: "NAME\n    jobs - ジョブ一覧を表示する\n\nSYNOPSIS\n    jobs\n\nDESCRIPTION\n    バックグラウンド/停止中のジョブを番号付きで一覧表示します。",
+  },
+  fg: {
+    summary: "ジョブをフォアグラウンドに戻す",
+    body: "NAME\n    fg - ジョブをフォアグラウンドに戻す\n\nSYNOPSIS\n    fg [%ジョブ番号]\n\nDESCRIPTION\n    指定したジョブ(省略時はカレントジョブ)をフォアグラウンドで再開します。",
+  },
+  bg: {
+    summary: "停止中のジョブをバックグラウンドで再開する",
+    body: "NAME\n    bg - ジョブをバックグラウンドで再開する\n\nSYNOPSIS\n    bg [%ジョブ番号]\n\nDESCRIPTION\n    指定した停止中のジョブ(省略時はカレントジョブ)をバックグラウンドで再開します。",
+  },
+  kill: {
+    summary: "プロセスやジョブを終了させる",
+    body: "NAME\n    kill - プロセスを終了させる\n\nSYNOPSIS\n    kill [-シグナル] PID | %ジョブ番号...\n\nDESCRIPTION\n    指定したPIDまたはジョブ番号のプロセスを終了させます。\n    root以外は自分が所有するプロセスのみ終了できます。",
+  },
   sed: {
     summary: "テキストをストリーム的に編集する(置換・削除・抽出)",
     body: "NAME\n    sed - テキストの検索・置換・削除を行う\n\nSYNOPSIS\n    sed [-n] スクリプト ファイル...\n\nDESCRIPTION\n    ファイルを1行ずつ読み込み、スクリプトに従って編集します。\n    -n  自動出力を抑制する(pコマンドで明示的に出力した行のみ表示)\n\n    アドレス指定: 行番号・`$`(最終行)・`/正規表現/`・`アドレス1,アドレス2`(範囲)\n    コマンド:\n      d          パターンスペースを削除する\n      p          パターンスペースを出力する\n      s/前/後/g  正規表現にマッチした部分を置換する(gで全置換、`\\1`で後方参照)",
