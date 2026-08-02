@@ -17,6 +17,7 @@ const EXPECTED_COMMANDS = [
   "find",
   "locate",
   "which",
+  "grep",
   "man",
   "help",
   "chmod",
@@ -27,6 +28,16 @@ const EXPECTED_COMMANDS = [
   "fg",
   "bg",
   "kill",
+  "wc",
+  "sort",
+  "uniq",
+  "cut",
+  "tr",
+  "head",
+  "tail",
+  "diff",
+  "sed",
+  "awk",
 ];
 
 describe("commandRegistry", () => {
