@@ -225,13 +225,89 @@ const MAN_PAGES: Record<string, ManPage> = {
     summary: "PATH上から実行可能なコマンドの場所を検索する",
     body: "NAME\n    which - コマンドの実体を検索する\n\nSYNOPSIS\n    which コマンド名...\n\nDESCRIPTION\n    環境変数PATHに列挙されたディレクトリを順に探索し、実行可能なコマンドの\n    パスを表示します。",
   },
+  grep: {
+    summary: "ファイルの内容を正規表現で検索する",
+    body: "NAME\n    grep - パターンにマッチする行を検索する\n\nSYNOPSIS\n    grep [-i] [-n] [-v] [-E] パターン ファイル...\n\nDESCRIPTION\n    指定したファイルから正規表現パターンにマッチする行を表示します。\n    -i  大文字小文字を区別しない\n    -n  マッチした行の行番号を表示する\n    -v  マッチしなかった行を表示する(反転)\n    -E  拡張正規表現(+ ? {m,n} () |)を使用する",
+  },
   man: {
     summary: "コマンドのマニュアルページを表示する",
     body: "NAME\n    man - マニュアルページを表示する\n\nSYNOPSIS\n    man コマンド名\n\nDESCRIPTION\n    指定したコマンドのマニュアルページを表示します。",
   },
+  wc: {
+    summary: "行数・単語数・バイト数を数える",
+    body: "NAME\n    wc - 行数・単語数・バイト数を数える\n\nSYNOPSIS\n    wc [-l] [-w] [-c] [ファイル...]\n\nDESCRIPTION\n    指定したファイル(省略時は標準入力)の行数・単語数・バイト数を表示します。\n    -l  行数のみ表示する\n    -w  単語数のみ表示する\n    -c  バイト数のみ表示する",
+  },
+  sort: {
+    summary: "テキストの行を並び替える",
+    body: "NAME\n    sort - 行を並び替える\n\nSYNOPSIS\n    sort [-n] [-r] [-u] [-k フィールド番号] [ファイル...]\n\nDESCRIPTION\n    指定したファイル(省略時は標準入力)の各行を並び替えて表示します。\n    -n  数値として比較する\n    -r  逆順に並び替える\n    -u  重複する行をまとめる\n    -k  指定したフィールド番号を比較キーにする",
+  },
+  uniq: {
+    summary: "隣接する重複行をまとめる",
+    body: "NAME\n    uniq - 隣接する重複行をまとめる\n\nSYNOPSIS\n    uniq [-c] [ファイル]\n\nDESCRIPTION\n    連続して同じ内容の行をひとつにまとめて表示します(sortしていない入力では\n    離れた場所にある重複行はまとめられません)。\n    -c  各行の前に出現回数を表示する",
+  },
+  cut: {
+    summary: "各行から指定したフィールドを切り出す",
+    body: "NAME\n    cut - 各行からフィールドを切り出す\n\nSYNOPSIS\n    cut -f フィールドリスト [-d 区切り文字] [ファイル...]\n\nDESCRIPTION\n    指定した区切り文字(省略時はタブ)で各行を分割し、指定したフィールドのみを\n    表示します。フィールドリストは `1,3` や `2-4` のように指定できます。",
+  },
+  tr: {
+    summary: "標準入力の文字を変換・削除する",
+    body: "NAME\n    tr - 文字を変換・削除する\n\nSYNOPSIS\n    tr SET1 SET2\n    tr -d SET1\n\nDESCRIPTION\n    標準入力に含まれるSET1の文字をSET2の対応する文字に変換して表示します。\n    -d  SET1に含まれる文字を削除する\n    SET1・SET2は `a-z` のような範囲指定にも対応します。",
+  },
+  head: {
+    summary: "ファイルの先頭部分を表示する",
+    body: "NAME\n    head - ファイルの先頭部分を表示する\n\nSYNOPSIS\n    head [-n 行数] [ファイル...]\n\nDESCRIPTION\n    指定したファイル(省略時は標準入力)の先頭から指定行数(省略時は10行)を\n    表示します。",
+  },
+  tail: {
+    summary: "ファイルの末尾部分を表示する",
+    body: "NAME\n    tail - ファイルの末尾部分を表示する\n\nSYNOPSIS\n    tail [-n 行数] [-f] [ファイル...]\n\nDESCRIPTION\n    指定したファイル(省略時は標準入力)の末尾から指定行数(省略時は10行)を\n    表示します。\n    -f  ファイルへの追記を監視し続ける(本アプリでは実行時点の末尾を返す簡易的な\n        シミュレートのみ行う)",
+  },
+  diff: {
+    summary: "2つのファイルの差分を表示する",
+    body: "NAME\n    diff - 2つのファイルを比較する\n\nSYNOPSIS\n    diff ファイル1 ファイル2\n    diff -u ファイル1 ファイル2\n\nDESCRIPTION\n    2つのファイルを行単位で比較し、差分を表示します。\n    -u  ユニファイド形式(前後の文脈付き)で表示する",
+  },
   help: {
     summary: "利用可能な組み込みコマンドの一覧を表示する",
     body: "NAME\n    help - 組み込みコマンドの一覧を表示する\n\nSYNOPSIS\n    help\n\nDESCRIPTION\n    このアプリで利用できる組み込みコマンドとその概要を一覧表示します。",
+  },
+  chmod: {
+    summary: "ファイルやディレクトリのパーミッションを変更する",
+    body: "NAME\n    chmod - パーミッションを変更する\n\nSYNOPSIS\n    chmod モード ファイル...\n\nDESCRIPTION\n    指定したファイルのパーミッションを変更します。\n    モードには755のような数値モード、u+x/go-w/a=rxのようなシンボリックモードを指定できます。",
+  },
+  su: {
+    summary: "実行ユーザーを切り替える",
+    body: "NAME\n    su - ユーザーを切り替える\n\nSYNOPSIS\n    su [ユーザー名]\n\nDESCRIPTION\n    以後のコマンドを指定したユーザー(省略時はroot)として実行するように切り替えます。\n    本アプリでは演習用の仮想的な権限昇格として認証なしで切り替わります。",
+  },
+  sudo: {
+    summary: "1つのコマンドをroot権限で実行する",
+    body: "NAME\n    sudo - コマンドをroot権限で実行する\n\nSYNOPSIS\n    sudo コマンド [引数...]\n\nDESCRIPTION\n    指定したコマンドのみをroot権限で実行し、実行後は元のユーザーに戻ります。",
+  },
+  ps: {
+    summary: "実行中のプロセス一覧を表示する",
+    body: "NAME\n    ps - プロセス一覧を表示する\n\nSYNOPSIS\n    ps [-e|-a|-A]\n\nDESCRIPTION\n    モックのプロセス一覧を表示します。オプション省略時は自分が所有するプロセスのみ、\n    -e/-a/-A指定時は全ユーザーのプロセスを表示します。",
+  },
+  jobs: {
+    summary: "現在のシェルのジョブ一覧を表示する",
+    body: "NAME\n    jobs - ジョブ一覧を表示する\n\nSYNOPSIS\n    jobs\n\nDESCRIPTION\n    バックグラウンド/停止中のジョブを番号付きで一覧表示します。",
+  },
+  fg: {
+    summary: "ジョブをフォアグラウンドに戻す",
+    body: "NAME\n    fg - ジョブをフォアグラウンドに戻す\n\nSYNOPSIS\n    fg [%ジョブ番号]\n\nDESCRIPTION\n    指定したジョブ(省略時はカレントジョブ)をフォアグラウンドで再開します。",
+  },
+  bg: {
+    summary: "停止中のジョブをバックグラウンドで再開する",
+    body: "NAME\n    bg - ジョブをバックグラウンドで再開する\n\nSYNOPSIS\n    bg [%ジョブ番号]\n\nDESCRIPTION\n    指定した停止中のジョブ(省略時はカレントジョブ)をバックグラウンドで再開します。",
+  },
+  kill: {
+    summary: "プロセスやジョブを終了させる",
+    body: "NAME\n    kill - プロセスを終了させる\n\nSYNOPSIS\n    kill [-シグナル] PID | %ジョブ番号...\n\nDESCRIPTION\n    指定したPIDまたはジョブ番号のプロセスを終了させます。\n    root以外は自分が所有するプロセスのみ終了できます。",
+  },
+  sed: {
+    summary: "テキストをストリーム的に編集する(置換・削除・抽出)",
+    body: "NAME\n    sed - テキストの検索・置換・削除を行う\n\nSYNOPSIS\n    sed [-n] スクリプト ファイル...\n\nDESCRIPTION\n    ファイルを1行ずつ読み込み、スクリプトに従って編集します。\n    -n  自動出力を抑制する(pコマンドで明示的に出力した行のみ表示)\n\n    アドレス指定: 行番号・`$`(最終行)・`/正規表現/`・`アドレス1,アドレス2`(範囲)\n    コマンド:\n      d          パターンスペースを削除する\n      p          パターンスペースを出力する\n      s/前/後/g  正規表現にマッチした部分を置換する(gで全置換、`\\1`で後方参照)",
+  },
+  awk: {
+    summary: "パターンに応じたアクションを実行するテキスト処理言語",
+    body: "NAME\n    awk - パターンマッチによるテキスト処理を行う\n\nSYNOPSIS\n    awk [-F 区切り文字] 'パターン { アクション }' ファイル...\n\nDESCRIPTION\n    ファイルを1行ずつ読み込み、パターンに一致した行に対してアクションを実行します。\n    -F  フィールド区切り文字を指定する(デフォルトは空白文字)\n\n    フィールド変数: $0(行全体)・$1〜$NF(各フィールド)\n    組み込み変数: NR(現在の行番号)・NF(フィールド数)\n    BEGIN{...}はデータ処理前に、END{...}はデータ処理後に一度だけ実行される。",
   },
 };
 
