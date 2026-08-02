@@ -7,6 +7,7 @@ const EXPECTED_COMMANDS = [
   "pwd",
   "cd",
   "ls",
+  "cat",
   "mkdir",
   "touch",
   "rm",
@@ -44,6 +45,7 @@ const EXPECTED_COMMANDS = [
   "true",
   "false",
   ":",
+  "xargs",
 ];
 
 describe("commandRegistry", () => {

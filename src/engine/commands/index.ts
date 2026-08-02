@@ -2,6 +2,7 @@ export type { CommandContext, CommandHandler, CommandResult, MockProcess } from 
 export { commandRegistry, executeCommand, isKnownCommand, resolveCommand } from "./registry";
 export { awkCommand } from "./awk";
 export {
+  catCommand,
   cdCommand,
   cpCommand,
   lnCommand,
@@ -30,3 +31,4 @@ export {
   uniqCommand,
   wcCommand,
 } from "./textProc";
+export { xargsCommand } from "./xargs";

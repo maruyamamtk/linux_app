@@ -1,5 +1,6 @@
 import { awkCommand } from "./awk";
 import {
+  catCommand,
   cdCommand,
   cpCommand,
   lnCommand,
@@ -29,14 +30,16 @@ import {
   wcCommand,
 } from "./textProc";
 import type { CommandContext, CommandHandler, CommandResult } from "./types";
+import { xargsCommand } from "./xargs";
 
 /**
- * コマンド名 → 実装関数のレジストリ。要件定義書4章のCh4-6・Ch9-10・Ch11-12・Ch14該当コマンド群。
+ * コマンド名 → 実装関数のレジストリ。要件定義書4章のCh4-6・Ch9-10・Ch11-12・Ch14・Ch17該当コマンド群。
  */
 export const commandRegistry: Readonly<Record<string, CommandHandler>> = {
   pwd: pwdCommand,
   cd: cdCommand,
   ls: lsCommand,
+  cat: catCommand,
   mkdir: mkdirCommand,
   touch: touchCommand,
   rm: rmCommand,
@@ -74,6 +77,7 @@ export const commandRegistry: Readonly<Record<string, CommandHandler>> = {
   true: trueCommand,
   false: falseCommand,
   ":": colonCommand,
+  xargs: xargsCommand,
 };
 
 export function resolveCommand(name: string): CommandHandler | undefined {

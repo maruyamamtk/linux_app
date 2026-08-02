@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  catCommand,
   cdCommand,
   cpCommand,
   lnCommand,
@@ -13,6 +14,49 @@ import {
   touchCommand,
 } from "./fileOps";
 import { ROOT_USER, buildContext } from "./testFixtures";
+
+describe("cat", () => {
+  it("prints the contents of a single file", () => {
+    const context = buildContext();
+    expect(catCommand(["file1.txt"], context)).toEqual({ stdout: "hello\n", stderr: "", exitCode: 0 });
+  });
+
+  it("concatenates multiple files in order", () => {
+    const context = buildContext();
+    context.vfs.writeFile("/home/study/second.txt", "world\n");
+    const result = catCommand(["file1.txt", "second.txt"], context);
+    expect(result.stdout).toBe("hello\nworld\n");
+    expect(result.exitCode).toBe(0);
+  });
+
+  it("reads standard input when no file is given, or `-` is given", () => {
+    const context = { ...buildContext(), stdin: "piped\n" };
+    expect(catCommand([], context)).toEqual({ stdout: "piped\n", stderr: "", exitCode: 0 });
+    expect(catCommand(["-"], context)).toEqual({ stdout: "piped\n", stderr: "", exitCode: 0 });
+  });
+
+  it("reports an error and exit code 1 for a missing file, but still outputs the rest", () => {
+    const context = buildContext();
+    const result = catCommand(["missing.txt", "file1.txt"], context);
+    expect(result.stdout).toBe("hello\n");
+    expect(result.stderr).toContain("No such file or directory");
+    expect(result.exitCode).toBe(1);
+  });
+
+  it("rejects directories", () => {
+    const context = buildContext();
+    const result = catCommand(["docs"], context);
+    expect(result.stderr).toContain("Is a directory");
+    expect(result.exitCode).toBe(1);
+  });
+
+  it("-n prefixes each line with its (1-based) line number", () => {
+    const context = buildContext();
+    context.vfs.writeFile("/home/study/multi.txt", "a\nb\n");
+    const result = catCommand(["-n", "multi.txt"], context);
+    expect(result.stdout).toBe("     1\ta\n     2\tb\n");
+  });
+});
 
 describe("pwd", () => {
   it("prints the current working directory", () => {

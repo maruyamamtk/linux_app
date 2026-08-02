@@ -2,10 +2,14 @@ import { describe, expect, it } from "vitest";
 
 import { ShellSyntaxError } from "./errors";
 import { tokenize } from "./lexer";
-import type { WordToken } from "./lexer";
+import type { HeredocToken, WordToken } from "./lexer";
 
 function words(input: string): WordToken[] {
   return tokenize(input).filter((t): t is WordToken => t.type === "WORD");
+}
+
+function heredocs(input: string): HeredocToken[] {
+  return tokenize(input).filter((t): t is HeredocToken => t.type === "HEREDOC");
 }
 
 describe("tokenize: 単語の基本形", () => {
@@ -20,11 +24,11 @@ describe("tokenize: 単語の基本形", () => {
     expect(arg.word.parts).toEqual([{ type: "SingleQuoted", value: "a $b `c` $((1+1))" }]);
   });
 
-  it("ダブルクォート内は変数展開・コマンド置換を解決する", () => {
+  it("ダブルクォート内は変数展開・コマンド置換を解決する(IFSによる単語分割を抑止するためquotedが付く)", () => {
     const [, arg] = words('echo "hello $name"');
     expect(arg.word.parts).toEqual([
       { type: "Text", value: "hello " },
-      { type: "ParameterExpansion", name: "name" },
+      { type: "ParameterExpansion", name: "name", quoted: true },
     ]);
   });
 
@@ -138,13 +142,47 @@ describe("tokenize: 演算子・リダイレクト", () => {
   });
 });
 
+describe("tokenize: ヒアドキュメント", () => {
+  it("区切り文字がクォートされていなければ本文の変数展開を解決する", () => {
+    const [heredoc] = heredocs("cat <<EOF\nhello $name\nEOF\n");
+    expect(heredoc.body.parts).toEqual([
+      { type: "Text", value: "hello " },
+      { type: "ParameterExpansion", name: "name" },
+      { type: "Text", value: "\n" },
+    ]);
+  });
+
+  it("区切り文字がクォートされていれば本文は展開せずそのまま保持する", () => {
+    const [heredoc] = heredocs("cat <<'EOF'\nhello $name\nEOF\n");
+    expect(heredoc.body.parts).toEqual([{ type: "SingleQuoted", value: "hello $name\n" }]);
+  });
+
+  it("<<- は本文各行と区切り文字行の先頭タブを除去する", () => {
+    const [heredoc] = heredocs("cat <<-EOF\n\tindented\n\tEOF\n");
+    expect(heredoc.body.parts).toEqual([{ type: "Text", value: "indented\n" }]);
+  });
+
+  it("本文が空(区切り文字の直後に終端行)であれば空の本文になる", () => {
+    const [heredoc] = heredocs("cat <<EOF\nEOF\n");
+    expect(heredoc.body.parts).toEqual([{ type: "Text", value: "" }]);
+  });
+
+  it("終端が入力の途中で見つからなければShellSyntaxErrorになる", () => {
+    expect(() => tokenize("cat <<EOF\nhello\n")).toThrow(ShellSyntaxError);
+  });
+
+  it("末尾に改行が無い(区切り文字自体が現れない)場合もShellSyntaxErrorになる", () => {
+    expect(() => tokenize("cat <<EOF")).toThrow(ShellSyntaxError);
+  });
+});
+
 describe("tokenize: 未対応構文はShellSyntaxErrorになる", () => {
   it("バックグラウンド実行(&)", () => {
     expect(() => tokenize("sleep 1 &")).toThrow(ShellSyntaxError);
   });
 
-  it("ヒアドキュメント(<<)", () => {
-    expect(() => tokenize("cat <<EOF")).toThrow(ShellSyntaxError);
+  it("ヒアストリング(<<<)", () => {
+    expect(() => tokenize("cat <<<hello")).toThrow(ShellSyntaxError);
   });
 
   it("閉じられていないシングルクォート", () => {

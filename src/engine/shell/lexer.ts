@@ -15,12 +15,39 @@ import type {
 import { ShellSyntaxError } from "./errors";
 import { parseScript } from "./parser";
 
-export type OperatorValue = "|" | "||" | "&&" | ";" | ";;" | ">" | ">>" | "<" | ">&" | "<&" | "(" | ")";
+export type OperatorValue =
+  | "|"
+  | "||"
+  | "&&"
+  | ";"
+  | ";;"
+  | ">"
+  | ">>"
+  | "<"
+  | ">&"
+  | "<&"
+  | "<<"
+  | "<<-"
+  | "("
+  | ")";
 
 export interface WordToken {
   type: "WORD";
   word: Word;
   raw: string;
+  start: number;
+  end: number;
+}
+
+/**
+ * ヒアドキュメント(`<< WORD` / `<<- WORD`)の本文を表すトークン。
+ * `<<`/`<<-` の OPERATOR トークンの直後に、区切り文字(delimiter)の代わりとして置かれる。
+ * `body` は区切り文字を検出した時点では未確定(まだ本文が入力に現れていない)ため、
+ * 現在の行の末尾の改行に到達してから本文を読み進めて事後的にこのトークンへ書き込む。
+ */
+export interface HeredocToken {
+  type: "HEREDOC";
+  body: Word;
   start: number;
   end: number;
 }
@@ -51,7 +78,22 @@ export interface EofToken {
   end: number;
 }
 
-export type Token = WordToken | IoNumberToken | OperatorToken | NewlineToken | EofToken;
+export type Token = WordToken | IoNumberToken | OperatorToken | NewlineToken | EofToken | HeredocToken;
+
+/** ヒアドキュメントの区切り文字を検出した時点ではまだ本文が読めないため、暫定的に空の本文を積んでおく。 */
+const EMPTY_WORD: Word = { type: "Word", parts: [] };
+
+/** `<<`/`<<-` を読んだ時点で、対応する本文の読み進めを行末まで遅延するためのキュー項目。 */
+interface PendingHeredoc {
+  /** 区切り文字のクォート・エスケープを解決した後のリテラル文字列(本文終端の判定に使う)。 */
+  literalDelimiter: string;
+  /** 区切り文字の一部でもクォート・エスケープされていた場合true(本文中の変数展開等を抑止する)。 */
+  quoted: boolean;
+  /** `<<-` の場合true。本文の各行および区切り文字行の先頭タブを除去してから比較する。 */
+  stripTabs: boolean;
+  /** 本文が確定した時点で `body` フィールドを書き込む対象のトークン。 */
+  token: HeredocToken;
+}
 
 const NAME_START = /[A-Za-z_]/;
 const NAME_CONT = /[A-Za-z0-9_]/;
@@ -101,11 +143,20 @@ class CharScanner {
 export function tokenize(input: string): Token[] {
   const scanner = new CharScanner(input);
   const tokens: Token[] = [];
+  // `<<`/`<<-` を読んだ時点ではまだ本文が入力に現れていないため、区切り文字だけを解決して
+  // ここに積んでおき、その行の末尾の改行に到達した時点でまとめて本文を読み進める
+  // (1行に複数のヒアドキュメントがある場合は出現順に処理する、実シェルと同じ規則)。
+  const pendingHeredocs: PendingHeredoc[] = [];
 
   for (;;) {
     skipBlanksAndComments(scanner);
 
     if (scanner.eof()) {
+      // 入力が改行で終わっていない場合でも、行末とみなして未処理のヒアドキュメントを解決する
+      // (本文・区切り文字行が実際には存在しなければ、ここで「終端が見つからない」エラーになる)。
+      while (pendingHeredocs.length > 0) {
+        consumeHeredocBody(scanner, pendingHeredocs.shift()!);
+      }
       tokens.push({ type: "EOF", start: scanner.pos, end: scanner.pos });
       break;
     }
@@ -116,6 +167,9 @@ export function tokenize(input: string): Token[] {
     if (ch === "\n") {
       scanner.advance();
       tokens.push({ type: "NEWLINE", start, end: scanner.pos });
+      while (pendingHeredocs.length > 0) {
+        consumeHeredocBody(scanner, pendingHeredocs.shift()!);
+      }
       continue;
     }
 
@@ -154,10 +208,21 @@ export function tokenize(input: string): Token[] {
     if (ch === "<") {
       scanner.advance();
       if (scanner.peek() === "<") {
-        throw new ShellSyntaxError(
-          "ヒアドキュメント/ヒアストリング(<<, <<<)には対応していません",
-          start,
-        );
+        scanner.advance();
+        if (scanner.peek() === "<") {
+          throw new ShellSyntaxError("ヒアストリング(<<<)には対応していません", start);
+        }
+        let stripTabs = false;
+        if (scanner.peek() === "-") {
+          scanner.advance();
+          stripTabs = true;
+        }
+        tokens.push({ type: "OPERATOR", value: stripTabs ? "<<-" : "<<", start, end: scanner.pos });
+        const heredocToken: HeredocToken = { type: "HEREDOC", body: EMPTY_WORD, start, end: scanner.pos };
+        const { literal, quoted } = scanHeredocDelimiterWord(scanner, start);
+        pendingHeredocs.push({ literalDelimiter: literal, quoted, stripTabs, token: heredocToken });
+        tokens.push(heredocToken);
+        continue;
       }
       if (scanner.peek() === "&") {
         scanner.advance();
@@ -238,6 +303,85 @@ function skipBlanksAndComments(scanner: CharScanner): void {
 
     break;
   }
+}
+
+/**
+ * `<<`/`<<-` の直後にある区切り文字を読み取る。空白文字またはワード境界文字(演算子等)の
+ * 手前まで読み進め、シングル/ダブルクォート・バックスラッシュエスケープは値へ反映しつつ
+ * `quoted` フラグを立てる(区切り文字の一部でもクォートされていれば本文中の展開を抑止する、
+ * 実シェルと同じ規則)。
+ */
+function scanHeredocDelimiterWord(scanner: CharScanner, errorStart: number): { literal: string; quoted: boolean } {
+  while (scanner.peek() === " " || scanner.peek() === "\t") scanner.advance();
+
+  let literal = "";
+  let quoted = false;
+  let sawAny = false;
+
+  while (!scanner.eof() && !isWordBoundaryChar(scanner.peek()!)) {
+    sawAny = true;
+    const ch = scanner.advance();
+
+    if (ch === "\\") {
+      quoted = true;
+      const next = scanner.peek();
+      if (next === undefined) {
+        literal += "\\";
+        break;
+      }
+      literal += scanner.advance();
+      continue;
+    }
+
+    if (ch === "'" || ch === '"') {
+      quoted = true;
+      while (!scanner.eof() && scanner.peek() !== ch) literal += scanner.advance();
+      if (scanner.eof()) throw new ShellSyntaxError(`${ch} が閉じられていません`, errorStart);
+      scanner.advance();
+      continue;
+    }
+
+    literal += ch;
+  }
+
+  if (!sawAny) {
+    throw new ShellSyntaxError("ヒアドキュメントの区切り文字が必要です", errorStart);
+  }
+
+  return { literal, quoted };
+}
+
+/**
+ * `PendingHeredoc` 1件分の本文を、現在の(行末の改行を消費した直後の)位置から読み進める。
+ * 区切り文字と一致する行に到達するまでの各行を本文として集め、`token.body` へ書き込む。
+ * 区切り文字がクォートされていた場合は展開を行わない(シングルクォート同様の生テキストとして
+ * 保持する)。`<<-` の場合、本文各行および区切り文字行の先頭タブを比較・格納の両方で除去する。
+ */
+function consumeHeredocBody(scanner: CharScanner, pending: PendingHeredoc): void {
+  const errorStart = scanner.pos;
+  const lines: string[] = [];
+
+  for (;;) {
+    if (scanner.eof()) {
+      throw new ShellSyntaxError(
+        `ヒアドキュメントの終端 "${pending.literalDelimiter}" が見つかりません`,
+        errorStart,
+      );
+    }
+
+    let line = "";
+    while (!scanner.eof() && scanner.peek() !== "\n") line += scanner.advance();
+    if (!scanner.eof()) scanner.advance(); // 行末の改行を消費する
+
+    const content = pending.stripTabs ? line.replace(/^\t+/, "") : line;
+    if (content === pending.literalDelimiter) break;
+    lines.push(content);
+  }
+
+  const bodyText = lines.length > 0 ? `${lines.join("\n")}\n` : "";
+  pending.token.body = pending.quoted
+    ? { type: "Word", parts: [{ type: "SingleQuoted", value: bodyText }] }
+    : parseWordFromString(bodyText);
 }
 
 function scanWordChars(scanner: CharScanner, isBoundary: (ch: string) => boolean): WordPart[] {
@@ -381,7 +525,7 @@ function scanDoubleQuoted(scanner: CharScanner): WordPart[] {
       const part = tryScanDollarExpansion(scanner);
       if (part) {
         flush();
-        parts.push(part);
+        parts.push(markQuoted(part));
         continue;
       }
       buffer += scanner.advance();
@@ -390,7 +534,7 @@ function scanDoubleQuoted(scanner: CharScanner): WordPart[] {
 
     if (ch === "`") {
       flush();
-      parts.push(scanBacktickSubstitution(scanner));
+      parts.push(markQuoted(scanBacktickSubstitution(scanner)));
       continue;
     }
 
@@ -399,6 +543,22 @@ function scanDoubleQuoted(scanner: CharScanner): WordPart[] {
 
   flush();
   return parts;
+}
+
+/**
+ * ダブルクォート内で展開部品(パラメータ展開・コマンド置換・算術展開)が出現した場合に
+ * `quoted: true` を付与する。IFSによる単語分割はダブルクォート内では行われないため
+ * (expand.ts の expandWordToFields 参照)、この印を頼りに分割対象かどうかを判定する。
+ */
+function markQuoted(part: WordPart): WordPart {
+  switch (part.type) {
+    case "ParameterExpansion":
+    case "CommandSubstitution":
+    case "ArithmeticExpansion":
+      return { ...part, quoted: true };
+    default:
+      return part;
+  }
 }
 
 function tryScanDollarExpansion(scanner: CharScanner): WordPart | undefined {
