@@ -6,12 +6,14 @@ import type { Word } from "../shell";
 import { parseScript } from "../shell";
 import { ShellRuntimeError } from "./errors";
 import { expandWord } from "./expand";
-import { runScript } from "./interpreter";
+import { runCompoundList, runScript } from "./interpreter";
 import type { ShellState } from "./types";
 
 function nthWord(input: string, index: number): Word {
   const script = parseScript(input);
-  return script.body[0].andOr.pipelines[0].commands[0].words[index];
+  const command = script.body[0].andOr.pipelines[0].commands[0];
+  if (command.type !== "SimpleCommand") throw new Error("expected a SimpleCommand");
+  return command.words[index];
 }
 
 function buildState(context: CommandContext = buildContext()): ShellState {
@@ -20,6 +22,11 @@ function buildState(context: CommandContext = buildContext()): ShellState {
     lastExitCode: 0,
     runSubshell: (script) =>
       runScript(script, buildState({ ...context, env: { ...context.env } })),
+    runCompoundList: (items) => runCompoundList(items, state),
+    functions: {},
+    positionalParams: [],
+    localFrames: [],
+    callDepth: 0,
   };
   return state;
 }
@@ -79,5 +86,33 @@ describe("expandWord", () => {
   it("算術展開 $((...)) は式を評価して数値の文字列を返す", () => {
     const state = buildState();
     expect(expandWord(nthWord("cmd $((2 + 3 * 4))", 1), state)).toBe("14");
+  });
+});
+
+describe("expandWord: 位置パラメータ", () => {
+  it("$1 $2 ... は positionalParams を1始まりで参照する", () => {
+    const state = buildState();
+    state.positionalParams = ["a", "b", "c"];
+    expect(expandWord(nthWord("cmd $1", 1), state)).toBe("a");
+    expect(expandWord(nthWord("cmd $2", 1), state)).toBe("b");
+  });
+
+  it("範囲外の位置パラメータは未設定として空文字列になる", () => {
+    const state = buildState();
+    state.positionalParams = ["a"];
+    expect(expandWord(nthWord("cmd $9", 1), state)).toBe("");
+  });
+
+  it("$# は位置パラメータの個数になる", () => {
+    const state = buildState();
+    state.positionalParams = ["a", "b", "c"];
+    expect(expandWord(nthWord("cmd $#", 1), state)).toBe("3");
+  });
+
+  it("$@ $* は位置パラメータをスペース区切りで連結する", () => {
+    const state = buildState();
+    state.positionalParams = ["a", "b", "c"];
+    expect(expandWord(nthWord("cmd $@", 1), state)).toBe("a b c");
+    expect(expandWord(nthWord("cmd $*", 1), state)).toBe("a b c");
   });
 });

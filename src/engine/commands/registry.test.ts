@@ -38,6 +38,12 @@ const EXPECTED_COMMANDS = [
   "diff",
   "sed",
   "awk",
+  "test",
+  "[",
+  "echo",
+  "true",
+  "false",
+  ":",
 ];
 
 describe("commandRegistry", () => {

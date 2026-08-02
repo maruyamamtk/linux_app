@@ -15,7 +15,7 @@ import type {
 import { ShellSyntaxError } from "./errors";
 import { parseScript } from "./parser";
 
-export type OperatorValue = "|" | "||" | "&&" | ";" | ">" | ">>" | "<" | ">&" | "<&";
+export type OperatorValue = "|" | "||" | "&&" | ";" | ";;" | ">" | ">>" | "<" | ">&" | "<&" | "(" | ")";
 
 export interface WordToken {
   type: "WORD";
@@ -121,7 +121,12 @@ export function tokenize(input: string): Token[] {
 
     if (ch === ";") {
       scanner.advance();
-      tokens.push({ type: "OPERATOR", value: ";", start, end: scanner.pos });
+      if (scanner.peek() === ";") {
+        scanner.advance();
+        tokens.push({ type: "OPERATOR", value: ";;", start, end: scanner.pos });
+      } else {
+        tokens.push({ type: "OPERATOR", value: ";", start, end: scanner.pos });
+      }
       continue;
     }
 
@@ -179,8 +184,16 @@ export function tokenize(input: string): Token[] {
       continue;
     }
 
-    if (ch === "(" || ch === ")") {
-      throw new ShellSyntaxError("サブシェル/グループコマンド ( ) には対応していません", start);
+    if (ch === "(") {
+      scanner.advance();
+      tokens.push({ type: "OPERATOR", value: "(", start, end: scanner.pos });
+      continue;
+    }
+
+    if (ch === ")") {
+      scanner.advance();
+      tokens.push({ type: "OPERATOR", value: ")", start, end: scanner.pos });
+      continue;
     }
 
     if (isDigit(ch)) {
