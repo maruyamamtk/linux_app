@@ -11,9 +11,21 @@ import {
   touchCommand,
 } from "./fileOps";
 import { findCommand, helpCommand, locateCommand, manCommand, whichCommand } from "./search";
+import {
+  cutCommand,
+  diffCommand,
+  headCommand,
+  sortCommand,
+  tailCommand,
+  trCommand,
+  uniqCommand,
+  wcCommand,
+} from "./textProc";
 import type { CommandContext, CommandHandler, CommandResult } from "./types";
 
-/** コマンド名 → 実装関数のレジストリ。要件定義書4章のCh4-6該当コマンド群。 */
+/**
+ * コマンド名 → 実装関数のレジストリ。要件定義書4章のCh4-6・Ch11-12該当コマンド群。
+ */
 export const commandRegistry: Readonly<Record<string, CommandHandler>> = {
   pwd: pwdCommand,
   cd: cdCommand,
@@ -30,6 +42,14 @@ export const commandRegistry: Readonly<Record<string, CommandHandler>> = {
   which: whichCommand,
   man: manCommand,
   help: helpCommand,
+  wc: wcCommand,
+  sort: sortCommand,
+  uniq: uniqCommand,
+  cut: cutCommand,
+  tr: trCommand,
+  head: headCommand,
+  tail: tailCommand,
+  diff: diffCommand,
 };
 
 export function resolveCommand(name: string): CommandHandler | undefined {

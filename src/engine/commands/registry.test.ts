@@ -19,6 +19,14 @@ const EXPECTED_COMMANDS = [
   "which",
   "man",
   "help",
+  "wc",
+  "sort",
+  "uniq",
+  "cut",
+  "tr",
+  "head",
+  "tail",
+  "diff",
 ];
 
 describe("commandRegistry", () => {
