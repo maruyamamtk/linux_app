@@ -69,6 +69,14 @@ export class VirtualFileSystem {
     return diffTree(this.initialTree, this.tree);
   }
 
+  /**
+   * 現在の木構造のクローンを返す。採点エンジンが学習者/模範解答それぞれの
+   * `VirtualFileSystem` インスタンスを実行後に比較する用途を想定している。
+   */
+  getRootNode(): VfsDirectoryNode {
+    return cloneNode(this.tree);
+  }
+
   private resolve(path: string): { node: VfsNode; parent: VfsDirectoryNode | null } {
     const normalized = normalizePath(path);
     const segments = splitPath(normalized);
