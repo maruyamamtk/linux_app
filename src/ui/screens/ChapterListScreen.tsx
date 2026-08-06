@@ -23,10 +23,10 @@ export function ChapterListScreen({ navigation }: Props) {
               disabled={!firstExercise}
               onPress={() =>
                 firstExercise &&
-                navigation.navigate("Exercise", {
-                  chapterId: chapter.id,
-                  exerciseId: firstExercise.id,
-                })
+                navigation.navigate(
+                  firstExercise.type === "script" ? "ScriptExercise" : "Exercise",
+                  { chapterId: chapter.id, exerciseId: firstExercise.id },
+                )
               }
             >
               <Text style={styles.title}>{chapter.title}</Text>

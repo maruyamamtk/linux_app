@@ -42,6 +42,10 @@ export interface GradeInput {
   userInput: string;
   /** 模範解答のコマンド、またはシェルスクリプト全文。 */
   referenceSolution: string;
+  /** 位置パラメータ(`$1` `$#` `$@` 等)としてスクリプトに渡す引数(スクリプト作成モード向け)。省略時は空配列。 */
+  argv?: string[];
+  /** スクリプトの標準入力(スクリプト作成モード向け)。省略時は空文字列。 */
+  stdin?: string;
   options?: GradeOptions;
 }
 
