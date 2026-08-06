@@ -490,3 +490,31 @@ describe("executeShellInput: シェル関数", () => {
     expect(result.stdout).toBe("hi\nhi\n");
   });
 });
+
+describe("executeShellInput: 標準入力(スクリプト作成モード向け)", () => {
+  it("context.stdinはファイル引数を取らないコマンドの標準入力として渡される", () => {
+    const context = buildContext();
+    context.stdin = "a\nb\nc\n";
+    const result = executeShellInput("wc -l", context);
+    expect(result.stdout.trim()).toBe("3");
+  });
+
+  it("同じスクリプト内の複数のコマンドがそれぞれcontext.stdinを引き継ぐ(読み取り位置は共有しない簡易実装)", () => {
+    const context = buildContext();
+    context.stdin = "x\ny\n";
+    const result = executeShellInput("wc -l; wc -l", context);
+    expect(
+      result.stdout
+        .split("\n")
+        .map((line) => line.trim())
+        .join("\n"),
+    ).toBe("2\n2\n");
+  });
+
+  it("パイプの1段目以外はcontext.stdinではなく前段の出力を標準入力として受け取る", () => {
+    const context = buildContext();
+    context.stdin = "ignored\n";
+    const result = executeShellInput("echo hello | wc -w", context);
+    expect(result.stdout.trim()).toBe("1");
+  });
+});

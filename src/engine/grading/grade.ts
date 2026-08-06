@@ -15,6 +15,7 @@ function buildContext(input: GradeInput): CommandContext {
     cwd: input.cwd,
     env: { ...input.env },
     processes: cloneProcesses(input.processes),
+    stdin: input.stdin ?? "",
   };
 }
 
@@ -40,8 +41,9 @@ export function gradeExercise(input: GradeInput): GradeResult {
   const userContext = buildContext(input);
   const referenceContext = buildContext(input);
 
-  const userResult = executeShellInput(input.userInput, userContext);
-  const referenceResult = executeShellInput(input.referenceSolution, referenceContext);
+  const argv = input.argv ?? [];
+  const userResult = executeShellInput(input.userInput, userContext, argv);
+  const referenceResult = executeShellInput(input.referenceSolution, referenceContext, argv);
 
   const stdout = compareText(referenceResult.stdout, userResult.stdout, stdoutMode);
   const stderr = compareText(referenceResult.stderr, userResult.stderr, stderrMode);

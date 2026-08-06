@@ -133,4 +133,40 @@ describe("gradeExercise", () => {
     expect(result.referenceResult.stdout).toBe("");
     expect(result.passed).toBe(false);
   });
+
+  it("argvは学習者・模範解答双方の位置パラメータ($1等)として渡される(スクリプト作成モード向け)", () => {
+    const result = gradeExercise(
+      buildInput({
+        userInput: 'echo "Hello, $1!"',
+        referenceSolution: 'echo "Hello, $1!"',
+        argv: ["Alice"],
+      }),
+    );
+
+    expect(result.userResult.stdout).toBe("Hello, Alice!\n");
+    expect(result.passed).toBe(true);
+  });
+
+  it("stdinは学習者・模範解答双方の標準入力として渡される(スクリプト作成モード向け)", () => {
+    const result = gradeExercise(
+      buildInput({ userInput: "wc -l", referenceSolution: "wc -l", stdin: "a\nb\nc\n" }),
+    );
+
+    expect(result.userResult.stdout.trim()).toBe("3");
+    expect(result.passed).toBe(true);
+  });
+
+  it("argv/stdinが異なれば同じスクリプトでも別解ではなく不正解として検出できる", () => {
+    const result = gradeExercise(
+      buildInput({
+        userInput: 'echo "Hi, $1"',
+        referenceSolution: 'echo "Hello, $1!"',
+        argv: ["Bob"],
+      }),
+    );
+
+    expect(result.passed).toBe(false);
+    expect(result.stdout.expected).toBe("Hello, Bob!\n");
+    expect(result.stdout.actual).toBe("Hi, Bob\n");
+  });
 });

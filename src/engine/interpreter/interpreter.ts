@@ -34,9 +34,14 @@ function isUnwinding(state: ShellState): boolean {
  * その出力を次のコマンドの標準入力として渡す。最終段のfd1がそのまま呼び出し元への標準出力になる。
  * 終了ステータスは最終段の終了コード(bashのデフォルト、`pipefail`相当は未対応)。
  * 途中の段で `return` が実行された場合(関数本体内)は、以降の段の実行を中断する。
+ * パイプラインの1段目は、他の段から出力を受け取らない場合に限り `context.stdin`
+ * (スクリプト作成モードのテストケースで指定された標準入力等)を引き継ぐ
+ * (実際のシェルでスクリプトの標準入力がリダイレクトされている場合と同様)。
+ * ただし読み取り位置の管理は行わないため、スクリプト内で複数回参照した場合は
+ * 実行のたびに同じ内容が渡される簡易的な近似である。
  */
 function runPipeline(pipeline: Pipeline, state: ShellState): CommandResult {
-  let stdin = "";
+  let stdin = state.context.stdin ?? "";
   let last: CommandResult = EMPTY_RESULT;
   const stderrParts: string[] = [];
 
