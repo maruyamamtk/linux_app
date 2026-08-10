@@ -16,6 +16,8 @@ export type Exercise = {
   testCases?: ScriptTestCase[];
   /** ヒントボタンを押すたびに1つずつ表示するヒント文言。 */
   hints?: string[];
+  /** 不正解時に模範解答とあわせて表示する、教科書相当の解説文。 */
+  explanation?: string;
 };
 
 export const exercises: Exercise[] = [
@@ -29,6 +31,10 @@ export const exercises: Exercise[] = [
       "現在地を表示するコマンドは3文字です。",
       "「Print Working Directory」の略で pwd です。",
     ],
+    explanation:
+      "pwd(Print Working Directory)は、シェルが今どのディレクトリにいるかを絶対パスで表示するコマンドです。" +
+      "引数を取らず、実行するだけでカレントディレクトリの絶対パスを出力します。cdでディレクトリを移動したあとに" +
+      "現在地を見失った場合など、作業の起点を確認するために頻繁に使います。",
   },
   {
     id: "ch15-17-ex01",
@@ -49,5 +55,10 @@ export const exercises: Exercise[] = [
       "引数は位置パラメータ $1 で参照できます。",
       "標準入力の行数は、ファイル名を指定せずに wc -l を実行すると数えられます。",
     ],
+    explanation:
+      "シェルスクリプトに渡された引数は $1, $2, ... という位置パラメータで参照できます。" +
+      "また、wc -l はファイル名を指定しなければ標準入力を読み込んで行数を数えるため、" +
+      "パイプやリダイレクトで渡されたデータの行数をそのまま数えるのに使えます。" +
+      "この演習ではecho \"Hello, $1!\"で挨拶したあと、wc -lで標準入力の行数を数えて出力します。",
   },
 ];

@@ -10,6 +10,7 @@ import type { VfsUser } from "../../engine/vfs";
 import type { RootStackParamList } from "../../navigation/types";
 import { useProgress } from "../../state/ProgressContext";
 import { CodeEditor } from "../components/CodeEditor";
+import { ExplanationPanel } from "../components/ExplanationPanel";
 import { TestCaseResultPanel } from "../components/TestCaseResultPanel";
 
 type Props = NativeStackScreenProps<RootStackParamList, "ScriptExercise">;
@@ -28,6 +29,7 @@ export function ScriptExerciseScreen({ route }: Props) {
   const [visibleHintCount, setVisibleHintCount] = useState(0);
   const [script, setScript] = useState(() => exercise?.initialScript ?? "#!/bin/bash\n");
   const [results, setResults] = useState<ScriptTestCaseResult[] | null>(null);
+  const [showExplanation, setShowExplanation] = useState(false);
 
   if (!exercise || exercise.type !== "script") {
     return (
@@ -60,10 +62,13 @@ export function ScriptExerciseScreen({ route }: Props) {
       testCases,
     );
     setResults(graded);
+    setShowExplanation(false);
     if (graded.length > 0) {
       recordAttempt(exercise.id, graded.every((result) => result.grade.passed));
     }
   }
+
+  const canShowExplanation = results !== null && results.length > 0 && !results.every((result) => result.grade.passed);
 
   return (
     <View style={styles.container}>
@@ -95,11 +100,24 @@ export function ScriptExerciseScreen({ route }: Props) {
         >
           <Text style={[styles.actionButtonText, styles.primaryButtonText]}>テストを実行</Text>
         </Pressable>
+        <Pressable
+          style={styles.actionButton}
+          onPress={() => setShowExplanation(true)}
+          disabled={!canShowExplanation || showExplanation}
+        >
+          <Text style={styles.actionButtonText}>解答・解説を見る</Text>
+        </Pressable>
       </View>
 
       {results && (
         <ScrollView style={styles.resultsScroll} contentContainerStyle={styles.resultsContent}>
           <TestCaseResultPanel results={results} />
+          {showExplanation && exercise.referenceSolution && (
+            <ExplanationPanel
+              referenceSolution={exercise.referenceSolution}
+              explanation={exercise.explanation}
+            />
+          )}
         </ScrollView>
       )}
     </View>
