@@ -8,6 +8,15 @@ export type Chapter = {
 
 export const chapters: Chapter[] = [
   {
+    id: "ch01",
+    title: "Linux学習環境の構築(VirtualBox)",
+    phase: 2,
+    description:
+      "仮想化ソフトウェアVirtualBoxを使って、手元のPCを壊すことなくLinux環境を試せる仮想マシン(VM)を構築する流れを理解する。" +
+      "ホストOS/ゲストOSの関係やスナップショット機能など、実機を触らずに安全に学習を進めるための考え方を選択式クイズで確認する" +
+      "(実際のVirtualBoxのインストール・操作は伴わない)。",
+  },
+  {
     id: "ch02-03",
     title: "シェルの基礎とキー操作クイズ",
     phase: 1,
