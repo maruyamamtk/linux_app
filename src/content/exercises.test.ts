@@ -101,7 +101,11 @@ describe("quiz exercises", () => {
   const quizExercises = exercises.filter((exercise) => exercise.type === "quiz");
 
   it("Ch2-3 has quiz exercises", () => {
-    expect(quizExercises.length).toBeGreaterThan(0);
+    expect(quizExercises.filter((exercise) => exercise.chapterId === "ch02-03").length).toBeGreaterThan(0);
+  });
+
+  it("Ch1 has quiz exercises", () => {
+    expect(quizExercises.filter((exercise) => exercise.chapterId === "ch01").length).toBeGreaterThan(0);
   });
 
   it.each(quizExercises)("$id: correctChoiceIndex points at an actual choice", (exercise) => {
