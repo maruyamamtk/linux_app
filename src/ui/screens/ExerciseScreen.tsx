@@ -9,6 +9,7 @@ import type { GradeResult } from "../../engine/grading";
 import type { VfsUser } from "../../engine/vfs";
 import type { RootStackParamList } from "../../navigation/types";
 import { useProgress } from "../../state/ProgressContext";
+import { ExplanationPanel } from "../components/ExplanationPanel";
 import { Terminal } from "../components/Terminal";
 import type { TerminalHandle } from "../components/Terminal";
 
@@ -23,6 +24,7 @@ export function ExerciseScreen({ route }: Props) {
   const terminalRef = useRef<TerminalHandle>(null);
   const [visibleHintCount, setVisibleHintCount] = useState(0);
   const [gradeResult, setGradeResult] = useState<GradeResult | null>(null);
+  const [showExplanation, setShowExplanation] = useState(false);
 
   if (!exercise) {
     return (
@@ -52,8 +54,11 @@ export function ExerciseScreen({ route }: Props) {
       referenceSolution: exercise.referenceSolution,
     });
     setGradeResult(result);
+    setShowExplanation(false);
     recordAttempt(exercise.id, result.passed);
   }
+
+  const canShowExplanation = gradeResult !== null && !gradeResult.passed;
 
   return (
     <View style={styles.container}>
@@ -68,6 +73,12 @@ export function ExerciseScreen({ route }: Props) {
           <Text style={gradeResult.passed ? styles.resultPass : styles.resultFail}>
             {gradeResult.passed ? "正解です!" : "不正解です。もう一度試してみましょう。"}
           </Text>
+        )}
+        {showExplanation && exercise.referenceSolution && (
+          <ExplanationPanel
+            referenceSolution={exercise.referenceSolution}
+            explanation={exercise.explanation}
+          />
         )}
       </ScrollView>
 
@@ -95,6 +106,13 @@ export function ExerciseScreen({ route }: Props) {
           disabled={!exercise.referenceSolution}
         >
           <Text style={[styles.actionButtonText, styles.primaryButtonText]}>答え合わせ</Text>
+        </Pressable>
+        <Pressable
+          style={styles.actionButton}
+          onPress={() => setShowExplanation(true)}
+          disabled={!canShowExplanation || showExplanation}
+        >
+          <Text style={styles.actionButtonText}>解答・解説を見る</Text>
         </Pressable>
       </View>
     </View>
