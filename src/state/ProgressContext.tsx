@@ -2,59 +2,67 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const STORAGE_KEY = "linuxdojo.progress.clearedExerciseIds.v1";
+import { parseStoredProgress, serializeProgress, upsertProgressRecord } from "./progress";
+import type { ProgressRecord, ProgressStatus } from "./progress";
+
+const STORAGE_KEY = "linuxdojo.progress.records.v1";
 
 type ProgressContextValue = {
-  clearedExerciseIds: ReadonlySet<string>;
   isCleared: (exerciseId: string) => boolean;
-  markCleared: (exerciseId: string) => void;
+  getStatus: (exerciseId: string) => ProgressStatus | "未着手";
+  recordAttempt: (exerciseId: string, passed: boolean) => void;
+  /** 直近の判定が「要復習」(不正解)のままになっている演習のID一覧。 */
+  reviewExerciseIds: ReadonlySet<string>;
 };
 
 const ProgressContext = createContext<ProgressContextValue | null>(null);
 
 /**
- * 演習ごとのクリア状況(docs/requirements.md 3章7節・6章 `Progress`)を保持し、
+ * 演習ごとの進捗(docs/requirements.md 3章7節・6章 `Progress`)を保持し、
  * AsyncStorageへ永続化するコンテキスト。RootNavigatorの外側でラップして使う。
  */
 export function ProgressProvider({ children }: { children: ReactNode }) {
-  const [clearedExerciseIds, setClearedExerciseIds] = useState<Set<string>>(new Set());
+  const [records, setRecords] = useState<ProgressRecord[]>([]);
 
   useEffect(() => {
     let cancelled = false;
     AsyncStorage.getItem(STORAGE_KEY)
       .then((stored) => {
-        if (cancelled || !stored) return;
-        const ids: unknown = JSON.parse(stored);
-        if (Array.isArray(ids)) {
-          setClearedExerciseIds(new Set(ids.filter((id): id is string => typeof id === "string")));
-        }
+        if (cancelled) return;
+        setRecords(parseStoredProgress(stored));
       })
       .catch(() => {
-        // 保存データの読み込みに失敗した場合は初期状態(未クリア)のまま続行する
+        // 保存データの読み込みに失敗した場合は初期状態(未着手)のまま続行する
       });
     return () => {
       cancelled = true;
     };
   }, []);
 
-  function markCleared(exerciseId: string) {
-    setClearedExerciseIds((prev) => {
-      if (prev.has(exerciseId)) return prev;
-      const next = new Set(prev);
-      next.add(exerciseId);
-      AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(next))).catch(() => {});
+  function recordAttempt(exerciseId: string, passed: boolean) {
+    setRecords((prev) => {
+      const next = upsertProgressRecord(
+        prev,
+        exerciseId,
+        passed ? "正解" : "要復習",
+        new Date().toISOString(),
+      );
+      AsyncStorage.setItem(STORAGE_KEY, serializeProgress(next)).catch(() => {});
       return next;
     });
   }
 
-  const value = useMemo<ProgressContextValue>(
-    () => ({
-      clearedExerciseIds,
-      isCleared: (exerciseId) => clearedExerciseIds.has(exerciseId),
-      markCleared,
-    }),
-    [clearedExerciseIds],
-  );
+  const value = useMemo<ProgressContextValue>(() => {
+    const byExerciseId = new Map(records.map((record) => [record.exerciseId, record]));
+    return {
+      isCleared: (exerciseId) => byExerciseId.get(exerciseId)?.status === "正解",
+      getStatus: (exerciseId) => byExerciseId.get(exerciseId)?.status ?? "未着手",
+      recordAttempt,
+      reviewExerciseIds: new Set(
+        records.filter((record) => record.status === "要復習").map((record) => record.exerciseId),
+      ),
+    };
+  }, [records]);
 
   return <ProgressContext.Provider value={value}>{children}</ProgressContext.Provider>;
 }

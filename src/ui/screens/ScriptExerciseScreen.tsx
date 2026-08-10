@@ -24,7 +24,7 @@ const HOME_DIR = "/home/study";
  */
 export function ScriptExerciseScreen({ route }: Props) {
   const exercise = exercises.find((item) => item.id === route.params.exerciseId);
-  const { markCleared } = useProgress();
+  const { recordAttempt } = useProgress();
   const [visibleHintCount, setVisibleHintCount] = useState(0);
   const [script, setScript] = useState(() => exercise?.initialScript ?? "#!/bin/bash\n");
   const [results, setResults] = useState<ScriptTestCaseResult[] | null>(null);
@@ -60,8 +60,8 @@ export function ScriptExerciseScreen({ route }: Props) {
       testCases,
     );
     setResults(graded);
-    if (graded.length > 0 && graded.every((result) => result.grade.passed)) {
-      markCleared(exercise.id);
+    if (graded.length > 0) {
+      recordAttempt(exercise.id, graded.every((result) => result.grade.passed));
     }
   }
 

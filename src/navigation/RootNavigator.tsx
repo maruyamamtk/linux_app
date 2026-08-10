@@ -1,9 +1,11 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Pressable, StyleSheet, Text } from "react-native";
 
 import { ProgressProvider } from "../state/ProgressContext";
 import { ChapterListScreen } from "../ui/screens/ChapterListScreen";
 import { ExerciseScreen } from "../ui/screens/ExerciseScreen";
+import { MyPageScreen } from "../ui/screens/MyPageScreen";
 import { ScriptExerciseScreen } from "../ui/screens/ScriptExerciseScreen";
 import { UnitDetailScreen } from "../ui/screens/UnitDetailScreen";
 import type { RootStackParamList } from "./types";
@@ -18,7 +20,14 @@ export function RootNavigator() {
           <Stack.Screen
             name="ChapterList"
             component={ChapterListScreen}
-            options={{ title: "章一覧" }}
+            options={({ navigation }) => ({
+              title: "章一覧",
+              headerRight: () => (
+                <Pressable onPress={() => navigation.navigate("MyPage")}>
+                  <Text style={styles.headerButtonText}>マイページ</Text>
+                </Pressable>
+              ),
+            })}
           />
           <Stack.Screen
             name="UnitDetail"
@@ -35,8 +44,17 @@ export function RootNavigator() {
             component={ScriptExerciseScreen}
             options={{ title: "スクリプト作成" }}
           />
+          <Stack.Screen
+            name="MyPage"
+            component={MyPageScreen}
+            options={{ title: "マイページ" }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </ProgressProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  headerButtonText: { fontSize: 14, color: "#1a7f37", fontWeight: "600" },
+});
