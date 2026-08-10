@@ -1,0 +1,116 @@
+import { describe, expect, it } from "vitest";
+
+import type { CommandContext, MockProcess } from "../engine/commands";
+import { executeShellInput } from "../engine/interpreter";
+import { VirtualFileSystem } from "../engine/vfs";
+import type { VfsUser } from "../engine/vfs";
+import { chapters } from "./chapters";
+import { exercises } from "./exercises";
+import { phase1VfsSnapshot } from "./vfsSeed";
+
+const STUDY_USER: VfsUser = { name: "study", groups: ["study"] };
+const HOME_DIR = "/home/study";
+
+function buildContext(initialCwd: string, processes?: MockProcess[]): CommandContext {
+  return {
+    vfs: new VirtualFileSystem(phase1VfsSnapshot, STUDY_USER),
+    cwd: initialCwd,
+    env: { HOME: HOME_DIR, PATH: "/bin:/usr/bin" },
+    processes: (processes ?? []).map((process) => ({ ...process })),
+  };
+}
+
+/** 未知のコマンド・パス誤り・権限エラー等を検出する(演習の誤字・タイポの検知が目的)。 */
+function expectNoEngineError(stderr: string): void {
+  expect(stderr).not.toMatch(/command not found/);
+  expect(stderr).not.toMatch(/^bash:/);
+  expect(stderr).not.toMatch(/No such file or directory/);
+  expect(stderr).not.toMatch(/Permission denied/);
+  expect(stderr).not.toMatch(/Not a directory/);
+}
+
+describe("chapters / exercises consistency", () => {
+  const chapterIds = new Set(chapters.map((chapter) => chapter.id));
+
+  it("every exercise references an existing chapter", () => {
+    for (const exercise of exercises) {
+      expect(chapterIds.has(exercise.chapterId), `${exercise.id} -> chapterId "${exercise.chapterId}"`).toBe(true);
+    }
+  });
+
+  it("has no duplicate exercise ids", () => {
+    const ids = exercises.map((exercise) => exercise.id);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it("every chapter has at least one exercise", () => {
+    for (const chapter of chapters) {
+      const count = exercises.filter((exercise) => exercise.chapterId === chapter.id).length;
+      expect(count, `chapter "${chapter.id}" has no exercises`).toBeGreaterThan(0);
+    }
+  });
+});
+
+describe("terminal exercises", () => {
+  const terminalExercises = exercises.filter((exercise) => (exercise.type ?? "terminal") === "terminal");
+
+  it.each(terminalExercises)("$id: initialCwd is a valid directory in phase1VfsSnapshot", (exercise) => {
+    const cwd = exercise.initialCwd ?? HOME_DIR;
+    const vfs = new VirtualFileSystem(phase1VfsSnapshot, STUDY_USER);
+    expect(vfs.stat(cwd).type).toBe("directory");
+  });
+
+  it.each(terminalExercises)("$id: has a referenceSolution", (exercise) => {
+    expect(exercise.referenceSolution).toBeTruthy();
+  });
+
+  it.each(terminalExercises)("$id: the reference solution runs without an unknown-command/runtime error", (exercise) => {
+    const context = buildContext(exercise.initialCwd ?? HOME_DIR, exercise.processes);
+    let stderr = "";
+    expect(() => {
+      stderr = executeShellInput(exercise.referenceSolution ?? "", context).stderr;
+    }).not.toThrow();
+    expectNoEngineError(stderr);
+  });
+});
+
+describe("script exercises", () => {
+  const scriptExercises = exercises.filter((exercise) => exercise.type === "script");
+
+  it.each(scriptExercises)("$id: has a referenceSolution and at least one test case", (exercise) => {
+    expect(exercise.referenceSolution).toBeTruthy();
+    expect(exercise.testCases?.length ?? 0).toBeGreaterThan(0);
+  });
+
+  for (const exercise of scriptExercises) {
+    for (const testCase of exercise.testCases ?? []) {
+      it(`${exercise.id} / ${testCase.id}: the reference solution runs cleanly`, () => {
+        const context = buildContext(exercise.initialCwd ?? HOME_DIR, exercise.processes);
+        context.stdin = testCase.stdin ?? "";
+        let stderr = "";
+        expect(() => {
+          stderr = executeShellInput(exercise.referenceSolution ?? "", context, testCase.args ?? []).stderr;
+        }).not.toThrow();
+        expectNoEngineError(stderr);
+      });
+    }
+  }
+});
+
+describe("quiz exercises", () => {
+  const quizExercises = exercises.filter((exercise) => exercise.type === "quiz");
+
+  it("Ch2-3 has quiz exercises", () => {
+    expect(quizExercises.length).toBeGreaterThan(0);
+  });
+
+  it.each(quizExercises)("$id: correctChoiceIndex points at an actual choice", (exercise) => {
+    expect(exercise.choices?.length ?? 0).toBeGreaterThan(1);
+    expect(exercise.correctChoiceIndex).toBeGreaterThanOrEqual(0);
+    expect(exercise.correctChoiceIndex).toBeLessThan(exercise.choices?.length ?? 0);
+  });
+
+  it.each(quizExercises)("$id: choices are unique", (exercise) => {
+    expect(new Set(exercise.choices).size).toBe(exercise.choices?.length ?? 0);
+  });
+});

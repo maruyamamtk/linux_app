@@ -6,6 +6,7 @@ import { ProgressProvider } from "../state/ProgressContext";
 import { ChapterListScreen } from "../ui/screens/ChapterListScreen";
 import { ExerciseScreen } from "../ui/screens/ExerciseScreen";
 import { MyPageScreen } from "../ui/screens/MyPageScreen";
+import { QuizExerciseScreen } from "../ui/screens/QuizExerciseScreen";
 import { ScriptExerciseScreen } from "../ui/screens/ScriptExerciseScreen";
 import { UnitDetailScreen } from "../ui/screens/UnitDetailScreen";
 import type { RootStackParamList } from "./types";
@@ -43,6 +44,11 @@ export function RootNavigator() {
             name="ScriptExercise"
             component={ScriptExerciseScreen}
             options={{ title: "スクリプト作成" }}
+          />
+          <Stack.Screen
+            name="QuizExercise"
+            component={QuizExerciseScreen}
+            options={{ title: "クイズ" }}
           />
           <Stack.Screen
             name="MyPage"
