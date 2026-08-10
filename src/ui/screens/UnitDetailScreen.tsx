@@ -58,12 +58,18 @@ export function UnitDetailScreen({ navigation, route }: Props) {
           return (
             <Pressable
               style={styles.row}
-              onPress={() =>
-                navigation.navigate(exercise.type === "script" ? "ScriptExercise" : "Exercise", {
+              onPress={() => {
+                const screen =
+                  exercise.type === "script"
+                    ? "ScriptExercise"
+                    : exercise.type === "quiz"
+                      ? "QuizExercise"
+                      : "Exercise";
+                navigation.navigate(screen, {
                   chapterId: exercise.chapterId,
                   exerciseId: exercise.id,
-                })
-              }
+                });
+              }}
             >
               <View style={styles.rowTextWrap}>
                 <Text style={styles.rowTitle}>演習 {index + 1}</Text>

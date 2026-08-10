@@ -50,6 +50,7 @@ export function ExerciseScreen({ route }: Props) {
       user: STUDY_USER,
       cwd: initialCwd,
       env: { HOME: HOME_DIR, PATH: "/bin:/usr/bin" },
+      processes: exercise.processes,
       userInput,
       referenceSolution: exercise.referenceSolution,
     });
@@ -88,6 +89,7 @@ export function ExerciseScreen({ route }: Props) {
         user={STUDY_USER}
         initialCwd={initialCwd}
         initialEnv={{ HOME: HOME_DIR }}
+        processes={exercise.processes}
       />
 
       <View style={styles.actions}>
