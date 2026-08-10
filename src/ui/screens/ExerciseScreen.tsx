@@ -8,6 +8,7 @@ import { gradeExercise } from "../../engine/grading";
 import type { GradeResult } from "../../engine/grading";
 import type { VfsUser } from "../../engine/vfs";
 import type { RootStackParamList } from "../../navigation/types";
+import { useProgress } from "../../state/ProgressContext";
 import { Terminal } from "../components/Terminal";
 import type { TerminalHandle } from "../components/Terminal";
 
@@ -18,6 +19,7 @@ const HOME_DIR = "/home/study";
 
 export function ExerciseScreen({ route }: Props) {
   const exercise = exercises.find((item) => item.id === route.params.exerciseId);
+  const { markCleared } = useProgress();
   const terminalRef = useRef<TerminalHandle>(null);
   const [visibleHintCount, setVisibleHintCount] = useState(0);
   const [gradeResult, setGradeResult] = useState<GradeResult | null>(null);
@@ -50,6 +52,9 @@ export function ExerciseScreen({ route }: Props) {
       referenceSolution: exercise.referenceSolution,
     });
     setGradeResult(result);
+    if (result.passed) {
+      markCleared(exercise.id);
+    }
   }
 
   return (
