@@ -6,3 +6,4 @@ export * from "./regex";
 export * from "./commands";
 export * from "./interpreter";
 export * from "./grading";
+export * from "./vim";
