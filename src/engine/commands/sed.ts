@@ -8,7 +8,7 @@ import type { CommandHandler } from "./types";
  * はリテラル文字として扱われる。JSの正規表現(ERE寄り)はこの2つの意味が入れ替わっているため、
  * ここで相互に反転させて `new RegExp` に渡せる形に変換する。
  */
-function translateBreToJsRegExp(pattern: string): string {
+export function translateBreToJsRegExp(pattern: string): string {
   const swapped = new Set(["(", ")", "{", "}", "|", "+", "?"]);
   let result = "";
   for (let i = 0; i < pattern.length; i += 1) {
@@ -29,7 +29,7 @@ function translateBreToJsRegExp(pattern: string): string {
 }
 
 /** `s///` の置換文字列内の `\1`・`&`・`\&`・`\\` をJSの `String.replace` 向け表記に変換する。 */
-function translateReplacement(replacement: string): string {
+export function translateReplacement(replacement: string): string {
   let result = "";
   for (let i = 0; i < replacement.length; i += 1) {
     const ch = replacement[i];
@@ -61,7 +61,7 @@ function translateReplacement(replacement: string): string {
 }
 
 /** 区切り文字(`delim`)でエスケープされていない出現位置まで読み進める。エスケープされた区切り文字はリテラルとして展開する。 */
-function readUntilDelimiter(script: string, start: number, delim: string): { text: string; next: number } {
+export function readUntilDelimiter(script: string, start: number, delim: string): { text: string; next: number } {
   let result = "";
   let i = start;
   while (i < script.length) {
