@@ -106,6 +106,20 @@ describe("カーソル移動", () => {
     expect(state.cursor).toEqual({ line: 0, col: 6 });
   });
 
+  it("桁数の多いカウント入力でもハングせず、上限でクランプされて即座に完了する(DoS対策)", () => {
+    const hugeCount = "9".repeat(40); // Number(...)は非常に大きいが有限
+    let state = createInitialState(`${"a ".repeat(20)}\n`);
+    state = keys(state, [...hugeCount.split(""), "w"]);
+    expect(state.cursor.col).toBeGreaterThanOrEqual(0);
+  });
+
+  it("g の2打目待ち中に数字が来てもカウントとして吸収せず未対応として扱う", () => {
+    let state = createInitialState("abc\n");
+    state = keys(state, ["g", "5"]);
+    expect(state.statusMessage).toEqual({ text: "未対応の操作です: g5", isError: true });
+    expect(state.pending.count).toBe("");
+  });
+
   it("未対応キーはstatusMessageにエラーを設定する", () => {
     const state = applyKey(createInitialState("abc\n"), "Z");
     expect(state.statusMessage).toEqual({ text: "未対応の操作です: Z", isError: true });

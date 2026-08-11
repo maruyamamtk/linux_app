@@ -43,6 +43,10 @@ describe("parseExCommand", () => {
     expect(() => parseExCommand("xyz")).toThrow(VimExCommandError);
   });
 
+  it("不正な正規表現は素のSyntaxErrorではなくVimExCommandErrorとして投げる", () => {
+    expect(() => parseExCommand("s/[/x/")).toThrow(VimExCommandError);
+  });
+
   it("s/old/new/ をパースする(範囲なし)", () => {
     const parsed = parseExCommand("s/foo/bar/");
     expect(parsed.type).toBe("substitute");

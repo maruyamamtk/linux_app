@@ -41,6 +41,14 @@ function withStatus(state: VimState, text: string, isError: boolean): VimState {
 }
 
 /**
+ * カウントの上限。`w`/`b`/`e` は1回分ずつループするため、桁数の多いカウント入力を
+ * そのまま渡すとループ回数が非現実的に巨大(桁数次第では`Infinity`)になり、
+ * 画面が固まってしまう。実際の演習で使うバッファはたかだか数十行程度のため、
+ * この上限を超えるカウントは意味を持たない。
+ */
+const MAX_COUNT = 100_000;
+
+/**
  * `pending.count`/`pending.motionCount` から実効カウントを求める。
  * どちらも未入力の場合は「カウント未指定」を表す `null` を返す
  * (`G`/`gg` が「指定なし=先頭/最終行」「指定あり={count}行目」を区別するために必要)。
@@ -48,7 +56,8 @@ function withStatus(state: VimState, text: string, isError: boolean): VimState {
 function effectiveCount(state: VimState): number | null {
   const { count, motionCount } = state.pending;
   if (count === "" && motionCount === "") return null;
-  return Number(count || "1") * Number(motionCount || "1");
+  const total = Number(count || "1") * Number(motionCount || "1");
+  return Math.min(total, MAX_COUNT);
 }
 
 function isDigitForCount(state: VimState, key: string): boolean {
@@ -147,17 +156,18 @@ function applyPlainMotion(state: VimState, key: string): VimState {
 function handleNormalKey(state: VimState, key: string): VimState {
   const { pending } = state;
 
-  if (isDigitForCount(state, key)) {
-    return pending.operator
-      ? { ...state, pending: { ...pending, motionCount: pending.motionCount + key } }
-      : { ...state, pending: { ...pending, count: pending.count + key } };
-  }
-
+  // "g" の2打目待ち中は、数字であってもカウント入力として吸収せず g+key の組として扱う
   if (pending.awaitingG) {
     if (key === "g") {
       return pending.operator ? handleOperatorMotion(state, "gg") : applyPlainMotion(state, "gg");
     }
     return withStatus(clearPending(state), `未対応の操作です: g${key}`, true);
+  }
+
+  if (isDigitForCount(state, key)) {
+    return pending.operator
+      ? { ...state, pending: { ...pending, motionCount: pending.motionCount + key } }
+      : { ...state, pending: { ...pending, count: pending.count + key } };
   }
 
   if (key === "g") {

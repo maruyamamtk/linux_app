@@ -71,13 +71,17 @@ export function parseExCommand(input: string): ExCommand {
       throw new VimExCommandError(`未対応のフラグです: ${flags}`);
     }
     const regexFlags = (flags.includes("g") ? "g" : "") + (flags.includes("i") ? "i" : "");
-    return {
-      type: "substitute",
-      range,
-      regex: new RegExp(translateBreToJsRegExp(patternResult.text), regexFlags),
-      replacement: translateReplacement(replacementResult.text),
-      patternSource: patternResult.text,
-    };
+    try {
+      return {
+        type: "substitute",
+        range,
+        regex: new RegExp(translateBreToJsRegExp(patternResult.text), regexFlags),
+        replacement: translateReplacement(replacementResult.text),
+        patternSource: patternResult.text,
+      };
+    } catch {
+      throw new VimExCommandError(`不正な正規表現です: ${patternResult.text}`);
+    }
   }
 
   throw new VimExCommandError(`未対応のコマンドです: ${trimmed}`);
