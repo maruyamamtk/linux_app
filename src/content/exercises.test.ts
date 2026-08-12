@@ -118,3 +118,20 @@ describe("quiz exercises", () => {
     expect(new Set(exercise.choices).size).toBe(exercise.choices?.length ?? 0);
   });
 });
+
+describe("vim exercises", () => {
+  const vimExercises = exercises.filter((exercise) => exercise.type === "vim");
+
+  it("Ch7 has vim exercises", () => {
+    expect(vimExercises.filter((exercise) => exercise.chapterId === "ch07").length).toBeGreaterThan(0);
+  });
+
+  it.each(vimExercises)("$id: has initialFileText and expectedFileText", (exercise) => {
+    expect(exercise.initialFileText).toBeTruthy();
+    expect(exercise.expectedFileText).toBeTruthy();
+  });
+
+  it.each(vimExercises)("$id: expectedFileText differs from initialFileText", (exercise) => {
+    expect(exercise.expectedFileText).not.toBe(exercise.initialFileText);
+  });
+});
