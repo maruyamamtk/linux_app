@@ -7,12 +7,17 @@ export type Exercise = {
   prompt: string;
   /**
    * "terminal"(通常のターミナル演習, デフォルト)・"script"(スクリプト作成モード、Ch15-17向け)・
-   * "quiz"(選択式クイズ、Ch2-3向け。仮想ターミナルを使わずchoices/correctChoiceIndexで正誤判定する)。
+   * "quiz"(選択式クイズ、Ch2-3向け。仮想ターミナルを使わずchoices/correctChoiceIndexで正誤判定する)・
+   * "vim"(Vim演習画面、Ch7向け。仮想ターミナルを使わずinitialFileText/expectedFileTextで正誤判定する)。
    */
-  type?: "terminal" | "script" | "quiz";
+  type?: "terminal" | "script" | "quiz" | "vim";
   /** ターミナルを開始するカレントディレクトリ。省略時は $HOME(/home/study)。 */
   initialCwd?: string;
-  /** 「答え合わせ」でユーザーの入力と突き合わせる模範解答コマンド(複数行可)。type:"script"の場合は模範解答スクリプト全文。 */
+  /**
+   * 「答え合わせ」でユーザーの入力と突き合わせる模範解答コマンド(複数行可)。type:"script"の場合は
+   * 模範解答スクリプト全文。type:"vim"の場合は解説パネルに表示する模範解答のキー入力列(表示用、
+   * 判定には使用しない。判定は`expectedFileText`との比較で行う)。
+   */
   referenceSolution?: string;
   /** type:"script"の場合に、コードエディタの初期表示内容として使うテンプレート(shebang等)。 */
   initialScript?: string;
@@ -24,6 +29,10 @@ export type Exercise = {
   choices?: string[];
   /** type:"quiz"の場合の、choicesのうち正解のインデックス(0始まり)。 */
   correctChoiceIndex?: number;
+  /** type:"vim"の場合の、Vimエディタの初期バッファ内容(ファイル形式、末尾改行あり)。 */
+  initialFileText?: string;
+  /** type:"vim"の場合の、答え合わせで比較する期待される最終バッファ内容(ファイル形式、末尾改行あり)。 */
+  expectedFileText?: string;
   /** ヒントボタンを押すたびに1つずつ表示するヒント文言。 */
   hints?: string[];
   /** 不正解時に模範解答とあわせて表示する、教科書相当の解説文。 */
@@ -784,5 +793,60 @@ export const exercises: Exercise[] = [
       "関数名() { ... } でシェル関数を定義できます。local total=0 で関数内だけの変数を作り、" +
       'for n in $@; do ... done で渡された引数をひとつずつ処理し、算術展開 $((total + n)) で合計を計算します。' +
       '"$@" をそのまま渡すことで、スクリプトの引数を関数にも引き継げます。',
+  },
+
+  // ---------------------------------------------------------------------
+  // Ch7: Vimエディタ
+  // ---------------------------------------------------------------------
+  {
+    id: "ch07-ex01",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "ddコマンドを使って、1行目(Hello)を削除してください。",
+    initialFileText: "Hello\nWorld\n",
+    expectedFileText: "World\n",
+    referenceSolution: "dd",
+    hints: [
+      "現在行を削除するには d を2回押します(dd)。",
+      "カーソルは開始時点ですでに1行目にあります。",
+    ],
+    explanation:
+      "dd はノーマルモードでカーソルがある行全体を削除し、無名レジスタへ格納するコマンドです。" +
+      "d を2回連続で押すことで「現在行」という単位の操作であることを表します。",
+  },
+  {
+    id: "ch07-ex02",
+    chapterId: "ch07",
+    type: "vim",
+    prompt:
+      "2行目(banana)にカーソルを移動し、yyでヤンクしたうえで、pでその直後(3行目の位置)に貼り付けてください。",
+    initialFileText: "apple\nbanana\ncherry\n",
+    expectedFileText: "apple\nbanana\nbanana\ncherry\n",
+    referenceSolution: "jyyp",
+    hints: [
+      "j で1行下(2行目)へ移動できます。",
+      "yy で現在行をヤンク(コピー)できます。",
+      "p でヤンクした内容をカーソル行の下に貼り付けられます。",
+    ],
+    explanation:
+      "yy は現在行を行単位で無名レジスタへヤンクします。行単位でヤンクされた内容を p で貼り付けると、" +
+      "実vimと同じく「カーソル行の下」に新しい行として挿入されます。",
+  },
+  {
+    id: "ch07-ex03",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "コマンドラインモード(:)で :%s/foo/FOO/g を実行し、全行の foo を FOO に置換してください。",
+    initialFileText: "foo bar\nfoo baz\n",
+    expectedFileText: "FOO bar\nFOO baz\n",
+    referenceSolution: ":%s/foo/FOO/g",
+    hints: [
+      ": でコマンドラインモードに入れます。",
+      "% は全行(1,$)を表すアドレスです。",
+      "末尾に g フラグを付けると、各行内の全ての一致箇所を置換できます。",
+    ],
+    explanation:
+      ":%s/old/new/g は、% (全行)を対象に old を new へ置換するexコマンドです。s/// の間の区切り文字は" +
+      "スラッシュ以外にも変更できますが、書籍Ch7ではスラッシュ区切りの :%s/old/new/g が基本形として紹介されています。",
   },
 ];

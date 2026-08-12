@@ -33,6 +33,14 @@ export const chapters: Chapter[] = [
       "find/locate/whichでファイルやコマンドの場所を探し、manでコマンドの使い方を調べる基本操作を身につける。",
   },
   {
+    id: "ch07",
+    title: "Vimエディタ",
+    phase: 2,
+    description:
+      "モーダルエディタVimの基本操作を、専用のVim演習画面(ノーマル/インサート/コマンドラインモード)で練習する。" +
+      "dd/yy/pによる行の削除・ヤンク・貼り付けや、:%s/old/new/gによる置換など、書籍Ch7で扱う操作を仮想バッファ上で体験する。",
+  },
+  {
     id: "ch08",
     title: "エイリアスと環境変数",
     phase: 1,

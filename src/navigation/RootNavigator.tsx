@@ -9,6 +9,7 @@ import { MyPageScreen } from "../ui/screens/MyPageScreen";
 import { QuizExerciseScreen } from "../ui/screens/QuizExerciseScreen";
 import { ScriptExerciseScreen } from "../ui/screens/ScriptExerciseScreen";
 import { UnitDetailScreen } from "../ui/screens/UnitDetailScreen";
+import { VimExerciseScreen } from "../ui/screens/VimExerciseScreen";
 import type { RootStackParamList } from "./types";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -49,6 +50,11 @@ export function RootNavigator() {
             name="QuizExercise"
             component={QuizExerciseScreen}
             options={{ title: "クイズ" }}
+          />
+          <Stack.Screen
+            name="VimExercise"
+            component={VimExerciseScreen}
+            options={{ title: "Vim演習" }}
           />
           <Stack.Screen
             name="MyPage"
