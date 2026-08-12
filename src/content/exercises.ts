@@ -849,4 +849,88 @@ export const exercises: Exercise[] = [
       ":%s/old/new/g は、% (全行)を対象に old を new へ置換するexコマンドです。s/// の間の区切り文字は" +
       "スラッシュ以外にも変更できますが、書籍Ch7ではスラッシュ区切りの :%s/old/new/g が基本形として紹介されています。",
   },
+  {
+    id: "ch07-ex04",
+    chapterId: "ch07",
+    type: "vim",
+    prompt:
+      "1行目の先頭で i を押してインサートモードに入り、「Hello, 」と入力したうえで Escape でノーマルモードに戻り、テキストを先頭に追加してください。",
+    initialFileText: "World\n",
+    expectedFileText: "Hello, World\n",
+    referenceSolution: "iHello, <Esc>",
+    hints: [
+      "i を押すと、カーソル位置の直前からインサートモードに入れます。",
+      "インサートモード中に入力した文字はそのままバッファに反映されます。",
+      "入力が終わったら Escape キーでノーマルモードに戻ります。",
+    ],
+    explanation:
+      "i はノーマルモードからインサートモードへ切り替える最も基本的なコマンドで、カーソル位置の直前から文字入力を開始します。" +
+      "インサートモード中の入力はそのままテキストとして挿入され、Escape を押すとノーマルモードに復帰します。",
+  },
+  {
+    id: "ch07-ex05",
+    chapterId: "ch07",
+    type: "vim",
+    prompt:
+      "1行目(first)と2行目(third)の間に、o で新しい行を開いてインサートモードに入り、「second」と入力したうえで Escape でノーマルモードに戻ってください。",
+    initialFileText: "first\nthird\n",
+    expectedFileText: "first\nsecond\nthird\n",
+    referenceSolution: "osecond<Esc>",
+    hints: [
+      "o を押すと、現在行の下に新しい空行を作り、その行頭でインサートモードに入ります。",
+      "文字を入力したら Escape でノーマルモードに戻ります。",
+      "似たコマンドの O は現在行の「上」に新しい行を作ります。",
+    ],
+    explanation:
+      "o は現在行の下に新規の空行を挿入し、その行頭からインサートモードに入るコマンドです(大文字の O は現在行の上に行を作る点が異なります)。" +
+      "新しい行に文字を入力したあと Escape でノーマルモードに戻ることで、複数行にまたがる編集もノーマル/インサートモードの切り替えだけで行えます。",
+  },
+  {
+    id: "ch07-ex06",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "数字の 2 に続けて dd を実行し(2dd)、1行目から2行分(oneとtwo)をまとめて削除してください。",
+    initialFileText: "one\ntwo\nthree\n",
+    expectedFileText: "three\n",
+    referenceSolution: "2dd",
+    hints: ["ddの前に数字を入力すると、その行数分をまとめて削除できます。", "2dd で現在行から2行分が削除されます。"],
+    explanation:
+      "{count}dd のように dd の前に数字(カウント)を入力すると、現在行を含めてその行数分をまとめて削除できます。" +
+      "2dd は1行目(one)から2行分、つまり one と two を削除し、残った行が繰り上がります。",
+  },
+  {
+    id: "ch07-ex07",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "2行目(two)にカーソルを移動して yy でヤンクしたうえで、P でその直前(2行目の上)に貼り付けてください。",
+    initialFileText: "one\ntwo\nthree\n",
+    expectedFileText: "one\ntwo\ntwo\nthree\n",
+    referenceSolution: "jyyP",
+    hints: [
+      "j で1行下(2行目)へ移動できます。",
+      "yy で現在行をヤンクできます。",
+      "P はヤンクした内容をカーソル行の「直前」に貼り付けます(p は直後)。",
+    ],
+    explanation:
+      "P は p と同じくレジスタの内容を貼り付けるコマンドですが、貼り付け位置がカーソル行の直前(行単位なら上の行)になる点が異なります。" +
+      "yy でヤンクした two を P で貼り付けると、カーソル行だった2行目の上に新しい行として挿入されます。",
+  },
+  {
+    id: "ch07-ex08",
+    chapterId: "ch07",
+    type: "vim",
+    prompt:
+      "コマンドラインモードで :2,3s/cat/dog/g を実行し、2行目〜3行目の cat だけを dog に置換してください(1行目は変更しないこと)。",
+    initialFileText: "cat\ncat\ncat\n",
+    expectedFileText: "cat\ndog\ndog\n",
+    referenceSolution: ":2,3s/cat/dog/g",
+    hints: [
+      ": でコマンドラインモードに入れます。",
+      ":{n},{m}s/old/new/g のように行番号の範囲を指定すると、その範囲だけを置換対象にできます。",
+      "1行目は範囲に含めないよう注意してください。",
+    ],
+    explanation:
+      ":%s/old/new/g がバッファ全体(1,$)を対象にするのに対し、:{n},{m}s/old/new/g のように行番号を明示すると、" +
+      "n行目からm行目までの範囲だけを置換対象にできます。範囲外の行(この演習では1行目)は変更されません。",
+  },
 ];
