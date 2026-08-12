@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 
 import type { CommandContext, MockProcess } from "../engine/commands";
 import { executeShellInput } from "../engine/interpreter";
+import { applyKey, bufferToFileText, createInitialState } from "../engine/vim";
+import type { VimKey } from "../engine/vim";
 import { VirtualFileSystem } from "../engine/vfs";
 import type { VfsUser } from "../engine/vfs";
 import { chapters } from "./chapters";
@@ -134,4 +136,36 @@ describe("vim exercises", () => {
   it.each(vimExercises)("$id: expectedFileText differs from initialFileText", (exercise) => {
     expect(exercise.expectedFileText).not.toBe(exercise.initialFileText);
   });
+
+  /**
+   * referenceSolution(表示用のキー入力列)を実際のVimエンジンに1キーずつ再生し、
+   * expectedFileText と一致するかを検証する。`<Esc>` はEscapeキー、`:`で始まる場合は
+   * 末尾に暗黙のEnter(exコマンドの確定)を1つ補う、という表示上の省略規則をここでのみ展開する。
+   */
+  function toVimKeys(referenceSolution: string): VimKey[] {
+    const keys: VimKey[] = [];
+    let i = 0;
+    while (i < referenceSolution.length) {
+      if (referenceSolution.startsWith("<Esc>", i)) {
+        keys.push("Escape");
+        i += "<Esc>".length;
+      } else {
+        keys.push(referenceSolution[i]);
+        i += 1;
+      }
+    }
+    if (referenceSolution.startsWith(":")) keys.push("Enter");
+    return keys;
+  }
+
+  it.each(vimExercises.filter((exercise) => exercise.referenceSolution))(
+    "$id: referenceSolution replayed on initialFileText produces expectedFileText",
+    (exercise) => {
+      let state = createInitialState(exercise.initialFileText ?? "");
+      for (const key of toVimKeys(exercise.referenceSolution ?? "")) {
+        state = applyKey(state, key);
+      }
+      expect(bufferToFileText(state.buffer)).toBe(exercise.expectedFileText);
+    },
+  );
 });
