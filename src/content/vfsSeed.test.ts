@@ -65,10 +65,17 @@ describe("phase1VfsSnapshot / /home/study/practice", () => {
     }
   });
 
-  it("does not include Phase2 chapters (ch18/ch19)", () => {
+  it("does not include the not-yet-implemented Phase2 chapter (ch19)", () => {
     const vfs = createVfs();
-    expect(vfs.exists("/home/study/practice/ch18_archive")).toBe(false);
     expect(vfs.exists("/home/study/practice/ch19_git")).toBe(false);
+  });
+
+  it("contains ch18_archive/project with multiple files for archive practice", () => {
+    const vfs = createVfs();
+    expect(vfs.stat("/home/study/practice/ch18_archive/project").type).toBe("directory");
+    expect(vfs.stat("/home/study/practice/ch18_archive/project/README.md").type).toBe("file");
+    expect(vfs.stat("/home/study/practice/ch18_archive/project/data.csv").type).toBe("file");
+    expect(vfs.stat("/home/study/practice/ch18_archive/project/src/app.sh").type).toBe("file");
   });
 
   it("resolves the deeply nested find target under ch06_search", () => {
