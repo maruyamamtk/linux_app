@@ -1,5 +1,14 @@
 import { awkCommand } from "./awk";
 import {
+  bunzip2Command,
+  bzip2Command,
+  gunzipCommand,
+  gzipCommand,
+  tarCommand,
+  unzipCommand,
+  zipCommand,
+} from "./archive";
+import {
   catCommand,
   cdCommand,
   cpCommand,
@@ -78,6 +87,13 @@ export const commandRegistry: Readonly<Record<string, CommandHandler>> = {
   false: falseCommand,
   ":": colonCommand,
   xargs: xargsCommand,
+  tar: tarCommand,
+  gzip: gzipCommand,
+  gunzip: gunzipCommand,
+  bzip2: bzip2Command,
+  bunzip2: bunzip2Command,
+  zip: zipCommand,
+  unzip: unzipCommand,
 };
 
 export function resolveCommand(name: string): CommandHandler | undefined {

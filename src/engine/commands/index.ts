@@ -2,6 +2,15 @@ export type { CommandContext, CommandHandler, CommandResult, MockProcess } from 
 export { commandRegistry, executeCommand, isKnownCommand, resolveCommand } from "./registry";
 export { awkCommand } from "./awk";
 export {
+  bunzip2Command,
+  bzip2Command,
+  gunzipCommand,
+  gzipCommand,
+  tarCommand,
+  unzipCommand,
+  zipCommand,
+} from "./archive";
+export {
   catCommand,
   cdCommand,
   cpCommand,
