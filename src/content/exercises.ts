@@ -796,6 +796,169 @@ export const exercises: Exercise[] = [
   },
 
   // ---------------------------------------------------------------------
+  // Ch18: アーカイブとバックアップ
+  // ---------------------------------------------------------------------
+  {
+    id: "ch18-ex01",
+    chapterId: "ch18",
+    prompt: "project ディレクトリを project.tar という名前のtarアーカイブにまとめてください(まとめたファイルの一覧が表示されるようにしてください)。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "tar cvf project.tar project",
+    hints: [
+      "tar c(create)がアーカイブの作成、v(verbose)がまとめたファイルの一覧表示、f(file)がアーカイブ名の指定です。",
+      "tar cvf アーカイブ名 対象ディレクトリ の順で指定します。",
+    ],
+    explanation:
+      "tar cvf アーカイブ名 対象... は、c(create)で新規アーカイブを作成し、v(verbose)でまとめたファイルの一覧を、" +
+      "f(file)の直後に指定したアーカイブ名で保存します。ディレクトリを指定すると、その中身は再帰的にすべて" +
+      "アーカイブへ含まれます。",
+  },
+  {
+    id: "ch18-ex02",
+    chapterId: "ch18",
+    prompt:
+      "project ディレクトリを project.tar としてアーカイブしたうえで、そのアーカイブの中身をパーミッション等の" +
+      "詳細情報付きで一覧表示してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "tar cf project.tar project; tar tvf project.tar",
+    hints: [
+      "アーカイブの中身を確認するだけなら展開(x)する必要はありません。t(list)を使います。",
+      "tar tvf アーカイブ名 で、パーミッション・所有者・サイズ付きの一覧が表示できます。",
+    ],
+    explanation:
+      "tar t(list)はアーカイブを展開せずに中身の一覧だけを確認できるオプションです。v(verbose)を付けると、" +
+      "各エントリのパーミッション・所有者/グループ・サイズ・パスがls -lに似た形式で表示されます。",
+  },
+  {
+    id: "ch18-ex03",
+    chapterId: "ch18",
+    prompt:
+      "project ディレクトリを project.tar としてアーカイブしてから元の project ディレクトリを削除し、" +
+      "アーカイブから元の内容を展開して復元してください(展開したファイル名の一覧が表示されるようにしてください)。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "tar cf project.tar project; rm -r project; tar xvf project.tar",
+    hints: [
+      "先に rm -r で project ディレクトリごと削除しておきます。",
+      "tar x(extract)で展開できます。v を付けると展開したファイルの一覧が表示されます。",
+    ],
+    explanation:
+      "tar x(extract)はアーカイブの中身をカレントディレクトリ以下に展開し、元のファイル・ディレクトリ構成を" +
+      "復元します。v(verbose)を付けると展開されたパスが順に表示されるため、tar cとtar xを組み合わせることで、" +
+      "アーカイブがバックアップ・復元の手段として使えることを確認できます。",
+  },
+  {
+    id: "ch18-ex04",
+    chapterId: "ch18",
+    prompt:
+      "project ディレクトリを、tarでまとめると同時にgzip圧縮も行い、project.tar.gz として作成してください" +
+      "(まとめたファイルの一覧が表示されるようにしてください)。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "tar czvf project.tar.gz project",
+    hints: [
+      "z オプションを追加すると、tarでのアーカイブ作成と同時にgzip圧縮も行われます。",
+      "オプションの並び順は自由なので czvf のようにまとめて指定できます。",
+    ],
+    explanation:
+      "tar に z オプションを追加すると、アーカイブの作成(または展開)と同時にgzipによる圧縮(または伸長)が" +
+      "行われます。czvf は c(作成)・z(gzip圧縮)・v(詳細表示)・f(ファイル名指定)を組み合わせたもので、" +
+      "拡張子には慣習的に .tar.gz を使います。",
+  },
+  {
+    id: "ch18-ex05",
+    chapterId: "ch18",
+    prompt:
+      "project ディレクトリを project.tar.gz としてtar+gzipでアーカイブしてから元の project ディレクトリを" +
+      "削除し、そのアーカイブから元の内容を展開して復元してください(展開したファイル名の一覧が表示されるようにしてください)。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "tar czf project.tar.gz project; rm -r project; tar xzvf project.tar.gz",
+    hints: [
+      "作成時に z を付けたアーカイブは、展開するときにも z を付ける必要があります。",
+      "tar xzvf アーカイブ名 で、gzip圧縮された.tar.gzアーカイブを一度に伸長・展開できます。",
+    ],
+    explanation:
+      "z オプションで圧縮したアーカイブ(.tar.gz)は、展開時にも同じ z オプションを付けることで、gzipの伸長と" +
+      "tarの展開を1つのコマンドでまとめて行えます。z を付け忘れると圧縮されたままの内容として扱われ、" +
+      "正しく展開できません。",
+  },
+  {
+    id: "ch18-ex06",
+    chapterId: "ch18",
+    prompt: "data.csv を gzip で圧縮してください。",
+    initialCwd: "/home/study/practice/ch18_archive/project",
+    referenceSolution: "gzip data.csv",
+    hints: [
+      "gzip ファイル名 で、そのファイルを圧縮できます。",
+      "圧縮後は data.csv.gz という名前になり、元の data.csv は削除されます。",
+    ],
+    explanation:
+      "gzip ファイル名 は指定したファイルを圧縮し、拡張子 .gz を付けた新しいファイルを作成します。tarと違い" +
+      "gzipは単体では複数ファイルをまとめられず、1つのファイルだけを圧縮対象にできます。デフォルトでは圧縮後に" +
+      "元のファイルは削除されます。",
+  },
+  {
+    id: "ch18-ex07",
+    chapterId: "ch18",
+    prompt: "data.csv を gzip で圧縮したうえで、gunzip を使って元のファイルに戻してください。",
+    initialCwd: "/home/study/practice/ch18_archive/project",
+    referenceSolution: "gzip data.csv; gunzip data.csv.gz",
+    hints: [
+      "gunzip ファイル名.gz で、gzip圧縮されたファイルを元に戻せます。",
+      "伸長後は data.csv という元のファイル名に戻り、data.csv.gz は削除されます。",
+    ],
+    explanation:
+      "gunzip はgzipで圧縮されたファイル(.gz拡張子)を元の内容に伸長するコマンドです。gzip -d ファイル名.gz でも" +
+      "同様の結果になりますが、gunzipの方が直感的な専用コマンドとしてよく使われます。",
+  },
+  {
+    id: "ch18-ex08",
+    chapterId: "ch18",
+    prompt: "data.csv を bzip2 で圧縮してください。ただし、元の data.csv は削除せずに残してください。",
+    initialCwd: "/home/study/practice/ch18_archive/project",
+    referenceSolution: "bzip2 -k data.csv",
+    hints: [
+      "bzip2 はgzipと同様の使い方で、拡張子は .bz2 になります。",
+      "-k(keep)オプションを付けると、圧縮後も元のファイルを削除せずに残せます。",
+    ],
+    explanation:
+      "bzip2 はgzipよりも高い圧縮率を持つことが多い圧縮コマンドで、使い方はgzipとほぼ同じです(拡張子は .bz2)。" +
+      "デフォルトでは圧縮後に元のファイルを削除しますが、-k(keep)オプションを付けることで元のファイルを" +
+      "残したまま圧縮ファイルだけを追加で作成できます。",
+  },
+  {
+    id: "ch18-ex09",
+    chapterId: "ch18",
+    prompt:
+      "project ディレクトリを再帰的に project.zip としてzip圧縮したうえで、そのアーカイブの中身を一覧表示してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "zip -r project.zip project; unzip -l project.zip",
+    hints: [
+      "zip はデフォルトではディレクトリの中身をたどらないため、-r(recursive)オプションが必要です。",
+      "unzip -l アーカイブ名 で、展開せずに中身の一覧だけを確認できます。",
+    ],
+    explanation:
+      "zip -r アーカイブ名 対象ディレクトリ は、-r(recursive)を付けることでディレクトリ以下のファイルを再帰的に" +
+      "たどってzipアーカイブへまとめます。unzip -l アーカイブ名 は展開を行わず、アーカイブに含まれるファイルの" +
+      "一覧とサイズだけを表示します。",
+  },
+  {
+    id: "ch18-ex10",
+    chapterId: "ch18",
+    prompt:
+      "project ディレクトリを project.zip として圧縮してから元の project ディレクトリを削除し、そのzipアーカイブを" +
+      "展開して復元してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "zip -r project.zip project; rm -r project; unzip project.zip",
+    hints: [
+      "unzip アーカイブ名 で、オプションなしで実行するとアーカイブの中身がすべて展開されます。",
+      "tarと同様に、圧縮(zip)と展開(unzip)は対になるコマンドです。",
+    ],
+    explanation:
+      "unzip アーカイブ名 はzipアーカイブに含まれるファイル・ディレクトリをカレントディレクトリ以下に展開し、" +
+      "元の構成を復元します。tar/gzip/bzip2と同じく、圧縮(まとめる)コマンドと展開(元に戻す)コマンドが" +
+      "対になっている点を確認できる演習です。",
+  },
+
+  // ---------------------------------------------------------------------
   // Ch7: Vimエディタ
   // ---------------------------------------------------------------------
   {

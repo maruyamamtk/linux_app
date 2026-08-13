@@ -80,4 +80,13 @@ export const chapters: Chapter[] = [
       "shebangとchmod +xでスクリプトを実行可能にし、変数・クォート・コマンド置換・位置パラメータを使ったスクリプトを書く。" +
       "if/for/case/whileの制御構造とlocal変数・再帰を使う関数、IFS、xargs、ヒアドキュメントまでを一通り練習する。",
   },
+  {
+    id: "ch18",
+    title: "アーカイブとバックアップ",
+    phase: 2,
+    description:
+      "tarでディレクトリを1つのアーカイブファイルにまとめ、-z/-jオプションでgzip/bzip2による圧縮を同時に行う。" +
+      "gzip/gunzip・bzip2/bunzip2で個々のファイルを圧縮・伸長し、zip/unzipでの圧縮・展開・一覧表示までを" +
+      "複数ファイルからなるサンプルプロジェクトに対して一通り練習する。",
+  },
 ];

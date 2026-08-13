@@ -226,6 +226,21 @@ Sato 65 70 60
 Suzuki 92 88 95
 `;
 
+const CH18_README_MD = `# sample-project
+
+アーカイブ演習用のサンプルプロジェクトです。
+`;
+
+const CH18_DATA_CSV = `id,name
+1,Alice
+2,Bob
+3,Carol
+`;
+
+const CH18_APP_SH = `#!/bin/bash
+echo "Hello from app.sh"
+`;
+
 function createPracticeDirectory(): VfsDirectoryNode {
   return createDirectory("practice", {
     ch04_fs: createDirectory("ch04_fs", {
@@ -333,6 +348,28 @@ function createPracticeDirectory(): VfsDirectoryNode {
       {},
       { owner: "study", group: "study", mode: 0o755 },
     ),
+
+    ch18_archive: createDirectory("ch18_archive", {
+      project: createDirectory("project", {
+        "README.md": createFile("README.md", CH18_README_MD, {
+          owner: "study",
+          group: "study",
+          mode: 0o644,
+        }),
+        "data.csv": createFile("data.csv", CH18_DATA_CSV, {
+          owner: "study",
+          group: "study",
+          mode: 0o644,
+        }),
+        src: createDirectory("src", {
+          "app.sh": createFile("app.sh", CH18_APP_SH, {
+            owner: "study",
+            group: "study",
+            mode: 0o755,
+          }),
+        }, { owner: "study", group: "study", mode: 0o755 }),
+      }, { owner: "study", group: "study", mode: 0o755 }),
+    }, { owner: "study", group: "study", mode: 0o755 }),
   }, { owner: "study", group: "study", mode: 0o755 });
 }
 
@@ -354,7 +391,7 @@ function createStudyHomeDirectory(): VfsDirectoryNode {
 }
 
 /**
- * Phase1(Ch4〜17)の演習で使う仮想ファイルシステムの初期スナップショット。
+ * ターミナル演習全体(Phase1のCh4〜17、およびPhase2のCh18)で使う仮想ファイルシステムの初期スナップショット。
  * `study`という非rootユーザーとして開始し、`/etc`・`/bin`はroot所有・書き込み不可にすることで、
  * Ch9(パーミッション)・sudo演習の権限エラーを自然に再現する(docs/requirements.md 4章参照)。
  */
