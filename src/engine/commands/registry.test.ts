@@ -56,6 +56,7 @@ const EXPECTED_COMMANDS = [
   "git",
   "dnf",
   "apt",
+  "ssh",
 ];
 
 describe("commandRegistry", () => {

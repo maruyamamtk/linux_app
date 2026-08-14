@@ -1,4 +1,4 @@
-export type { CommandContext, CommandHandler, CommandResult, MockProcess } from "./types";
+export type { CommandContext, CommandHandler, CommandResult, MockProcess, SshSavedSession, SshState } from "./types";
 export { commandRegistry, executeCommand, isKnownCommand, resolveCommand } from "./registry";
 export { awkCommand } from "./awk";
 export {
@@ -43,3 +43,4 @@ export {
   wcCommand,
 } from "./textProc";
 export { xargsCommand } from "./xargs";
+export { sshCommand } from "./ssh";

@@ -77,5 +77,6 @@ export function buildContext(user: VfsUser = STUDY_USER, cwd = "/home/study"): C
     cwd,
     env: { HOME: "/home/study", PATH: "/bin:/usr/bin" },
     processes: buildProcesses(),
+    ssh: {},
   };
 }
