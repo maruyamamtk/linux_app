@@ -24,6 +24,7 @@ export {
   touchCommand,
 } from "./fileOps";
 export { gitCommand } from "./git";
+export { aptCommand, dnfCommand } from "./packageManager";
 export { sedCommand } from "./sed";
 export { findCommand, helpCommand, locateCommand, manCommand, whichCommand } from "./search";
 export { bracketCommand, testCommand } from "./test";
