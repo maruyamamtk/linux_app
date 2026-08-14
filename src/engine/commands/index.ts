@@ -23,6 +23,7 @@ export {
   rmdirCommand,
   touchCommand,
 } from "./fileOps";
+export { gitCommand } from "./git";
 export { sedCommand } from "./sed";
 export { findCommand, helpCommand, locateCommand, manCommand, whichCommand } from "./search";
 export { bracketCommand, testCommand } from "./test";

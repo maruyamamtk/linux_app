@@ -53,6 +53,7 @@ const EXPECTED_COMMANDS = [
   "bunzip2",
   "zip",
   "unzip",
+  "git",
 ];
 
 describe("commandRegistry", () => {
