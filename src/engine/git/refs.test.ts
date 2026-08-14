@@ -5,8 +5,10 @@ import {
   listBranches,
   readBranchHash,
   readHeadBranch,
+  readRemoteBranchHash,
   writeBranchHash,
   writeHeadBranch,
+  writeRemoteBranchHash,
 } from "./refs";
 import { buildRepo, REPO_PATH } from "./testFixtures";
 
@@ -36,5 +38,13 @@ describe("refs", () => {
     writeBranchHash(vfs, REPO_PATH, "main", "h1");
     writeBranchHash(vfs, REPO_PATH, "feature", "h2");
     expect(listBranches(vfs, REPO_PATH)).toEqual(["feature", "main"]);
+  });
+
+  it("readRemoteBranchHash is undefined until a fetch/pull/push writes it", () => {
+    const vfs = buildRepo();
+    expect(readRemoteBranchHash(vfs, REPO_PATH, "origin", "main")).toBeUndefined();
+
+    writeRemoteBranchHash(vfs, REPO_PATH, "origin", "main", "abc123");
+    expect(readRemoteBranchHash(vfs, REPO_PATH, "origin", "main")).toBe("abc123");
   });
 });

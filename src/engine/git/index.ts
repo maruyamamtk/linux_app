@@ -10,6 +10,8 @@ export {
   writeBranchHash,
   branchExists,
   listBranches,
+  readRemoteBranchHash,
+  writeRemoteBranchHash,
 } from "./refs";
 export { readIndex, writeIndex, upsertIndexEntry, removeIndexEntry } from "./indexFile";
 export { buildTreeFromIndex, flattenTree, listWorktreeFiles, materializeTree } from "./tree";
@@ -25,3 +27,6 @@ export type { CreateCommitResult } from "./commit";
 export { performMerge } from "./merge";
 export type { MergeOutcome } from "./merge";
 export { formatCommitDate } from "./date";
+export { readConfig, writeConfig, getRemoteUrl, setRemoteUrl } from "./config";
+export { pushBranch, fetchBranch } from "./remote";
+export type { PushOutcome } from "./remote";

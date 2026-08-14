@@ -1,4 +1,4 @@
-import { joinPath } from "../vfs";
+import { dirname, joinPath } from "../vfs";
 import type { VirtualFileSystem } from "../vfs";
 import { GitError } from "./errors";
 import { gitDir } from "./repo";
@@ -9,6 +9,10 @@ function headPath(repoPath: string): string {
 
 function branchRefPath(repoPath: string, branch: string): string {
   return joinPath(gitDir(repoPath), "refs", "heads", branch);
+}
+
+function remoteBranchRefPath(repoPath: string, remote: string, branch: string): string {
+  return joinPath(gitDir(repoPath), "refs", "remotes", remote, branch);
 }
 
 const HEAD_REF_PATTERN = /^ref: refs\/heads\/(.+)$/;
@@ -59,4 +63,29 @@ export function listBranches(vfs: VirtualFileSystem, repoPath: string): string[]
     .readdir(headsDir)
     .map((entry) => entry.name)
     .sort((a, b) => a.localeCompare(b));
+}
+
+/** `refs/remotes/<remote>/<branch>`(直近のfetch/pull/push時点のリモート追跡ブランチ、3.6節)。未取得なら`undefined`。 */
+export function readRemoteBranchHash(
+  vfs: VirtualFileSystem,
+  repoPath: string,
+  remote: string,
+  branch: string,
+): string | undefined {
+  const path = remoteBranchRefPath(repoPath, remote, branch);
+  if (!vfs.exists(path)) return undefined;
+  return vfs.readFile(path).trim();
+}
+
+export function writeRemoteBranchHash(
+  vfs: VirtualFileSystem,
+  repoPath: string,
+  remote: string,
+  branch: string,
+  hash: string,
+): void {
+  const path = remoteBranchRefPath(repoPath, remote, branch);
+  const parent = dirname(path);
+  if (!vfs.exists(parent)) vfs.mkdir(parent, { recursive: true });
+  vfs.writeFile(path, `${hash}\n`);
 }
