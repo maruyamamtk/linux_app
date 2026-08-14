@@ -30,3 +30,5 @@ export { formatCommitDate } from "./date";
 export { readConfig, writeConfig, getRemoteUrl, setRemoteUrl } from "./config";
 export { pushBranch, fetchBranch } from "./remote";
 export type { PushOutcome } from "./remote";
+export { buildCommitGraph } from "./graph";
+export type { CommitGraph, CommitGraphNode } from "./graph";

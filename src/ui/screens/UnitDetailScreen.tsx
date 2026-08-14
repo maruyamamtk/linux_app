@@ -66,7 +66,9 @@ export function UnitDetailScreen({ navigation, route }: Props) {
                       ? "QuizExercise"
                       : exercise.type === "vim"
                         ? "VimExercise"
-                        : "Exercise";
+                        : exercise.type === "git"
+                          ? "GitExercise"
+                          : "Exercise";
                 navigation.navigate(screen, {
                   chapterId: exercise.chapterId,
                   exerciseId: exercise.id,

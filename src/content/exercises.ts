@@ -8,9 +8,12 @@ export type Exercise = {
   /**
    * "terminal"(通常のターミナル演習, デフォルト)・"script"(スクリプト作成モード、Ch15-17向け)・
    * "quiz"(選択式クイズ、Ch2-3向け。仮想ターミナルを使わずchoices/correctChoiceIndexで正誤判定する)・
-   * "vim"(Vim演習画面、Ch7向け。仮想ターミナルを使わずinitialFileText/expectedFileTextで正誤判定する)。
+   * "vim"(Vim演習画面、Ch7向け。仮想ターミナルを使わずinitialFileText/expectedFileTextで正誤判定する)・
+   * "git"(Git演習画面、Ch19向け。仮想ターミナルを再利用しつつコミットグラフパネルを追加表示する。
+   * 判定は"terminal"と同じくreferenceSolutionとの`compareVfs`ベースの採点で行う、
+   * docs/git-simulator-design.md 9-10章)。
    */
-  type?: "terminal" | "script" | "quiz" | "vim";
+  type?: "terminal" | "script" | "quiz" | "vim" | "git";
   /** ターミナルを開始するカレントディレクトリ。省略時は $HOME(/home/study)。 */
   initialCwd?: string;
   /**
