@@ -76,6 +76,33 @@ describe("terminal exercises", () => {
   });
 });
 
+describe("git exercises", () => {
+  const gitExercises = exercises.filter((exercise) => exercise.type === "git");
+
+  it("Ch19 has git exercises", () => {
+    expect(gitExercises.filter((exercise) => exercise.chapterId === "ch19").length).toBeGreaterThan(0);
+  });
+
+  it.each(gitExercises)("$id: initialCwd is a valid directory in phase1VfsSnapshot", (exercise) => {
+    const cwd = exercise.initialCwd ?? HOME_DIR;
+    const vfs = new VirtualFileSystem(phase1VfsSnapshot, STUDY_USER);
+    expect(vfs.stat(cwd).type).toBe("directory");
+  });
+
+  it.each(gitExercises)("$id: has a referenceSolution", (exercise) => {
+    expect(exercise.referenceSolution).toBeTruthy();
+  });
+
+  it.each(gitExercises)("$id: the reference solution runs without an unknown-command/runtime error", (exercise) => {
+    const context = buildContext(exercise.initialCwd ?? HOME_DIR, exercise.processes);
+    let stderr = "";
+    expect(() => {
+      stderr = executeShellInput(exercise.referenceSolution ?? "", context).stderr;
+    }).not.toThrow();
+    expectNoEngineError(stderr);
+  });
+});
+
 describe("script exercises", () => {
   const scriptExercises = exercises.filter((exercise) => exercise.type === "script");
 
