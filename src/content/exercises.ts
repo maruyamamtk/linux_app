@@ -1325,4 +1325,165 @@ export const exercises: Exercise[] = [
       "pull前の独自コミットが無いため、取得したコミットへブランチ参照を進めるだけのfast-forwardとなり、" +
       "sync-practiceのワークツリーにrelease.txtが取り込まれます。",
   },
+
+  // ---------------------------------------------------------------------
+  // Ch20: パッケージ管理(dnf/apt)
+  // ---------------------------------------------------------------------
+  {
+    id: "ch20-ex01",
+    chapterId: "ch20",
+    prompt: "curl というキーワードで、インストール可能なパッケージを dnf コマンドで検索してください。",
+    referenceSolution: "dnf search curl",
+    hints: [
+      "dnf search キーワード で、パッケージ名や説明文にキーワードを含むパッケージを検索できます。",
+      "まだインストールされていないパッケージも検索対象に含まれます。",
+    ],
+    explanation:
+      "dnf search キーワード は、リポジトリに登録されたパッケージのうち、名前または説明(summary)に" +
+      "キーワードを含むものを一覧表示します。実際にインストールするかどうかを決める前に、目的のパッケージが" +
+      "存在するか・どんなパッケージか(curlの場合はlibcurl4という依存ライブラリを使うクライアント)を調べる" +
+      "のに使います。",
+  },
+  {
+    id: "ch20-ex02",
+    chapterId: "ch20",
+    prompt: "nginx パッケージの詳細情報(バージョン・サイズ・説明)を dnf コマンドで表示してください。",
+    referenceSolution: "dnf info nginx",
+    hints: [
+      "dnf info パッケージ名 で、そのパッケージの詳細情報を表示できます。",
+      "まだインストールしていないパッケージの場合、先頭に「Available Packages」と表示されます。",
+    ],
+    explanation:
+      "dnf info パッケージ名 は、バージョン・アーキテクチャ・サイズ・説明などの詳細情報を表示します。" +
+      "先頭の見出しが「Available Packages」か「Installed Packages」かで、そのパッケージが未インストールか" +
+      "インストール済みかを区別できます。",
+  },
+  {
+    id: "ch20-ex03",
+    chapterId: "ch20",
+    prompt: "sudo を使って、htop パッケージを dnf コマンドでインストールしてください。",
+    referenceSolution: "sudo dnf install htop",
+    hints: [
+      "パッケージのインストールはシステム全体に影響するため、root権限が必要です。",
+      "sudo dnf install パッケージ名 の形で実行します。",
+    ],
+    explanation:
+      "パッケージのインストールはシステム全体の状態を変更するため、一般ユーザーのままでは" +
+      "「superuser privileges」が必要というエラーになります。sudo を先頭に付けてroot権限で実行することで、" +
+      "インストールが完了し、最後に「Complete!」と表示されます。",
+  },
+  {
+    id: "ch20-ex04",
+    chapterId: "ch20",
+    prompt:
+      "sudo を使って curl パッケージを dnf コマンドでインストールしてください。curl が依存する" +
+      "libcurl4 も自動的に一緒にインストールされることを確認してください。",
+    referenceSolution: "sudo dnf install curl",
+    hints: [
+      "dnf install は指定したパッケージだけでなく、そのパッケージが依存する他のパッケージも自動的に解決します。",
+      "実行結果には「Installing:」でcurl本体、「Installing dependencies:」でlibcurl4が表示されます。",
+    ],
+    explanation:
+      "dnf install パッケージ名 は、指定したパッケージ(この場合curl)が依存する他のパッケージ" +
+      "(libcurl4)をリポジトリの依存情報から解決し、まだ入っていなければまとめてインストールします。" +
+      "出力の「Installing:」には指定したパッケージ本体が、「Installing dependencies:」には自動的に" +
+      "追加された依存パッケージが表示されます。",
+  },
+  {
+    id: "ch20-ex05",
+    chapterId: "ch20",
+    prompt:
+      "sudo を使って tree パッケージを dnf コマンドでインストールしたうえで、dnf info でインストール済みに" +
+      "なったことを確認してください(1行のコマンドとして ; でつないでください)。",
+    referenceSolution: "sudo dnf install tree; dnf info tree",
+    hints: [
+      "インストール後は sudo なしの dnf info でも、そのパッケージの情報を確認できます。",
+      "インストール済みのパッケージは、dnf info の見出しが「Installed Packages」に変わります。",
+    ],
+    explanation:
+      "インストールが完了すると、以後の dnf info パッケージ名 の見出しは「Available Packages」から" +
+      "「Installed Packages」に変わります。インストール状態は仮想ファイルシステム内に記録されるため、" +
+      "info・search・install のいずれのサブコマンドを使う場合でも、直前のインストール結果が反映されます。",
+  },
+  {
+    id: "ch20-ex06",
+    chapterId: "ch20",
+    prompt:
+      "su コマンドでrootユーザーに切り替えたうえで、mysql-server パッケージを dnf コマンドでインストールして" +
+      "ください(1行のコマンドとして ; でつないでください)。",
+    referenceSolution: "su root; dnf install mysql-server",
+    hints: [
+      "sudo は1つのコマンドだけをroot権限で実行しますが、su root は以後すべてのコマンドの実行ユーザーを" +
+        "root に切り替えます。",
+      "ユーザーを切り替えたあとであれば、sudo を付けずに dnf install を実行できます。",
+    ],
+    explanation:
+      "su root で実行ユーザーをrootに切り替えたあとは、sudo を付けなくてもroot権限が必要なコマンドを" +
+      "実行できます。mysql-server は mysql-common という依存パッケージを持つため、インストール結果には" +
+      "依存パッケージも一緒に表示されます。",
+  },
+  {
+    id: "ch20-ex07",
+    chapterId: "ch20",
+    prompt: "jq というキーワードで、インストール可能なパッケージを apt コマンドで検索してください。",
+    referenceSolution: "apt search jq",
+    hints: [
+      "apt search キーワード で、Debian/Ubuntu系のパッケージ管理コマンドでも同様にパッケージを検索できます。",
+      "1件ごとに「パッケージ名/stable バージョン amd64」の行と、その次の行に説明が表示されます。",
+    ],
+    explanation:
+      "apt search キーワード は dnf search と同様に、パッケージ名や説明にキーワードを含むパッケージを" +
+      "検索します。表示形式はdnfと異なり、1件につき「パッケージ名/stable バージョン amd64」の行と、" +
+      "インデントされた説明文の2行で構成されます。",
+  },
+  {
+    id: "ch20-ex08",
+    chapterId: "ch20",
+    prompt:
+      "curl パッケージの詳細情報を apt コマンドで表示し、依存パッケージ(Depends)としてlibcurl4が" +
+      "表示されることを確認してください。",
+    referenceSolution: "apt info curl",
+    hints: [
+      "apt info パッケージ名 で詳細情報を表示できます。",
+      "依存パッケージを持つ場合のみ、「Depends:」の行が表示されます。",
+    ],
+    explanation:
+      "apt info パッケージ名 は、Package/Version/Installed-Size/Description等の詳細情報を表示します。" +
+      "依存パッケージを持つ場合(curlの場合はlibcurl4)のみ「Depends:」の行が追加され、依存関係が無い" +
+      "パッケージ(nginxなど)ではこの行自体が表示されません。",
+  },
+  {
+    id: "ch20-ex09",
+    chapterId: "ch20",
+    prompt:
+      "sudo を使って docker-ce パッケージを apt コマンドでインストールしてください。docker-ce が依存する" +
+      "containerd も追加パッケージとして一緒にインストールされることを確認してください。",
+    referenceSolution: "sudo apt install docker-ce",
+    hints: [
+      "aptでもdnfと同様、root権限が無いと「are you root?」のようなエラーになります。",
+      "依存パッケージは「The following additional packages will be installed:」の下に表示されます。",
+    ],
+    explanation:
+      "apt install パッケージ名 も dnf install 同様に依存関係を自動解決しますが、表示形式が異なり、" +
+      "追加でインストールされる依存パッケージは「The following additional packages will be installed:」の" +
+      "下に一覧表示されます。docker-ce は containerd に依存しているため、この行にcontainerdが表示されます。",
+  },
+  {
+    id: "ch20-ex10",
+    chapterId: "ch20",
+    prompt:
+      "sudo を使って redis-server パッケージを apt コマンドでインストールしたうえで、同じコマンドをもう一度" +
+      "実行し、2回目は「既に最新バージョンがインストール済み」という趣旨のメッセージになることを確認して" +
+      "ください(1行のコマンドとして ; でつないでください)。",
+    referenceSolution: "sudo apt install redis-server; sudo apt install redis-server",
+    hints: [
+      "同じパッケージを重ねてインストールしようとしても、apt/dnfはエラーにはなりません。",
+      "2回目の実行結果には「is already the newest version」という文言が含まれます。",
+    ],
+    explanation:
+      "既にインストール済みのパッケージに対して apt install を実行すると、再インストールは行われず、" +
+      "「パッケージ名 is already the newest version (バージョン).」というメッセージとともに正常終了します。" +
+      "これはdnfの「is already installed」「Nothing to do.」と同じ、べき等な(何度実行しても安全な)" +
+      "インストール操作を表しています。",
+  },
 ];
