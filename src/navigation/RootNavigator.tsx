@@ -5,6 +5,7 @@ import { Pressable, StyleSheet, Text } from "react-native";
 import { ProgressProvider } from "../state/ProgressContext";
 import { ChapterListScreen } from "../ui/screens/ChapterListScreen";
 import { ExerciseScreen } from "../ui/screens/ExerciseScreen";
+import { GitExerciseScreen } from "../ui/screens/GitExerciseScreen";
 import { MyPageScreen } from "../ui/screens/MyPageScreen";
 import { QuizExerciseScreen } from "../ui/screens/QuizExerciseScreen";
 import { ScriptExerciseScreen } from "../ui/screens/ScriptExerciseScreen";
@@ -55,6 +56,11 @@ export function RootNavigator() {
             name="VimExercise"
             component={VimExerciseScreen}
             options={{ title: "Vim演習" }}
+          />
+          <Stack.Screen
+            name="GitExercise"
+            component={GitExerciseScreen}
+            options={{ title: "Git演習" }}
           />
           <Stack.Screen
             name="MyPage"

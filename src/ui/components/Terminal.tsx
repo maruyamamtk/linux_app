@@ -1,4 +1,4 @@
-import { forwardRef, useImperativeHandle, useRef, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import {
   FlatList,
   KeyboardAvoidingView,
@@ -43,6 +43,12 @@ export interface TerminalProps {
   processes?: MockProcess[];
   /** プロンプトの `@` の後に表示するホスト名(デフォルト: "linuxtraining")。 */
   hostName?: string;
+  /**
+   * コマンド実行のたびに(初回マウント時にも1回)呼ばれる、最新の`CommandContext`を渡すコールバック。
+   * Git演習画面(`GitExerciseScreen`)がコミットグラフを再構築するために使う
+   * (docs/git-simulator-design.md 10章: 「表示のたびにVFSから再構築する単純な方式」)。
+   */
+  onCommandExecuted?: (context: CommandContext) => void;
 }
 
 /** `[study@linuxtraining practice]$` のようなプロンプト文字列を組み立てる(docs/requirements.md 5章参照)。 */
@@ -63,7 +69,7 @@ function formatPrompt(context: CommandContext, user: VfsUser, hostName: string):
  * 表示を担う。判定ロジックは持たず、エンジン層(`engine/interpreter`)にコマンドの実行を委譲する。
  */
 export const Terminal = forwardRef<TerminalHandle, TerminalProps>(function Terminal(
-  { snapshot, user, initialCwd, initialEnv, processes, hostName = "linuxtraining" },
+  { snapshot, user, initialCwd, initialEnv, processes, hostName = "linuxtraining", onCommandExecuted },
   ref,
 ) {
   const contextRef = useRef<CommandContext | null>(null);
@@ -87,6 +93,9 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(function Termi
     getLastCommand: () => history[history.length - 1]?.input ?? "",
   }));
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => onCommandExecuted?.(context), []);
+
   function runCommand() {
     const commandText = input.trim();
     if (commandText.length === 0) {
@@ -108,6 +117,7 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(function Termi
     setHistory((previous) => [...previous, entry]);
     setInput("");
     setPrompt(formatPrompt(context, user, hostName));
+    onCommandExecuted?.(context);
     requestAnimationFrame(() => listRef.current?.scrollToEnd({ animated: true }));
   }
 
