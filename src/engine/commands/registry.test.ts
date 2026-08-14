@@ -54,6 +54,8 @@ const EXPECTED_COMMANDS = [
   "zip",
   "unzip",
   "git",
+  "dnf",
+  "apt",
 ];
 
 describe("commandRegistry", () => {
