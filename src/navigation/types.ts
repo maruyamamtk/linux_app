@@ -7,4 +7,5 @@ export type RootStackParamList = {
   VimExercise: { chapterId: string; exerciseId: string };
   GitExercise: { chapterId: string; exerciseId: string };
   MyPage: undefined;
+  Settings: undefined;
 };
