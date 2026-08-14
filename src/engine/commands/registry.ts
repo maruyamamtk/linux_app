@@ -23,6 +23,7 @@ import {
 } from "./fileOps";
 import { chmodCommand, suCommand, sudoCommand } from "./permissions";
 import { bgCommand, fgCommand, jobsCommand, killCommand, psCommand } from "./process";
+import { gitCommand } from "./git";
 import { grepCommand } from "./grep";
 import { colonCommand, echoCommand, falseCommand, trueCommand } from "./shellBuiltins";
 import { sedCommand } from "./sed";
@@ -94,6 +95,7 @@ export const commandRegistry: Readonly<Record<string, CommandHandler>> = {
   bunzip2: bunzip2Command,
   zip: zipCommand,
   unzip: unzipCommand,
+  git: gitCommand,
 };
 
 export function resolveCommand(name: string): CommandHandler | undefined {
