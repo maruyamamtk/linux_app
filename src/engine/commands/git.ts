@@ -6,26 +6,32 @@ import {
   buildTreeFromIndex,
   collectAncestors,
   createCommit,
+  fetchBranch,
   findRepoRoot,
   flattenTree,
   formatCommitDate,
+  getRemoteUrl,
+  gitDir,
   hashObject,
   initRepo,
   listBranches,
   listWorktreeFiles,
   materializeTree,
   performMerge,
+  pushBranch,
   readBranchHash,
+  readConfig,
   readHeadBranch,
   readIndex,
   readObject,
+  setRemoteUrl,
   upsertIndexEntry,
   writeBranchHash,
   writeHeadBranch,
   writeIndex,
   writeObject,
 } from "../git";
-import type { GitCommitObject, GitFileMode } from "../git";
+import type { GitCommitObject, GitFileMode, MergeOutcome } from "../git";
 import { parseArgs } from "./args";
 import { fail, ok } from "./errors";
 import type { CommandContext, CommandHandler, CommandResult } from "./types";
@@ -294,6 +300,24 @@ function handleCheckout(
   return ok(`Switched to ${createFlag ? "a new branch" : "branch"} '${name}'\n`);
 }
 
+/** `performMerge`の結果をGit風の文言へ変換する(design 7章)。`git merge`/`git pull`で共用する。 */
+function formatMergeOutcome(outcome: MergeOutcome, currentHash: string, prefix = ""): CommandResult {
+  switch (outcome.type) {
+    case "up-to-date":
+      return ok(`${prefix}Already up to date.\n`);
+    case "fast-forward":
+      return ok(`${prefix}Updating ${currentHash.slice(0, 7)}..${outcome.commitHash.slice(0, 7)}\nFast-forward\n`);
+    case "merged":
+      return ok(`${prefix}Merge made by the 'recursive' strategy.\n`);
+    case "conflict":
+      return {
+        stdout: "",
+        stderr: prefix + outcome.paths.map((path) => `CONFLICT (content): Merge conflict in ${path}\n`).join(""),
+        exitCode: 1,
+      };
+  }
+}
+
 function handleMerge(args: string[], context: CommandContext, repoPath: string): CommandResult {
   const { positional } = parseArgs(args);
   if (positional.length === 0) return fail("git merge: missing branch name");
@@ -315,21 +339,105 @@ function handleMerge(args: string[], context: CommandContext, repoPath: string):
 
   const message = `Merge branch '${otherBranch}' into ${branch}`;
   const outcome = performMerge(context.vfs, repoPath, branch, currentHash, otherHash, message);
+  return formatMergeOutcome(outcome, currentHash);
+}
 
+/** `git remote add`で設定した`<name>`の登録先パスを解決する。未設定/リポジトリ不在ならエラー。 */
+function resolveRemotePath(context: CommandContext, repoPath: string, remoteName: string): string {
+  const url = getRemoteUrl(context.vfs, repoPath, remoteName);
+  if (!url || !context.vfs.exists(gitDir(url))) {
+    throw new GitError(`'${remoteName}' does not appear to be a git repository`);
+  }
+  return url;
+}
+
+function handleRemote(args: string[], context: CommandContext, repoPath: string): CommandResult {
+  const { flags, positional } = parseArgs(args);
+
+  if (positional[0] === "add") {
+    const [, name, target] = positional;
+    if (!name || !target) return fail("usage: git remote add <name> <url>");
+    setRemoteUrl(context.vfs, repoPath, name, resolveArgPath(context, target));
+    return ok("");
+  }
+
+  const config = readConfig(context.vfs, repoPath);
+  const names = Object.keys(config.remotes).sort();
+  if (flags.has("v") || flags.has("verbose")) {
+    const lines = names.flatMap((name) => [
+      `${name}\t${config.remotes[name]} (fetch)`,
+      `${name}\t${config.remotes[name]} (push)`,
+    ]);
+    return ok(lines.length > 0 ? `${lines.join("\n")}\n` : "");
+  }
+  return ok(names.length > 0 ? `${names.join("\n")}\n` : "");
+}
+
+function handlePush(args: string[], context: CommandContext, repoPath: string): CommandResult {
+  const { positional } = parseArgs(args);
+  const remoteName = positional[0] ?? "origin";
+  const branch = positional[1] ?? readHeadBranch(context.vfs, repoPath);
+
+  let remotePath: string;
+  try {
+    remotePath = resolveRemotePath(context, repoPath, remoteName);
+  } catch (error) {
+    if (error instanceof GitError) return fail(`fatal: ${error.message}`);
+    throw error;
+  }
+
+  const outcome = pushBranch(context.vfs, repoPath, remotePath, branch);
   switch (outcome.type) {
     case "up-to-date":
-      return ok("Already up to date.\n");
-    case "fast-forward":
-      return ok(`Updating ${currentHash.slice(0, 7)}..${outcome.commitHash.slice(0, 7)}\nFast-forward\n`);
-    case "merged":
-      return ok("Merge made by the 'recursive' strategy.\n");
-    case "conflict":
+      return ok("Everything up-to-date\n");
+    case "rejected":
       return {
         stdout: "",
-        stderr: outcome.paths.map((path) => `CONFLICT (content): Merge conflict in ${path}\n`).join(""),
+        stderr:
+          `To ${remotePath}\n` +
+          ` ! [rejected]        ${branch} -> ${branch} (non-fast-forward)\n` +
+          `error: failed to push some refs to '${remotePath}'\n`,
         exitCode: 1,
       };
+    case "ok":
+      return ok(`To ${remotePath}\n   ${branch} -> ${branch}\n`);
   }
+}
+
+function handlePull(args: string[], context: CommandContext, repoPath: string): CommandResult {
+  const { positional } = parseArgs(args);
+  const remoteName = positional[0] ?? "origin";
+  const branch = positional[1] ?? readHeadBranch(context.vfs, repoPath);
+
+  let remotePath: string;
+  try {
+    remotePath = resolveRemotePath(context, repoPath, remoteName);
+  } catch (error) {
+    if (error instanceof GitError) return fail(`fatal: ${error.message}`);
+    throw error;
+  }
+  if (hasUncommittedChanges(context, repoPath)) {
+    return fail("error: your local changes would be overwritten by merge; commit your changes before merging.");
+  }
+
+  const fetchedHash = fetchBranch(context.vfs, repoPath, remotePath, remoteName, branch);
+  if (!fetchedHash) return fail(`fatal: couldn't find remote ref ${branch}`);
+
+  const prefix = `From ${remotePath}\n`;
+  const currentBranch = readHeadBranch(context.vfs, repoPath);
+  const currentHash = readBranchHash(context.vfs, repoPath, currentBranch);
+
+  if (!currentHash) {
+    writeBranchHash(context.vfs, repoPath, currentBranch, fetchedHash);
+    const commit = readObject(context.vfs, repoPath, fetchedHash) as GitCommitObject;
+    writeIndex(context.vfs, repoPath, flattenTree(context.vfs, repoPath, commit.tree));
+    materializeTree(context.vfs, repoPath, commit.tree);
+    return ok(`${prefix}Fast-forward\n`);
+  }
+
+  const message = `Merge remote-tracking branch '${remoteName}/${branch}'`;
+  const outcome = performMerge(context.vfs, repoPath, currentBranch, currentHash, fetchedHash, message);
+  return formatMergeOutcome(outcome, currentHash, prefix);
 }
 
 /**
@@ -364,6 +472,12 @@ export const gitCommand: CommandHandler = (args, context) => {
         return handleCheckout(rest, context, repoPath, "switch");
       case "merge":
         return handleMerge(rest, context, repoPath);
+      case "remote":
+        return handleRemote(rest, context, repoPath);
+      case "push":
+        return handlePush(rest, context, repoPath);
+      case "pull":
+        return handlePull(rest, context, repoPath);
       default:
         throw new GitUnsupportedCommandError(subcommand);
     }

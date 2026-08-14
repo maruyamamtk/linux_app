@@ -46,3 +46,8 @@ export interface GitIndexEntry {
 }
 
 export type GitIndex = GitIndexEntry[];
+
+/** `.git/config`(3.6節)。リモート名からVFS絶対パスへのマッピングのみを保持する(`origin`1つのみ対応)。 */
+export interface GitConfig {
+  remotes: Record<string, string>;
+}

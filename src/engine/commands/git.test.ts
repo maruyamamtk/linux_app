@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 
+import { joinPath } from "../vfs";
 import { gitCommand } from "./git";
 import { buildContext } from "./testFixtures";
 import type { CommandContext } from "./types";
@@ -10,6 +11,19 @@ function buildRepoContext(): CommandContext {
   gitCommand(["init", "repo"], context);
   context.cwd = "/home/study/repo";
   return context;
+}
+
+/** `context.cwd`配下に`path`を書き込み、add+commitする。 */
+function commitFile(context: CommandContext, path: string, content: string, message: string): void {
+  context.vfs.writeFile(joinPath(context.cwd, path), content);
+  gitCommand(["add", path], context);
+  gitCommand(["commit", "-m", message], context);
+}
+
+/** ローカルリポジトリに`/home/study/remote`を疑似リモート(`origin`)として登録する。 */
+function setupRemote(context: CommandContext): void {
+  gitCommand(["init", "/home/study/remote"], context);
+  gitCommand(["remote", "add", "origin", "/home/study/remote"], context);
 }
 
 describe("git init", () => {
@@ -168,12 +182,6 @@ describe("git branch / checkout / switch", () => {
 });
 
 describe("git merge", () => {
-  function commitFile(context: CommandContext, path: string, content: string, message: string): void {
-    context.vfs.writeFile(`/home/study/repo/${path}`, content);
-    gitCommand(["add", path], context);
-    gitCommand(["commit", "-m", message], context);
-  }
-
   it("fast-forwards when the current branch is an ancestor of the merged branch", () => {
     const context = buildRepoContext();
     commitFile(context, "a.txt", "a\n", "first");
@@ -226,6 +234,144 @@ describe("git merge", () => {
     expect(result.exitCode).toBe(1);
     expect(result.stderr).toContain("CONFLICT (content): Merge conflict in shared.txt");
     expect(context.vfs.readFile("/home/study/repo/shared.txt")).toBe("main version\n");
+  });
+});
+
+describe("git remote", () => {
+  it("lists remote names without -v", () => {
+    const context = buildRepoContext();
+    setupRemote(context);
+
+    const result = gitCommand(["remote"], context);
+    expect(result.stdout).toBe("origin\n");
+  });
+
+  it("-v lists fetch/push urls", () => {
+    const context = buildRepoContext();
+    setupRemote(context);
+
+    const result = gitCommand(["remote", "-v"], context);
+    expect(result.stdout).toBe("origin\t/home/study/remote (fetch)\norigin\t/home/study/remote (push)\n");
+  });
+});
+
+describe("git push", () => {
+  it("fails without a configured remote", () => {
+    const context = buildRepoContext();
+    commitFile(context, "a.txt", "a\n", "first");
+
+    const result = gitCommand(["push"], context);
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stderr).toContain("does not appear to be a git repository");
+  });
+
+  it("fails when the local branch has no commits yet", () => {
+    const context = buildRepoContext();
+    setupRemote(context);
+
+    const result = gitCommand(["push"], context);
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stderr).toContain("src refspec");
+  });
+
+  it("copies commits to the remote and updates its branch ref", () => {
+    const context = buildRepoContext();
+    setupRemote(context);
+    commitFile(context, "a.txt", "a\n", "first");
+
+    const result = gitCommand(["push"], context);
+    expect(result.exitCode).toBe(0);
+    expect(result.stdout).toContain("main -> main");
+
+    const remoteContext = { ...context, cwd: "/home/study/remote" };
+    const log = gitCommand(["log", "--oneline"], remoteContext);
+    expect(log.stdout).toContain("first");
+  });
+
+  it("reports 'Everything up-to-date' when the remote already has the local commits", () => {
+    const context = buildRepoContext();
+    setupRemote(context);
+    commitFile(context, "a.txt", "a\n", "first");
+    gitCommand(["push"], context);
+
+    const result = gitCommand(["push"], context);
+    expect(result.stdout).toBe("Everything up-to-date\n");
+  });
+
+  it("rejects a non-fast-forward push and leaves the remote branch untouched", () => {
+    const context = buildRepoContext();
+    setupRemote(context);
+    commitFile(context, "a.txt", "a\n", "first");
+    gitCommand(["push"], context);
+
+    const remoteContext = { ...context, cwd: "/home/study/remote" };
+    commitFile(remoteContext, "remote-only.txt", "remote\n", "remote change");
+    commitFile(context, "local-only.txt", "local\n", "local change");
+
+    const result = gitCommand(["push"], context);
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("[rejected]");
+    expect(result.stderr).toContain("non-fast-forward");
+
+    const remoteLog = gitCommand(["log", "--oneline"], remoteContext);
+    expect(remoteLog.stdout).not.toContain("local change");
+  });
+});
+
+describe("git pull", () => {
+  it("fails without a configured remote", () => {
+    const context = buildRepoContext();
+    const result = gitCommand(["pull"], context);
+    expect(result.exitCode).not.toBe(0);
+    expect(result.stderr).toContain("does not appear to be a git repository");
+  });
+
+  it("fast-forwards the local branch when the remote is ahead", () => {
+    const context = buildRepoContext();
+    setupRemote(context);
+    commitFile(context, "a.txt", "a\n", "first");
+    gitCommand(["push"], context);
+
+    const remoteContext = { ...context, cwd: "/home/study/remote" };
+    commitFile(remoteContext, "b.txt", "b\n", "second");
+
+    const result = gitCommand(["pull"], context);
+    expect(result.exitCode).toBe(0);
+    expect(result.stdout).toContain("Fast-forward");
+    expect(context.vfs.readFile("/home/study/repo/b.txt")).toBe("b\n");
+  });
+
+  it("creates a merge commit for non-conflicting diverged changes", () => {
+    const context = buildRepoContext();
+    setupRemote(context);
+    commitFile(context, "base.txt", "base\n", "base");
+    gitCommand(["push"], context);
+
+    const remoteContext = { ...context, cwd: "/home/study/remote" };
+    commitFile(remoteContext, "remote-only.txt", "remote\n", "remote change");
+    commitFile(context, "local-only.txt", "local\n", "local change");
+
+    const result = gitCommand(["pull"], context);
+    expect(result.exitCode).toBe(0);
+    expect(result.stdout).toContain("Merge made by the 'recursive' strategy.");
+    expect(context.vfs.readFile("/home/study/repo/remote-only.txt")).toBe("remote\n");
+    expect(context.vfs.readFile("/home/study/repo/local-only.txt")).toBe("local\n");
+  });
+
+  it("fails with a CONFLICT message and leaves refs unchanged when both sides edit the same file", () => {
+    const context = buildRepoContext();
+    setupRemote(context);
+    commitFile(context, "shared.txt", "base\n", "base");
+    gitCommand(["push"], context);
+
+    const remoteContext = { ...context, cwd: "/home/study/remote" };
+    commitFile(remoteContext, "shared.txt", "remote version\n", "remote edits shared");
+    commitFile(context, "shared.txt", "local version\n", "local edits shared");
+
+    const result = gitCommand(["pull"], context);
+    expect(result.exitCode).toBe(1);
+    expect(result.stderr).toContain("CONFLICT (content): Merge conflict in shared.txt");
+    expect(context.vfs.readFile("/home/study/repo/shared.txt")).toBe("local version\n");
   });
 });
 
