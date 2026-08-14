@@ -65,9 +65,15 @@ describe("phase1VfsSnapshot / /home/study/practice", () => {
     }
   });
 
-  it("does not include the not-yet-implemented Phase2 chapter (ch19)", () => {
+  it("contains ch19_git with a work tree per Git exercise scenario, none pre-initialized as a repo", () => {
     const vfs = createVfs();
-    expect(vfs.exists("/home/study/practice/ch19_git")).toBe(false);
+    for (const dir of ["notes", "branch-practice", "sync-practice"]) {
+      const path = `/home/study/practice/ch19_git/${dir}`;
+      expect(vfs.stat(path).type).toBe("directory");
+      expect(vfs.exists(`${path}/.git`)).toBe(false);
+    }
+    expect(vfs.stat("/home/study/practice/ch19_git/notes/memo.txt").type).toBe("file");
+    expect(vfs.stat("/home/study/practice/ch19_git/notes/todo.txt").type).toBe("file");
   });
 
   it("contains ch18_archive/project with multiple files for archive practice", () => {

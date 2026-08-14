@@ -241,6 +241,20 @@ const CH18_APP_SH = `#!/bin/bash
 echo "Hello from app.sh"
 `;
 
+const CH19_MEMO_TXT = `会議メモ
+- 次回の日程を決める
+`;
+
+const CH19_TODO_TXT = `TODO
+- 資料を準備する
+`;
+
+const CH19_BRANCH_MEMO_TXT = `プロジェクトの概要をここに書く。
+`;
+
+const CH19_SYNC_MEMO_TXT = `同期演習用のメモ。
+`;
+
 function createPracticeDirectory(): VfsDirectoryNode {
   return createDirectory("practice", {
     ch04_fs: createDirectory("ch04_fs", {
@@ -368,6 +382,40 @@ function createPracticeDirectory(): VfsDirectoryNode {
             mode: 0o755,
           }),
         }, { owner: "study", group: "study", mode: 0o755 }),
+      }, { owner: "study", group: "study", mode: 0o755 }),
+    }, { owner: "study", group: "study", mode: 0o755 }),
+
+    ch19_git: createDirectory("ch19_git", {
+      // git init/status/add/commit/log演習用。まだGitリポジトリ化されていない状態の作業ツリー。
+      notes: createDirectory("notes", {
+        "memo.txt": createFile("memo.txt", CH19_MEMO_TXT, {
+          owner: "study",
+          group: "study",
+          mode: 0o644,
+        }),
+        "todo.txt": createFile("todo.txt", CH19_TODO_TXT, {
+          owner: "study",
+          group: "study",
+          mode: 0o644,
+        }),
+      }, { owner: "study", group: "study", mode: 0o755 }),
+
+      // branch/checkout/merge演習用。演習ごとにgit initからやり直す想定の作業ツリー。
+      "branch-practice": createDirectory("branch-practice", {
+        "memo.txt": createFile("memo.txt", CH19_BRANCH_MEMO_TXT, {
+          owner: "study",
+          group: "study",
+          mode: 0o644,
+        }),
+      }, { owner: "study", group: "study", mode: 0o755 }),
+
+      // remote/push/pull演習用。"../sync-practice-remote" を疑似リモートとして演習内でgit initする想定。
+      "sync-practice": createDirectory("sync-practice", {
+        "memo.txt": createFile("memo.txt", CH19_SYNC_MEMO_TXT, {
+          owner: "study",
+          group: "study",
+          mode: 0o644,
+        }),
       }, { owner: "study", group: "study", mode: 0o755 }),
     }, { owner: "study", group: "study", mode: 0o755 }),
   }, { owner: "study", group: "study", mode: 0o755 });

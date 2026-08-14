@@ -1099,4 +1099,230 @@ export const exercises: Exercise[] = [
       ":%s/old/new/g がバッファ全体(1,$)を対象にするのに対し、:{n},{m}s/old/new/g のように行番号を明示すると、" +
       "n行目からm行目までの範囲だけを置換対象にできます。範囲外の行(この演習では1行目)は変更されません。",
   },
+
+  // ---------------------------------------------------------------------
+  // Ch19: Gitによるバージョン管理
+  // ---------------------------------------------------------------------
+  {
+    id: "ch19-ex01",
+    chapterId: "ch19",
+    type: "git",
+    prompt: "notes ディレクトリを、新しいGitリポジトリとして初期化してください。",
+    initialCwd: "/home/study/practice/ch19_git/notes",
+    referenceSolution: "git init",
+    hints: [
+      "git init を実行すると、カレントディレクトリが新しいGitリポジトリになります。",
+      "リポジトリ化したいディレクトリへcdしてから実行するのが基本です(今回は既にnotesディレクトリにいます)。",
+    ],
+    explanation:
+      "git init は、カレントディレクトリを新しいGitリポジトリとして初期化するコマンドです。実行すると .git という" +
+      "隠しディレクトリが作られ、その中にオブジェクトストア(objects)・ブランチの参照(refs/heads)・現在のブランチを" +
+      "指すHEAD・ステージング内容を記録するindexが用意されます。以降のadd/commit等は、この.gitディレクトリの中身を" +
+      "更新していく操作になります。",
+  },
+  {
+    id: "ch19-ex02",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "notes ディレクトリでリポジトリを初期化したうえで、git status を実行し、まだ何も追跡されていない状態を確認してください。",
+    initialCwd: "/home/study/practice/ch19_git/notes",
+    referenceSolution: "git init; git status",
+    hints: [
+      "git init のあと、続けて git status を実行します(; で区切って1行にまとめられます)。",
+      "初期化直後は、memo.txt・todo.txtのどちらもまだGitに追跡されていない「Untracked files」として表示されます。",
+    ],
+    explanation:
+      "git status は、ワークツリー・インデックス(ステージング状態)・直前のコミットの3者を比較し、現在のブランチ名・" +
+      "ステージ済みの変更(Changes to be committed)・未ステージの変更(Changes not staged for commit)・" +
+      "まだ一度もaddされていないファイル(Untracked files)を報告します。git init直後はコミットが1つも無いため、" +
+      "ワークツリー上のファイルはすべてUntracked filesとして表示されます。",
+  },
+  {
+    id: "ch19-ex03",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "notes ディレクトリでリポジトリを初期化し、memo.txt だけをステージングしたうえで、git status を実行して" +
+      "ステージ済みの変更として表示されることを確認してください(todo.txt はまだ追跡しないでください)。",
+    initialCwd: "/home/study/practice/ch19_git/notes",
+    referenceSolution: "git init; git add memo.txt; git status",
+    hints: [
+      "git add ファイル名 で、指定したファイルだけをステージング(インデックスに追加)できます。",
+      "git add . のようにディレクトリ全体を指定しない限り、指定していないファイル(todo.txt)は追跡対象になりません。",
+    ],
+    explanation:
+      "git add ファイル名 は、指定したファイルの現在の内容をワークツリーからインデックス(ステージングエリア)へ" +
+      "コピーする操作です。まだコミットはされておらず、「次にgit commitしたときに記録される内容」を確定させる" +
+      "段階にすぎません。git status ではこの状態が「Changes to be committed」として表示され、addしていない" +
+      "todo.txtは引き続き「Untracked files」のままです。",
+  },
+  {
+    id: "ch19-ex04",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "notes ディレクトリでリポジトリを初期化し、すべてのファイルをステージングしたうえで、" +
+      "「Initial commit」というメッセージでコミットしてください。",
+    initialCwd: "/home/study/practice/ch19_git/notes",
+    referenceSolution: 'git init; git add .; git commit -m "Initial commit"',
+    hints: [
+      "git add . で、カレントディレクトリ以下のすべてのファイルをまとめてステージングできます。",
+      "git commit -m \"メッセージ\" で、-mオプションに続けてコミットメッセージを指定します。",
+    ],
+    explanation:
+      "git commit -m \"メッセージ\" は、その時点のインデックスの内容から新しいコミットを作成し、現在のブランチ" +
+      "(初期状態ではmain)がそのコミットを指すように更新します。-mオプションは必須で、本シミュレータでは" +
+      "エディタを開く無引数のgit commitには対応していません。git add . で全ファイルをまとめてステージングして" +
+      "からコミットする流れは、最初のコミット(root-commit)を作る際によく使われます。",
+  },
+  {
+    id: "ch19-ex05",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "notes ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」、todo.txt を「Add todo」というメッセージで" +
+      "それぞれ別のコミットとして記録したうえで、git log --oneline でコミット履歴を確認してください。",
+    initialCwd: "/home/study/practice/ch19_git/notes",
+    referenceSolution:
+      'git init; git add memo.txt; git commit -m "Add memo"; git add todo.txt; git commit -m "Add todo"; git log --oneline',
+    hints: [
+      "add と commit をファイルごとに1組ずつ、2回繰り返します。",
+      "git log --oneline は、各コミットを「短縮ハッシュ + メッセージの1行目」の1行で新しい順に一覧表示します。",
+    ],
+    explanation:
+      "git log は、現在のブランチが指すコミットから親をたどってコミット履歴を新しい順に表示するコマンドです。" +
+      "--oneline を付けると、各コミットが「短縮ハッシュ(先頭7桁) メッセージの1行目」という1行に要約されます。" +
+      "ファイルごとにadd・commitを繰り返すと、その分だけ独立したコミットが履歴に積み重なっていくことが確認できます。",
+  },
+  {
+    id: "ch19-ex06",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "branch-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージでコミットした" +
+      "うえで、feature という名前の新しいブランチを作成してください(切り替えはまだ不要です)。",
+    initialCwd: "/home/study/practice/ch19_git/branch-practice",
+    referenceSolution: 'git init; git add memo.txt; git commit -m "Add memo"; git branch feature',
+    hints: [
+      "git branch ブランチ名 で、現在のHEADが指すコミットを指す新しいブランチを作成できます。",
+      "引数無しの git branch とは異なり、ブランチ名を指定した場合はブランチの作成のみを行い、切り替えは行いません。",
+    ],
+    explanation:
+      "git branch ブランチ名 は、現在のHEADが指しているコミットを指す新しいブランチ参照(refs/heads/ブランチ名)を" +
+      "作成するだけのコマンドです。作成しただけでは現在のブランチ(この場合main)は切り替わらず、ワークツリーの" +
+      "内容にも変化はありません。ブランチの実体は「特定のコミットを指すラベル」にすぎないことが確認できる演習です。",
+  },
+  {
+    id: "ch19-ex07",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "branch-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージでコミットして" +
+      "ください。続けて git checkout -b で feature ブランチを作成・切り替えし、feature.txt というファイルに" +
+      "「feature update」という内容を書き込んでから「Add feature file」というメッセージでコミットしてください。",
+    initialCwd: "/home/study/practice/ch19_git/branch-practice",
+    referenceSolution:
+      'git init; git add memo.txt; git commit -m "Add memo"; git checkout -b feature; echo "feature update" > feature.txt; git add feature.txt; git commit -m "Add feature file"',
+    hints: [
+      "git checkout -b ブランチ名 は、ブランチの作成と切り替えを1つのコマンドで同時に行います。",
+      "echo \"内容\" > ファイル名 で、新しい内容のファイルを作成できます。",
+    ],
+    explanation:
+      "git checkout -b ブランチ名 は git branch ブランチ名 に続けて git checkout ブランチ名 を実行するのと同じ" +
+      "効果を持つ糖衣構文です。切り替え後にfeature.txtを追加してコミットすると、この変更はfeatureブランチだけが" +
+      "指す新しいコミットとして記録され、main側の履歴には影響しません。",
+  },
+  {
+    id: "ch19-ex08",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "branch-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージでコミットして" +
+      "ください。続けて feature ブランチを作成・切り替えし、feature.txt を追加して「Add feature file」という" +
+      "メッセージでコミットします。最後に main ブランチへ戻り、feature ブランチをmergeして変更を取り込んでください。",
+    initialCwd: "/home/study/practice/ch19_git/branch-practice",
+    referenceSolution:
+      'git init; git add memo.txt; git commit -m "Add memo"; git checkout -b feature; echo "feature update" > feature.txt; git add feature.txt; git commit -m "Add feature file"; git checkout main; git merge feature',
+    hints: [
+      "git checkout main で、featureブランチからmainブランチへ戻れます。",
+      "git merge feature を実行すると、mainがfeatureに追いついているだけの場合はfast-forward(単純にポインタを" +
+        "進めるだけ)でマージされます。",
+    ],
+    explanation:
+      "mainブランチがfeatureブランチの祖先である(mainの側に分岐後の独自コミットが無い)場合、git mergeは新しい" +
+      "マージコミットを作らず、mainの参照をfeatureが指すコミットへ直接進めるだけで済みます。これをfast-forward" +
+      "マージと呼びます。実行結果にはFast-forwardという文言が表示され、mainブランチのワークツリーにも" +
+      "feature.txtが取り込まれます。",
+  },
+  {
+    id: "ch19-ex09",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "branch-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージでコミットして" +
+      "ください。続けて feature ブランチを作成・切り替えて feature.txt を「Add feature note」というメッセージで" +
+      "コミットし、main ブランチへ戻って main.txt を「Add main note」というメッセージでコミットしてください" +
+      "(それぞれ別のファイルを追加するため、両ブランチの変更は衝突しません)。最後に main で feature をmergeして、" +
+      "両方の変更を取り込んでください。",
+    initialCwd: "/home/study/practice/ch19_git/branch-practice",
+    referenceSolution:
+      'git init; git add memo.txt; git commit -m "Add memo"; git checkout -b feature; echo "feature note" > feature.txt; git add feature.txt; git commit -m "Add feature note"; git checkout main; echo "main note" > main.txt; git add main.txt; git commit -m "Add main note"; git merge feature',
+    hints: [
+      "mainとfeatureの両方に、共通の祖先コミットの後で独自のコミットを積んでおくと履歴が分岐します。",
+      "分岐した履歴同士をmergeすると、双方の変更を取り込んだ新しいマージコミットが作られます" +
+        "(異なるファイルへの変更なので衝突しません)。",
+    ],
+    explanation:
+      "mainとfeatureの双方が共通の祖先コミットから分岐して別々のコミットを積んでいる場合、git mergeは共通祖先の" +
+      "treeを基準に双方の変更をファイル単位で比較する3-wayマージを行います。今回はmain.txtとfeature.txtという" +
+      "別々のファイルへの変更なので衝突が起きず、両方の親を持つ新しいマージコミットが自動的に作成されます" +
+      "(Merge made by the 'recursive' strategy.と表示されます)。マージ後のワークツリーには、main.txt・" +
+      "feature.txtの両方が存在します。",
+  },
+  {
+    id: "ch19-ex10",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "sync-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージでコミットして" +
+      "ください。続けて、1つ上の階層に sync-practice-remote という名前の別のリポジトリを疑似リモートとして用意し、" +
+      "origin という名前で登録したうえで、git push でコミットを送ってください。",
+    initialCwd: "/home/study/practice/ch19_git/sync-practice",
+    referenceSolution:
+      'git init; git add memo.txt; git commit -m "Add memo"; git init ../sync-practice-remote; git remote add origin ../sync-practice-remote; git push',
+    hints: [
+      "git init 対象のパス のように、パスを指定するとカレントディレクトリ以外の場所にもリポジトリを初期化できます。",
+      "git remote add origin リモートのパス で、そのパスにあるリポジトリを origin という名前で登録できます。",
+      "git push は、明示的な引数を省略すると origin の現在のブランチへ送ります。",
+    ],
+    explanation:
+      "本シミュレータには実際のネットワーク通信は無いため、「もう1つのローカルリポジトリ」を疑似リモートとして" +
+      "扱います。git remote add origin パス で .git/config にリモートの登録先を記録し、git push origin ブランチ名" +
+      "(省略時は現在のブランチ)は、ローカル側にしかまだ無いコミット・tree・blobオブジェクトをリモート側の" +
+      "オブジェクトストアへコピーしたうえで、リモート側のブランチ参照を更新します。",
+  },
+  {
+    id: "ch19-ex11",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "sync-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージでコミットして" +
+      "ください。1つ上の階層に sync-practice-remote を疑似リモート(origin)として用意してpushしたあと、" +
+      "sync-practice-remote 側へ移動して release.txt というファイルを「Add release notes」というメッセージで" +
+      "直接コミットしてください。最後に sync-practice へ戻り、git pull でその変更を取り込んでください。",
+    initialCwd: "/home/study/practice/ch19_git/sync-practice",
+    referenceSolution:
+      'git init; git add memo.txt; git commit -m "Add memo"; git init ../sync-practice-remote; git remote add origin ../sync-practice-remote; git push; cd ../sync-practice-remote; echo "release notes" > release.txt; git add release.txt; git commit -m "Add release notes"; cd ../sync-practice; git pull',
+    hints: [
+      "cd で疑似リモート側のディレクトリに移動すれば、そのリポジトリに対して直接add/commitできます" +
+        "(疑似リモートも中身は普通のGitリポジトリです)。",
+      "git pull は、リモートの新しいコミットを取り込んだうえで、fast-forward可能なら単純にブランチを進めます。",
+    ],
+    explanation:
+      "git pull origin ブランチ名(省略時はoriginの現在のブランチ)は、リモートの新しいコミットをローカルへ" +
+      "取得(fetch)したうえで、ローカルのブランチへ取り込む(merge)処理をまとめて行います。今回はローカル側に" +
+      "pull前の独自コミットが無いため、取得したコミットへブランチ参照を進めるだけのfast-forwardとなり、" +
+      "sync-practiceのワークツリーにrelease.txtが取り込まれます。",
+  },
 ];

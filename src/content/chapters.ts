@@ -89,4 +89,15 @@ export const chapters: Chapter[] = [
       "gzip/gunzip・bzip2/bunzip2で個々のファイルを圧縮・伸長し、zip/unzipでの圧縮・展開・一覧表示までを" +
       "複数ファイルからなるサンプルプロジェクトに対して一通り練習する。",
   },
+  {
+    id: "ch19",
+    title: "Gitによるバージョン管理",
+    phase: 2,
+    description:
+      "専用のGit演習画面(コミットグラフの可視化+コマンド入力)を使って、git init/add/commit/statusで" +
+      "変更を記録し、git logで履歴を確認する基本操作を練習する。branch/checkoutでブランチを分けて作業し、" +
+      "mergeでfast-forward・非衝突な3-wayマージの2パターンを取り込む。remote add/push/pullでは、" +
+      "ローカルに置いたもう1つのリポジトリを疑似リモートに見立て、ネットワーク通信を伴わない形で" +
+      "変更のやり取りを体験する。",
+  },
 ];
