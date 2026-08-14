@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 
@@ -6,6 +6,8 @@ import { exercises } from "../../content/exercises";
 import { compareText } from "../../engine/grading";
 import type { RootStackParamList } from "../../navigation/types";
 import { useProgress } from "../../state/ProgressContext";
+import { useSettings } from "../../state/SettingsContext";
+import type { ThemeColors } from "../../theme/colors";
 import { ExplanationPanel } from "../components/ExplanationPanel";
 import { VimEditor } from "../components/VimEditor";
 import type { VimEditorHandle } from "../components/VimEditor";
@@ -21,6 +23,8 @@ type Props = NativeStackScreenProps<RootStackParamList, "VimExercise">;
 export function VimExerciseScreen({ route }: Props) {
   const exercise = exercises.find((item) => item.id === route.params.exerciseId);
   const { recordAttempt } = useProgress();
+  const { colors } = useSettings();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const editorRef = useRef<VimEditorHandle>(null);
   const [visibleHintCount, setVisibleHintCount] = useState(0);
   const [passed, setPassed] = useState<boolean | null>(null);
@@ -105,29 +109,31 @@ export function VimExerciseScreen({ route }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff" },
-  header: { maxHeight: 160 },
-  headerContent: { padding: 16, gap: 8 },
-  prompt: { fontSize: 16 },
-  hint: { fontSize: 14, color: "#555" },
-  resultPass: { fontSize: 15, fontWeight: "600", color: "#1a7f37" },
-  resultFail: { fontSize: 15, fontWeight: "600", color: "#cf222e" },
-  actions: {
-    flexDirection: "row",
-    padding: 12,
-    gap: 12,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: "#ccc",
-  },
-  actionButton: {
-    flex: 1,
-    paddingVertical: 12,
-    borderRadius: 8,
-    alignItems: "center",
-    backgroundColor: "#eee",
-  },
-  actionButtonText: { fontSize: 14, fontWeight: "600", color: "#333" },
-  primaryButton: { backgroundColor: "#1a7f37" },
-  primaryButtonText: { color: "#fff" },
-});
+function createStyles(colors: ThemeColors) {
+  return StyleSheet.create({
+    container: { flex: 1, backgroundColor: colors.background },
+    header: { maxHeight: 160 },
+    headerContent: { padding: 16, gap: 8 },
+    prompt: { fontSize: 16, color: colors.text },
+    hint: { fontSize: 14, color: colors.textSecondary },
+    resultPass: { fontSize: 15, fontWeight: "600", color: colors.success },
+    resultFail: { fontSize: 15, fontWeight: "600", color: colors.danger },
+    actions: {
+      flexDirection: "row",
+      padding: 12,
+      gap: 12,
+      borderTopWidth: StyleSheet.hairlineWidth,
+      borderTopColor: colors.border,
+    },
+    actionButton: {
+      flex: 1,
+      paddingVertical: 12,
+      borderRadius: 8,
+      alignItems: "center",
+      backgroundColor: colors.chip,
+    },
+    actionButtonText: { fontSize: 14, fontWeight: "600", color: colors.text },
+    primaryButton: { backgroundColor: colors.primary },
+    primaryButtonText: { color: colors.primaryContrast },
+  });
+}

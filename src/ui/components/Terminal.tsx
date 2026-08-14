@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import {
   FlatList,
   KeyboardAvoidingView,
@@ -13,6 +13,7 @@ import type { CommandContext, MockProcess } from "../../engine/commands";
 import { executeShellInput } from "../../engine/interpreter";
 import { VirtualFileSystem } from "../../engine/vfs";
 import type { VfsSnapshot, VfsUser } from "../../engine/vfs";
+import { DEFAULT_TERMINAL_FONT_SIZE } from "../../state/settings";
 
 const MONOSPACE_FONT = Platform.select({ ios: "Menlo", android: "monospace", default: "monospace" });
 
@@ -49,6 +50,8 @@ export interface TerminalProps {
    * (docs/git-simulator-design.md 10章: 「表示のたびにVFSから再構築する単純な方式」)。
    */
   onCommandExecuted?: (context: CommandContext) => void;
+  /** ターミナル部分の表示フォントサイズ(docs/requirements.md 7章)。未指定時は既定値を使う。 */
+  fontSize?: number;
 }
 
 /**
@@ -73,9 +76,19 @@ function formatPrompt(context: CommandContext, user: VfsUser, hostName: string):
  * 表示を担う。判定ロジックは持たず、エンジン層(`engine/interpreter`)にコマンドの実行を委譲する。
  */
 export const Terminal = forwardRef<TerminalHandle, TerminalProps>(function Terminal(
-  { snapshot, user, initialCwd, initialEnv, processes, hostName = "linuxtraining", onCommandExecuted },
+  {
+    snapshot,
+    user,
+    initialCwd,
+    initialEnv,
+    processes,
+    hostName = "linuxtraining",
+    onCommandExecuted,
+    fontSize = DEFAULT_TERMINAL_FONT_SIZE,
+  },
   ref,
 ) {
+  const styles = useMemo(() => createStyles(fontSize), [fontSize]);
   const contextRef = useRef<CommandContext | null>(null);
   if (!contextRef.current) {
     contextRef.current = {
@@ -171,27 +184,29 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(function Termi
   );
 });
 
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#0d1117", borderRadius: 8, overflow: "hidden" },
-  scrollback: { flex: 1, padding: 8 },
-  entry: { marginBottom: 6 },
-  line: { fontFamily: MONOSPACE_FONT, color: "#e6edf3", fontSize: 13 },
-  promptText: { fontFamily: MONOSPACE_FONT, color: "#3fb950", fontWeight: "600", fontSize: 13 },
-  stdout: { fontFamily: MONOSPACE_FONT, color: "#e6edf3", fontSize: 13 },
-  stderr: { fontFamily: MONOSPACE_FONT, color: "#f85149", fontSize: 13 },
-  inputRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: "#30363d",
-    paddingHorizontal: 8,
-    paddingVertical: 6,
-  },
-  input: {
-    flex: 1,
-    marginLeft: 6,
-    color: "#e6edf3",
-    fontFamily: MONOSPACE_FONT,
-    fontSize: 13,
-  },
-});
+function createStyles(fontSize: number) {
+  return StyleSheet.create({
+    container: { flex: 1, backgroundColor: "#0d1117", borderRadius: 8, overflow: "hidden" },
+    scrollback: { flex: 1, padding: 8 },
+    entry: { marginBottom: 6 },
+    line: { fontFamily: MONOSPACE_FONT, color: "#e6edf3", fontSize },
+    promptText: { fontFamily: MONOSPACE_FONT, color: "#3fb950", fontWeight: "600", fontSize },
+    stdout: { fontFamily: MONOSPACE_FONT, color: "#e6edf3", fontSize },
+    stderr: { fontFamily: MONOSPACE_FONT, color: "#f85149", fontSize },
+    inputRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      borderTopWidth: StyleSheet.hairlineWidth,
+      borderTopColor: "#30363d",
+      paddingHorizontal: 8,
+      paddingVertical: 6,
+    },
+    input: {
+      flex: 1,
+      marginLeft: 6,
+      color: "#e6edf3",
+      fontFamily: MONOSPACE_FONT,
+      fontSize,
+    },
+  });
+}

@@ -1,6 +1,9 @@
+import { useMemo } from "react";
 import { Platform, ScrollView, StyleSheet, Text, View } from "react-native";
 
 import type { CommitGraph } from "../../engine/git";
+import { useSettings } from "../../state/SettingsContext";
+import type { ThemeColors } from "../../theme/colors";
 import { layoutCommitGraph } from "./commitGraphLayout";
 
 const MONOSPACE_FONT = Platform.select({ ios: "Menlo", android: "monospace", default: "monospace" });
@@ -26,6 +29,8 @@ export interface CommitGraphViewProps {
  * `View`のみでレーンの縦線とコミットのドットを表現する(要件定義書のスコープ規模ではこれで十分)。
  */
 export function CommitGraphView({ graph }: CommitGraphViewProps) {
+  const { colors } = useSettings();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const rows = layoutCommitGraph(graph);
 
   if (rows.length === 0) {
@@ -93,33 +98,35 @@ export function CommitGraphView({ graph }: CommitGraphViewProps) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flexGrow: 0 },
-  empty: { padding: 16 },
-  emptyText: { fontSize: 13, color: "#57606a" },
-  row: { flexDirection: "row", alignItems: "flex-start" },
-  laneArea: { position: "relative" },
-  laneLine: { position: "absolute", top: 0, bottom: 0, width: 2 },
-  dot: {
-    position: "absolute",
-    top: (ROW_MIN_HEIGHT - DOT_SIZE) / 2,
-    width: DOT_SIZE,
-    height: DOT_SIZE,
-    borderRadius: DOT_SIZE / 2,
-  },
-  info: { minWidth: 200, paddingVertical: 8, paddingRight: 12, gap: 2 },
-  infoHeader: { flexDirection: "row", alignItems: "center", flexWrap: "wrap", gap: 6 },
-  hash: { fontFamily: MONOSPACE_FONT, fontSize: 12, color: "#57606a" },
-  branchBadge: {
-    fontSize: 11,
-    fontWeight: "600",
-    color: "#0969da",
-    backgroundColor: "#ddf4ff",
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 4,
-    overflow: "hidden",
-  },
-  headBranchBadge: { color: "#1a7f37", backgroundColor: "#dafbe1" },
-  message: { fontSize: 13, color: "#24292f" },
-});
+function createStyles(colors: ThemeColors) {
+  return StyleSheet.create({
+    container: { flexGrow: 0 },
+    empty: { padding: 16 },
+    emptyText: { fontSize: 13, color: colors.textSecondary },
+    row: { flexDirection: "row", alignItems: "flex-start" },
+    laneArea: { position: "relative" },
+    laneLine: { position: "absolute", top: 0, bottom: 0, width: 2 },
+    dot: {
+      position: "absolute",
+      top: (ROW_MIN_HEIGHT - DOT_SIZE) / 2,
+      width: DOT_SIZE,
+      height: DOT_SIZE,
+      borderRadius: DOT_SIZE / 2,
+    },
+    info: { minWidth: 200, paddingVertical: 8, paddingRight: 12, gap: 2 },
+    infoHeader: { flexDirection: "row", alignItems: "center", flexWrap: "wrap", gap: 6 },
+    hash: { fontFamily: MONOSPACE_FONT, fontSize: 12, color: colors.textSecondary },
+    branchBadge: {
+      fontSize: 11,
+      fontWeight: "600",
+      color: colors.info,
+      backgroundColor: colors.infoBg,
+      paddingHorizontal: 6,
+      paddingVertical: 2,
+      borderRadius: 4,
+      overflow: "hidden",
+    },
+    headBranchBadge: { color: colors.success, backgroundColor: colors.successBg },
+    message: { fontSize: 13, color: colors.text },
+  });
+}

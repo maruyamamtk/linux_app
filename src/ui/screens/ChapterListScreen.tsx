@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 
@@ -5,6 +6,8 @@ import { chapters } from "../../content/chapters";
 import { exercises } from "../../content/exercises";
 import type { RootStackParamList } from "../../navigation/types";
 import { useProgress } from "../../state/ProgressContext";
+import { useSettings } from "../../state/SettingsContext";
+import type { ThemeColors } from "../../theme/colors";
 import { ProgressBar } from "../components/ProgressBar";
 
 type Props = NativeStackScreenProps<RootStackParamList, "ChapterList">;
@@ -15,6 +18,8 @@ type Props = NativeStackScreenProps<RootStackParamList, "ChapterList">;
  */
 export function ChapterListScreen({ navigation }: Props) {
   const { isCleared } = useProgress();
+  const { colors } = useSettings();
+  const styles = useMemo(() => createStyles(colors), [colors]);
 
   return (
     <View style={styles.container}>
@@ -55,22 +60,24 @@ export function ChapterListScreen({ navigation }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1 },
-  row: {
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: "#ccc",
-    gap: 6,
-  },
-  rowHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  title: { fontSize: 16 },
-  phase: { fontSize: 12, color: "#888" },
-  progressLabel: { fontSize: 12, color: "#57606a" },
-  comingSoon: { fontSize: 12, color: "#888" },
-});
+function createStyles(colors: ThemeColors) {
+  return StyleSheet.create({
+    container: { flex: 1, backgroundColor: colors.background },
+    row: {
+      paddingHorizontal: 16,
+      paddingVertical: 14,
+      borderBottomWidth: StyleSheet.hairlineWidth,
+      borderBottomColor: colors.border,
+      gap: 6,
+    },
+    rowHeader: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+    },
+    title: { fontSize: 16, color: colors.text },
+    phase: { fontSize: 12, color: colors.textMuted },
+    progressLabel: { fontSize: 12, color: colors.textSecondary },
+    comingSoon: { fontSize: 12, color: colors.textMuted },
+  });
+}

@@ -1,4 +1,8 @@
+import { useMemo } from "react";
 import { Platform, StyleSheet, Text, View } from "react-native";
+
+import { useSettings } from "../../state/SettingsContext";
+import type { ThemeColors } from "../../theme/colors";
 
 export interface ExplanationPanelProps {
   referenceSolution: string;
@@ -11,6 +15,9 @@ export interface ExplanationPanelProps {
  * 呼び出し側が表示するため、いきなり答えを見せない設計になっている。
  */
 export function ExplanationPanel({ referenceSolution, explanation }: ExplanationPanelProps) {
+  const { colors } = useSettings();
+  const styles = useMemo(() => createStyles(colors), [colors]);
+
   return (
     <View style={styles.container}>
       <Text style={styles.label}>模範解答</Text>
@@ -25,23 +32,25 @@ export function ExplanationPanel({ referenceSolution, explanation }: Explanation
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    gap: 4,
-    padding: 10,
-    borderRadius: 8,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: "#d0d7de",
-    backgroundColor: "#f6f8fa",
-  },
-  label: { fontSize: 12, fontWeight: "700", color: "#57606a" },
-  solution: {
-    fontSize: 13,
-    fontFamily: Platform.select({ ios: "Menlo", android: "monospace", default: "monospace" }),
-    color: "#24292f",
-    backgroundColor: "#eaeef2",
-    padding: 6,
-    borderRadius: 4,
-  },
-  explanation: { fontSize: 13, color: "#24292f", lineHeight: 19 },
-});
+function createStyles(colors: ThemeColors) {
+  return StyleSheet.create({
+    container: {
+      gap: 4,
+      padding: 10,
+      borderRadius: 8,
+      borderWidth: StyleSheet.hairlineWidth,
+      borderColor: colors.border,
+      backgroundColor: colors.surface,
+    },
+    label: { fontSize: 12, fontWeight: "700", color: colors.textSecondary },
+    solution: {
+      fontSize: 13,
+      fontFamily: Platform.select({ ios: "Menlo", android: "monospace", default: "monospace" }),
+      color: colors.text,
+      backgroundColor: colors.surfaceAlt,
+      padding: 6,
+      borderRadius: 4,
+    },
+    explanation: { fontSize: 13, color: colors.text, lineHeight: 19 },
+  });
+}

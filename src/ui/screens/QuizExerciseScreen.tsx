@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { exercises } from "../../content/exercises";
 import type { RootStackParamList } from "../../navigation/types";
 import { useProgress } from "../../state/ProgressContext";
+import { useSettings } from "../../state/SettingsContext";
+import type { ThemeColors } from "../../theme/colors";
 
 type Props = NativeStackScreenProps<RootStackParamList, "QuizExercise">;
 
@@ -16,6 +18,8 @@ type Props = NativeStackScreenProps<RootStackParamList, "QuizExercise">;
 export function QuizExerciseScreen({ route }: Props) {
   const exercise = exercises.find((item) => item.id === route.params.exerciseId);
   const { recordAttempt } = useProgress();
+  const { colors } = useSettings();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [visibleHintCount, setVisibleHintCount] = useState(0);
   const [showExplanation, setShowExplanation] = useState(false);
@@ -112,41 +116,43 @@ export function QuizExerciseScreen({ route }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff" },
-  content: { padding: 16, gap: 12 },
-  prompt: { fontSize: 16 },
-  hint: { fontSize: 14, color: "#555" },
-  choices: { gap: 8 },
-  choiceButton: {
-    padding: 12,
-    borderRadius: 8,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: "#d0d7de",
-    backgroundColor: "#f6f8fa",
-  },
-  choiceCorrect: { backgroundColor: "#dafbe1", borderColor: "#1a7f37" },
-  choiceWrong: { backgroundColor: "#ffebe9", borderColor: "#cf222e" },
-  choiceText: { fontSize: 14, color: "#24292f" },
-  resultPass: { fontSize: 15, fontWeight: "600", color: "#1a7f37" },
-  resultFail: { fontSize: 15, fontWeight: "600", color: "#cf222e" },
-  explanationBox: {
-    gap: 4,
-    padding: 10,
-    borderRadius: 8,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: "#d0d7de",
-    backgroundColor: "#f6f8fa",
-  },
-  explanationLabel: { fontSize: 12, fontWeight: "700", color: "#57606a" },
-  explanationText: { fontSize: 13, color: "#24292f", lineHeight: 19 },
-  actions: { flexDirection: "row", gap: 12 },
-  actionButton: {
-    flex: 1,
-    paddingVertical: 12,
-    borderRadius: 8,
-    alignItems: "center",
-    backgroundColor: "#eee",
-  },
-  actionButtonText: { fontSize: 14, fontWeight: "600", color: "#333" },
-});
+function createStyles(colors: ThemeColors) {
+  return StyleSheet.create({
+    container: { flex: 1, backgroundColor: colors.background },
+    content: { padding: 16, gap: 12 },
+    prompt: { fontSize: 16, color: colors.text },
+    hint: { fontSize: 14, color: colors.textSecondary },
+    choices: { gap: 8 },
+    choiceButton: {
+      padding: 12,
+      borderRadius: 8,
+      borderWidth: StyleSheet.hairlineWidth,
+      borderColor: colors.border,
+      backgroundColor: colors.surface,
+    },
+    choiceCorrect: { backgroundColor: colors.successBg, borderColor: colors.success },
+    choiceWrong: { backgroundColor: colors.dangerBg, borderColor: colors.danger },
+    choiceText: { fontSize: 14, color: colors.text },
+    resultPass: { fontSize: 15, fontWeight: "600", color: colors.success },
+    resultFail: { fontSize: 15, fontWeight: "600", color: colors.danger },
+    explanationBox: {
+      gap: 4,
+      padding: 10,
+      borderRadius: 8,
+      borderWidth: StyleSheet.hairlineWidth,
+      borderColor: colors.border,
+      backgroundColor: colors.surface,
+    },
+    explanationLabel: { fontSize: 12, fontWeight: "700", color: colors.textSecondary },
+    explanationText: { fontSize: 13, color: colors.text, lineHeight: 19 },
+    actions: { flexDirection: "row", gap: 12 },
+    actionButton: {
+      flex: 1,
+      paddingVertical: 12,
+      borderRadius: 8,
+      alignItems: "center",
+      backgroundColor: colors.chip,
+    },
+    actionButtonText: { fontSize: 14, fontWeight: "600", color: colors.text },
+  });
+}

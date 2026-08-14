@@ -3,12 +3,15 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Pressable, StyleSheet, Text } from "react-native";
 
 import { ProgressProvider } from "../state/ProgressContext";
+import { useSettings } from "../state/SettingsContext";
+import { getNavigationTheme } from "../theme/navigationTheme";
 import { ChapterListScreen } from "../ui/screens/ChapterListScreen";
 import { ExerciseScreen } from "../ui/screens/ExerciseScreen";
 import { GitExerciseScreen } from "../ui/screens/GitExerciseScreen";
 import { MyPageScreen } from "../ui/screens/MyPageScreen";
 import { QuizExerciseScreen } from "../ui/screens/QuizExerciseScreen";
 import { ScriptExerciseScreen } from "../ui/screens/ScriptExerciseScreen";
+import { SettingsScreen } from "../ui/screens/SettingsScreen";
 import { UnitDetailScreen } from "../ui/screens/UnitDetailScreen";
 import { VimExerciseScreen } from "../ui/screens/VimExerciseScreen";
 import type { RootStackParamList } from "./types";
@@ -16,9 +19,11 @@ import type { RootStackParamList } from "./types";
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export function RootNavigator() {
+  const { resolvedTheme, colors } = useSettings();
+
   return (
     <ProgressProvider>
-      <NavigationContainer>
+      <NavigationContainer theme={getNavigationTheme(resolvedTheme)}>
         <Stack.Navigator initialRouteName="ChapterList">
           <Stack.Screen
             name="ChapterList"
@@ -27,7 +32,7 @@ export function RootNavigator() {
               title: "章一覧",
               headerRight: () => (
                 <Pressable onPress={() => navigation.navigate("MyPage")}>
-                  <Text style={styles.headerButtonText}>マイページ</Text>
+                  <Text style={[styles.headerButtonText, { color: colors.primary }]}>マイページ</Text>
                 </Pressable>
               ),
             })}
@@ -67,6 +72,11 @@ export function RootNavigator() {
             component={MyPageScreen}
             options={{ title: "マイページ" }}
           />
+          <Stack.Screen
+            name="Settings"
+            component={SettingsScreen}
+            options={{ title: "表示設定" }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </ProgressProvider>
@@ -74,5 +84,5 @@ export function RootNavigator() {
 }
 
 const styles = StyleSheet.create({
-  headerButtonText: { fontSize: 14, color: "#1a7f37", fontWeight: "600" },
+  headerButtonText: { fontSize: 14, fontWeight: "600" },
 });

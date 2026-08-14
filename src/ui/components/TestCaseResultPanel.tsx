@@ -1,6 +1,9 @@
+import { useMemo } from "react";
 import { Platform, StyleSheet, Text, View } from "react-native";
 
 import type { ScriptTestCaseResult } from "../../engine/grading";
+import { useSettings } from "../../state/SettingsContext";
+import type { ThemeColors } from "../../theme/colors";
 
 export interface TestCaseResultPanelProps {
   results: ScriptTestCaseResult[];
@@ -12,6 +15,9 @@ export interface TestCaseResultPanelProps {
  * `ScriptTestCaseResult[]` をそのまま表示するだけ。
  */
 export function TestCaseResultPanel({ results }: TestCaseResultPanelProps) {
+  const { colors } = useSettings();
+  const styles = useMemo(() => createStyles(colors), [colors]);
+
   if (results.length === 0) return null;
 
   const passedCount = results.filter((result) => result.grade.passed).length;
@@ -70,40 +76,42 @@ export function TestCaseResultPanel({ results }: TestCaseResultPanelProps) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: { gap: 8 },
-  summary: { fontSize: 15, fontWeight: "700" },
-  summaryPass: { color: "#1a7f37" },
-  summaryFail: { color: "#cf222e" },
-  card: {
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: "#d0d7de",
-    borderRadius: 8,
-    padding: 10,
-    gap: 4,
-  },
-  cardHeader: { flexDirection: "row", alignItems: "center", gap: 8 },
-  badge: {
-    fontSize: 11,
-    fontWeight: "700",
-    color: "#fff",
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 4,
-    overflow: "hidden",
-  },
-  badgePass: { backgroundColor: "#1a7f37" },
-  badgeFail: { backgroundColor: "#cf222e" },
-  title: { fontSize: 14, fontWeight: "600", flexShrink: 1 },
-  caseInput: { fontSize: 12, color: "#57606a" },
-  detail: { marginTop: 4, gap: 2 },
-  detailLabel: { fontSize: 11, fontWeight: "600", color: "#57606a" },
-  detailValue: {
-    fontSize: 12,
-    fontFamily: Platform.select({ ios: "Menlo", android: "monospace", default: "monospace" }),
-    color: "#24292f",
-    backgroundColor: "#f6f8fa",
-    padding: 4,
-    borderRadius: 4,
-  },
-});
+function createStyles(colors: ThemeColors) {
+  return StyleSheet.create({
+    container: { gap: 8 },
+    summary: { fontSize: 15, fontWeight: "700" },
+    summaryPass: { color: colors.success },
+    summaryFail: { color: colors.danger },
+    card: {
+      borderWidth: StyleSheet.hairlineWidth,
+      borderColor: colors.border,
+      borderRadius: 8,
+      padding: 10,
+      gap: 4,
+    },
+    cardHeader: { flexDirection: "row", alignItems: "center", gap: 8 },
+    badge: {
+      fontSize: 11,
+      fontWeight: "700",
+      color: colors.primaryContrast,
+      paddingHorizontal: 6,
+      paddingVertical: 2,
+      borderRadius: 4,
+      overflow: "hidden",
+    },
+    badgePass: { backgroundColor: colors.success },
+    badgeFail: { backgroundColor: colors.danger },
+    title: { fontSize: 14, fontWeight: "600", flexShrink: 1, color: colors.text },
+    caseInput: { fontSize: 12, color: colors.textSecondary },
+    detail: { marginTop: 4, gap: 2 },
+    detailLabel: { fontSize: 11, fontWeight: "600", color: colors.textSecondary },
+    detailValue: {
+      fontSize: 12,
+      fontFamily: Platform.select({ ios: "Menlo", android: "monospace", default: "monospace" }),
+      color: colors.text,
+      backgroundColor: colors.surface,
+      padding: 4,
+      borderRadius: 4,
+    },
+  });
+}

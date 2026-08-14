@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 
@@ -5,6 +6,8 @@ import { chapters } from "../../content/chapters";
 import { exercises } from "../../content/exercises";
 import type { RootStackParamList } from "../../navigation/types";
 import { useProgress } from "../../state/ProgressContext";
+import { useSettings } from "../../state/SettingsContext";
+import type { ThemeColors } from "../../theme/colors";
 import { ProgressBar } from "../components/ProgressBar";
 
 type Props = NativeStackScreenProps<RootStackParamList, "UnitDetail">;
@@ -15,6 +18,8 @@ type Props = NativeStackScreenProps<RootStackParamList, "UnitDetail">;
  */
 export function UnitDetailScreen({ navigation, route }: Props) {
   const { isCleared } = useProgress();
+  const { colors } = useSettings();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const chapter = chapters.find((item) => item.id === route.params.chapterId);
   const chapterExercises = exercises.filter(
     (exercise) => exercise.chapterId === route.params.chapterId,
@@ -92,42 +97,44 @@ export function UnitDetailScreen({ navigation, route }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff" },
-  header: {
-    padding: 16,
-    gap: 8,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: "#ccc",
-  },
-  headerRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
-  title: { fontSize: 20, fontWeight: "700" },
-  phase: { fontSize: 12, color: "#888" },
-  description: { fontSize: 14, color: "#444", lineHeight: 20 },
-  progressLabel: { fontSize: 12, color: "#57606a" },
-  list: { flexGrow: 1 },
-  empty: { padding: 16, fontSize: 14, color: "#888" },
-  row: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: "#ccc",
-    gap: 12,
-  },
-  rowTextWrap: { flex: 1, gap: 2 },
-  rowTitle: { fontSize: 15, fontWeight: "600" },
-  rowPrompt: { fontSize: 13, color: "#57606a" },
-  badge: {
-    fontSize: 11,
-    fontWeight: "700",
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 4,
-    overflow: "hidden",
-  },
-  badgeCleared: { backgroundColor: "#1a7f37", color: "#fff" },
-  badgePending: { backgroundColor: "#eee", color: "#57606a" },
-});
+function createStyles(colors: ThemeColors) {
+  return StyleSheet.create({
+    container: { flex: 1, backgroundColor: colors.background },
+    header: {
+      padding: 16,
+      gap: 8,
+      borderBottomWidth: StyleSheet.hairlineWidth,
+      borderBottomColor: colors.border,
+    },
+    headerRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
+    title: { fontSize: 20, fontWeight: "700", color: colors.text },
+    phase: { fontSize: 12, color: colors.textMuted },
+    description: { fontSize: 14, color: colors.textSecondary, lineHeight: 20 },
+    progressLabel: { fontSize: 12, color: colors.textSecondary },
+    list: { flexGrow: 1 },
+    empty: { padding: 16, fontSize: 14, color: colors.textMuted },
+    row: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      paddingHorizontal: 16,
+      paddingVertical: 14,
+      borderBottomWidth: StyleSheet.hairlineWidth,
+      borderBottomColor: colors.border,
+      gap: 12,
+    },
+    rowTextWrap: { flex: 1, gap: 2 },
+    rowTitle: { fontSize: 15, fontWeight: "600", color: colors.text },
+    rowPrompt: { fontSize: 13, color: colors.textSecondary },
+    badge: {
+      fontSize: 11,
+      fontWeight: "700",
+      paddingHorizontal: 8,
+      paddingVertical: 4,
+      borderRadius: 4,
+      overflow: "hidden",
+    },
+    badgeCleared: { backgroundColor: colors.primary, color: colors.primaryContrast },
+    badgePending: { backgroundColor: colors.chip, color: colors.textSecondary },
+  });
+}
