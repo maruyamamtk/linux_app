@@ -16,6 +16,7 @@ function buildContext(input: GradeInput): CommandContext {
     env: { ...input.env },
     processes: cloneProcesses(input.processes),
     stdin: input.stdin ?? "",
+    ssh: {},
   };
 }
 

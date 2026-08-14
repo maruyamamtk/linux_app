@@ -29,6 +29,7 @@ import { grepCommand } from "./grep";
 import { colonCommand, echoCommand, falseCommand, trueCommand } from "./shellBuiltins";
 import { sedCommand } from "./sed";
 import { findCommand, helpCommand, locateCommand, manCommand, whichCommand } from "./search";
+import { sshCommand } from "./ssh";
 import { bracketCommand, testCommand } from "./test";
 import {
   cutCommand,
@@ -99,6 +100,7 @@ export const commandRegistry: Readonly<Record<string, CommandHandler>> = {
   git: gitCommand,
   dnf: dnfCommand,
   apt: aptCommand,
+  ssh: sshCommand,
 };
 
 export function resolveCommand(name: string): CommandHandler | undefined {

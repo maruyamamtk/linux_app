@@ -150,11 +150,27 @@ function parseExitCode(raw: string | undefined, fallback: number): number {
 }
 
 /**
- * `exit [n]`。`state.exiting` を立てて、関数呼び出しの境界を越えてスクリプト全体の実行を
+ * `exit [n]`。通常は`state.exiting`を立てて、関数呼び出しの境界を越えてスクリプト全体の実行を
  * 打ち切るまで各実行ループを早期終了させながら巻き戻す(`return`と異なり`callFunction`では
  * 消費されないため、関数の中から呼んでもそのまま呼び出し元・トップレベルまで伝播する)。
+ * ただし`ssh`(commands/ssh.ts)で仮想リモートホストに接続中(`context.ssh.saved`が設定されている)は、
+ * 実際のsshセッションと同様に「ログアウトしてローカルへ復帰する」動作として扱い、`state.exiting`は
+ * 立てない(同じ行で`;`以降に続くコマンドをローカル側でそのまま実行できるようにするため)。
  */
 function runExitBuiltin(args: string[], state: ShellState): CommandResult {
+  const ssh = state.context.ssh;
+  if (ssh.saved) {
+    const saved = ssh.saved;
+    const disconnectedFrom = ssh.remoteHost;
+    state.context.vfs.load(saved.snapshot);
+    state.context.cwd = saved.cwd;
+    for (const key of Object.keys(state.context.env)) delete state.context.env[key];
+    Object.assign(state.context.env, saved.env);
+    ssh.remoteHost = undefined;
+    ssh.saved = undefined;
+    return { stdout: `logout\nConnection to ${disconnectedFrom} closed.\n`, stderr: "", exitCode: 0 };
+  }
+
   const exitCode = parseExitCode(args[0], state.lastExitCode);
   state.exiting = { exitCode };
   return { stdout: "", stderr: "", exitCode };

@@ -51,7 +51,11 @@ export interface TerminalProps {
   onCommandExecuted?: (context: CommandContext) => void;
 }
 
-/** `[study@linuxtraining practice]$` のようなプロンプト文字列を組み立てる(docs/requirements.md 5章参照)。 */
+/**
+ * `[study@linuxtraining practice]$` のようなプロンプト文字列を組み立てる(docs/requirements.md 5章参照)。
+ * `ssh`で仮想リモートホストに接続中は`context.ssh.remoteHost`が設定されるため、`@`の後のホスト名を
+ * それに差し替えることで、付録の「ssh切替体験」でプロンプト表示が変化する様子を再現する。
+ */
 function formatPrompt(context: CommandContext, user: VfsUser, hostName: string): string {
   const home = context.env.HOME ?? `/home/${user.name}`;
   const displayPath =
@@ -61,7 +65,7 @@ function formatPrompt(context: CommandContext, user: VfsUser, hostName: string):
         ? `~${context.cwd.slice(home.length)}`
         : context.cwd;
   const shortDir = displayPath === "~" ? "~" : (displayPath.split("/").pop() ?? "") || "/";
-  return `[${user.name}@${hostName} ${shortDir}]$`;
+  return `[${user.name}@${context.ssh.remoteHost ?? hostName} ${shortDir}]$`;
 }
 
 /**
@@ -79,6 +83,7 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(function Termi
       cwd: initialCwd,
       env: { HOME: initialCwd, PATH: "/bin:/usr/bin", ...initialEnv },
       processes: (processes ?? []).map((process) => ({ ...process })),
+      ssh: {},
     };
   }
   const context = contextRef.current;

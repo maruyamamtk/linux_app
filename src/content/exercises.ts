@@ -1486,4 +1486,216 @@ export const exercises: Exercise[] = [
       "これはdnfの「is already installed」「Nothing to do.」と同じ、べき等な(何度実行しても安全な)" +
       "インストール操作を表しています。",
   },
+
+  // ---------------------------------------------------------------------
+  // 付録: SSH接続・infoコマンド・日本語入力
+  // ---------------------------------------------------------------------
+  {
+    id: "appendix-ex01",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt: "SSH(Secure Shell)の説明として最も適切なものはどれですか?",
+    choices: [
+      "ネットワーク越しに別のコンピュータへ安全(暗号化された通信)にログインし、遠隔操作するための仕組み",
+      "ファイルを圧縮・解凍するためのコマンド",
+      "ローカルのファイルシステムを暗号化して保存するための機能",
+      "Webサーバーが静的ファイルを配信するためのプロトコル",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "「Secure Shell」という名前の通り、通信路の安全性がポイントです。",
+      "自分のPCから、別のサーバーへリモートログインする場面で使います。",
+    ],
+    explanation:
+      "SSHは、ネットワークを介して別のコンピュータ(リモートホスト)へログインし、そこでコマンドを実行するための" +
+      "プロトコルです。通信内容が暗号化されるため、同じ目的で使われていた古いtelnetと異なり、" +
+      "パスワードやコマンドの内容を盗聴されるリスクを抑えられます。",
+  },
+  {
+    id: "appendix-ex02",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt: "telnetと比較したときのSSHの利点として、最も適切なものはどれですか?",
+    choices: [
+      "通信内容(パスワードやコマンド・実行結果)が暗号化されるため、通信経路上で盗聴されにくい",
+      "SSHはtelnetよりも常に通信速度が速い",
+      "SSHは暗号化を行わない代わりに、認証を一切必要としない",
+      "SSHは同一LAN内でしか利用できない",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["telnetは通信内容が平文(暗号化なし)でやり取りされる点を思い出してください。"],
+    explanation:
+      "telnetは通信内容を暗号化しないため、経路上でパケットを盗聴されるとパスワードや実行内容が漏えいする" +
+      "リスクがあります。SSHは公開鍵暗号方式を用いて通信路そのものを暗号化するため、同じ「リモートログイン」" +
+      "という目的でも安全性が大きく異なります。",
+  },
+  {
+    id: "appendix-ex03",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt: "コマンド `ssh study@webserver` の説明として最も適切なものはどれですか?",
+    choices: [
+      "webserverというホストに対して、studyというユーザー名でSSHログインを試みる",
+      "webserverというファイルを、studyという名前でコピーする",
+      "study というホスト上で webserver コマンドを実行する",
+      "SSHの設定ファイルにwebserverという行を追加する",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["`ssh [ユーザー名@]接続先ホスト名` という書式です。"],
+    explanation:
+      "`ssh ユーザー名@ホスト名` は、指定したホストに対して指定したユーザーとしてSSHログインするコマンドです。" +
+      "ユーザー名を省略した場合は、手元の環境で現在ログインしているユーザー名が使われます。",
+  },
+  {
+    id: "appendix-ex04",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt: "man コマンドと info コマンドの違いとして最も適切なものはどれですか?",
+    choices: [
+      "manは1ページのマニュアルを表示するのに対し、infoはノード(章・節)をリンクでたどりながら階層的に閲覧できる",
+      "manは日本語専用、infoは英語専用のマニュアル表示コマンドである",
+      "infoはネットワーク経由でマニュアルをダウンロードするコマンドで、manはローカルのみに対応する",
+      "manとinfoはまったく同じ内容を異なるフォントで表示するだけの違いしかない",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "GNUプロジェクトのコマンドは、manより詳しい説明がinfoにまとまっていることがあります。",
+      "infoはWebページのように「リンク」をたどって別のノードへ移動できる点が特徴です。",
+    ],
+    explanation:
+      "manコマンドが表示するマニュアルページは基本的に1つのページ(トピック)にまとまっているのに対し、" +
+      "infoコマンドはドキュメントを「ノード」と呼ばれる単位に分割し、メニューやリンクをたどりながら" +
+      "階層的に閲覧できる仕組みを持っています。GNU製コマンド(bash, gcc等)は、manより詳しい説明がinfoに" +
+      "用意されていることが多くあります。",
+  },
+  {
+    id: "appendix-ex05",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt: "infoコマンドの操作として正しいものはどれですか?",
+    choices: [
+      "Spaceキーで次の画面へスクロールし、nキーで次のノード、pキーで前のノードへ移動できる",
+      "infoは対話的な操作を一切受け付けず、常に全文を一括表示するだけである",
+      "infoではqキーを押すと、そのままシャットダウンが実行される",
+      "infoはマウス操作専用で、キーボードからは終了できない",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["manページと同様、Spaceキーでのスクロールに加えて、ノード間を移動するための専用キーがあります。"],
+    explanation:
+      "infoコマンドの表示中は、Spaceキー/Backspaceキーで画面のスクロール、nキーで次のノード、pキーで前の" +
+      "ノード、uキーで一つ上の階層のノードへ移動できます。manと同じくqキーで終了します。",
+  },
+  {
+    id: "appendix-ex06",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt: "Linuxで日本語を入力できるようにするために、一般的に必要となるソフトウェアはどれですか?",
+    choices: [
+      "IME(Input Method Editor)。ibus-mozcやfcitx-mozcのような「入力メソッド」と呼ばれる仕組み",
+      "特別なソフトウェアは不要で、キーボードを日本語配列に交換するだけでよい",
+      "SSH。SSH経由で接続すると自動的に日本語入力が有効になる",
+      "Vimエディタ。Vimをインストールすると日本語入力もあわせて有効になる",
+      "ディスプレイドライバ。GPUのドライバを更新すると日本語入力が有効になる",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["「かな漢字変換」を行うソフトウェアの総称を思い出してみましょう。"],
+    explanation:
+      "日本語のようにローマ字入力からひらがな・漢字への変換が必要な言語を入力するには、IME" +
+      "(Input Method Editor、入力メソッド)と呼ばれるソフトウェアが必要です。Linuxではibusやfcitxといった" +
+      "入力メソッドフレームワークに、Mozcなどの日本語変換エンジンを組み合わせて利用するのが一般的です。",
+  },
+  {
+    id: "appendix-ex07",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt: "日本語入力中に「半角英数」と「日本語(ひらがな)入力」を切り替える一般的な操作はどれですか?",
+    choices: [
+      "半角/全角キー(または Ctrl+Space 等)でIMEのオン/オフを切り替える",
+      "Ctrl+Cを押すたびに入力モードが自動的に切り替わる",
+      "マウスを右クリックしないと入力モードは切り替えられない",
+      "OSを再起動しない限り、一度設定した入力モードは変更できない",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["日本語配列キーボードにある専用キーの名前を思い出してみましょう。"],
+    explanation:
+      "多くのLinuxディストリビューションでは、半角/全角キー(日本語配列キーボードの場合)や Ctrl+Space" +
+      "(englishキーボードでよく割り当てられるショートカット)でIMEのオン/オフを切り替え、日本語入力と" +
+      "半角英数入力を素早く切り替えられるようになっています。",
+  },
+  {
+    id: "appendix-ex08",
+    chapterId: "appendix",
+    prompt: "study@webserver というホスト名の仮想リモートホストへ、sshコマンドで接続してください。",
+    referenceSolution: "ssh study@webserver",
+    hints: [
+      "ssh [ユーザー名@]ホスト名 の形式で接続します。",
+      "このアプリでは webserver という名前の仮想リモートホストにのみ接続できます。",
+    ],
+    explanation:
+      "ssh study@webserver を実行すると、webserverという仮想リモートホストへの接続が完了し、以後のコマンドは" +
+      "ローカル環境ではなくwebserver上の仮想ファイルシステムに対して実行されるようになります。実際のsshと" +
+      "同様に、接続直後は初回接続の警告メッセージが表示されます。",
+  },
+  {
+    id: "appendix-ex09",
+    chapterId: "appendix",
+    prompt:
+      "study@webserver にSSH接続したうえで、接続先ホストのホスト名を /etc/hostname から確認してください" +
+      "(1行のコマンドとして ; でつないでください)。",
+    referenceSolution: "ssh study@webserver; cat /etc/hostname",
+    hints: [
+      "ssh study@webserver; の後に続けてコマンドを書くと、接続後のリモートホスト上でそのコマンドが実行されます。",
+      "/etc/hostname はホスト名が書かれた設定ファイルです。",
+    ],
+    explanation:
+      "sshで接続すると、以後のコマンドはリモートホスト(webserver)の仮想ファイルシステムに対して実行される" +
+      "ため、/etc/hostname を読むとローカル環境とは異なる「webserver」という内容が表示されます。これは" +
+      "「ホスト固有のVFSへの切替」が実際に起きていることを確認するための操作です。",
+  },
+  {
+    id: "appendix-ex10",
+    chapterId: "appendix",
+    prompt:
+      "study@webserver にSSH接続したうえで、ホームディレクトリ直下の deploy/README.md の内容を確認して" +
+      "ください(1行のコマンドとして ; でつないでください)。このファイルはローカル環境には存在しません。",
+    referenceSolution: "ssh study@webserver; cat deploy/README.md",
+    hints: [
+      "接続直後のカレントディレクトリは、webserver上のホームディレクトリ(/home/study)です。",
+      "cat 相対パス で、カレントディレクトリからの相対パスにあるファイルを表示できます。",
+    ],
+    explanation:
+      "deploy/README.md はwebserver専用の仮想ファイルシステムにのみ存在するファイルです。ローカル環境の" +
+      "~/practiceにはこのファイルが存在しないため、sshで接続してVFSが切り替わっていることの確認になります。",
+  },
+  {
+    id: "appendix-ex11",
+    chapterId: "appendix",
+    prompt:
+      "study@webserver にSSH接続したうえで、Webサーバーのアクセスログ(/var/log/nginx/access.log)を表示" +
+      "してください(1行のコマンドとして ; でつないでください)。",
+    referenceSolution: "ssh study@webserver; cat /var/log/nginx/access.log",
+    hints: ["絶対パス /var/log/nginx/access.log を指定して cat コマンドで表示します。"],
+    explanation:
+      "/var/log/nginx/access.log はwebserverの仮想ファイルシステム上に用意された、Webサーバーへの" +
+      "アクセスログのサンプルです。実際の運用でも、SSH接続したサーバー上でこうしたログファイルを確認する" +
+      "操作はよく行われます。",
+  },
+  {
+    id: "appendix-ex12",
+    chapterId: "appendix",
+    prompt:
+      "study@webserver にSSH接続したあと、exit コマンドでローカル環境に戻り、pwd で元のホームディレクトリ" +
+      "に戻っていることを確認してください(1行のコマンドとして ; でつないでください)。",
+    referenceSolution: "ssh study@webserver; exit; pwd",
+    hints: [
+      "実際のsshセッションと同様、exit コマンドでリモートホストからログアウトし、ローカルの状態に復帰します。",
+      "ログアウト後は、ssh接続前のカレントディレクトリ・ファイルシステムの状態にそのまま戻ります。",
+    ],
+    explanation:
+      "exit コマンドは、ssh接続中のシェルではリモートホストからログアウトしてローカル環境へ復帰する動作に" +
+      "なります(スクリプトの終端で使う「シェル全体を終了する」exitと同じコマンドですが、ssh接続中は" +
+      "「ログアウト」として振る舞います)。ログアウト後にpwdを実行すると、接続前のカレントディレクトリ" +
+      "(ローカルのホームディレクトリ)が表示され、ファイルシステムもローカルの状態に戻っていることが" +
+      "わかります。",
+  },
 ];

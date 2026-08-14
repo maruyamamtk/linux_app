@@ -19,6 +19,7 @@ function buildContext(initialCwd: string, processes?: MockProcess[]): CommandCon
     cwd: initialCwd,
     env: { HOME: HOME_DIR, PATH: "/bin:/usr/bin" },
     processes: (processes ?? []).map((process) => ({ ...process })),
+    ssh: {},
   };
 }
 
