@@ -100,4 +100,13 @@ export const chapters: Chapter[] = [
       "ローカルに置いたもう1つのリポジトリを疑似リモートに見立て、ネットワーク通信を伴わない形で" +
       "変更のやり取りを体験する。",
   },
+  {
+    id: "ch20",
+    title: "パッケージ管理(dnf/apt)",
+    phase: 2,
+    description:
+      "RedHat系のdnf、Debian系のaptという2つのパッケージ管理コマンドを使って、固定の仮想パッケージリポジトリに" +
+      "対するsearch(検索)・info(詳細確認)・install(インストール)を練習する。installはroot権限を要求するため、" +
+      "sudo/suによる権限昇格や、依存パッケージの自動解決も合わせて体験する。",
+  },
 ];
