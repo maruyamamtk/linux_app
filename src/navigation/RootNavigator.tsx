@@ -98,6 +98,6 @@ export function RootNavigator() {
 }
 
 const styles = StyleSheet.create({
-  headerButtonRow: { flexDirection: "row", gap: 16 },
+  headerButtonRow: { flexDirection: "row", alignItems: "center", gap: 24 },
   headerButtonText: { fontSize: 14, fontWeight: "600" },
 });
