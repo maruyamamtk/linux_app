@@ -10,9 +10,9 @@ export interface ExplanationPanelProps {
 }
 
 /**
- * 不正解時に表示する「模範解答コマンド+解説」パネル(docs/requirements.md 3章6節)。
- * 段階的ヒントをすべて確認したあと、または答え合わせで不正解になったあとにのみ
- * 呼び出し側が表示するため、いきなり答えを見せない設計になっている。
+ * 「模範解答コマンド+解説」パネル(docs/requirements.md 3章6節)。
+ * 表示タイミングの制御(答え合わせ前後どちらでも可、トグルでの表示/非表示)は
+ * 呼び出し側の画面が行う。
  */
 export function ExplanationPanel({ referenceSolution, explanation }: ExplanationPanelProps) {
   const { colors } = useSettings();
