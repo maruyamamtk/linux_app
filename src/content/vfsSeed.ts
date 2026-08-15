@@ -8,10 +8,7 @@ const STUDY_DIR_OPTIONS = { owner: "study", group: "study", mode: 0o755 } as con
  * `/bin`, `/usr/bin` 用のダミー実行ファイル一覧。
  * 実際のcontentは持たず、名前・サイズ・パーミッションのみを持つ(du/sort/ls演習で使用)。
  */
-function createBinDirectory(
-  name: string,
-  commands: readonly (readonly [string, number])[],
-): VfsDirectoryNode {
+function createBinDirectory(name: string, commands: readonly (readonly [string, number])[]): VfsDirectoryNode {
   const children: Record<string, VfsNode> = {};
   for (const [commandName, size] of commands) {
     children[commandName] = createFile(commandName, "", {
@@ -349,68 +346,40 @@ const CH19_SYNC_MEMO_TXT = `同期演習用のメモ。
 
 function createCh0406PracticeChildren(): Record<string, VfsNode> {
   return {
-    ch04_fs: createDirectory(
-      "ch04_fs",
-      {
-        documents: createDirectory("documents", {}, STUDY_DIR_OPTIONS),
-        photos: createDirectory("photos", {}, STUDY_DIR_OPTIONS),
-        "sample.txt": createFile("sample.txt", CH04_SAMPLE_TXT, {
-          owner: "study",
-          group: "study",
-          mode: 0o644,
-        }),
-      },
-      STUDY_DIR_OPTIONS,
-    ),
+    ch04_fs: createDirectory("ch04_fs", {
+      documents: createDirectory("documents", {}, STUDY_DIR_OPTIONS),
+      photos: createDirectory("photos", {}, STUDY_DIR_OPTIONS),
+      "sample.txt": createFile("sample.txt", CH04_SAMPLE_TXT, {
+        owner: "study",
+        group: "study",
+        mode: 0o644,
+      }),
+    }, STUDY_DIR_OPTIONS),
 
-    ch05_fileops: createDirectory(
-      "ch05_fileops",
-      {
-        "memo.txt": createFile("memo.txt", CH05_MEMO_TXT, {
-          owner: "study",
-          group: "study",
-          mode: 0o644,
-        }),
-        backup: createDirectory("backup", {}, STUDY_DIR_OPTIONS),
-      },
-      STUDY_DIR_OPTIONS,
-    ),
+    ch05_fileops: createDirectory("ch05_fileops", {
+      "memo.txt": createFile("memo.txt", CH05_MEMO_TXT, {
+        owner: "study",
+        group: "study",
+        mode: 0o644,
+      }),
+      backup: createDirectory("backup", {}, STUDY_DIR_OPTIONS),
+    }, STUDY_DIR_OPTIONS),
 
-    ch06_search: createDirectory(
-      "ch06_search",
-      {
-        deep: createDirectory(
-          "deep",
-          {
-            a: createDirectory(
-              "a",
-              {
-                b: createDirectory(
-                  "b",
-                  {
-                    c: createDirectory(
-                      "c",
-                      {
-                        "target.txt": createFile("target.txt", CH06_TARGET_TXT, {
-                          owner: "study",
-                          group: "study",
-                          mode: 0o644,
-                        }),
-                      },
-                      STUDY_DIR_OPTIONS,
-                    ),
-                  },
-                  STUDY_DIR_OPTIONS,
-                ),
-              },
-              STUDY_DIR_OPTIONS,
-            ),
-          },
-          STUDY_DIR_OPTIONS,
-        ),
-      },
-      STUDY_DIR_OPTIONS,
-    ),
+    ch06_search: createDirectory("ch06_search", {
+      deep: createDirectory("deep", {
+        a: createDirectory("a", {
+          b: createDirectory("b", {
+            c: createDirectory("c", {
+              "target.txt": createFile("target.txt", CH06_TARGET_TXT, {
+                owner: "study",
+                group: "study",
+                mode: 0o644,
+              }),
+            }, STUDY_DIR_OPTIONS),
+          }, STUDY_DIR_OPTIONS),
+        }, STUDY_DIR_OPTIONS),
+      }, STUDY_DIR_OPTIONS),
+    }, STUDY_DIR_OPTIONS),
   };
 }
 
@@ -588,193 +557,149 @@ function createCh09PracticeChildren(): Record<string, VfsNode> {
 
 function createCh1114PracticeChildren(): Record<string, VfsNode> {
   return {
-    ch11_pipeline: createDirectory(
-      "ch11_pipeline",
-      {
-        "output.log": createFile("output.log", CH11_OUTPUT_LOG, {
-          owner: "study",
-          group: "study",
-          mode: 0o644,
-        }),
-      },
-      STUDY_DIR_OPTIONS,
-    ),
+    ch11_pipeline: createDirectory("ch11_pipeline", {
+      "output.log": createFile("output.log", CH11_OUTPUT_LOG, {
+        owner: "study",
+        group: "study",
+        mode: 0o644,
+      }),
+    }, STUDY_DIR_OPTIONS),
 
-    ch12_textproc: createDirectory(
-      "ch12_textproc",
-      {
-        "file1.txt": createFile("file1.txt", CH12_FILE1_TXT, {
-          owner: "study",
-          group: "study",
-          mode: 0o644,
-        }),
-        "file2.txt": createFile("file2.txt", CH12_FILE2_TXT, {
-          owner: "study",
-          group: "study",
-          mode: 0o644,
-        }),
-        "number.txt": createFile("number.txt", CH12_NUMBER_TXT, {
-          owner: "study",
-          group: "study",
-          mode: 0o644,
-        }),
-        "score.csv": createFile("score.csv", CH12_SCORE_CSV, {
-          owner: "study",
-          group: "study",
-          mode: 0o644,
-        }),
-      },
-      STUDY_DIR_OPTIONS,
-    ),
+    ch12_textproc: createDirectory("ch12_textproc", {
+      "file1.txt": createFile("file1.txt", CH12_FILE1_TXT, {
+        owner: "study",
+        group: "study",
+        mode: 0o644,
+      }),
+      "file2.txt": createFile("file2.txt", CH12_FILE2_TXT, {
+        owner: "study",
+        group: "study",
+        mode: 0o644,
+      }),
+      "number.txt": createFile("number.txt", CH12_NUMBER_TXT, {
+        owner: "study",
+        group: "study",
+        mode: 0o644,
+      }),
+      "score.csv": createFile("score.csv", CH12_SCORE_CSV, {
+        owner: "study",
+        group: "study",
+        mode: 0o644,
+      }),
+    }, STUDY_DIR_OPTIONS),
 
-    ch13_regex: createDirectory(
-      "ch13_regex",
-      {
-        "drink.txt": createFile("drink.txt", CH13_DRINK_TXT, {
-          owner: "study",
-          group: "study",
-          mode: 0o644,
-        }),
-      },
-      STUDY_DIR_OPTIONS,
-    ),
+    ch13_regex: createDirectory("ch13_regex", {
+      "drink.txt": createFile("drink.txt", CH13_DRINK_TXT, {
+        owner: "study",
+        group: "study",
+        mode: 0o644,
+      }),
+    }, STUDY_DIR_OPTIONS),
 
-    ch14_sedawk: createDirectory(
-      "ch14_sedawk",
-      {
-        "drink2.txt": createFile("drink2.txt", CH14_DRINK2_TXT, {
-          owner: "study",
-          group: "study",
-          mode: 0o644,
-        }),
-        "score.txt": createFile("score.txt", CH14_SCORE_TXT, {
-          owner: "study",
-          group: "study",
-          mode: 0o644,
-        }),
-      },
-      STUDY_DIR_OPTIONS,
-    ),
+    ch14_sedawk: createDirectory("ch14_sedawk", {
+      "drink2.txt": createFile("drink2.txt", CH14_DRINK2_TXT, {
+        owner: "study",
+        group: "study",
+        mode: 0o644,
+      }),
+      "score.txt": createFile("score.txt", CH14_SCORE_TXT, {
+        owner: "study",
+        group: "study",
+        mode: 0o644,
+      }),
+    }, STUDY_DIR_OPTIONS),
   };
 }
 
 function createCh1517PracticeChildren(): Record<string, VfsNode> {
   return {
-    ch15_17_shellscript: createDirectory("ch15_17_shellscript", {}, STUDY_DIR_OPTIONS),
+    ch15_17_shellscript: createDirectory(
+      "ch15_17_shellscript",
+      {},
+      STUDY_DIR_OPTIONS,
+    ),
   };
 }
 
 function createCh18PracticeChildren(): Record<string, VfsNode> {
   return {
-    ch18_archive: createDirectory(
-      "ch18_archive",
-      {
-        project: createDirectory(
-          "project",
-          {
-            "README.md": createFile("README.md", CH18_README_MD, {
-              owner: "study",
-              group: "study",
-              mode: 0o644,
-            }),
-            "data.csv": createFile("data.csv", CH18_DATA_CSV, {
-              owner: "study",
-              group: "study",
-              mode: 0o644,
-            }),
-            src: createDirectory(
-              "src",
-              {
-                "app.sh": createFile("app.sh", CH18_APP_SH, {
-                  owner: "study",
-                  group: "study",
-                  mode: 0o755,
-                }),
-              },
-              STUDY_DIR_OPTIONS,
-            ),
-          },
-          STUDY_DIR_OPTIONS,
-        ),
-      },
-      STUDY_DIR_OPTIONS,
-    ),
+    ch18_archive: createDirectory("ch18_archive", {
+      project: createDirectory("project", {
+        "README.md": createFile("README.md", CH18_README_MD, {
+          owner: "study",
+          group: "study",
+          mode: 0o644,
+        }),
+        "data.csv": createFile("data.csv", CH18_DATA_CSV, {
+          owner: "study",
+          group: "study",
+          mode: 0o644,
+        }),
+        src: createDirectory("src", {
+          "app.sh": createFile("app.sh", CH18_APP_SH, {
+            owner: "study",
+            group: "study",
+            mode: 0o755,
+          }),
+        }, STUDY_DIR_OPTIONS),
+      }, STUDY_DIR_OPTIONS),
+    }, STUDY_DIR_OPTIONS),
   };
 }
 
 function createCh19PracticeChildren(): Record<string, VfsNode> {
   return {
-    ch19_git: createDirectory(
-      "ch19_git",
-      {
-        // git init/status/add/commit/log演習用。まだGitリポジトリ化されていない状態の作業ツリー。
-        notes: createDirectory(
-          "notes",
-          {
-            "memo.txt": createFile("memo.txt", CH19_MEMO_TXT, {
-              owner: "study",
-              group: "study",
-              mode: 0o644,
-            }),
-            "todo.txt": createFile("todo.txt", CH19_TODO_TXT, {
-              owner: "study",
-              group: "study",
-              mode: 0o644,
-            }),
-          },
-          STUDY_DIR_OPTIONS,
-        ),
+    ch19_git: createDirectory("ch19_git", {
+      // git init/status/add/commit/log演習用。まだGitリポジトリ化されていない状態の作業ツリー。
+      notes: createDirectory("notes", {
+        "memo.txt": createFile("memo.txt", CH19_MEMO_TXT, {
+          owner: "study",
+          group: "study",
+          mode: 0o644,
+        }),
+        "todo.txt": createFile("todo.txt", CH19_TODO_TXT, {
+          owner: "study",
+          group: "study",
+          mode: 0o644,
+        }),
+      }, STUDY_DIR_OPTIONS),
 
-        // branch/checkout/merge演習用。演習ごとにgit initからやり直す想定の作業ツリー。
-        "branch-practice": createDirectory(
-          "branch-practice",
-          {
-            "memo.txt": createFile("memo.txt", CH19_BRANCH_MEMO_TXT, {
-              owner: "study",
-              group: "study",
-              mode: 0o644,
-            }),
-          },
-          STUDY_DIR_OPTIONS,
-        ),
+      // branch/checkout/merge演習用。演習ごとにgit initからやり直す想定の作業ツリー。
+      "branch-practice": createDirectory("branch-practice", {
+        "memo.txt": createFile("memo.txt", CH19_BRANCH_MEMO_TXT, {
+          owner: "study",
+          group: "study",
+          mode: 0o644,
+        }),
+      }, STUDY_DIR_OPTIONS),
 
-        // remote/push/pull演習用。"../sync-practice-remote" を疑似リモートとして演習内でgit initする想定。
-        "sync-practice": createDirectory(
-          "sync-practice",
-          {
-            "memo.txt": createFile("memo.txt", CH19_SYNC_MEMO_TXT, {
-              owner: "study",
-              group: "study",
-              mode: 0o644,
-            }),
-          },
-          STUDY_DIR_OPTIONS,
-        ),
-      },
-      STUDY_DIR_OPTIONS,
-    ),
+      // remote/push/pull演習用。"../sync-practice-remote" を疑似リモートとして演習内でgit initする想定。
+      "sync-practice": createDirectory("sync-practice", {
+        "memo.txt": createFile("memo.txt", CH19_SYNC_MEMO_TXT, {
+          owner: "study",
+          group: "study",
+          mode: 0o644,
+        }),
+      }, STUDY_DIR_OPTIONS),
+    }, STUDY_DIR_OPTIONS),
   };
 }
 
 function createStudyHomeDirectory(practiceChildren: Record<string, VfsNode>): VfsDirectoryNode {
-  return createDirectory(
-    "study",
-    {
-      ".bashrc": createFile(".bashrc", STUDY_BASHRC_CONTENT, {
-        owner: "study",
-        group: "study",
-        mode: 0o644,
-      }),
-      ".bash_profile": createFile(".bash_profile", STUDY_BASH_PROFILE_CONTENT, {
-        owner: "study",
-        group: "study",
-        mode: 0o644,
-      }),
-      bin: createDirectory("bin", {}, STUDY_DIR_OPTIONS),
-      practice: createDirectory("practice", practiceChildren, STUDY_DIR_OPTIONS),
-    },
-    STUDY_DIR_OPTIONS,
-  );
+  return createDirectory("study", {
+    ".bashrc": createFile(".bashrc", STUDY_BASHRC_CONTENT, {
+      owner: "study",
+      group: "study",
+      mode: 0o644,
+    }),
+    ".bash_profile": createFile(".bash_profile", STUDY_BASH_PROFILE_CONTENT, {
+      owner: "study",
+      group: "study",
+      mode: 0o644,
+    }),
+    bin: createDirectory("bin", {}, STUDY_DIR_OPTIONS),
+    practice: createDirectory("practice", practiceChildren, STUDY_DIR_OPTIONS),
+  }, STUDY_DIR_OPTIONS);
 }
 
 /**

@@ -128,8 +128,7 @@ export const exercises: Exercise[] = [
     id: "ch01-ex05",
     chapterId: "ch01",
     type: "quiz",
-    prompt:
-      "実機に直接Linuxをインストールする方法と比べて、VirtualBox上の仮想マシンでLinuxを学習することの利点はどれですか?",
+    prompt: "実機に直接Linuxをインストールする方法と比べて、VirtualBox上の仮想マシンでLinuxを学習することの利点はどれですか?",
     choices: [
       "手元のPCのOS(Windows/macOS等)を残したまま、並行してLinuxを試せる",
       "実機にインストールする場合よりも、常にディスク容量を消費しない",
@@ -179,9 +178,7 @@ export const exercises: Exercise[] = [
       "ターミナルはシェルの一部の機能名である",
     ],
     correctChoiceIndex: 0,
-    hints: [
-      "ターミナルは「画面」、シェルはその画面の中で動く「プログラム」と考えると整理しやすいです。",
-    ],
+    hints: ["ターミナルは「画面」、シェルはその画面の中で動く「プログラム」と考えると整理しやすいです。"],
     explanation:
       "ターミナル(端末)はユーザーの文字入力と出力表示を受け持つアプリケーションで、その中でシェルというプログラムが" +
       "起動し、入力されたコマンドを解釈・実行します。両者は役割の異なる別のソフトウェアです。",
@@ -211,8 +208,7 @@ export const exercises: Exercise[] = [
     ],
     correctChoiceIndex: 0,
     hints: ["eは「end」(終わり)の頭文字です。"],
-    explanation:
-      "Ctrl+eはカーソルを行末(end of line)に移動するキー操作です。長いコマンドを編集するときによく使います。",
+    explanation: "Ctrl+eはカーソルを行末(end of line)に移動するキー操作です。長いコマンドを編集するときによく使います。",
   },
   {
     id: "ch02-03-ex05",
@@ -251,8 +247,7 @@ export const exercises: Exercise[] = [
     id: "ch02-03-ex07",
     chapterId: "ch02-03",
     type: "quiz",
-    prompt:
-      "コマンド履歴をさかのぼって、入力したキーワードを含むコマンドをインクリメンタルに検索するキー操作はどれですか?",
+    prompt: "コマンド履歴をさかのぼって、入力したキーワードを含むコマンドをインクリメンタルに検索するキー操作はどれですか?",
     choices: ["Ctrl+r", "Ctrl+p", "Ctrl+n", "Ctrl+f"],
     correctChoiceIndex: 0,
     hints: ["rは「reverse-search」(逆順検索)の頭文字です。"],
@@ -293,8 +288,7 @@ export const exercises: Exercise[] = [
   {
     id: "ch04-06-ex03",
     chapterId: "ch04-06",
-    prompt:
-      "photos ディレクトリの下に、2024/summer というネストしたディレクトリを一度のコマンドで作成してください。",
+    prompt: "photos ディレクトリの下に、2024/summer というネストしたディレクトリを一度のコマンドで作成してください。",
     initialCwd: "/home/study/practice/ch04_fs",
     referenceSolution: "mkdir -p photos/2024/summer",
     hints: ["mkdir に -p オプションを付けると、存在しない親ディレクトリもまとめて作成できます。"],
@@ -328,8 +322,7 @@ export const exercises: Exercise[] = [
   {
     id: "ch04-06-ex06",
     chapterId: "ch04-06",
-    prompt:
-      "カレントディレクトリ以下から、target.txt という名前のファイルを再帰的に検索してください。",
+    prompt: "カレントディレクトリ以下から、target.txt という名前のファイルを再帰的に検索してください。",
     initialCwd: "/home/study/practice/ch06_search",
     referenceSolution: "find . -name target.txt",
     hints: [
@@ -416,8 +409,7 @@ export const exercises: Exercise[] = [
   {
     id: "ch08-ex06",
     chapterId: "ch08",
-    prompt:
-      "$HOME/.bashrc の末尾に、ls -l を実行するエイリアス ll を定義する行(alias ll='ls -l')を追記してください。",
+    prompt: "$HOME/.bashrc の末尾に、ls -l を実行するエイリアス ll を定義する行(alias ll='ls -l')を追記してください。",
     referenceSolution: "echo \"alias ll='ls -l'\" >> $HOME/.bashrc",
     hints: [
       "ファイルの末尾に追記するには >> を使います(> だと上書きされてしまいます)。",
@@ -434,8 +426,7 @@ export const exercises: Exercise[] = [
   {
     id: "ch09-ex01",
     chapterId: "ch09",
-    prompt:
-      "script.sh に、所有者・グループ・その他すべてに実行権限を追加し、755(rwxr-xr-x)にしてください。",
+    prompt: "script.sh に、所有者・グループ・その他すべてに実行権限を追加し、755(rwxr-xr-x)にしてください。",
     initialCwd: "/home/study/practice/ch09_permissions",
     referenceSolution: "chmod 755 script.sh",
     hints: [
@@ -466,8 +457,7 @@ export const exercises: Exercise[] = [
   {
     id: "ch09-ex03",
     chapterId: "ch09",
-    prompt:
-      "一般ユーザーでは書き込めない /etc ディレクトリに、sudo を使って newconf.txt という空ファイルを作成してください。",
+    prompt: "一般ユーザーでは書き込めない /etc ディレクトリに、sudo を使って newconf.txt という空ファイルを作成してください。",
     referenceSolution: "sudo touch /etc/newconf.txt",
     hints: [
       "/etc はroot所有で書き込み権限が無いため、通常のtouchでは失敗します。",
@@ -579,7 +569,8 @@ export const exercises: Exercise[] = [
     hints: ["groupsコマンドの実行結果に複数のグループ名が並ぶことがあります。"],
     explanation:
       "ユーザーは同時にいくつものグループに所属できます。ただし、どのユーザーも最低1つのグループには" +
-      "所属している必要があります(それが表2-03などで紹介されるプライマリグループです)。",
+      "所属している必要があります(ユーザー作成時に自動的に割り当てられる、そのユーザー自身のグループが" +
+      "これにあたります)。",
   },
   {
     id: "ch09-ex10",
@@ -2145,7 +2136,7 @@ export const exercises: Exercise[] = [
     prompt: "/etc/sudoers を安全に編集するために使用する専用のコマンドは何ですか?",
     choices: ["visudo", "vim", "sudoedit-safe", "chmod"],
     correctChoiceIndex: 0,
-    hints: ["エディタとしてvimが起動しますが、コマンド名自体は別のものです。"],
+    hints: ["中で起動するエディタ(多くの場合vim、環境によってはnano等)とは別に、専用のコマンド名があります。"],
     explanation:
       "/etc/sudoersを編集するには、visudoという専用コマンドを使用します。保存時に文法チェックが行われる" +
       "ため、直接エディタで編集するよりも安全に作業できます。",
@@ -2225,8 +2216,7 @@ export const exercises: Exercise[] = [
   {
     id: "ch10-ex02",
     chapterId: "ch10",
-    prompt:
-      "自分以外のユーザーが所有するプロセスも含め、全ユーザーのプロセス一覧を表示してください。",
+    prompt: "自分以外のユーザーが所有するプロセスも含め、全ユーザーのプロセス一覧を表示してください。",
     referenceSolution: "ps -e",
     processes: [
       { pid: 1001, command: "bash", status: "running", owner: "study" },
@@ -2254,8 +2244,7 @@ export const exercises: Exercise[] = [
   {
     id: "ch10-ex04",
     chapterId: "ch10",
-    prompt:
-      "jobsコマンドでジョブ一覧を確認したうえで、停止中のジョブ%1をバックグラウンドで再開してください。",
+    prompt: "jobsコマンドでジョブ一覧を確認したうえで、停止中のジョブ%1をバックグラウンドで再開してください。",
     referenceSolution: "bg %1",
     processes: [{ pid: 3001, jobId: 1, command: "sleep 300 &", status: "stopped", owner: "study" }],
     hints: [
@@ -2273,8 +2262,7 @@ export const exercises: Exercise[] = [
   {
     id: "ch11-14-ex01",
     chapterId: "ch11-14",
-    prompt:
-      "存在しない no_such_file.txt を cat しようとしたときに出るエラーメッセージを画面に表示させず、/dev/null に捨ててください。",
+    prompt: "存在しない no_such_file.txt を cat しようとしたときに出るエラーメッセージを画面に表示させず、/dev/null に捨ててください。",
     initialCwd: "/home/study/practice/ch11_pipeline",
     referenceSolution: "cat no_such_file.txt 2>/dev/null",
     hints: [
@@ -2343,14 +2331,13 @@ export const exercises: Exercise[] = [
       "-n オプションを付けると数値として比較して並び替えられます。",
     ],
     explanation:
-      'sort はデフォルトでは文字列として辞書順に比較するため、"10"が"2"より前に来るなど直感に反する結果に' +
+      "sort はデフォルトでは文字列として辞書順に比較するため、\"10\"が\"2\"より前に来るなど直感に反する結果に" +
       "なります。-n(numeric-sort)オプションを付けることで、各行を数値として比較して並び替えられます。",
   },
   {
     id: "ch11-14-ex07",
     chapterId: "ch11-14",
-    prompt:
-      "score.csv から name と score の列(1列目と2列目)だけを、カンマ区切りのまま抽出してください。",
+    prompt: "score.csv から name と score の列(1列目と2列目)だけを、カンマ区切りのまま抽出してください。",
     initialCwd: "/home/study/practice/ch12_textproc",
     referenceSolution: "cut -d, -f1,2 score.csv",
     hints: [
@@ -2364,8 +2351,7 @@ export const exercises: Exercise[] = [
   {
     id: "ch11-14-ex08",
     chapterId: "ch11-14",
-    prompt:
-      "file1.txt と file2.txt をあわせてソートし、それぞれの都道府県名が何回登場するか集計してください。",
+    prompt: "file1.txt と file2.txt をあわせてソートし、それぞれの都道府県名が何回登場するか集計してください。",
     initialCwd: "/home/study/practice/ch12_textproc",
     referenceSolution: "cat file1.txt file2.txt | sort | uniq -c",
     hints: [
@@ -2386,7 +2372,7 @@ export const exercises: Exercise[] = [
     hints: ["-i オプションを付けると大文字小文字を区別せずに検索できます。"],
     explanation:
       "grep -i パターン ファイル は、大文字小文字を区別せずにパターンマッチングを行います。drink.txtには" +
-      '"Beer"という表記のみですが、-iを付けることで"beer"や"BEER"といった表記でも一致させられます。',
+      "\"Beer\"という表記のみですが、-iを付けることで\"beer\"や\"BEER\"といった表記でも一致させられます。",
   },
   {
     id: "ch11-14-ex10",
@@ -2409,14 +2395,12 @@ export const exercises: Exercise[] = [
     initialCwd: "/home/study/practice/ch13_regex",
     referenceSolution: "grep -v Beer drink.txt",
     hints: ["-v オプションを付けると、パターンに一致しない行だけを表示します(反転)。"],
-    explanation:
-      "grep -v パターン ファイル は、パターンに一致しない行だけを表示する「反転検索」です。",
+    explanation: "grep -v パターン ファイル は、パターンに一致しない行だけを表示する「反転検索」です。",
   },
   {
     id: "ch11-14-ex12",
     chapterId: "ch11-14",
-    prompt:
-      "drink2.txt 内の Japan を 日本 に置換して表示してください(元のファイルは変更しないでください)。",
+    prompt: "drink2.txt 内の Japan を 日本 に置換して表示してください(元のファイルは変更しないでください)。",
     initialCwd: "/home/study/practice/ch14_sedawk",
     referenceSolution: "sed 's/Japan/日本/' drink2.txt",
     hints: ["sed 's/置換前/置換後/' ファイル で最初に見つかった箇所を置換できます。"],
@@ -2431,10 +2415,7 @@ export const exercises: Exercise[] = [
     prompt: "drink2.txt から、カンマ区切りの1列目(飲み物の名前)だけを awk で抽出してください。",
     initialCwd: "/home/study/practice/ch14_sedawk",
     referenceSolution: "awk -F, '{print $1}' drink2.txt",
-    hints: [
-      "awk -F 区切り文字 でフィールドの区切りを指定します。",
-      "$1 は1列目のフィールドを表します。",
-    ],
+    hints: ["awk -F 区切り文字 でフィールドの区切りを指定します。", "$1 は1列目のフィールドを表します。"],
     explanation:
       "awk -F, で区切り文字をカンマに設定し、{print $1} で各行の1列目のフィールドだけを出力します。$0は行全体、" +
       "$1〜$NFが各フィールドに対応します。",
@@ -2468,12 +2449,7 @@ export const exercises: Exercise[] = [
     initialScript: "#!/bin/bash\n",
     referenceSolution: '#!/bin/bash\necho "Hello, $1!"\nwc -l\n',
     testCases: [
-      {
-        id: "tc1",
-        description: "名前=Alice, 標準入力2行",
-        args: ["Alice"],
-        stdin: "apple\nbanana\n",
-      },
+      { id: "tc1", description: "名前=Alice, 標準入力2行", args: ["Alice"], stdin: "apple\nbanana\n" },
       { id: "tc2", description: "名前=Bob, 標準入力なし", args: ["Bob"] },
       { id: "tc3", description: "名前=study, 標準入力3行", args: ["study"], stdin: "a\nb\nc\n" },
     ],
@@ -2485,7 +2461,7 @@ export const exercises: Exercise[] = [
       "シェルスクリプトに渡された引数は $1, $2, ... という位置パラメータで参照できます。" +
       "また、wc -l はファイル名を指定しなければ標準入力を読み込んで行数を数えるため、" +
       "パイプやリダイレクトで渡されたデータの行数をそのまま数えるのに使えます。" +
-      'この演習ではecho "Hello, $1!"で挨拶したあと、wc -lで標準入力の行数を数えて出力します。',
+      "この演習ではecho \"Hello, $1!\"で挨拶したあと、wc -lで標準入力の行数を数えて出力します。",
   },
   {
     id: "ch15-17-ex02",
@@ -2495,8 +2471,7 @@ export const exercises: Exercise[] = [
       "位置パラメータ $1 で渡された整数が偶数か奇数かを判定し、「偶数です」または「奇数です」と表示するシェルスクリプトを作成してください。",
     initialCwd: "/home/study/practice/ch15_17_shellscript",
     initialScript: "#!/bin/bash\n",
-    referenceSolution:
-      '#!/bin/bash\nn=$1\nif [ $((n % 2)) -eq 0 ]; then\n  echo "偶数です"\nelse\n  echo "奇数です"\nfi\n',
+    referenceSolution: '#!/bin/bash\nn=$1\nif [ $((n % 2)) -eq 0 ]; then\n  echo "偶数です"\nelse\n  echo "奇数です"\nfi\n',
     testCases: [
       { id: "tc1", description: "引数=4(偶数)", args: ["4"] },
       { id: "tc2", description: "引数=7(奇数)", args: ["7"] },
@@ -2535,7 +2510,7 @@ export const exercises: Exercise[] = [
     ],
     explanation:
       "関数名() { ... } でシェル関数を定義できます。local total=0 で関数内だけの変数を作り、" +
-      "for n in $@; do ... done で渡された引数をひとつずつ処理し、算術展開 $((total + n)) で合計を計算します。" +
+      'for n in $@; do ... done で渡された引数をひとつずつ処理し、算術展開 $((total + n)) で合計を計算します。' +
       '"$@" をそのまま渡すことで、スクリプトの引数を関数にも引き継げます。',
   },
 
@@ -2545,8 +2520,7 @@ export const exercises: Exercise[] = [
   {
     id: "ch18-ex01",
     chapterId: "ch18",
-    prompt:
-      "project ディレクトリを project.tar という名前のtarアーカイブにまとめてください(まとめたファイルの一覧が表示されるようにしてください)。",
+    prompt: "project ディレクトリを project.tar という名前のtarアーカイブにまとめてください(まとめたファイルの一覧が表示されるようにしてください)。",
     initialCwd: "/home/study/practice/ch18_archive",
     referenceSolution: "tar cvf project.tar project",
     hints: [
@@ -2657,8 +2631,7 @@ export const exercises: Exercise[] = [
   {
     id: "ch18-ex08",
     chapterId: "ch18",
-    prompt:
-      "data.csv を bzip2 で圧縮してください。ただし、元の data.csv は削除せずに残してください。",
+    prompt: "data.csv を bzip2 で圧縮してください。ただし、元の data.csv は削除せずに残してください。",
     initialCwd: "/home/study/practice/ch18_archive/project",
     referenceSolution: "bzip2 -k data.csv",
     hints: [
@@ -2745,8 +2718,7 @@ export const exercises: Exercise[] = [
     id: "ch07-ex03",
     chapterId: "ch07",
     type: "vim",
-    prompt:
-      "コマンドラインモード(:)で :%s/foo/FOO/g を実行し、全行の foo を FOO に置換してください。",
+    prompt: "コマンドラインモード(:)で :%s/foo/FOO/g を実行し、全行の foo を FOO に置換してください。",
     initialFileText: "foo bar\nfoo baz\n",
     expectedFileText: "FOO bar\nFOO baz\n",
     referenceSolution: ":%s/foo/FOO/g",
@@ -2799,15 +2771,11 @@ export const exercises: Exercise[] = [
     id: "ch07-ex06",
     chapterId: "ch07",
     type: "vim",
-    prompt:
-      "数字の 2 に続けて dd を実行し(2dd)、1行目から2行分(oneとtwo)をまとめて削除してください。",
+    prompt: "数字の 2 に続けて dd を実行し(2dd)、1行目から2行分(oneとtwo)をまとめて削除してください。",
     initialFileText: "one\ntwo\nthree\n",
     expectedFileText: "three\n",
     referenceSolution: "2dd",
-    hints: [
-      "ddの前に数字を入力すると、その行数分をまとめて削除できます。",
-      "2dd で現在行から2行分が削除されます。",
-    ],
+    hints: ["ddの前に数字を入力すると、その行数分をまとめて削除できます。", "2dd で現在行から2行分が削除されます。"],
     explanation:
       "{count}dd のように dd の前に数字(カウント)を入力すると、現在行を含めてその行数分をまとめて削除できます。" +
       "2dd は1行目(one)から2行分、つまり one と two を削除し、残った行が繰り上がります。",
@@ -2816,8 +2784,7 @@ export const exercises: Exercise[] = [
     id: "ch07-ex07",
     chapterId: "ch07",
     type: "vim",
-    prompt:
-      "2行目(two)にカーソルを移動して yy でヤンクしたうえで、P でその直前(2行目の上)に貼り付けてください。",
+    prompt: "2行目(two)にカーソルを移動して yy でヤンクしたうえで、P でその直前(2行目の上)に貼り付けてください。",
     initialFileText: "one\ntwo\nthree\n",
     expectedFileText: "one\ntwo\ntwo\nthree\n",
     referenceSolution: "jyyP",
@@ -2917,10 +2884,10 @@ export const exercises: Exercise[] = [
     referenceSolution: 'git init; git add .; git commit -m "Initial commit"',
     hints: [
       "git add . で、カレントディレクトリ以下のすべてのファイルをまとめてステージングできます。",
-      'git commit -m "メッセージ" で、-mオプションに続けてコミットメッセージを指定します。',
+      "git commit -m \"メッセージ\" で、-mオプションに続けてコミットメッセージを指定します。",
     ],
     explanation:
-      'git commit -m "メッセージ" は、その時点のインデックスの内容から新しいコミットを作成し、現在のブランチ' +
+      "git commit -m \"メッセージ\" は、その時点のインデックスの内容から新しいコミットを作成し、現在のブランチ" +
       "(初期状態ではmain)がそのコミットを指すように更新します。-mオプションは必須で、本シミュレータでは" +
       "エディタを開く無引数のgit commitには対応していません。git add . で全ファイルをまとめてステージングして" +
       "からコミットする流れは、最初のコミット(root-commit)を作る際によく使われます。",
@@ -2975,7 +2942,7 @@ export const exercises: Exercise[] = [
       'git init; git add memo.txt; git commit -m "Add memo"; git checkout -b feature; echo "feature update" > feature.txt; git add feature.txt; git commit -m "Add feature file"',
     hints: [
       "git checkout -b ブランチ名 は、ブランチの作成と切り替えを1つのコマンドで同時に行います。",
-      'echo "内容" > ファイル名 で、新しい内容のファイルを作成できます。',
+      "echo \"内容\" > ファイル名 で、新しい内容のファイルを作成できます。",
     ],
     explanation:
       "git checkout -b ブランチ名 は git branch ブランチ名 に続けて git checkout ブランチ名 を実行するのと同じ" +
@@ -3081,8 +3048,7 @@ export const exercises: Exercise[] = [
   {
     id: "ch20-ex01",
     chapterId: "ch20",
-    prompt:
-      "curl というキーワードで、インストール可能なパッケージを dnf コマンドで検索してください。",
+    prompt: "curl というキーワードで、インストール可能なパッケージを dnf コマンドで検索してください。",
     referenceSolution: "dnf search curl",
     hints: [
       "dnf search キーワード で、パッケージ名や説明文にキーワードを含むパッケージを検索できます。",
@@ -3097,8 +3063,7 @@ export const exercises: Exercise[] = [
   {
     id: "ch20-ex02",
     chapterId: "ch20",
-    prompt:
-      "nginx パッケージの詳細情報(バージョン・サイズ・説明)を dnf コマンドで表示してください。",
+    prompt: "nginx パッケージの詳細情報(バージョン・サイズ・説明)を dnf コマンドで表示してください。",
     referenceSolution: "dnf info nginx",
     hints: [
       "dnf info パッケージ名 で、そのパッケージの詳細情報を表示できます。",
@@ -3176,8 +3141,7 @@ export const exercises: Exercise[] = [
   {
     id: "ch20-ex07",
     chapterId: "ch20",
-    prompt:
-      "jq というキーワードで、インストール可能なパッケージを apt コマンドで検索してください。",
+    prompt: "jq というキーワードで、インストール可能なパッケージを apt コマンドで検索してください。",
     referenceSolution: "apt search jq",
     hints: [
       "apt search キーワード で、Debian/Ubuntu系のパッケージ管理コマンドでも同様にパッケージを検索できます。",
@@ -3332,9 +3296,7 @@ export const exercises: Exercise[] = [
       "infoはマウス操作専用で、キーボードからは終了できない",
     ],
     correctChoiceIndex: 0,
-    hints: [
-      "manページと同様、Spaceキーでのスクロールに加えて、ノード間を移動するための専用キーがあります。",
-    ],
+    hints: ["manページと同様、Spaceキーでのスクロールに加えて、ノード間を移動するための専用キーがあります。"],
     explanation:
       "infoコマンドの表示中は、Spaceキー/Backspaceキーで画面のスクロール、nキーで次のノード、pキーで前の" +
       "ノード、uキーで一つ上の階層のノードへ移動できます。manと同じくqキーで終了します。",
@@ -3343,8 +3305,7 @@ export const exercises: Exercise[] = [
     id: "appendix-ex06",
     chapterId: "appendix",
     type: "quiz",
-    prompt:
-      "Linuxで日本語を入力できるようにするために、一般的に必要となるソフトウェアはどれですか?",
+    prompt: "Linuxで日本語を入力できるようにするために、一般的に必要となるソフトウェアはどれですか?",
     choices: [
       "IME(Input Method Editor)。ibus-mozcやfcitx-mozcのような「入力メソッド」と呼ばれる仕組み",
       "特別なソフトウェアは不要で、キーボードを日本語配列に交換するだけでよい",
@@ -3363,8 +3324,7 @@ export const exercises: Exercise[] = [
     id: "appendix-ex07",
     chapterId: "appendix",
     type: "quiz",
-    prompt:
-      "日本語入力中に「半角英数」と「日本語(ひらがな)入力」を切り替える一般的な操作はどれですか?",
+    prompt: "日本語入力中に「半角英数」と「日本語(ひらがな)入力」を切り替える一般的な操作はどれですか?",
     choices: [
       "半角/全角キー(または Ctrl+Space 等)でIMEのオン/オフを切り替える",
       "Ctrl+Cを押すたびに入力モードが自動的に切り替わる",

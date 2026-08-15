@@ -66,12 +66,22 @@ export function MyPageScreen({ navigation }: Props) {
                   <Pressable
                     key={exercise.id}
                     style={styles.reviewRow}
-                    onPress={() =>
-                      navigation.navigate(exercise.type === "script" ? "ScriptExercise" : "Exercise", {
+                    onPress={() => {
+                      const screen =
+                        exercise.type === "script"
+                          ? "ScriptExercise"
+                          : exercise.type === "quiz"
+                            ? "QuizExercise"
+                            : exercise.type === "vim"
+                              ? "VimExercise"
+                              : exercise.type === "git"
+                                ? "GitExercise"
+                                : "Exercise";
+                      navigation.navigate(screen, {
                         chapterId: exercise.chapterId,
                         exerciseId: exercise.id,
-                      })
-                    }
+                      });
+                    }}
                   >
                     <Text style={styles.rowPrompt} numberOfLines={2}>
                       {exercise.prompt}
