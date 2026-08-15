@@ -485,6 +485,1853 @@ export const exercises: Exercise[] = [
       "切り替えとファイル作成を1行で実行できます。",
   },
 
+  // --- Ch9: ファイルのオーナーとグループ ---
+  {
+    id: "ch09-ex05",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "新しくファイルを作成すると、そのファイルの所有者(オーナー)は誰になりますか?",
+    choices: [
+      "そのファイルを作成したユーザー",
+      "常にrootユーザー",
+      "そのディレクトリの元々の所有者",
+      "所有者は設定されない",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "touchやリダイレクトでファイルを作れば、それを実行した自分がオーナーになります。",
+    ],
+    explanation:
+      "新しく作成されたファイルは、それを作成したユーザーが自動的にオーナー(所有者)になります。" +
+      "例えばuser osumiがtouch testfile1を実行すると、testfile1のオーナーはosumiになります。",
+  },
+  {
+    id: "ch09-ex06",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "ls -l /bin/cat を実行すると、オーナーとグループの欄がどちらもrootと表示されます。この理由として最も適切なものはどれですか?",
+    choices: [
+      "システムが提供する実行コマンドは、通常root(スーパーユーザー)が所有者・所属グループになっているため",
+      "catコマンドは誰も所有していないため、表示上rootと出るだけで実際には無所属である",
+      "一般ユーザーが作成したファイルは自動的にrootの所有物として扱われるため",
+      "/bin配下のファイルだけ特別に所有者情報が記録されない仕様になっているため",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "/bin配下のコマンド群は、システムのセットアップ時にroot権限でインストールされたものです。",
+    ],
+    explanation:
+      "cat のようなシステム提供の実行コマンドは、通常インストール時にrootユーザーによって配置されるため、" +
+      "オーナー・グループともにrootになっています。一般ユーザーが新規作成したファイルは、作成した" +
+      "ユーザー自身がオーナーになります。",
+  },
+  {
+    id: "ch09-ex07",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "自分が現在どのグループに所属しているかを確認するには、どのコマンドを使いますか?",
+    choices: ["groups", "chmod", "su", "sudo"],
+    correctChoiceIndex: 0,
+    hints: ["コマンド名がそのまま「グループ」の複数形になっています。"],
+    explanation:
+      "groups コマンドを引数なしで実行すると、現在ログインしているユーザーが所属しているグループの一覧が" +
+      "表示されます。ユーザーは複数のグループに同時に所属できます。",
+  },
+  {
+    id: "ch09-ex08",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "ユーザーを新規作成する際、所属グループを特に指定しなかった場合、そのユーザーはどのグループに所属しますか?",
+    choices: [
+      "ユーザー名と同じ名前のグループ",
+      "常にrootグループ",
+      "wheelグループ",
+      "どのグループにも所属しない",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "「どのユーザーも最低1つのグループに所属していないといけない」という制約があります。",
+    ],
+    explanation:
+      "ユーザーを新規作成する際に所属グループを特に指定しないと、そのユーザー名と同一のグループに" +
+      "所属した状態で作成されます。すべてのユーザーは最低1つのグループへの所属が必須です。",
+  },
+  {
+    id: "ch09-ex09",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "1人のユーザーが同時に所属できるグループの数について、正しい説明はどれですか?",
+    choices: [
+      "複数のグループに同時に所属できる",
+      "常にちょうど1つのグループにしか所属できない",
+      "最大2つまでしか所属できない",
+      "所属できるグループ数はrootユーザーだけ無制限で、一般ユーザーは1つに制限される",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["groupsコマンドの実行結果に複数のグループ名が並ぶことがあります。"],
+    explanation:
+      "ユーザーは同時にいくつものグループに所属できます。ただし、どのユーザーも最低1つのグループには" +
+      "所属している必要があります(ユーザー作成時に自動的に割り当てられる、そのユーザー自身のグループが" +
+      "これにあたります)。",
+  },
+  {
+    id: "ch09-ex10",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "wheelという名前のグループが、システム管理の文脈でよく使われる理由として最も適切なものはどれですか?",
+    choices: [
+      "システム管理を行う複数の管理者ユーザーをまとめて所属させ、同一の権限(sudoの利用許可など)を与えるため",
+      "wheelグループに所属すると、パーミッションのチェック自体が完全に無効化されるため",
+      "wheelはLinuxカーネルが内部的に使う特殊なプロセス専用のグループであり、ユーザーは所属できないため",
+      "wheelグループのファイルはすべて自動的に実行権限が付与されるため",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "個々のユーザーに1つずつ権限を設定する代わりに、グループ単位でまとめて権限管理ができます。",
+    ],
+    explanation:
+      "wheelは、システム管理を行うための管理者ユーザーをまとめる、慣習的によく使われるグループ名です。" +
+      "wheelグループに対して権限(sudoの利用許可など)を与えることで、同じ役割を持つ複数のユーザーに" +
+      "同一の権限をまとめて与えることができます。",
+  },
+  {
+    id: "ch09-ex11",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "ファイルのオーナー(所有者)が持つ権限について、正しい説明はどれですか?",
+    choices: [
+      "そのファイルのパーミッション(アクセス権限)を自由に設定できる",
+      "オーナーであっても、パーミッションの変更にはsu/sudoが必須である",
+      "オーナーはファイルの内容を読み書きできるが、パーミッションの変更だけは一切できない",
+      "オーナーという概念は、ディレクトリには存在せずファイルにのみ存在する",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "Linuxで扱われるファイルはすべて所有者(オーナー)が設定されており、オーナーには特別な権利があります。",
+    ],
+    explanation:
+      "ファイルのオーナーは、そのファイルへのアクセス権限(パーミッション)を自由に設定できます。" +
+      "ディレクトリにもオーナーの概念があり、同様にパーミッションを設定できます。",
+  },
+  {
+    id: "ch09-ex12",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt: "あるファイルのパーミッションを変更できるのは、誰ですか?",
+    choices: [
+      "そのファイルのオーナー、またはスーパーユーザー",
+      "そのファイルが所属するグループに属する全員",
+      "システムにログインしている全ユーザー",
+      "そのファイルを最後に編集したユーザー(オーナーとは限らない)",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "誰でもパーミッションを変更できてしまうと、パーミッションで操作を禁止する意味がなくなってしまいます。",
+    ],
+    explanation:
+      "ファイルのパーミッションは、そのオーナーか、スーパーユーザー(root)しか変更することができません。" +
+      "これは、誰でもパーミッションを自由に変更できてしまうと、アクセス制御の仕組みそのものが" +
+      "意味をなさなくなってしまうためです。",
+  },
+
+  // --- Ch9: ファイルのパーミッション(rwxの意味・ファイル編) ---
+  {
+    id: "ch09-ex13",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt: "ファイルに対する「読み取り(r)」権限が意味することはどれですか?",
+    choices: [
+      "ファイルの内容を閲覧(参照)できる",
+      "ファイルの内容を変更・上書きできる",
+      "ファイルをプログラム/スクリプトとして実行できる",
+      "ファイル自体を削除できる",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["read(読み取り)という英単語の意味そのままです。"],
+    explanation:
+      "ファイルの読み取り(r)権限は、catなどでファイルの内容を閲覧できることを意味します。書き込み(w)や" +
+      "実行(x)とは別の権限として管理されます。",
+  },
+  {
+    id: "ch09-ex14",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt: "ファイルに対する「書き込み(w)」権限が意味することはどれですか?",
+    choices: [
+      "ファイルの内容を変更・上書きできる",
+      "ファイルの内容を閲覧できる",
+      "ファイルをコマンドとして実行できる",
+      "ファイルのオーナーを変更できる",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["write(書き込み)という英単語の意味そのままです。"],
+    explanation:
+      "ファイルの書き込み(w)権限は、エディタなどでファイルの内容を変更・上書きできることを意味します。",
+  },
+  {
+    id: "ch09-ex15",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt: "ファイルに対する「実行(x)」権限が意味することはどれですか?",
+    choices: [
+      "そのファイルをプログラム/シェルスクリプトとして実行できる",
+      "そのファイルをディレクトリとして扱える",
+      "そのファイルを他のユーザーに共有できる",
+      "そのファイルの内容を暗号化できる",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["execute(実行)という英単語の意味そのままです。"],
+    explanation:
+      "ファイルの実行(x)権限は、そのファイルをコマンド(プログラムやシェルスクリプト)として実行できることを" +
+      "意味します。実行権限がないファイルを直接実行しようとするとエラーになります。",
+  },
+  {
+    id: "ch09-ex16",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "ls -l の出力でパーミッションが `-` (ハイフン)と表示されている箇所は、何を意味しますか?",
+    choices: [
+      "その操作(読み取り・書き込み・実行のいずれか)が許可されていないこと",
+      "そのファイルが空であること",
+      "そのファイルが削除待ちであること",
+      "そのファイルがシンボリックリンクであること",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "許可されている操作はr/w/xの記号で、許可されていない操作は別の記号で表示されます。",
+    ],
+    explanation:
+      "ls -l のパーミッション表示では、操作が許可されているときは「r」「w」「x」の記号が表示され、" +
+      "許可されていないときはその位置に「-」が表示されます。",
+  },
+  {
+    id: "ch09-ex17",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "ファイルのパーミッションが `rwxr-xr-x` のとき、正しい内訳はどれですか?",
+    choices: [
+      "オーナー: 読み書き実行すべて可 / グループ: 読み取りと実行のみ可 / その他: 読み取りと実行のみ可",
+      "オーナー: 読み取りのみ可 / グループ: 読み書き実行すべて可 / その他: 読み書き実行すべて可",
+      "オーナー・グループ・その他すべてが読み書き実行すべて可",
+      "オーナー: 読み書き実行すべて可 / グループ・その他: 一切の操作が不可",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "rwxr-xr-x は3文字ずつ「オーナー」「グループ」「その他」のブロックに分かれています。",
+    ],
+    explanation:
+      "9文字は3文字ずつ1つのブロックになっていて、それぞれが「オーナー」「グループ」「その他のユーザー」に" +
+      "対するパーミッションを意味します。rwxr-xr-x は、オーナーがrwxすべて、グループとその他がr-x" +
+      "(読み取りと実行のみ)という内訳です。",
+  },
+  {
+    id: "ch09-ex18",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "ファイルのパーミッションが `rw-r--r--` のとき、その他のユーザーができる操作はどれですか?",
+    choices: [
+      "読み取りのみ",
+      "読み書き両方",
+      "読み書き実行すべて",
+      "何もできない",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["末尾3文字「r--」がその他のユーザーに対するパーミッションです。"],
+    explanation:
+      "rw-r--r-- の末尾3文字「r--」がその他のユーザーへのパーミッションで、読み取り(r)のみが許可され、" +
+      "書き込み・実行は許可されていません。",
+  },
+  {
+    id: "ch09-ex19",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "/etc/crontab のパーミッションはどのユーザーに対しても実行権限(x)が与えられていません。このファイルをコマンドとして直接実行しようとするとどうなりますか?",
+    choices: [
+      "「許可がありません」(Permission denied)というエラーになり実行できない",
+      "実行権限がなくても、オーナーがrootならエラーにならず実行できる",
+      "自動的に読み取り専用モードで内容が表示される",
+      "実行権限の有無に関わらず、ファイルの中身がシェルスクリプトとして解釈されて実行される",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "実行(x)権限は、読み取り(r)権限とは別に必要です。ファイルの中身が読めても実行できるとは限りません。",
+    ],
+    explanation:
+      "どのユーザーに対しても実行権限(x)が与えられていないファイルを直接実行しようとすると、" +
+      "「許可がありません」という権限エラーになります。読み取り権限があっても、実行権限がなければ" +
+      "コマンドとして実行することはできません。",
+  },
+  {
+    id: "ch09-ex20",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "書き込み権限(w)のないファイルに対して、エディタで内容を変更して上書き保存しようとするとどうなりますか?",
+    choices: [
+      "保存に失敗し、エラーが表示される",
+      "自動的に読み取り権限だけが一時的に書き込み権限に切り替わり保存できる",
+      "オーナー自身であれば書き込み権限がなくても常に保存できる",
+      "エディタ側の設定次第で、パーミッションを無視して常に保存できる",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "ファイルのパーミッションが所有者にすら書き込みを許可していない場合、その制限はエディタでも有効です。",
+    ],
+    explanation:
+      "書き込み権限がないファイルはオーナーであっても上書き保存に失敗し、エラーが表示されます。" +
+      "このため、他ユーザーに上書きされたくない重要な設定ファイルなどは、オーナー以外の書き込みを" +
+      "禁止しておくのが基本です。",
+  },
+  {
+    id: "ch09-ex21",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "ファイルのパーミッションが `644` (数値モード)のとき、その他のユーザーができる操作はどれですか?",
+    choices: [
+      "読み取りのみ",
+      "読み書き両方",
+      "読み書き実行すべて",
+      "何もできない",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "644を8進数の各桁に分解すると 6,4,4 になり、それぞれオーナー・グループ・その他に対応します。",
+    ],
+    explanation:
+      "644 はオーナーが6(rw-)、グループが4(r--)、その他が4(r--)です。その他のユーザーができるのは" +
+      "読み取り(r)のみで、書き込みや実行はできません。",
+  },
+  {
+    id: "ch09-ex22",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "ファイルのパーミッションが `600` (数値モード)のとき、オーナー以外のユーザーができる操作はどれですか?",
+    choices: [
+      "何もできない(読み書き実行いずれも不可)",
+      "読み取りのみ",
+      "読み書き両方",
+      "読み書き実行すべて",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "600を8進数の各桁に分解すると 6,0,0 です。グループとその他の桁が0ということは…?",
+    ],
+    explanation:
+      "600 はオーナーが6(rw-)、グループとその他がともに0(---)です。オーナー以外のユーザーは読み取り・" +
+      "書き込み・実行のいずれもできません。パスワードや秘密鍵など、自分だけが見られればよいファイルに" +
+      "よく使われるパーミッションです。",
+  },
+
+  // --- Ch9: ディレクトリのパーミッション(rwxの意味・ディレクトリ編) ---
+  {
+    id: "ch09-ex23",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "ディレクトリに対する「読み取り(r)」権限が意味することはどれですか?",
+    choices: [
+      "そのディレクトリに含まれるファイル一覧を取得できる(lsができる)",
+      "そのディレクトリ内のファイルを自由に実行できる",
+      "そのディレクトリをカレントディレクトリにできる(cdできる)",
+      "そのディレクトリ内にファイルを新規作成できる",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "ファイルの場合の「読み取り」とは意味が異なります。ディレクトリの「中身」に関する権限です。",
+    ],
+    explanation:
+      "ディレクトリの読み取り(r)権限は、そのディレクトリに含まれるファイル・ディレクトリの一覧を取得" +
+      "(ls)できることを意味します。ファイルの場合の「内容を読む」とは異なる意味を持つ点に注意が必要です。",
+  },
+  {
+    id: "ch09-ex24",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "ディレクトリに対する「書き込み(w)」権限が意味することはどれですか?",
+    choices: [
+      "そのディレクトリの下にファイル・ディレクトリを作成・削除できる",
+      "そのディレクトリに含まれるファイルの一覧を取得できる",
+      "そのディレクトリをカレントディレクトリにできる",
+      "そのディレクトリ自体の名前を変更できる",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["ディレクトリの「中身の増減」に関わる権限です。"],
+    explanation:
+      "ディレクトリの書き込み(w)権限は、そのディレクトリの下にあるファイルやディレクトリの作成・削除が" +
+      "できることを意味します。",
+  },
+  {
+    id: "ch09-ex25",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt: "ディレクトリに対する「実行(x)」権限が意味することはどれですか?",
+    choices: [
+      "そのディレクトリをカレントディレクトリにできる(cdできる)",
+      "そのディレクトリ内のすべてのファイルを実行ファイルとして扱える",
+      "そのディレクトリに含まれるファイル一覧を取得できる",
+      "そのディレクトリを圧縮・アーカイブできる",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "ディレクトリの実行権限は、ファイルの実行権限とは全く違う意味を持ちます。",
+    ],
+    explanation:
+      "ディレクトリの実行(x)権限は、そのディレクトリをカレントディレクトリにできる(cdで移動できる)ことを" +
+      "意味します。ディレクトリ下のファイルの読み書きを行うためにも、この実行権限が必要です。",
+  },
+  {
+    id: "ch09-ex26",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "読み取り権限(r)が設定されていないディレクトリに対して ls コマンドを実行すると、どうなりますか?",
+    choices: [
+      "エラーとなり、ファイル一覧を取得できない",
+      "ファイル名だけは表示され、詳細情報は表示されない",
+      "エラーにはならず、空のディレクトリとして表示される",
+      "権限は無視され、常に一覧が表示される",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "ディレクトリの中身の一覧取得には、そのディレクトリ自体への読み取り権限が必要です。",
+    ],
+    explanation:
+      "ディレクトリに読み取り(r)権限が設定されていない場合、lsコマンドはエラーとなり、そのディレクトリの" +
+      "ファイル一覧を取得することができません。",
+  },
+  {
+    id: "ch09-ex27",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "実行権限(x)が設定されていないディレクトリに対して cd コマンドを実行すると、どうなりますか?",
+    choices: [
+      "「許可がありません」というエラーになり、移動できない",
+      "読み取り権限さえあれば、実行権限がなくても移動できる",
+      "移動はできるが、その中のファイルには一切アクセスできなくなる",
+      "エラーは出ないが、常にホームディレクトリに戻される",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "ディレクトリの実行権限は「そのディレクトリをカレントディレクトリにできる」権限でした。",
+    ],
+    explanation:
+      "実行権限(x)が設定されていないディレクトリへは cd で移動できず、「許可がありません」というエラーに" +
+      "なります。ディレクトリ配下のファイルの読み書きを行うにも、この実行権限が必要です。",
+  },
+  {
+    id: "ch09-ex28",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "あるファイル自体のパーミッションが `r--r--r--`(書き込み不可)であっても、そのファイルを rm コマンドで削除できる場合があります。それはどのような場合ですか?",
+    choices: [
+      "そのファイルが置かれているディレクトリに、書き込み権限(w)がある場合",
+      "そのファイルのオーナーがrootである場合に限り、常に削除できる",
+      "ファイル自体が書き込み不可である以上、いかなる場合も削除は不可能",
+      "そのファイルの読み取り権限(r)がある場合は常に削除できる",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "ファイルの削除ができるかどうかは、ファイル自身のパーミッションではなく、それが属するディレクトリのパーミッションで決まります。",
+    ],
+    explanation:
+      "ファイルの削除ができるかどうかは、ディレクトリのパーミッション(書き込み権限)で決まり、ファイル" +
+      "自身のパーミッションとは関係がありません。そのため、書き込み不可(r--r--r--)に設定された" +
+      "ファイルであっても、ディレクトリに書き込み権限があればrmコマンドで削除できてしまいます。",
+  },
+  {
+    id: "ch09-ex29",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "あるディレクトリのパーミッションが `rwx------` に設定されているとき、正しい説明はどれですか?",
+    choices: [
+      "オーナー以外のユーザーは、そのディレクトリの中身を一切知ることも操作することもできない",
+      "オーナー以外のユーザーも、中身の一覧を見ることだけはできる",
+      "グループに属するユーザーだけは、cdで移動できる",
+      "その他のユーザーも、ファイルの作成だけはできる",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "グループ・その他の桁がすべて「---」、つまり読み取り・書き込み・実行のいずれも許可されていません。",
+    ],
+    explanation:
+      "rwx------ は、グループ・その他のユーザーに対する権限がすべて禁止されている状態です。そのため" +
+      "オーナー以外のユーザーは、一覧の取得(r)・ファイルの作成削除(w)・移動(x)のいずれもできず、" +
+      "ディレクトリの中身を一切知ることができません。",
+  },
+  {
+    id: "ch09-ex30",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "あるディレクトリのモードが `drwxrwxr-x` と表示されているとき、その他のユーザーができる操作はどれですか?",
+    choices: [
+      "一覧の取得(ls)とcdでの移動はできるが、ファイルの作成・削除はできない",
+      "ファイルの作成・削除も含め、すべての操作ができる",
+      "一切の操作ができない",
+      "cdでの移動だけができ、一覧の取得はできない",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "末尾3文字「r-x」がその他のユーザーへのパーミッションです。書き込み(w)は含まれていません。",
+    ],
+    explanation:
+      "末尾3文字「r-x」がその他のユーザーに対するパーミッションで、読み取り(r)と実行(x)は許可されて" +
+      "いますが、書き込み(w)は許可されていません。そのため一覧取得とcdでの移動はできますが、その" +
+      "ディレクトリ内でのファイル作成・削除はできません。",
+  },
+  {
+    id: "ch09-ex31",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "ls -ld dir1 のように、-lオプションに加えて-dオプションを付ける目的は何ですか?",
+    choices: [
+      "ディレクトリの「中身」ではなく、ディレクトリ自体の情報(パーミッション等)を表示するため",
+      "ディレクトリの中身を再帰的にすべて表示するため",
+      "ディレクトリを新規作成するため",
+      "ディレクトリの中身を日付順にソートして表示するため",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "-lだけだとディレクトリ「の中にあるもの」の詳細一覧になってしまいます。",
+    ],
+    explanation:
+      "-dオプションを付けると、ディレクトリの「中身」ではなく、そのディレクトリ自体の情報(パーミッションや" +
+      "オーナーなど)を表示できます。ディレクトリ自身のパーミッションを確認したいときによく使われます。",
+  },
+  {
+    id: "ch09-ex32",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "ディレクトリのパーミッションの記号(r/w/x)が意味する内容は、ファイルの場合と同じですか?",
+    choices: [
+      "いいえ、記号は同じ(r/w/x)だが、意味する内容はファイルとディレクトリで異なる",
+      "はい、まったく同じ意味である",
+      "いいえ、ディレクトリには記号自体が存在せず数値モードでしか表現できない",
+      "いいえ、ディレクトリのパーミッションは常にオーナーにのみ適用され、グループ・その他には適用されない",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "ファイルのrは「内容を読む」、ディレクトリのrは「一覧を取得する」という異なる意味でした。",
+    ],
+    explanation:
+      "ディレクトリのパーミッションの表示も、ファイルと同じくr/w/xの記号を利用しますが、それぞれの記号が" +
+      "表す意味はファイルの場合と異なります(表09-03)。r=一覧取得、w=作成削除、x=カレントディレクトリ化" +
+      "という、ディレクトリ特有の意味を持つ点に注意してください。",
+  },
+
+  // --- Ch9: ls -l 出力の読み方(パーミッション文字列の解釈・数値変換) ---
+  {
+    id: "ch09-ex33",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "ターミナルで `ls -l` を実行すると、次のように表示されました。\n`-rw-r--r-- study study    32 memo.txt`\nこのファイルにその他のユーザーができる操作はどれですか?",
+    choices: [
+      "読み取りのみ",
+      "読み書き両方",
+      "読み書き実行すべて",
+      "何もできない",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["末尾3文字「r--」がその他のユーザーへのパーミッションです。"],
+    explanation:
+      "末尾3文字が「r--」なので、その他のユーザーに許可されているのは読み取り(r)のみです。",
+  },
+  {
+    id: "ch09-ex34",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "ターミナルで `ls -l` を実行すると、次のように表示されました。\n`-rwx------ study study   120 backup.sh`\nこのファイルの所有者ができる操作はどれですか?",
+    choices: [
+      "読み書き実行すべて",
+      "読み取りのみ",
+      "読み書きのみ(実行不可)",
+      "何もできない",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["先頭3文字「rwx」がオーナーへのパーミッションです。"],
+    explanation:
+      "先頭3文字が「rwx」なので、オーナーには読み取り・書き込み・実行のすべてが許可されています。",
+  },
+  {
+    id: "ch09-ex35",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "ターミナルで `ls -l` を実行すると、次のように表示されました。\n`drwxr-xr-x study study     2 project`\n先頭の文字 `d` は何を表していますか?",
+    choices: [
+      "ファイルタイプ(このエントリがディレクトリであること)",
+      "所有者に実行権限があること",
+      "ファイルが削除待ちであること",
+      "ディスク使用量の単位",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["通常ファイルなら`-`、ディレクトリなら`d`が先頭に表示されます。"],
+    explanation:
+      "ls -l の出力の先頭1文字はファイルタイプを表します。「-」は通常ファイル、「d」はディレクトリ、" +
+      "「l」はシンボリックリンクを意味します。",
+  },
+  {
+    id: "ch09-ex36",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "ターミナルで `ls -l` を実行すると、次のように表示されました。\n`-rw-rw---- study study    45 shared.txt`\nこのファイルのグループに属するユーザーができる操作はどれですか?",
+    choices: [
+      "読み書き両方(実行は不可)",
+      "読み取りのみ",
+      "読み書き実行すべて",
+      "何もできない",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["中央3文字「rw-」がグループへのパーミッションです。"],
+    explanation:
+      "中央3文字が「rw-」なので、グループに属するユーザーには読み取りと書き込みが許可され、実行は許可されていません。",
+  },
+  {
+    id: "ch09-ex37",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "ターミナルで `ls -l` を実行すると、次のように表示されました。\n`-r--r--r-- study study    18 readonly.txt`\nこのファイルについて、正しい説明はどれですか?",
+    choices: [
+      "オーナー自身を含め、誰も書き込みができない(全ユーザーが読み取りのみ可能)",
+      "オーナーだけは書き込みができる",
+      "グループに属するユーザーだけは書き込みができる",
+      "その他のユーザーだけは書き込みができる",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["3つのブロックすべてが「r--」になっています。"],
+    explanation:
+      "オーナー・グループ・その他のすべてが「r--」なので、オーナー自身を含め誰も書き込みができません。" +
+      "誤って上書きしてしまうことを防ぎたいファイルに使われるパーミッションです。",
+  },
+  {
+    id: "ch09-ex38",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "ls -l の出力の先頭1文字が `-` (ハイフン)の場合、何を表していますか?",
+    choices: [
+      "通常のファイルであること",
+      "ディレクトリであること",
+      "シンボリックリンクであること",
+      "パーミッションが未設定であること",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["dならディレクトリ、lならシンボリックリンクでした。"],
+    explanation:
+      "先頭1文字が「-」の場合は通常ファイルを表します。「d」はディレクトリ、「l」はシンボリックリンクです。",
+  },
+  {
+    id: "ch09-ex39",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "パーミッションの記号表現 `rwxr-x---` を、数値モードで表すと何になりますか?",
+    choices: ["750", "755", "700", "705"],
+    correctChoiceIndex: 0,
+    hints: ["rwx=4+2+1=7、r-x=4+1=5、---=0 を3桁並べます。"],
+    explanation: "rwx(7) r-x(5) ---(0) を並べると 750 になります。",
+  },
+  {
+    id: "ch09-ex40",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "パーミッションの記号表現 `rw-rw-rw-` を、数値モードで表すと何になりますか?",
+    choices: ["666", "664", "660", "777"],
+    correctChoiceIndex: 0,
+    hints: ["rw-=4+2=6 が3つ並びます。"],
+    explanation: "rw-(6) rw-(6) rw-(6) を並べると 666 になります。",
+  },
+  {
+    id: "ch09-ex41",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt: "数値モード `644` を、記号表現(rwx形式)で表すと何になりますか?",
+    choices: ["rw-r--r--", "rwxr-xr-x", "rw-rw-r--", "r--r--r--"],
+    correctChoiceIndex: 0,
+    hints: ["6=rw-、4=r--、4=r-- です。"],
+    explanation: "6(rw-) 4(r--) 4(r--) を並べると rw-r--r-- になります。",
+  },
+  {
+    id: "ch09-ex42",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt: "数値モード `750` を、記号表現(rwx形式)で表すと何になりますか?",
+    choices: ["rwxr-x---", "rwxrwx---", "rwxr-xr-x", "rw-r-x---"],
+    correctChoiceIndex: 0,
+    hints: ["7=rwx、5=r-x、0=--- です。"],
+    explanation: "7(rwx) 5(r-x) 0(---) を並べると rwxr-x--- になります。",
+  },
+
+  // --- Ch9: chmodコマンド(数値モード) ---
+  {
+    id: "ch09-ex43",
+    chapterId: "ch09",
+    prompt:
+      "memo.txt(644)を、オーナーだけが読み書きできる 600 に変更してください(数値モード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod 600 memo.txt",
+    hints: ["数値モードでは chmod <8進数> <ファイル名> の形式で指定します。"],
+    explanation:
+      "chmod 600 memo.txt は、元のパーミッションに関わらず新しいパーミッション600(オーナーのみrw-)に絶対指定で変更します。",
+  },
+  {
+    id: "ch09-ex44",
+    chapterId: "ch09",
+    prompt:
+      "diary.txt(600)を、誰でも読み取れる 644 に変更してください(数値モード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod 644 diary.txt",
+    hints: [
+      "644はオーナーがrw-、グループ・その他がr--の一般的なファイル権限です。",
+    ],
+    explanation:
+      "chmod 644 diary.txt により、オーナーは読み書き可能、グループとその他は読み取りのみ可能になります。",
+  },
+  {
+    id: "ch09-ex45",
+    chapterId: "ch09",
+    prompt:
+      "todo.txt(664)を、その他のユーザーが書き込めない 644 に変更してください(数値モード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod 644 todo.txt",
+    hints: ["664と644の違いは、グループの書き込み権限の有無です。"],
+    explanation:
+      "chmod 644 todo.txt により、グループの書き込み権限が削除され、オーナーのみが書き込めるようになります。",
+  },
+  {
+    id: "ch09-ex46",
+    chapterId: "ch09",
+    prompt:
+      "report.csv(640)を、オーナーだけが読み書きできる 600 に変更してください(数値モード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod 600 report.csv",
+    hints: ["現在はグループに読み取り権限(4)が与えられています。"],
+    explanation:
+      "chmod 600 report.csv により、グループの読み取り権限が削除され、オーナーのみアクセスできるようになります。",
+  },
+  {
+    id: "ch09-ex47",
+    chapterId: "ch09",
+    prompt:
+      "notes.md(600)を、グループにも読み書き権限を与えた 640 に変更してください(数値モード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod 640 notes.md",
+    hints: ["640は オーナー6・グループ4・その他0 です。"],
+    explanation:
+      "chmod 640 notes.md により、グループに読み取り権限(r)が追加されます。",
+  },
+  {
+    id: "ch09-ex48",
+    chapterId: "ch09",
+    prompt:
+      "data.json(644)を、誰からも書き込みできない読み取り専用の 444 に変更してください(数値モード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod 444 data.json",
+    hints: ["444は オーナー・グループ・その他すべてがr--です。"],
+    explanation:
+      "chmod 444 data.json により、オーナー自身を含め誰も書き込みできない読み取り専用ファイルになります。",
+  },
+  {
+    id: "ch09-ex49",
+    chapterId: "ch09",
+    prompt:
+      "install.sh(644)を、誰でも実行できる 755 に変更してください(数値モード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod 755 install.sh",
+    hints: [
+      "755はオーナーがrwx、グループ・その他がr-xです。実行スクリプトの典型的な権限です。",
+    ],
+    explanation:
+      "chmod 755 install.sh により、オーナーは読み書き実行すべて、グループとその他は読み取りと実行が可能になります。",
+  },
+  {
+    id: "ch09-ex50",
+    chapterId: "ch09",
+    prompt:
+      "deploy.sh(700)を、グループにも実行できる権限を与えた 750 に変更してください(数値モード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod 750 deploy.sh",
+    hints: ["750はオーナーがrwx、グループがr-x、その他が---です。"],
+    explanation:
+      "chmod 750 deploy.sh により、グループに読み取りと実行の権限が追加されます。",
+  },
+  {
+    id: "ch09-ex51",
+    chapterId: "ch09",
+    prompt:
+      "backup.sh(750)を、オーナーだけがアクセスできる 700 に変更してください(数値モード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod 700 backup.sh",
+    hints: ["700はオーナーのみrwxで、グループ・その他は---です。"],
+    explanation:
+      "chmod 700 backup.sh により、グループの読み取り・実行権限が削除され、オーナーのみアクセス可能になります。",
+  },
+  {
+    id: "ch09-ex52",
+    chapterId: "ch09",
+    prompt:
+      "run.sh(600)に、オーナーの実行権限を追加した 700 に変更してください(数値モード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod 700 run.sh",
+    hints: ["数値モードのオーナー桁は 読み取り4+書き込み2+実行1=7 です。"],
+    explanation:
+      "chmod 700 run.sh により、オーナーに実行権限(x)が追加され、rwxすべてが揃います。",
+  },
+  {
+    id: "ch09-ex53",
+    chapterId: "ch09",
+    prompt:
+      "config.yml(664)を、その他のユーザーが読み取れない 660 に変更してください(数値モード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod 660 config.yml",
+    hints: ["660の最後の桁は0(---)です。"],
+    explanation:
+      "chmod 660 config.yml により、その他のユーザーの読み取り権限が削除されます。",
+  },
+  {
+    id: "ch09-ex54",
+    chapterId: "ch09",
+    prompt:
+      "app.conf(644)を、その他のユーザーが読み取れない 640 に変更してください(数値モード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod 640 app.conf",
+    hints: ["640の最後の桁は0(---)です。"],
+    explanation:
+      "chmod 640 app.conf により、その他のユーザーの読み取り権限が削除されます。",
+  },
+  {
+    id: "ch09-ex55",
+    chapterId: "ch09",
+    prompt:
+      "debug.log(666)を、書き込みは所有者だけに限定した 644 に変更してください(数値モード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod 644 debug.log",
+    hints: [
+      "666は誰でも読み書きできてしまう、あまり安全とは言えないパーミッションです。",
+    ],
+    explanation:
+      "chmod 644 debug.log により、グループとその他の書き込み権限が削除され、書き込みはオーナーのみに限定されます。",
+  },
+  {
+    id: "ch09-ex56",
+    chapterId: "ch09",
+    prompt:
+      "access.log(644)を、オーナー以外は読み取りもできない 444 ではなく、書き込みも読み取りもできない 400 に変更してください(数値モード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod 400 access.log",
+    hints: ["400はオーナーのみr--、グループ・その他は---です。"],
+    explanation:
+      "chmod 400 access.log により、オーナー自身も書き込みできない読み取り専用になり、グループ・その他は一切アクセスできなくなります。",
+  },
+  {
+    id: "ch09-ex57",
+    chapterId: "ch09",
+    prompt:
+      "SSH秘密鍵 id_rsa(644)は本来オーナーだけが読み書きできる状態でなければなりません。600 に変更してください(数値モード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod 600 id_rsa",
+    hints: [
+      "秘密鍵ファイルは、他のユーザーから読み取れる状態だとセキュリティ上のリスクになります。",
+    ],
+    explanation:
+      "SSHの秘密鍵などの機密ファイルは、オーナー以外が読み取れないよう600に設定するのが定石です。" +
+      "chmod 600 id_rsa により、グループ・その他からの読み取り・書き込みを禁止します。",
+  },
+  {
+    id: "ch09-ex58",
+    chapterId: "ch09",
+    prompt:
+      "SSH公開鍵 id_rsa.pub(600)は、他のユーザーからも読み取れて構いません。644 に変更してください(数値モード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod 644 id_rsa.pub",
+    hints: ["公開鍵は「公開」しても問題ない前提の鍵です。"],
+    explanation:
+      "公開鍵は他人に見られても問題ないため、644(誰でも読み取り可能)に設定するのが一般的です。",
+  },
+  {
+    id: "ch09-ex59",
+    chapterId: "ch09",
+    prompt:
+      "readonly.txt(444)は、誰も書き込みできない状態になっています。オーナーだけは編集できるよう 644 に変更してください(数値モード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod 644 readonly.txt",
+    hints: [
+      "444はオーナーも含め全員が読み取り専用です。オーナーの桁だけ書き込み権限を追加します。",
+    ],
+    explanation:
+      "chmod 644 readonly.txt により、オーナーの桁に書き込み権限(w)が追加され、再び編集できるようになります。",
+  },
+  {
+    id: "ch09-ex60",
+    chapterId: "ch09",
+    prompt:
+      "draft.txt(600)を、グループにも読み書きさせたい場合の 640 に変更してください(数値モード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod 640 draft.txt",
+    hints: ["640はグループが読み取りのみ(r--)可能です。"],
+    explanation:
+      "chmod 640 draft.txt により、グループに読み取り権限が追加されます。",
+  },
+  {
+    id: "ch09-ex61",
+    chapterId: "ch09",
+    prompt:
+      "shared.txt(664)を、その他のユーザーにも書き込みを許可した 666 に変更してください(数値モード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod 666 shared.txt",
+    hints: ["666はオーナー・グループ・その他すべてがrw-です。"],
+    explanation:
+      "chmod 666 shared.txt により、その他のユーザーにも書き込み権限が追加されます。",
+  },
+  {
+    id: "ch09-ex62",
+    chapterId: "ch09",
+    prompt:
+      "teamnotes.txt(640)を、グループにも書き込みを許可した 660 に変更してください(数値モード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod 660 teamnotes.txt",
+    hints: ["660はオーナー・グループがrw-、その他が---です。"],
+    explanation:
+      "chmod 660 teamnotes.txt により、グループに書き込み権限が追加されます。",
+  },
+  {
+    id: "ch09-ex63",
+    chapterId: "ch09",
+    prompt:
+      "secret.txt(600)を、オーナー自身も書き込みできない読み取り専用の 400 に変更してください(数値モード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod 400 secret.txt",
+    hints: ["400はオーナーのみr--で、書き込みビットが立っていません。"],
+    explanation:
+      "chmod 400 secret.txt により、オーナー自身も書き込みができなくなり、誤編集を防止できます。",
+  },
+  {
+    id: "ch09-ex64",
+    chapterId: "ch09",
+    prompt:
+      "script.sh(644)を、誰でも実行できる 755 に変更してください(数値モード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod 755 script.sh",
+    hints: ["755はスクリプトファイルの実行権限として典型的な設定です。"],
+    explanation:
+      "chmod 755 script.sh により、オーナーはrwxすべて、グループとその他はr-x(読み取り・実行)が可能になります。",
+  },
+  {
+    id: "ch09-ex65",
+    chapterId: "ch09",
+    prompt:
+      "public_dir ディレクトリ(700)を、誰でも中に入って一覧を見られる 755 に変更してください(数値モード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod 755 public_dir",
+    hints: ["chmodはディレクトリに対しても同じ書式で使えます。"],
+    explanation:
+      "chmod 755 public_dir により、グループとその他のユーザーにも一覧取得(r)とcdでの移動(x)が許可されます。",
+  },
+  {
+    id: "ch09-ex66",
+    chapterId: "ch09",
+    prompt:
+      "private_dir ディレクトリ(755)を、オーナー以外は中身を一切知ることができない 700 に変更してください(数値モード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod 700 private_dir",
+    hints: ["700はグループ・その他の桁がすべて0(---)です。"],
+    explanation:
+      "chmod 700 private_dir により、グループ・その他の一覧取得・移動権限がすべて削除されます。",
+  },
+  {
+    id: "ch09-ex67",
+    chapterId: "ch09",
+    prompt:
+      "archive_dir ディレクトリ(777)は権限が開放的すぎます。オーナーのみ書き込みできる 755 に変更してください(数値モード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod 755 archive_dir",
+    hints: ["777は誰でも読み書き実行できてしまう、注意が必要な設定です。"],
+    explanation:
+      "chmod 755 archive_dir により、グループ・その他の書き込み権限が削除され、ファイルの作成・削除はオーナーのみに限定されます。",
+  },
+
+  // --- Ch9: chmodコマンド(シンボルモード) ---
+  {
+    id: "ch09-ex68",
+    chapterId: "ch09",
+    prompt:
+      "memo.txt について、グループに書き込み権限を追加してください(シンボルモード、他は変更しないこと)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod g+w memo.txt",
+    hints: [
+      "シンボルモードは 対象(u/g/o/a)+演算子(+/-/=)+権限(r/w/x) の形式です。",
+    ],
+    explanation:
+      "chmod g+w memo.txt は、グループ(g)に書き込み権限(w)を追加(+)します。オーナー・その他には影響しません。",
+  },
+  {
+    id: "ch09-ex69",
+    chapterId: "ch09",
+    prompt:
+      "diary.txt について、グループには権限を与えず、その他のユーザーにだけ読み取り権限を追加してください(シンボルモード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod o+r diary.txt",
+    hints: ["対象をoに限定すれば、グループ(g)には影響しません。"],
+    explanation:
+      "chmod o+r diary.txt は、その他(o)にだけ読み取り権限(r)を追加します。グループには変化がありません。",
+  },
+  {
+    id: "ch09-ex70",
+    chapterId: "ch09",
+    prompt:
+      "todo.txt について、オーナー・その他は変更せず、グループの書き込み権限だけを禁止してください(シンボルモード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod g-w todo.txt",
+    hints: ["禁止する場合は演算子に - を使います。"],
+    explanation:
+      "chmod g-w todo.txt は、グループ(g)の書き込み権限(w)だけを禁止(-)します。",
+  },
+  {
+    id: "ch09-ex71",
+    chapterId: "ch09",
+    prompt:
+      "report.csv について、グループの読み取り権限を禁止してください(シンボルモード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod g-r report.csv",
+    hints: [
+      "グループにはすでに読み取り権限が与えられています。それを禁止する操作です。",
+    ],
+    explanation:
+      "chmod g-r report.csv は、グループ(g)の読み取り権限(r)を禁止します。",
+  },
+  {
+    id: "ch09-ex72",
+    chapterId: "ch09",
+    prompt:
+      "notes.md について、オーナーに実行権限を追加してください(シンボルモード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod u+x notes.md",
+    hints: ["オーナーはuで指定します。"],
+    explanation:
+      "chmod u+x notes.md は、オーナー(u)に実行権限(x)を追加します。",
+  },
+  {
+    id: "ch09-ex73",
+    chapterId: "ch09",
+    prompt:
+      "readonly.txt は誤って上書きされないよう444に設定していましたが、オーナーだけは編集できるようにしたくなりました。オーナーの書き込み権限を追加してください(シンボルモード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod u+w readonly.txt",
+    hints: [
+      "対象をuにすれば、グループ・その他の読み取り専用状態は変わりません。",
+    ],
+    explanation:
+      "chmod u+w readonly.txt は、オーナー(u)にだけ書き込み権限(w)を追加します。グループ・その他は引き続き読み取り専用のままです。",
+  },
+  {
+    id: "ch09-ex74",
+    chapterId: "ch09",
+    prompt:
+      "install.sh について、オーナー・グループ・その他すべてに実行権限を追加してください(シンボルモード、a を使用)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod a+x install.sh",
+    hints: ["すべての対象を意味する記号は a です。"],
+    explanation:
+      "chmod a+x install.sh は、a(ugoすべて)に実行権限(x)を追加します。644に実行権限が加わり755になります。",
+  },
+  {
+    id: "ch09-ex75",
+    chapterId: "ch09",
+    prompt:
+      "deploy.sh について、オーナーは変更せず、グループとその他に実行権限を追加してください(シンボルモード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod go+x deploy.sh",
+    hints: ["対象は複数まとめて go のように指定できます。"],
+    explanation:
+      "chmod go+x deploy.sh は、グループとその他(go)に実行権限(x)を追加します。オーナーの権限には影響しません。",
+  },
+  {
+    id: "ch09-ex76",
+    chapterId: "ch09",
+    prompt:
+      "backup.sh について、その他のユーザーに読み取り権限を追加してください(シンボルモード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod o+r backup.sh",
+    hints: ["対象をoにすれば、グループの実行権限はそのまま残ります。"],
+    explanation:
+      "chmod o+r backup.sh は、その他(o)に読み取り権限(r)を追加します。",
+  },
+  {
+    id: "ch09-ex77",
+    chapterId: "ch09",
+    prompt:
+      "run.sh について、グループに読み取り権限を追加してください(シンボルモード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod g+r run.sh",
+    hints: ["対象をgにすれば、その他のユーザーには権限が付与されません。"],
+    explanation:
+      "chmod g+r run.sh は、グループ(g)に読み取り権限(r)を追加します。",
+  },
+  {
+    id: "ch09-ex78",
+    chapterId: "ch09",
+    prompt:
+      "config.yml について、その他のユーザーの読み取り権限を禁止してください(シンボルモード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod o-r config.yml",
+    hints: ["禁止する演算子は - です。"],
+    explanation:
+      "chmod o-r config.yml は、その他(o)の読み取り権限(r)を禁止します。",
+  },
+  {
+    id: "ch09-ex79",
+    chapterId: "ch09",
+    prompt:
+      "app.conf について、その他のユーザーの読み取り権限を禁止してください(シンボルモード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod o-r app.conf",
+    hints: ["対象をoにすれば、グループの読み取り権限はそのまま残ります。"],
+    explanation:
+      "chmod o-r app.conf は、その他(o)の読み取り権限(r)だけを禁止します。",
+  },
+  {
+    id: "ch09-ex80",
+    chapterId: "ch09",
+    prompt:
+      "debug.log について、オーナーは変更せず、グループとその他の書き込み権限を禁止してください(シンボルモード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod go-w debug.log",
+    hints: ["対象はgoとまとめて指定できます。"],
+    explanation:
+      "chmod go-w debug.log は、グループとその他(go)の書き込み権限(w)を禁止します。",
+  },
+  {
+    id: "ch09-ex81",
+    chapterId: "ch09",
+    prompt:
+      "access.log について、その他のユーザーの読み取り権限を禁止してください(シンボルモード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod o-r access.log",
+    hints: ["対象をoにすれば、グループの読み取り権限には影響しません。"],
+    explanation:
+      "chmod o-r access.log は、その他(o)の読み取り権限(r)を禁止します。",
+  },
+  {
+    id: "ch09-ex82",
+    chapterId: "ch09",
+    prompt:
+      "SSH秘密鍵 id_rsa について、グループとその他の権限をまとめてすべて禁止してください(シンボルモード、= を使用)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod go= id_rsa",
+    hints: ["=の後に権限記号を書かないと「権限なし」を意味します。"],
+    explanation:
+      "chmod go= id_rsa は、グループとその他(go)の権限を、元の値に関わらずすべて禁止(空)にします。秘密鍵をオーナーのみアクセス可能にする典型的な操作です。",
+  },
+  {
+    id: "ch09-ex83",
+    chapterId: "ch09",
+    prompt:
+      "SSH公開鍵 id_rsa.pub について、グループとその他に読み取り権限を追加してください(シンボルモード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod go+r id_rsa.pub",
+    hints: ["対象をgoとまとめて指定します。"],
+    explanation:
+      "chmod go+r id_rsa.pub は、グループとその他(go)に読み取り権限(r)を追加します。公開鍵は共有しても問題ありません。",
+  },
+  {
+    id: "ch09-ex84",
+    chapterId: "ch09",
+    prompt:
+      "draft.txt について、グループに読み取り権限を追加してください(シンボルモード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod g+r draft.txt",
+    hints: ["対象をgにすれば、その他のユーザーには権限が付与されません。"],
+    explanation:
+      "chmod g+r draft.txt は、グループ(g)に読み取り権限(r)を追加します。",
+  },
+  {
+    id: "ch09-ex85",
+    chapterId: "ch09",
+    prompt:
+      "shared.txt について、その他のユーザーの権限をすべて禁止してください(シンボルモード、= を使用)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod o= shared.txt",
+    hints: ["=の後に権限記号を書かないと「権限なし」を意味します。"],
+    explanation:
+      "chmod o= shared.txt は、その他(o)の権限を、元の値に関わらずすべて禁止(空)にします。",
+  },
+  {
+    id: "ch09-ex86",
+    chapterId: "ch09",
+    prompt:
+      "teamnotes.txt について、グループに書き込み権限を追加してください(シンボルモード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod g+w teamnotes.txt",
+    hints: ["現在グループには読み取り権限のみが与えられています。"],
+    explanation:
+      "chmod g+w teamnotes.txt は、グループ(g)に書き込み権限(w)を追加します。",
+  },
+  {
+    id: "ch09-ex87",
+    chapterId: "ch09",
+    prompt:
+      "secret.txt について、オーナーの書き込み権限だけを禁止してください(シンボルモード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod u-w secret.txt",
+    hints: [
+      "対象をuにすれば、グループ・その他(元々権限なし)には影響しません。",
+    ],
+    explanation:
+      "chmod u-w secret.txt は、オーナー(u)の書き込み権限(w)を禁止します。オーナー自身も読み取り専用になります。",
+  },
+  {
+    id: "ch09-ex88",
+    chapterId: "ch09",
+    prompt:
+      "script.sh について、オーナーは変更せず、グループとその他に実行権限を追加してください(シンボルモード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod go+x script.sh",
+    hints: [
+      "対象はgoとまとめて指定できます。オーナーの権限(rw-)には影響しません。",
+    ],
+    explanation:
+      "chmod go+x script.sh は、グループとその他(go)に実行権限(x)だけを追加します。オーナーはrw-のままなので、結果はrw-r-xr-xになります。",
+  },
+  {
+    id: "ch09-ex89",
+    chapterId: "ch09",
+    prompt:
+      "public_dir ディレクトリについて、グループとその他に読み取り・実行権限を追加してください(シンボルモード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod go+rx public_dir",
+    hints: ["1つのクローズに複数の権限記号(rx)をまとめて指定できます。"],
+    explanation:
+      "chmod go+rx public_dir は、グループとその他(go)に読み取り(r)と実行(x)をまとめて追加します。",
+  },
+  {
+    id: "ch09-ex90",
+    chapterId: "ch09",
+    prompt:
+      "private_dir ディレクトリについて、グループとその他の権限をまとめて禁止してください(シンボルモード、= を使用)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod go= private_dir",
+    hints: ["=の後に権限記号を書かないと「権限なし」を意味します。"],
+    explanation:
+      "chmod go= private_dir は、グループとその他(go)の権限をすべて禁止(空)にします。",
+  },
+  {
+    id: "ch09-ex91",
+    chapterId: "ch09",
+    prompt:
+      "shared_dir ディレクトリについて、グループに書き込み権限を追加してください(シンボルモード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod g+w shared_dir",
+    hints: [
+      "ディレクトリの書き込み権限は、その中にファイルを作成・削除できることを意味します。",
+    ],
+    explanation:
+      "chmod g+w shared_dir は、グループ(g)に書き込み権限(w)を追加し、グループのメンバーもファイルの作成・削除ができるようになります。",
+  },
+  {
+    id: "ch09-ex92",
+    chapterId: "ch09",
+    prompt:
+      "team_dir ディレクトリについて、グループに読み書き実行の権限をまとめて追加してください(シンボルモード)。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod g+rwx team_dir",
+    hints: ["1つのクローズに複数の権限記号(rwx)をまとめて指定できます。"],
+    explanation:
+      "chmod g+rwx team_dir は、グループ(g)に読み取り・書き込み・実行のすべてを追加します。",
+  },
+
+  // --- Ch9: chmodコマンド(複数の節をカンマ区切りで一度に指定) ---
+  {
+    id: "ch09-ex93",
+    chapterId: "ch09",
+    prompt:
+      "team_dir ディレクトリについて、オーナーとグループにrwxすべて、その他には権限なしとなるよう、カンマ区切りの1回のchmodで指定してください。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod u=rwx,g=rwx,o= team_dir",
+    hints: [
+      "シンボルモードは , (カンマ)区切りで複数の節を1回のchmodにまとめて指定できます。",
+    ],
+    explanation:
+      "chmod u=rwx,g=rwx,o= team_dir のように、カンマで区切ることで「オーナーとグループはrwx、その他は権限なし」を1回のコマンドで指定できます。",
+  },
+  {
+    id: "ch09-ex94",
+    chapterId: "ch09",
+    prompt:
+      "archive_dir ディレクトリについて、オーナーはrwxのまま、グループとその他はr-xとなるよう、カンマ区切りの1回のchmodで指定してください。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod u=rwx,go=rx archive_dir",
+    hints: ["対象ごとに=で絶対指定した節を、カンマでつなげます。"],
+    explanation:
+      "chmod u=rwx,go=rx archive_dir は、オーナーをrwx、グループとその他をr-xに絶対指定し、結果として755になります。",
+  },
+  {
+    id: "ch09-ex95",
+    chapterId: "ch09",
+    prompt:
+      "config.yml について、オーナーはrw、グループはr、その他は権限なしとなるよう、カンマ区切りの1回のchmodで指定してください。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod u=rw,g=r,o= config.yml",
+    hints: ["3つの節をカンマでつなげ、u/g/oそれぞれを個別に絶対指定します。"],
+    explanation:
+      "chmod u=rw,g=r,o= config.yml は、u/g/oそれぞれに異なる権限を1回のコマンドで絶対指定し、結果は640になります。",
+  },
+  {
+    id: "ch09-ex96",
+    chapterId: "ch09",
+    prompt:
+      "debug.log について、オーナーはrw、グループとその他はrとなるよう、カンマ区切りの1回のchmodで指定してください。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod u=rw,go=r debug.log",
+    hints: ["go=rのように対象をまとめて1つの節にすることもできます。"],
+    explanation:
+      "chmod u=rw,go=r debug.log は、オーナーをrw、グループとその他をrに絶対指定し、結果は644になります。",
+  },
+  {
+    id: "ch09-ex97",
+    chapterId: "ch09",
+    prompt:
+      "shared.txt について、オーナーとグループはrw、その他は権限なしとなるよう、カンマ区切りの1回のchmodで指定してください。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod u=rw,g=rw,o= shared.txt",
+    hints: ["3つの節をカンマでつなげます。"],
+    explanation:
+      "chmod u=rw,g=rw,o= shared.txt は、オーナーとグループをrw、その他を権限なしに絶対指定し、結果は660になります。",
+  },
+  {
+    id: "ch09-ex98",
+    chapterId: "ch09",
+    prompt:
+      "app.conf について、オーナーはrw、グループはr、その他は権限なしとなるよう、カンマ区切りの1回のchmodで指定してください。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod u=rw,g=r,o= app.conf",
+    hints: ["3つの節をカンマでつなげ、u/g/oそれぞれを個別に絶対指定します。"],
+    explanation:
+      "chmod u=rw,g=r,o= app.conf は、u/g/oそれぞれに異なる権限を1回のコマンドで絶対指定し、結果は640になります。",
+  },
+  {
+    id: "ch09-ex99",
+    chapterId: "ch09",
+    prompt:
+      "teamnotes.txt について、オーナーとグループはrw、その他は権限なしとなるよう、カンマ区切りの1回のchmodで指定してください。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod u=rw,g=rw,o= teamnotes.txt",
+    hints: ["3つの節をカンマでつなげます。"],
+    explanation:
+      "chmod u=rw,g=rw,o= teamnotes.txt は、オーナーとグループをrw、その他を権限なしに絶対指定し、結果は660になります。",
+  },
+  {
+    id: "ch09-ex100",
+    chapterId: "ch09",
+    prompt:
+      "data.json について、オーナーはrのみ、グループとその他は権限なしとなるよう、カンマ区切りの1回のchmodで指定してください。",
+    initialCwd: "/home/study/practice/ch09_permissions",
+    referenceSolution: "chmod u=r,go= data.json",
+    hints: ["go=のように対象をまとめて「権限なし」を1つの節で指定できます。"],
+    explanation:
+      "chmod u=r,go= data.json は、オーナーを読み取りのみ、グループとその他を権限なしに絶対指定し、結果は400になります。",
+  },
+
+  // --- Ch9: suコマンド ---
+  {
+    id: "ch09-ex101",
+    chapterId: "ch09",
+    prompt:
+      "su コマンドでrootユーザーに切り替えたうえで、/etc/appdata という空のディレクトリを作成してください(1行のコマンドとして ; でつないでください)。",
+    referenceSolution: "su root; mkdir /etc/appdata",
+    hints: [
+      "/etc は一般ユーザーに書き込み権限がないため、mkdirの前にsuでrootへ切り替える必要があります。",
+    ],
+    explanation:
+      "su root; mkdir /etc/appdata のように ; でつなぐことで、rootへの切り替えとディレクトリ作成を1行で実行できます。",
+  },
+  {
+    id: "ch09-ex102",
+    chapterId: "ch09",
+    prompt:
+      "su コマンドでrootユーザーに切り替えたうえで(ユーザー名は省略して構いません)、/etc/service.conf という空ファイルを作成してください(1行、;でつなぐこと)。",
+    referenceSolution: "su; touch /etc/service.conf",
+    hints: ["suは引数を省略すると、デフォルトでrootに切り替わります。"],
+    explanation:
+      "su は引数省略時にrootへ切り替わるため、su; touch /etc/service.conf のように1行で実行できます。",
+  },
+  {
+    id: "ch09-ex103",
+    chapterId: "ch09",
+    prompt:
+      "su コマンドでrootユーザーに切り替えたうえで、/etc/network.conf という空ファイルを作成してください(1行、;でつなぐこと)。",
+    referenceSolution: "su root; touch /etc/network.conf",
+    hints: ["su root は明示的にrootを指定する書き方です。"],
+    explanation:
+      "su root; touch /etc/network.conf は、rootへの明示的な切り替えとファイル作成を1行で実行します。",
+  },
+  {
+    id: "ch09-ex104",
+    chapterId: "ch09",
+    prompt:
+      "su コマンドでrootユーザーに切り替えたうえで、/etc/backups という空のディレクトリを作成してください(1行、;でつなぐこと。ユーザー名は省略して構いません)。",
+    referenceSolution: "su; mkdir /etc/backups",
+    hints: ["suの引数を省略すると、デフォルトでrootに切り替わります。"],
+    explanation:
+      "su; mkdir /etc/backups のように、引数省略のsuでrootに切り替えたうえでディレクトリを作成します。",
+  },
+  {
+    id: "ch09-ex105",
+    chapterId: "ch09",
+    prompt:
+      "/etc/crontab は study ユーザーの所有ではないため、study自身ではパーミッションを変更できません。su コマンドでrootに切り替えたうえで、/etc/crontab のパーミッションを 600 に変更してください(1行、;でつなぐこと)。",
+    referenceSolution: "su root; chmod 600 /etc/crontab",
+    hints: [
+      "chmodは、そのファイルのオーナーかスーパーユーザーしか実行できません。",
+    ],
+    explanation:
+      "/etc/crontab のオーナーはrootであり、study自身はオーナーでもスーパーユーザーでもないためchmodできません。su root で先にrootに切り替えることで、chmodが実行できるようになります。",
+  },
+  {
+    id: "ch09-ex106",
+    chapterId: "ch09",
+    prompt:
+      "su コマンドでrootに切り替えたうえで(ユーザー名は省略して構いません)、/etc/bashrc のパーミッションを 640 に変更してください(1行、;でつなぐこと)。",
+    referenceSolution: "su; chmod 640 /etc/bashrc",
+    hints: ["/etc/bashrc のオーナーはrootです。"],
+    explanation:
+      "su; chmod 640 /etc/bashrc のように、rootへの切り替えとchmodを1行で実行します。",
+  },
+  {
+    id: "ch09-ex107",
+    chapterId: "ch09",
+    prompt:
+      "su コマンドでrootユーザーに切り替えたうえで、/etc/newapp という空のディレクトリを作成してください(1行、;でつなぐこと)。",
+    referenceSolution: "su root; mkdir /etc/newapp",
+    hints: ["su root; mkdir <パス> の形式です。"],
+    explanation:
+      "su root; mkdir /etc/newapp は、rootへの切り替えとディレクトリ作成を1行で実行します。",
+  },
+  {
+    id: "ch09-ex108",
+    chapterId: "ch09",
+    prompt:
+      "su コマンドでrootに切り替えたうえで(ユーザー名は省略して構いません)、/etc/hosts.local という空ファイルを作成してください(1行、;でつなぐこと)。",
+    referenceSolution: "su; touch /etc/hosts.local",
+    hints: ["suの引数を省略すると、デフォルトでrootに切り替わります。"],
+    explanation:
+      "su; touch /etc/hosts.local のように、引数省略のsuでrootに切り替えたうえでファイルを作成します。",
+  },
+  {
+    id: "ch09-ex109",
+    chapterId: "ch09",
+    prompt:
+      "su コマンドでrootに切り替えたうえで、/etc/temp.log という空ファイルを作成し、その後すぐに同じファイルを削除してください(すべて1行、;でつなぐこと)。",
+    referenceSolution: "su root; touch /etc/temp.log; rm /etc/temp.log",
+    hints: [
+      "; でつなげば、3つ以上のコマンドも1行にまとめて順番に実行できます。",
+    ],
+    explanation:
+      "su root; touch /etc/temp.log; rm /etc/temp.log のように、rootへの切り替え・ファイル作成・削除を1行で実行できます。suで切り替えたユーザーは、明示的にexitするまで維持されます。",
+  },
+  {
+    id: "ch09-ex110",
+    chapterId: "ch09",
+    prompt:
+      "su コマンドでrootに切り替えたうえで(ユーザー名は省略して構いません)、/etc/app という空のディレクトリを作成し、続けてその中に config.txt という空ファイルを作成してください(すべて1行、;でつなぐこと)。",
+    referenceSolution: "su; mkdir /etc/app; touch /etc/app/config.txt",
+    hints: [
+      "suで切り替えたrootユーザーの状態は、明示的にexitするまで以降のコマンドすべてに引き継がれます。",
+    ],
+    explanation:
+      "su; mkdir /etc/app; touch /etc/app/config.txt のように、rootに切り替えた後の複数コマンドをすべて1行で実行できます。",
+  },
+
+  // --- Ch9: sudoコマンド ---
+  {
+    id: "ch09-ex111",
+    chapterId: "ch09",
+    prompt:
+      "sudo コマンドを使って、/etc/report.txt という空ファイルを作成してください。",
+    referenceSolution: "sudo touch /etc/report.txt",
+    hints: [
+      "sudo <実行したいコマンド> の形式で、そのコマンド1つだけをroot権限で実行します。",
+    ],
+    explanation:
+      "sudo touch /etc/report.txt は、touchコマンドだけをスーパーユーザー権限で実行し、/etcへの書き込み権限エラーを回避します。",
+  },
+  {
+    id: "ch09-ex112",
+    chapterId: "ch09",
+    prompt:
+      "sudo コマンドを使って、/etc/scripts という空のディレクトリを作成してください。",
+    referenceSolution: "sudo mkdir /etc/scripts",
+    hints: ["sudo mkdir <パス> の形式です。"],
+    explanation:
+      "sudo mkdir /etc/scripts は、mkdirコマンドだけをスーパーユーザー権限で実行します。",
+  },
+  {
+    id: "ch09-ex113",
+    chapterId: "ch09",
+    prompt:
+      "/etc/crontab のパーミッションを、sudo コマンドを使って 600 に変更してください。",
+    referenceSolution: "sudo chmod 600 /etc/crontab",
+    hints: [
+      "chmodはファイルのオーナーかスーパーユーザーしか実行できないため、sudoで実行する必要があります。",
+    ],
+    explanation:
+      "sudo chmod 600 /etc/crontab は、chmodコマンドだけをスーパーユーザー権限で実行し、root所有ファイルのパーミッションを変更します。",
+  },
+  {
+    id: "ch09-ex114",
+    chapterId: "ch09",
+    prompt:
+      "/etc/passwd のパーミッションを、sudo コマンドを使って 640 に変更してください。",
+    referenceSolution: "sudo chmod 640 /etc/passwd",
+    hints: ["sudo chmod <モード> <ファイル名> の形式です。"],
+    explanation:
+      "sudo chmod 640 /etc/passwd は、chmodコマンドだけをスーパーユーザー権限で実行します。",
+  },
+  {
+    id: "ch09-ex115",
+    chapterId: "ch09",
+    prompt:
+      "sudo コマンドを使って、/etc/motd という空ファイルを作成してください。",
+    referenceSolution: "sudo touch /etc/motd",
+    hints: ["sudo touch <パス> の形式です。"],
+    explanation:
+      "sudo touch /etc/motd は、touchコマンドだけをスーパーユーザー権限で実行します。",
+  },
+  {
+    id: "ch09-ex116",
+    chapterId: "ch09",
+    prompt:
+      "sudo コマンドを使って、/etc/opt という空のディレクトリを作成してください。",
+    referenceSolution: "sudo mkdir /etc/opt",
+    hints: ["sudo mkdir <パス> の形式です。"],
+    explanation:
+      "sudo mkdir /etc/opt は、mkdirコマンドだけをスーパーユーザー権限で実行します。",
+  },
+  {
+    id: "ch09-ex117",
+    chapterId: "ch09",
+    prompt:
+      "sudo コマンドを使って、/etc/opt2 という空のディレクトリを作成し、続けてその中に app.conf という空ファイルを作成してください(2つのsudoコマンドを ; でつないでください)。",
+    referenceSolution: "sudo mkdir /etc/opt2; sudo touch /etc/opt2/app.conf",
+    hints: [
+      "sudoは1つのコマンドだけをroot権限で実行するので、複数のroot操作にはそれぞれにsudoが必要です。",
+    ],
+    explanation:
+      "sudoは1つのコマンドが終了すると自動的に元の一般ユーザーに戻るため、複数のroot操作を行うには、" +
+      "sudo mkdir /etc/opt2; sudo touch /etc/opt2/app.conf のようにコマンドごとにsudoを付ける必要があります。",
+  },
+  {
+    id: "ch09-ex118",
+    chapterId: "ch09",
+    prompt:
+      "sudo コマンドを使って、/etc/tmp2.log という空ファイルを作成し、その後すぐに同じファイルを削除してください(2つのsudoコマンドを ; でつないでください)。",
+    referenceSolution: "sudo touch /etc/tmp2.log; sudo rm /etc/tmp2.log",
+    hints: ["touchとrmのそれぞれにsudoを付ける必要があります。"],
+    explanation:
+      "sudo touch /etc/tmp2.log; sudo rm /etc/tmp2.log のように、それぞれのコマンドに個別にsudoを付けて実行します。",
+  },
+  {
+    id: "ch09-ex119",
+    chapterId: "ch09",
+    prompt:
+      "/etc/bashrc のパーミッションを、sudo コマンドを使って 644 に変更してください。",
+    referenceSolution: "sudo chmod 644 /etc/bashrc",
+    hints: ["sudo chmod <モード> <ファイル名> の形式です。"],
+    explanation:
+      "sudo chmod 644 /etc/bashrc は、chmodコマンドだけをスーパーユーザー権限で実行します。",
+  },
+  {
+    id: "ch09-ex120",
+    chapterId: "ch09",
+    prompt:
+      "sudo コマンドを使って、/etc/config.d という空のディレクトリを作成してください。",
+    referenceSolution: "sudo mkdir /etc/config.d",
+    hints: ["sudo mkdir <パス> の形式です。"],
+    explanation:
+      "sudo mkdir /etc/config.d は、mkdirコマンドだけをスーパーユーザー権限で実行します。",
+  },
+
+  // --- Ch9: suとsudoの違い ---
+  {
+    id: "ch09-ex121",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt: "su と sudo の最も大きな違いは何ですか?",
+    choices: [
+      "suは明示的にexitするまでスーパーユーザー権限が継続するが、sudoは指定した1つのコマンドだけがスーパーユーザー権限で実行される",
+      "suは1つのコマンドだけを実行し、sudoはセッション全体が切り替わる",
+      "suはパスワードが不要だが、sudoは必ずパスワードが必要である",
+      "sudoはroot以外のユーザーには絶対に使えないが、suは任意のユーザーに切り替えられる",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "suは「ログインし直す」イメージ、sudoは「その場で1回だけ特別な権限を借りる」イメージです。",
+    ],
+    explanation:
+      "suはexitコマンドで明示的に終了するまでスーパーユーザー権限が継続します。一方sudoは、指定した1つの" +
+      "コマンドだけをスーパーユーザー権限で実行し、そのコマンドが終了すると自動的に元の一般ユーザーに戻ります。",
+  },
+  {
+    id: "ch09-ex122",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "su コマンドを実行したときに尋ねられるパスワードは、誰のパスワードですか?",
+    choices: [
+      "切り替え先のユーザー(通常はroot)のパスワード",
+      "現在ログインしている自分自身のパスワード",
+      "パスワードは一切不要",
+      "システム管理者に個別に発行されたワンタイムパスワード",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["suは「そのユーザーとしてログインし直す」ような動作をします。"],
+    explanation:
+      "suコマンドは切り替え先のユーザー(多くの場合スーパーユーザー)のパスワードを要求します。",
+  },
+  {
+    id: "ch09-ex123",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "sudo コマンドを実行したときに尋ねられるパスワードは、誰のパスワードですか?",
+    choices: [
+      "現在ログインしている自分自身のパスワード",
+      "スーパーユーザー(root)のパスワード",
+      "切り替え先ユーザーのパスワード(自分以外)",
+      "パスワードは一切不要",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "sudoでは、スーパーユーザーのパスワードを知らなくても管理者作業ができるように設計されています。",
+    ],
+    explanation:
+      "sudoで要求されるパスワードは、スーパーユーザーのパスワードではなく、現在ログインしているユーザー" +
+      "自身のパスワードです。これはsuとの大きな違いの1つです。",
+  },
+  {
+    id: "ch09-ex124",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt: "sudo で実行したコマンドが終了すると、どうなりますか?",
+    choices: [
+      "自動的に元の一般ユーザーの状態に戻る",
+      "exitコマンドを実行するまでスーパーユーザーのままになる",
+      "システムが再起動する",
+      "再度パスワードを入力するまでログイン状態が凍結される",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["sudoは「1コマンドだけ」root権限で実行する仕組みです。"],
+    explanation:
+      "sudoで実行したコマンドが終了すると、自動的に元の一般ユーザーの状態に戻ります。exitは不要です。",
+  },
+  {
+    id: "ch09-ex125",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "su でスーパーユーザーになった後、一般ユーザーに戻るにはどうすればよいですか?",
+    choices: [
+      "exit コマンドを実行する",
+      "sudo コマンドを実行する",
+      "自動的に一定時間で戻るので何もしなくてよい",
+      "reboot コマンドを実行する",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["suによるユーザー切り替えは、明示的な操作をするまで継続します。"],
+    explanation:
+      "suコマンドで切り替えたスーパーユーザーの状態は、exitコマンドを実行するまで継続します。",
+  },
+  {
+    id: "ch09-ex126",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "スーパーユーザーでの作業時間をできるだけ短くするために、通常 su と sudo のどちらの利用が推奨されますか?",
+    choices: [
+      "sudo(必要な1コマンドだけをスーパーユーザー権限で実行できるため)",
+      "su(常にセッション全体を切り替えられるため)",
+      "どちらも同程度の作業時間になるため、どちらでもよい",
+      "どちらも推奨されず、常にrootで直接ログインするべき",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "スーパーユーザーでの操作は、ミスによる被害が大きくなりがちなので、必要最小限にとどめるべきです。",
+    ],
+    explanation:
+      "sudoは必要なコマンドだけをスーパーユーザー権限で実行するため、スーパーユーザーとして操作する時間を" +
+      "最小限に抑えられます。このため、システムに必須なファイルを誤って削除するといった致命的なミスの" +
+      "リスクを減らせるsudoの方が推奨される傾向にあります。",
+  },
+  {
+    id: "ch09-ex127",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "最近のLinuxディストリビューションでは、su と sudo のどちらがより一般的に使われるようになりつつありますか?",
+    choices: [
+      "sudo",
+      "su",
+      "両者は完全に廃止され、別のコマンドが主流になった",
+      "ディストリビューションによらず、常にsuだけが使われる",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "インストール時に作成した一般ユーザーに、はじめからsudoの権限が付与されていることが多くなっています。",
+    ],
+    explanation:
+      "最近のLinuxディストリビューションでは、インストール中に作成した一般ユーザーにはじめからsudoの権限が" +
+      "付与されていることが多く、suよりもsudoの方がよく使われるようになりつつあります。",
+  },
+  {
+    id: "ch09-ex128",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "sudo が su と比べて優れている点として、本文で挙げられている「細かな制御」とはどのようなことですか?",
+    choices: [
+      "特定のユーザーに、特定のコマンドだけの実行を許可する、といった細かい権限設定ができる",
+      "sudoを使うと、パーミッションのチェック自体が不要になる",
+      "sudoは複数のユーザーを同時に切り替えることができる",
+      "sudoはネットワーク越しに他のマシンの権限も操作できる",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "/etc/sudoersファイルには「どのユーザーに、どのコマンドの実行を許可するか」を記述できます。",
+    ],
+    explanation:
+      "sudoは/etc/sudoersファイルの設定により、特定のユーザー(またはグループ)に特定のコマンドの実行" +
+      "だけを許可する、といった細かい制御が可能です。これはセッション全体を切り替えるsuにはない利点です。",
+  },
+
+  // --- Ch9: sudoers・visudo ---
+  {
+    id: "ch09-ex129",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "あるユーザーにsudoの利用を許可するかどうかを管理しているファイルはどれですか?",
+    choices: ["/etc/sudoers", "/etc/passwd", "/etc/crontab", "/etc/bashrc"],
+    correctChoiceIndex: 0,
+    hints: ["sudoersという名前がそのままファイル名になっています。"],
+    explanation:
+      "ユーザーにsudoを許可するかどうかは、/etc/sudoersファイルによって管理されています。",
+  },
+  {
+    id: "ch09-ex130",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "/etc/sudoers を直接テキストエディタで開いて編集してはいけないとされる理由は何ですか?",
+    choices: [
+      "書き方を誤ると文法エラーとなり、どのユーザーもsudoが使えなくなる致命的な状態になりうるため",
+      "/etc/sudoersは読み取り専用で、そもそも編集自体が技術的に不可能なため",
+      "直接編集すると、システムが即座にシャットダウンしてしまうため",
+      "直接編集すると、ファイルの内容が暗号化されて読めなくなるため",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "文法エラーを修正するにもスーパーユーザー権限が必要なため、詰んでしまう可能性があります。",
+    ],
+    explanation:
+      "/etc/sudoersの書き方を誤ると、sudoが動作しなくなったり、どのユーザーもsudoを使えなくなったり" +
+      "する可能性があります。この場合、誤りを修正するにもスーパーユーザー権限が必要なため、二度と" +
+      "スーパーユーザー権限を取得できない状態に陥ってしまう危険があります。",
+  },
+  {
+    id: "ch09-ex131",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "/etc/sudoers を安全に編集するために使用する専用のコマンドは何ですか?",
+    choices: ["visudo", "vim", "sudoedit-safe", "chmod"],
+    correctChoiceIndex: 0,
+    hints: [
+      "中で起動するエディタ(多くの場合vim、環境によってはnano等)とは別に、専用のコマンド名があります。",
+    ],
+    explanation:
+      "/etc/sudoersを編集するには、visudoという専用コマンドを使用します。保存時に文法チェックが行われる" +
+      "ため、直接エディタで編集するよりも安全に作業できます。",
+  },
+  {
+    id: "ch09-ex132",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "/etc/sudoers に記述された `%wheel ALL=(ALL) ALL` という設定が意味することは何ですか?",
+    choices: [
+      "wheelグループに所属するユーザーは、すべてのマシンで、すべてのユーザーとして、すべてのコマンドを実行できる",
+      "wheelという名前の1人のユーザーだけがsudoを利用できる",
+      "wheelグループに所属するユーザーは、sudoの利用が禁止される",
+      "wheelグループはネットワーク上のすべてのマシンにログインできる",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["先頭の % はユーザー名ではなくグループ名を指定する記法です。"],
+    explanation:
+      "%wheel ALL=(ALL) ALL は、「wheelグループに所属するユーザーは、すべてのマシンで、すべてのユーザーとして、すべてのコマンドを実行できる」という意味の設定です。",
+  },
+  {
+    id: "ch09-ex133",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt:
+      "visudo でファイルの編集を終了しようとした際に文法エラーが検出されると、対応方法の選択肢が表示されます。通常は使用を避けるべき、文法エラーがあっても強制的に上書き保存してしまう選択肢はどれですか?",
+    choices: [
+      "Q(sudoersファイルへの変更を保存して終了する。危険)",
+      "e(sudoersファイルを再度編集する)",
+      "x(sudoersファイルへの変更を保存せずに終了する)",
+      "visudoにはそのような選択肢は存在しない",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "文法エラーが残ったまま保存してしまうと、sudoが誰にも使えなくなる危険な状態になります。",
+    ],
+    explanation:
+      "Qを選択すると、文法上の誤りがあったとしても強制的に/etc/sudoersファイルを上書き保存してしまいます。" +
+      "これは危険な操作であるため、通常は誤りを修正するeか、変更を破棄して終了するxを選ぶべきです。",
+  },
+  {
+    id: "ch09-ex134",
+    chapterId: "ch09",
+    type: "quiz",
+    prompt: "visudo コマンドを実行するには、どのような権限が必要ですか?",
+    choices: [
+      "スーパーユーザー権限(あらかじめsuやsudoで昇格しておく必要がある)",
+      "特別な権限は不要で、一般ユーザーのまま誰でも実行できる",
+      "sudoersファイルのオーナーであるユーザーだけが実行できる特別なアカウント権限",
+      "ネットワーク管理者としての証明書が必要",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "/etc/sudoers自体が一般ユーザーには読み込み権限すら与えられていないファイルです。",
+    ],
+    explanation:
+      "visudoコマンドの実行にはスーパーユーザーの権限が必要なため、あらかじめsuまたはsudoでスーパー" +
+      "ユーザーに昇格したうえでvisudoを実行します。",
+  },
+
   // ---------------------------------------------------------------------
   // Ch10: プロセスとジョブ管理
   // ---------------------------------------------------------------------
