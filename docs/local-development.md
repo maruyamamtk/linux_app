@@ -34,28 +34,15 @@ npm run android   # Android Studio + AVD(エミュレータ)が必要
 
 シミュレータ/エミュレータが未セットアップの環境ではこれらは使えない。その場合は方法1か3を使う。
 
-### 3. Webブラウザ
+### 3. Webブラウザ — シミュレータ未セットアップな環境では最有力
 
 ```sh
 npm run web
 ```
 
-初回実行時、`react-native-web` / `react-dom` / `@expo/metro-runtime` が未インストールだと以下のエラーになる。
+`react-native-web` / `react-dom` / `@expo/metro-runtime` は `package.json` の依存関係に含まれているため、`npm install` 済みであれば追加作業なしでそのまま起動する。
 
-```
-CommandError: It looks like you're trying to use web support but don't have the required
-dependencies installed.
-```
-
-その場合は指示に従い一度だけ追加する。
-
-```sh
-npx expo install react-native-web react-dom @expo/metro-runtime
-```
-
-これらは `package.json` に追加され、以降 `npm run web` で起動できるようになる(このアプリは本来モバイル向けのため、Web対応を恒常的に残すかは要判断。動作確認だけが目的なら確認後に `git checkout -- package.json package-lock.json && npm install` で元に戻せる)。
-
-起動すると `http://localhost:8081` でアクセスできる(初回バンドル生成に30秒前後かかる)。
+起動すると `http://localhost:8081` でアクセスできる(初回バンドル生成に30秒前後かかることがある)。
 
 ## アプリの使い方(画面の流れ)
 
