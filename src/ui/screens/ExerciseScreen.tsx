@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { exercises } from "../../content/exercises";
-import { phase1VfsSnapshot } from "../../content/vfsSeed";
+import { getVfsSnapshot } from "../../content/vfsSeed";
 import { gradeExercise } from "../../engine/grading";
 import type { GradeResult } from "../../engine/grading";
 import type { VfsUser } from "../../engine/vfs";
@@ -42,6 +42,7 @@ export function ExerciseScreen({ route }: Props) {
 
   const initialCwd = exercise.initialCwd ?? HOME_DIR;
   const hints = exercise.hints ?? [];
+  const snapshot = getVfsSnapshot(exercise.chapterId, exercise.vfsSnapshotId);
 
   function handleShowHint() {
     setVisibleHintCount((count) => Math.min(count + 1, hints.length));
@@ -52,7 +53,7 @@ export function ExerciseScreen({ route }: Props) {
 
     const userInput = terminalRef.current?.getLastCommand() ?? "";
     const result = gradeExercise({
-      snapshot: phase1VfsSnapshot,
+      snapshot,
       user: STUDY_USER,
       cwd: initialCwd,
       env: { HOME: HOME_DIR, PATH: "/bin:/usr/bin" },
@@ -91,7 +92,7 @@ export function ExerciseScreen({ route }: Props) {
 
       <Terminal
         ref={terminalRef}
-        snapshot={phase1VfsSnapshot}
+        snapshot={snapshot}
         user={STUDY_USER}
         initialCwd={initialCwd}
         initialEnv={{ HOME: HOME_DIR }}

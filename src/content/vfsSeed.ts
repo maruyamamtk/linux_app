@@ -255,8 +255,8 @@ const CH19_BRANCH_MEMO_TXT = `プロジェクトの概要をここに書く。
 const CH19_SYNC_MEMO_TXT = `同期演習用のメモ。
 `;
 
-function createPracticeDirectory(): VfsDirectoryNode {
-  return createDirectory("practice", {
+function createCh0406PracticeChildren(): Record<string, VfsNode> {
+  return {
     ch04_fs: createDirectory("ch04_fs", {
       documents: createDirectory("documents", {}, { owner: "study", group: "study", mode: 0o755 }),
       photos: createDirectory("photos", {}, { owner: "study", group: "study", mode: 0o755 }),
@@ -291,7 +291,11 @@ function createPracticeDirectory(): VfsDirectoryNode {
         }, { owner: "study", group: "study", mode: 0o755 }),
       }, { owner: "study", group: "study", mode: 0o755 }),
     }, { owner: "study", group: "study", mode: 0o755 }),
+  };
+}
 
+function createCh09PracticeChildren(): Record<string, VfsNode> {
+  return {
     ch09_permissions: createDirectory("ch09_permissions", {
       "secret.txt": createFile("secret.txt", CH09_SECRET_TXT, {
         owner: "study",
@@ -304,7 +308,11 @@ function createPracticeDirectory(): VfsDirectoryNode {
         mode: 0o644,
       }),
     }, { owner: "study", group: "study", mode: 0o755 }),
+  };
+}
 
+function createCh1114PracticeChildren(): Record<string, VfsNode> {
+  return {
     ch11_pipeline: createDirectory("ch11_pipeline", {
       "output.log": createFile("output.log", CH11_OUTPUT_LOG, {
         owner: "study",
@@ -356,13 +364,21 @@ function createPracticeDirectory(): VfsDirectoryNode {
         mode: 0o644,
       }),
     }, { owner: "study", group: "study", mode: 0o755 }),
+  };
+}
 
+function createCh1517PracticeChildren(): Record<string, VfsNode> {
+  return {
     ch15_17_shellscript: createDirectory(
       "ch15_17_shellscript",
       {},
       { owner: "study", group: "study", mode: 0o755 },
     ),
+  };
+}
 
+function createCh18PracticeChildren(): Record<string, VfsNode> {
+  return {
     ch18_archive: createDirectory("ch18_archive", {
       project: createDirectory("project", {
         "README.md": createFile("README.md", CH18_README_MD, {
@@ -384,7 +400,11 @@ function createPracticeDirectory(): VfsDirectoryNode {
         }, { owner: "study", group: "study", mode: 0o755 }),
       }, { owner: "study", group: "study", mode: 0o755 }),
     }, { owner: "study", group: "study", mode: 0o755 }),
+  };
+}
 
+function createCh19PracticeChildren(): Record<string, VfsNode> {
+  return {
     ch19_git: createDirectory("ch19_git", {
       // git init/status/add/commit/log演習用。まだGitリポジトリ化されていない状態の作業ツリー。
       notes: createDirectory("notes", {
@@ -418,10 +438,10 @@ function createPracticeDirectory(): VfsDirectoryNode {
         }),
       }, { owner: "study", group: "study", mode: 0o755 }),
     }, { owner: "study", group: "study", mode: 0o755 }),
-  }, { owner: "study", group: "study", mode: 0o755 });
+  };
 }
 
-function createStudyHomeDirectory(): VfsDirectoryNode {
+function createStudyHomeDirectory(practiceChildren: Record<string, VfsNode>): VfsDirectoryNode {
   return createDirectory("study", {
     ".bashrc": createFile(".bashrc", STUDY_BASHRC_CONTENT, {
       owner: "study",
@@ -434,19 +454,18 @@ function createStudyHomeDirectory(): VfsDirectoryNode {
       mode: 0o644,
     }),
     bin: createDirectory("bin", {}, { owner: "study", group: "study", mode: 0o755 }),
-    practice: createPracticeDirectory(),
+    practice: createDirectory("practice", practiceChildren, { owner: "study", group: "study", mode: 0o755 }),
   }, { owner: "study", group: "study", mode: 0o755 });
 }
 
 /**
- * ターミナル演習全体(Phase1のCh4〜17、およびPhase2のCh18)で使う仮想ファイルシステムの初期スナップショット。
+ * 全スナップショットに共通するルート構造(`/bin`, `/usr/bin`, `/etc`, `/dev`, `/home/study`)を組み立てる。
  * `study`という非rootユーザーとして開始し、`/etc`・`/bin`はroot所有・書き込み不可にすることで、
  * Ch9(パーミッション)・sudo演習の権限エラーを自然に再現する(docs/requirements.md 4章参照)。
+ * `practiceChildren`にはスナップショットごとに異なる演習グループ専用のフィクスチャを渡す。
  */
-export const phase1VfsSnapshot: VfsSnapshot = {
-  id: "phase1-seed",
-  description: "Phase1(Ch4〜17)演習用のVFS初期シードデータ",
-  root: createDirectory(
+function createBaseRoot(practiceChildren: Record<string, VfsNode>): VfsDirectoryNode {
+  return createDirectory(
     "",
     {
       bin: createBinDirectory("bin", BIN_COMMANDS),
@@ -488,11 +507,70 @@ export const phase1VfsSnapshot: VfsSnapshot = {
       home: createDirectory(
         "home",
         {
-          study: createStudyHomeDirectory(),
+          study: createStudyHomeDirectory(practiceChildren),
         },
         { owner: "root", group: "root", mode: 0o755 },
       ),
     },
     { owner: "root", group: "root", mode: 0o755 },
+  );
+}
+
+function buildChapterSnapshot(
+  id: string,
+  description: string,
+  practiceChildren: Record<string, VfsNode> = {},
+): VfsSnapshot {
+  return { id, description, root: createBaseRoot(practiceChildren) };
+}
+
+/**
+ * 章グループ(`Exercise.chapterId`)ごとの専用VFSスナップショット。
+ * `/home/study/practice`配下に、そのグループの演習だけが使うフィクスチャを持たせることで、
+ * 章間でのファイル名衝突や前提の矛盾を避ける(#89)。専用フィクスチャを持たない章
+ * (Ch1, 2-3, 7, 8, 10, 20, appendix等)は`default`にフォールバックする。
+ */
+export const vfsSnapshots: Record<string, VfsSnapshot> = {
+  "ch04-06": buildChapterSnapshot(
+    "ch04-06",
+    "Ch4〜6(ファイル操作の基本)演習用のVFS初期シードデータ",
+    createCh0406PracticeChildren(),
+  ),
+  ch09: buildChapterSnapshot(
+    "ch09",
+    "Ch9(パーミッション)演習用のVFS初期シードデータ",
+    createCh09PracticeChildren(),
+  ),
+  "ch11-14": buildChapterSnapshot(
+    "ch11-14",
+    "Ch11〜14(パイプラインとテキスト処理・正規表現)演習用のVFS初期シードデータ",
+    createCh1114PracticeChildren(),
+  ),
+  "ch15-17": buildChapterSnapshot(
+    "ch15-17",
+    "Ch15〜17(シェルスクリプト作成)演習用のVFS初期シードデータ",
+    createCh1517PracticeChildren(),
+  ),
+  ch18: buildChapterSnapshot(
+    "ch18",
+    "Ch18(アーカイブとバックアップ)演習用のVFS初期シードデータ",
+    createCh18PracticeChildren(),
+  ),
+  ch19: buildChapterSnapshot(
+    "ch19",
+    "Ch19(Gitによるバージョン管理)演習用のVFS初期シードデータ",
+    createCh19PracticeChildren(),
+  ),
+  default: buildChapterSnapshot(
+    "default",
+    "practice配下の専用フィクスチャを持たない演習(Ch1, 2-3, 7, 8, 10, 20, appendix等)用の共通VFS初期シードデータ",
   ),
 };
+
+/**
+ * 演習の`chapterId`(必要なら明示指定の`vfsSnapshotId`)から、使用すべきVFSスナップショットを解決する。
+ * 該当するスナップショットが登録されていない場合は`default`にフォールバックする。
+ */
+export function getVfsSnapshot(chapterId: string, vfsSnapshotId?: string): VfsSnapshot {
+  return vfsSnapshots[vfsSnapshotId ?? chapterId] ?? vfsSnapshots.default;
+}

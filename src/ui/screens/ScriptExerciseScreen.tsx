@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { exercises } from "../../content/exercises";
-import { phase1VfsSnapshot } from "../../content/vfsSeed";
+import { getVfsSnapshot } from "../../content/vfsSeed";
 import { gradeScriptTestCases } from "../../engine/grading";
 import type { ScriptTestCaseResult } from "../../engine/grading";
 import type { VfsUser } from "../../engine/vfs";
@@ -48,6 +48,7 @@ export function ScriptExerciseScreen({ route }: Props) {
   const initialCwd = exercise.initialCwd ?? HOME_DIR;
   const hints = exercise.hints ?? [];
   const testCases = exercise.testCases ?? [];
+  const snapshot = getVfsSnapshot(exercise.chapterId, exercise.vfsSnapshotId);
 
   function handleShowHint() {
     setVisibleHintCount((count) => Math.min(count + 1, hints.length));
@@ -58,7 +59,7 @@ export function ScriptExerciseScreen({ route }: Props) {
 
     const graded = gradeScriptTestCases(
       {
-        snapshot: phase1VfsSnapshot,
+        snapshot,
         user: STUDY_USER,
         cwd: initialCwd,
         env: { HOME: HOME_DIR, PATH: "/bin:/usr/bin" },
