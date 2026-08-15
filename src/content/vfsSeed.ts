@@ -1,6 +1,9 @@
 import { createDirectory, createFile } from "../engine/vfs";
 import type { VfsDirectoryNode, VfsNode, VfsSnapshot } from "../engine/vfs";
 
+/** `study`ユーザー所有の演習用ディレクトリに共通の所有者/パーミッション。 */
+const STUDY_DIR_OPTIONS = { owner: "study", group: "study", mode: 0o755 } as const;
+
 /**
  * `/bin`, `/usr/bin` 用のダミー実行ファイル一覧。
  * 実際のcontentは持たず、名前・サイズ・パーミッションのみを持つ(du/sort/ls演習で使用)。
@@ -258,14 +261,14 @@ const CH19_SYNC_MEMO_TXT = `同期演習用のメモ。
 function createCh0406PracticeChildren(): Record<string, VfsNode> {
   return {
     ch04_fs: createDirectory("ch04_fs", {
-      documents: createDirectory("documents", {}, { owner: "study", group: "study", mode: 0o755 }),
-      photos: createDirectory("photos", {}, { owner: "study", group: "study", mode: 0o755 }),
+      documents: createDirectory("documents", {}, STUDY_DIR_OPTIONS),
+      photos: createDirectory("photos", {}, STUDY_DIR_OPTIONS),
       "sample.txt": createFile("sample.txt", CH04_SAMPLE_TXT, {
         owner: "study",
         group: "study",
         mode: 0o644,
       }),
-    }, { owner: "study", group: "study", mode: 0o755 }),
+    }, STUDY_DIR_OPTIONS),
 
     ch05_fileops: createDirectory("ch05_fileops", {
       "memo.txt": createFile("memo.txt", CH05_MEMO_TXT, {
@@ -273,8 +276,8 @@ function createCh0406PracticeChildren(): Record<string, VfsNode> {
         group: "study",
         mode: 0o644,
       }),
-      backup: createDirectory("backup", {}, { owner: "study", group: "study", mode: 0o755 }),
-    }, { owner: "study", group: "study", mode: 0o755 }),
+      backup: createDirectory("backup", {}, STUDY_DIR_OPTIONS),
+    }, STUDY_DIR_OPTIONS),
 
     ch06_search: createDirectory("ch06_search", {
       deep: createDirectory("deep", {
@@ -286,11 +289,11 @@ function createCh0406PracticeChildren(): Record<string, VfsNode> {
                 group: "study",
                 mode: 0o644,
               }),
-            }, { owner: "study", group: "study", mode: 0o755 }),
-          }, { owner: "study", group: "study", mode: 0o755 }),
-        }, { owner: "study", group: "study", mode: 0o755 }),
-      }, { owner: "study", group: "study", mode: 0o755 }),
-    }, { owner: "study", group: "study", mode: 0o755 }),
+            }, STUDY_DIR_OPTIONS),
+          }, STUDY_DIR_OPTIONS),
+        }, STUDY_DIR_OPTIONS),
+      }, STUDY_DIR_OPTIONS),
+    }, STUDY_DIR_OPTIONS),
   };
 }
 
@@ -307,7 +310,7 @@ function createCh09PracticeChildren(): Record<string, VfsNode> {
         group: "study",
         mode: 0o644,
       }),
-    }, { owner: "study", group: "study", mode: 0o755 }),
+    }, STUDY_DIR_OPTIONS),
   };
 }
 
@@ -319,7 +322,7 @@ function createCh1114PracticeChildren(): Record<string, VfsNode> {
         group: "study",
         mode: 0o644,
       }),
-    }, { owner: "study", group: "study", mode: 0o755 }),
+    }, STUDY_DIR_OPTIONS),
 
     ch12_textproc: createDirectory("ch12_textproc", {
       "file1.txt": createFile("file1.txt", CH12_FILE1_TXT, {
@@ -342,7 +345,7 @@ function createCh1114PracticeChildren(): Record<string, VfsNode> {
         group: "study",
         mode: 0o644,
       }),
-    }, { owner: "study", group: "study", mode: 0o755 }),
+    }, STUDY_DIR_OPTIONS),
 
     ch13_regex: createDirectory("ch13_regex", {
       "drink.txt": createFile("drink.txt", CH13_DRINK_TXT, {
@@ -350,7 +353,7 @@ function createCh1114PracticeChildren(): Record<string, VfsNode> {
         group: "study",
         mode: 0o644,
       }),
-    }, { owner: "study", group: "study", mode: 0o755 }),
+    }, STUDY_DIR_OPTIONS),
 
     ch14_sedawk: createDirectory("ch14_sedawk", {
       "drink2.txt": createFile("drink2.txt", CH14_DRINK2_TXT, {
@@ -363,7 +366,7 @@ function createCh1114PracticeChildren(): Record<string, VfsNode> {
         group: "study",
         mode: 0o644,
       }),
-    }, { owner: "study", group: "study", mode: 0o755 }),
+    }, STUDY_DIR_OPTIONS),
   };
 }
 
@@ -372,7 +375,7 @@ function createCh1517PracticeChildren(): Record<string, VfsNode> {
     ch15_17_shellscript: createDirectory(
       "ch15_17_shellscript",
       {},
-      { owner: "study", group: "study", mode: 0o755 },
+      STUDY_DIR_OPTIONS,
     ),
   };
 }
@@ -397,9 +400,9 @@ function createCh18PracticeChildren(): Record<string, VfsNode> {
             group: "study",
             mode: 0o755,
           }),
-        }, { owner: "study", group: "study", mode: 0o755 }),
-      }, { owner: "study", group: "study", mode: 0o755 }),
-    }, { owner: "study", group: "study", mode: 0o755 }),
+        }, STUDY_DIR_OPTIONS),
+      }, STUDY_DIR_OPTIONS),
+    }, STUDY_DIR_OPTIONS),
   };
 }
 
@@ -418,7 +421,7 @@ function createCh19PracticeChildren(): Record<string, VfsNode> {
           group: "study",
           mode: 0o644,
         }),
-      }, { owner: "study", group: "study", mode: 0o755 }),
+      }, STUDY_DIR_OPTIONS),
 
       // branch/checkout/merge演習用。演習ごとにgit initからやり直す想定の作業ツリー。
       "branch-practice": createDirectory("branch-practice", {
@@ -427,7 +430,7 @@ function createCh19PracticeChildren(): Record<string, VfsNode> {
           group: "study",
           mode: 0o644,
         }),
-      }, { owner: "study", group: "study", mode: 0o755 }),
+      }, STUDY_DIR_OPTIONS),
 
       // remote/push/pull演習用。"../sync-practice-remote" を疑似リモートとして演習内でgit initする想定。
       "sync-practice": createDirectory("sync-practice", {
@@ -436,8 +439,8 @@ function createCh19PracticeChildren(): Record<string, VfsNode> {
           group: "study",
           mode: 0o644,
         }),
-      }, { owner: "study", group: "study", mode: 0o755 }),
-    }, { owner: "study", group: "study", mode: 0o755 }),
+      }, STUDY_DIR_OPTIONS),
+    }, STUDY_DIR_OPTIONS),
   };
 }
 
@@ -453,9 +456,9 @@ function createStudyHomeDirectory(practiceChildren: Record<string, VfsNode>): Vf
       group: "study",
       mode: 0o644,
     }),
-    bin: createDirectory("bin", {}, { owner: "study", group: "study", mode: 0o755 }),
-    practice: createDirectory("practice", practiceChildren, { owner: "study", group: "study", mode: 0o755 }),
-  }, { owner: "study", group: "study", mode: 0o755 });
+    bin: createDirectory("bin", {}, STUDY_DIR_OPTIONS),
+    practice: createDirectory("practice", practiceChildren, STUDY_DIR_OPTIONS),
+  }, STUDY_DIR_OPTIONS);
 }
 
 /**
