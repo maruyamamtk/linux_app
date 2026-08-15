@@ -1,6 +1,9 @@
 import { createDirectory, createFile } from "../engine/vfs";
 import type { VfsDirectoryNode, VfsNode, VfsSnapshot } from "../engine/vfs";
 
+/** `study`ユーザー所有の演習用ディレクトリに共通の所有者/パーミッション。 */
+const STUDY_DIR_OPTIONS = { owner: "study", group: "study", mode: 0o755 } as const;
+
 /**
  * `/bin`, `/usr/bin` 用のダミー実行ファイル一覧。
  * 実際のcontentは持たず、名前・サイズ・パーミッションのみを持つ(du/sort/ls演習で使用)。
@@ -255,17 +258,17 @@ const CH19_BRANCH_MEMO_TXT = `プロジェクトの概要をここに書く。
 const CH19_SYNC_MEMO_TXT = `同期演習用のメモ。
 `;
 
-function createPracticeDirectory(): VfsDirectoryNode {
-  return createDirectory("practice", {
+function createCh0406PracticeChildren(): Record<string, VfsNode> {
+  return {
     ch04_fs: createDirectory("ch04_fs", {
-      documents: createDirectory("documents", {}, { owner: "study", group: "study", mode: 0o755 }),
-      photos: createDirectory("photos", {}, { owner: "study", group: "study", mode: 0o755 }),
+      documents: createDirectory("documents", {}, STUDY_DIR_OPTIONS),
+      photos: createDirectory("photos", {}, STUDY_DIR_OPTIONS),
       "sample.txt": createFile("sample.txt", CH04_SAMPLE_TXT, {
         owner: "study",
         group: "study",
         mode: 0o644,
       }),
-    }, { owner: "study", group: "study", mode: 0o755 }),
+    }, STUDY_DIR_OPTIONS),
 
     ch05_fileops: createDirectory("ch05_fileops", {
       "memo.txt": createFile("memo.txt", CH05_MEMO_TXT, {
@@ -273,8 +276,8 @@ function createPracticeDirectory(): VfsDirectoryNode {
         group: "study",
         mode: 0o644,
       }),
-      backup: createDirectory("backup", {}, { owner: "study", group: "study", mode: 0o755 }),
-    }, { owner: "study", group: "study", mode: 0o755 }),
+      backup: createDirectory("backup", {}, STUDY_DIR_OPTIONS),
+    }, STUDY_DIR_OPTIONS),
 
     ch06_search: createDirectory("ch06_search", {
       deep: createDirectory("deep", {
@@ -286,12 +289,16 @@ function createPracticeDirectory(): VfsDirectoryNode {
                 group: "study",
                 mode: 0o644,
               }),
-            }, { owner: "study", group: "study", mode: 0o755 }),
-          }, { owner: "study", group: "study", mode: 0o755 }),
-        }, { owner: "study", group: "study", mode: 0o755 }),
-      }, { owner: "study", group: "study", mode: 0o755 }),
-    }, { owner: "study", group: "study", mode: 0o755 }),
+            }, STUDY_DIR_OPTIONS),
+          }, STUDY_DIR_OPTIONS),
+        }, STUDY_DIR_OPTIONS),
+      }, STUDY_DIR_OPTIONS),
+    }, STUDY_DIR_OPTIONS),
+  };
+}
 
+function createCh09PracticeChildren(): Record<string, VfsNode> {
+  return {
     ch09_permissions: createDirectory("ch09_permissions", {
       "secret.txt": createFile("secret.txt", CH09_SECRET_TXT, {
         owner: "study",
@@ -303,15 +310,19 @@ function createPracticeDirectory(): VfsDirectoryNode {
         group: "study",
         mode: 0o644,
       }),
-    }, { owner: "study", group: "study", mode: 0o755 }),
+    }, STUDY_DIR_OPTIONS),
+  };
+}
 
+function createCh1114PracticeChildren(): Record<string, VfsNode> {
+  return {
     ch11_pipeline: createDirectory("ch11_pipeline", {
       "output.log": createFile("output.log", CH11_OUTPUT_LOG, {
         owner: "study",
         group: "study",
         mode: 0o644,
       }),
-    }, { owner: "study", group: "study", mode: 0o755 }),
+    }, STUDY_DIR_OPTIONS),
 
     ch12_textproc: createDirectory("ch12_textproc", {
       "file1.txt": createFile("file1.txt", CH12_FILE1_TXT, {
@@ -334,7 +345,7 @@ function createPracticeDirectory(): VfsDirectoryNode {
         group: "study",
         mode: 0o644,
       }),
-    }, { owner: "study", group: "study", mode: 0o755 }),
+    }, STUDY_DIR_OPTIONS),
 
     ch13_regex: createDirectory("ch13_regex", {
       "drink.txt": createFile("drink.txt", CH13_DRINK_TXT, {
@@ -342,7 +353,7 @@ function createPracticeDirectory(): VfsDirectoryNode {
         group: "study",
         mode: 0o644,
       }),
-    }, { owner: "study", group: "study", mode: 0o755 }),
+    }, STUDY_DIR_OPTIONS),
 
     ch14_sedawk: createDirectory("ch14_sedawk", {
       "drink2.txt": createFile("drink2.txt", CH14_DRINK2_TXT, {
@@ -355,14 +366,22 @@ function createPracticeDirectory(): VfsDirectoryNode {
         group: "study",
         mode: 0o644,
       }),
-    }, { owner: "study", group: "study", mode: 0o755 }),
+    }, STUDY_DIR_OPTIONS),
+  };
+}
 
+function createCh1517PracticeChildren(): Record<string, VfsNode> {
+  return {
     ch15_17_shellscript: createDirectory(
       "ch15_17_shellscript",
       {},
-      { owner: "study", group: "study", mode: 0o755 },
+      STUDY_DIR_OPTIONS,
     ),
+  };
+}
 
+function createCh18PracticeChildren(): Record<string, VfsNode> {
+  return {
     ch18_archive: createDirectory("ch18_archive", {
       project: createDirectory("project", {
         "README.md": createFile("README.md", CH18_README_MD, {
@@ -381,10 +400,14 @@ function createPracticeDirectory(): VfsDirectoryNode {
             group: "study",
             mode: 0o755,
           }),
-        }, { owner: "study", group: "study", mode: 0o755 }),
-      }, { owner: "study", group: "study", mode: 0o755 }),
-    }, { owner: "study", group: "study", mode: 0o755 }),
+        }, STUDY_DIR_OPTIONS),
+      }, STUDY_DIR_OPTIONS),
+    }, STUDY_DIR_OPTIONS),
+  };
+}
 
+function createCh19PracticeChildren(): Record<string, VfsNode> {
+  return {
     ch19_git: createDirectory("ch19_git", {
       // git init/status/add/commit/log演習用。まだGitリポジトリ化されていない状態の作業ツリー。
       notes: createDirectory("notes", {
@@ -398,7 +421,7 @@ function createPracticeDirectory(): VfsDirectoryNode {
           group: "study",
           mode: 0o644,
         }),
-      }, { owner: "study", group: "study", mode: 0o755 }),
+      }, STUDY_DIR_OPTIONS),
 
       // branch/checkout/merge演習用。演習ごとにgit initからやり直す想定の作業ツリー。
       "branch-practice": createDirectory("branch-practice", {
@@ -407,7 +430,7 @@ function createPracticeDirectory(): VfsDirectoryNode {
           group: "study",
           mode: 0o644,
         }),
-      }, { owner: "study", group: "study", mode: 0o755 }),
+      }, STUDY_DIR_OPTIONS),
 
       // remote/push/pull演習用。"../sync-practice-remote" を疑似リモートとして演習内でgit initする想定。
       "sync-practice": createDirectory("sync-practice", {
@@ -416,12 +439,12 @@ function createPracticeDirectory(): VfsDirectoryNode {
           group: "study",
           mode: 0o644,
         }),
-      }, { owner: "study", group: "study", mode: 0o755 }),
-    }, { owner: "study", group: "study", mode: 0o755 }),
-  }, { owner: "study", group: "study", mode: 0o755 });
+      }, STUDY_DIR_OPTIONS),
+    }, STUDY_DIR_OPTIONS),
+  };
 }
 
-function createStudyHomeDirectory(): VfsDirectoryNode {
+function createStudyHomeDirectory(practiceChildren: Record<string, VfsNode>): VfsDirectoryNode {
   return createDirectory("study", {
     ".bashrc": createFile(".bashrc", STUDY_BASHRC_CONTENT, {
       owner: "study",
@@ -433,20 +456,19 @@ function createStudyHomeDirectory(): VfsDirectoryNode {
       group: "study",
       mode: 0o644,
     }),
-    bin: createDirectory("bin", {}, { owner: "study", group: "study", mode: 0o755 }),
-    practice: createPracticeDirectory(),
-  }, { owner: "study", group: "study", mode: 0o755 });
+    bin: createDirectory("bin", {}, STUDY_DIR_OPTIONS),
+    practice: createDirectory("practice", practiceChildren, STUDY_DIR_OPTIONS),
+  }, STUDY_DIR_OPTIONS);
 }
 
 /**
- * ターミナル演習全体(Phase1のCh4〜17、およびPhase2のCh18)で使う仮想ファイルシステムの初期スナップショット。
+ * 全スナップショットに共通するルート構造(`/bin`, `/usr/bin`, `/etc`, `/dev`, `/home/study`)を組み立てる。
  * `study`という非rootユーザーとして開始し、`/etc`・`/bin`はroot所有・書き込み不可にすることで、
  * Ch9(パーミッション)・sudo演習の権限エラーを自然に再現する(docs/requirements.md 4章参照)。
+ * `practiceChildren`にはスナップショットごとに異なる演習グループ専用のフィクスチャを渡す。
  */
-export const phase1VfsSnapshot: VfsSnapshot = {
-  id: "phase1-seed",
-  description: "Phase1(Ch4〜17)演習用のVFS初期シードデータ",
-  root: createDirectory(
+function createBaseRoot(practiceChildren: Record<string, VfsNode>): VfsDirectoryNode {
+  return createDirectory(
     "",
     {
       bin: createBinDirectory("bin", BIN_COMMANDS),
@@ -488,11 +510,70 @@ export const phase1VfsSnapshot: VfsSnapshot = {
       home: createDirectory(
         "home",
         {
-          study: createStudyHomeDirectory(),
+          study: createStudyHomeDirectory(practiceChildren),
         },
         { owner: "root", group: "root", mode: 0o755 },
       ),
     },
     { owner: "root", group: "root", mode: 0o755 },
+  );
+}
+
+function buildChapterSnapshot(
+  id: string,
+  description: string,
+  practiceChildren: Record<string, VfsNode> = {},
+): VfsSnapshot {
+  return { id, description, root: createBaseRoot(practiceChildren) };
+}
+
+/**
+ * 章グループ(`Exercise.chapterId`)ごとの専用VFSスナップショット。
+ * `/home/study/practice`配下に、そのグループの演習だけが使うフィクスチャを持たせることで、
+ * 章間でのファイル名衝突や前提の矛盾を避ける(#89)。専用フィクスチャを持たない章
+ * (Ch1, 2-3, 7, 8, 10, 20, appendix等)は`default`にフォールバックする。
+ */
+export const vfsSnapshots: Record<string, VfsSnapshot> = {
+  "ch04-06": buildChapterSnapshot(
+    "ch04-06",
+    "Ch4〜6(ファイル操作の基本)演習用のVFS初期シードデータ",
+    createCh0406PracticeChildren(),
+  ),
+  ch09: buildChapterSnapshot(
+    "ch09",
+    "Ch9(パーミッション)演習用のVFS初期シードデータ",
+    createCh09PracticeChildren(),
+  ),
+  "ch11-14": buildChapterSnapshot(
+    "ch11-14",
+    "Ch11〜14(パイプラインとテキスト処理・正規表現)演習用のVFS初期シードデータ",
+    createCh1114PracticeChildren(),
+  ),
+  "ch15-17": buildChapterSnapshot(
+    "ch15-17",
+    "Ch15〜17(シェルスクリプト作成)演習用のVFS初期シードデータ",
+    createCh1517PracticeChildren(),
+  ),
+  ch18: buildChapterSnapshot(
+    "ch18",
+    "Ch18(アーカイブとバックアップ)演習用のVFS初期シードデータ",
+    createCh18PracticeChildren(),
+  ),
+  ch19: buildChapterSnapshot(
+    "ch19",
+    "Ch19(Gitによるバージョン管理)演習用のVFS初期シードデータ",
+    createCh19PracticeChildren(),
+  ),
+  default: buildChapterSnapshot(
+    "default",
+    "practice配下の専用フィクスチャを持たない演習(Ch1, 2-3, 7, 8, 10, 20, appendix等)用の共通VFS初期シードデータ",
   ),
 };
+
+/**
+ * 演習の`chapterId`(必要なら明示指定の`vfsSnapshotId`)から、使用すべきVFSスナップショットを解決する。
+ * 該当するスナップショットが登録されていない場合は`default`にフォールバックする。
+ */
+export function getVfsSnapshot(chapterId: string, vfsSnapshotId?: string): VfsSnapshot {
+  return vfsSnapshots[vfsSnapshotId ?? chapterId] ?? vfsSnapshots.default;
+}

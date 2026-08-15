@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import type { CommandContext, MockProcess } from "../engine/commands";
+import type { CommandContext } from "../engine/commands";
 import { executeShellInput } from "../engine/interpreter";
 import { applyKey, bufferToFileText, createInitialState } from "../engine/vim";
 import type { VimKey } from "../engine/vim";
@@ -8,17 +8,19 @@ import { VirtualFileSystem } from "../engine/vfs";
 import type { VfsUser } from "../engine/vfs";
 import { chapters } from "./chapters";
 import { exercises } from "./exercises";
-import { phase1VfsSnapshot } from "./vfsSeed";
+import type { Exercise } from "./exercises";
+import { getVfsSnapshot } from "./vfsSeed";
 
 const STUDY_USER: VfsUser = { name: "study", groups: ["study"] };
 const HOME_DIR = "/home/study";
 
-function buildContext(initialCwd: string, processes?: MockProcess[]): CommandContext {
+function buildContext(exercise: Exercise): CommandContext {
+  const snapshot = getVfsSnapshot(exercise.chapterId, exercise.vfsSnapshotId);
   return {
-    vfs: new VirtualFileSystem(phase1VfsSnapshot, STUDY_USER),
-    cwd: initialCwd,
+    vfs: new VirtualFileSystem(snapshot, STUDY_USER),
+    cwd: exercise.initialCwd ?? HOME_DIR,
     env: { HOME: HOME_DIR, PATH: "/bin:/usr/bin" },
-    processes: (processes ?? []).map((process) => ({ ...process })),
+    processes: (exercise.processes ?? []).map((process) => ({ ...process })),
     ssh: {},
   };
 }
@@ -57,9 +59,10 @@ describe("chapters / exercises consistency", () => {
 describe("terminal exercises", () => {
   const terminalExercises = exercises.filter((exercise) => (exercise.type ?? "terminal") === "terminal");
 
-  it.each(terminalExercises)("$id: initialCwd is a valid directory in phase1VfsSnapshot", (exercise) => {
+  it.each(terminalExercises)("$id: initialCwd is a valid directory in its VFS snapshot", (exercise) => {
     const cwd = exercise.initialCwd ?? HOME_DIR;
-    const vfs = new VirtualFileSystem(phase1VfsSnapshot, STUDY_USER);
+    const snapshot = getVfsSnapshot(exercise.chapterId, exercise.vfsSnapshotId);
+    const vfs = new VirtualFileSystem(snapshot, STUDY_USER);
     expect(vfs.stat(cwd).type).toBe("directory");
   });
 
@@ -68,7 +71,7 @@ describe("terminal exercises", () => {
   });
 
   it.each(terminalExercises)("$id: the reference solution runs without an unknown-command/runtime error", (exercise) => {
-    const context = buildContext(exercise.initialCwd ?? HOME_DIR, exercise.processes);
+    const context = buildContext(exercise);
     let stderr = "";
     expect(() => {
       stderr = executeShellInput(exercise.referenceSolution ?? "", context).stderr;
@@ -84,9 +87,10 @@ describe("git exercises", () => {
     expect(gitExercises.filter((exercise) => exercise.chapterId === "ch19").length).toBeGreaterThan(0);
   });
 
-  it.each(gitExercises)("$id: initialCwd is a valid directory in phase1VfsSnapshot", (exercise) => {
+  it.each(gitExercises)("$id: initialCwd is a valid directory in its VFS snapshot", (exercise) => {
     const cwd = exercise.initialCwd ?? HOME_DIR;
-    const vfs = new VirtualFileSystem(phase1VfsSnapshot, STUDY_USER);
+    const snapshot = getVfsSnapshot(exercise.chapterId, exercise.vfsSnapshotId);
+    const vfs = new VirtualFileSystem(snapshot, STUDY_USER);
     expect(vfs.stat(cwd).type).toBe("directory");
   });
 
@@ -95,7 +99,7 @@ describe("git exercises", () => {
   });
 
   it.each(gitExercises)("$id: the reference solution runs without an unknown-command/runtime error", (exercise) => {
-    const context = buildContext(exercise.initialCwd ?? HOME_DIR, exercise.processes);
+    const context = buildContext(exercise);
     let stderr = "";
     expect(() => {
       stderr = executeShellInput(exercise.referenceSolution ?? "", context).stderr;
@@ -115,7 +119,7 @@ describe("script exercises", () => {
   for (const exercise of scriptExercises) {
     for (const testCase of exercise.testCases ?? []) {
       it(`${exercise.id} / ${testCase.id}: the reference solution runs cleanly`, () => {
-        const context = buildContext(exercise.initialCwd ?? HOME_DIR, exercise.processes);
+        const context = buildContext(exercise);
         context.stdin = testCase.stdin ?? "";
         let stderr = "";
         expect(() => {

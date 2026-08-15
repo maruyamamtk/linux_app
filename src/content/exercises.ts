@@ -17,6 +17,12 @@ export type Exercise = {
   /** ターミナルを開始するカレントディレクトリ。省略時は $HOME(/home/study)。 */
   initialCwd?: string;
   /**
+   * 使用するVFSスナップショットのキー(`vfsSeed.ts`の`vfsSnapshots`)。省略時は`chapterId`を
+   * キーとして解決される(`getVfsSnapshot`参照)。章をまたいで前提を共有したい場合や、
+   * 章内でさらに細かく専用フィクスチャを分けたい場合にのみ明示指定する。
+   */
+  vfsSnapshotId?: string;
+  /**
    * 「答え合わせ」でユーザーの入力と突き合わせる模範解答コマンド(複数行可)。type:"script"の場合は
    * 模範解答スクリプト全文。type:"vim"の場合は解説パネルに表示する模範解答のキー入力列(表示用、
    * 判定には使用しない。判定は`expectedFileText`との比較で行う)。
