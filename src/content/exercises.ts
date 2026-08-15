@@ -490,7 +490,8 @@ export const exercises: Exercise[] = [
     id: "ch09-ex05",
     chapterId: "ch09",
     type: "quiz",
-    prompt: "新しくファイルを作成すると、そのファイルの所有者(オーナー)は誰になりますか?",
+    prompt:
+      "新しくファイルを作成すると、そのファイルの所有者(オーナー)は誰になりますか?",
     choices: [
       "そのファイルを作成したユーザー",
       "常にrootユーザー",
@@ -498,7 +499,9 @@ export const exercises: Exercise[] = [
       "所有者は設定されない",
     ],
     correctChoiceIndex: 0,
-    hints: ["touchやリダイレクトでファイルを作れば、それを実行した自分がオーナーになります。"],
+    hints: [
+      "touchやリダイレクトでファイルを作れば、それを実行した自分がオーナーになります。",
+    ],
     explanation:
       "新しく作成されたファイルは、それを作成したユーザーが自動的にオーナー(所有者)になります。" +
       "例えばuser osumiがtouch testfile1を実行すると、testfile1のオーナーはosumiになります。",
@@ -528,7 +531,8 @@ export const exercises: Exercise[] = [
     id: "ch09-ex07",
     chapterId: "ch09",
     type: "quiz",
-    prompt: "自分が現在どのグループに所属しているかを確認するには、どのコマンドを使いますか?",
+    prompt:
+      "自分が現在どのグループに所属しているかを確認するには、どのコマンドを使いますか?",
     choices: ["groups", "chmod", "su", "sudo"],
     correctChoiceIndex: 0,
     hints: ["コマンド名がそのまま「グループ」の複数形になっています。"],
@@ -549,7 +553,9 @@ export const exercises: Exercise[] = [
       "どのグループにも所属しない",
     ],
     correctChoiceIndex: 0,
-    hints: ["「どのユーザーも最低1つのグループに所属していないといけない」という制約があります。"],
+    hints: [
+      "「どのユーザーも最低1つのグループに所属していないといけない」という制約があります。",
+    ],
     explanation:
       "ユーザーを新規作成する際に所属グループを特に指定しないと、そのユーザー名と同一のグループに" +
       "所属した状態で作成されます。すべてのユーザーは最低1つのグループへの所属が必須です。",
@@ -558,7 +564,8 @@ export const exercises: Exercise[] = [
     id: "ch09-ex09",
     chapterId: "ch09",
     type: "quiz",
-    prompt: "1人のユーザーが同時に所属できるグループの数について、正しい説明はどれですか?",
+    prompt:
+      "1人のユーザーが同時に所属できるグループの数について、正しい説明はどれですか?",
     choices: [
       "複数のグループに同時に所属できる",
       "常にちょうど1つのグループにしか所属できない",
@@ -597,7 +604,8 @@ export const exercises: Exercise[] = [
     id: "ch09-ex11",
     chapterId: "ch09",
     type: "quiz",
-    prompt: "ファイルのオーナー(所有者)が持つ権限について、正しい説明はどれですか?",
+    prompt:
+      "ファイルのオーナー(所有者)が持つ権限について、正しい説明はどれですか?",
     choices: [
       "そのファイルのパーミッション(アクセス権限)を自由に設定できる",
       "オーナーであっても、パーミッションの変更にはsu/sudoが必須である",
@@ -697,7 +705,9 @@ export const exercises: Exercise[] = [
       "そのファイルがシンボリックリンクであること",
     ],
     correctChoiceIndex: 0,
-    hints: ["許可されている操作はr/w/xの記号で、許可されていない操作は別の記号で表示されます。"],
+    hints: [
+      "許可されている操作はr/w/xの記号で、許可されていない操作は別の記号で表示されます。",
+    ],
     explanation:
       "ls -l のパーミッション表示では、操作が許可されているときは「r」「w」「x」の記号が表示され、" +
       "許可されていないときはその位置に「-」が表示されます。",
@@ -706,7 +716,8 @@ export const exercises: Exercise[] = [
     id: "ch09-ex17",
     chapterId: "ch09",
     type: "quiz",
-    prompt: "ファイルのパーミッションが `rwxr-xr-x` のとき、正しい内訳はどれですか?",
+    prompt:
+      "ファイルのパーミッションが `rwxr-xr-x` のとき、正しい内訳はどれですか?",
     choices: [
       "オーナー: 読み書き実行すべて可 / グループ: 読み取りと実行のみ可 / その他: 読み取りと実行のみ可",
       "オーナー: 読み取りのみ可 / グループ: 読み書き実行すべて可 / その他: 読み書き実行すべて可",
@@ -714,7 +725,9 @@ export const exercises: Exercise[] = [
       "オーナー: 読み書き実行すべて可 / グループ・その他: 一切の操作が不可",
     ],
     correctChoiceIndex: 0,
-    hints: ["rwxr-xr-x は3文字ずつ「オーナー」「グループ」「その他」のブロックに分かれています。"],
+    hints: [
+      "rwxr-xr-x は3文字ずつ「オーナー」「グループ」「その他」のブロックに分かれています。",
+    ],
     explanation:
       "9文字は3文字ずつ1つのブロックになっていて、それぞれが「オーナー」「グループ」「その他のユーザー」に" +
       "対するパーミッションを意味します。rwxr-xr-x は、オーナーがrwxすべて、グループとその他がr-x" +
@@ -726,7 +739,12 @@ export const exercises: Exercise[] = [
     type: "quiz",
     prompt:
       "ファイルのパーミッションが `rw-r--r--` のとき、その他のユーザーができる操作はどれですか?",
-    choices: ["読み取りのみ", "読み書き両方", "読み書き実行すべて", "何もできない"],
+    choices: [
+      "読み取りのみ",
+      "読み書き両方",
+      "読み書き実行すべて",
+      "何もできない",
+    ],
     correctChoiceIndex: 0,
     hints: ["末尾3文字「r--」がその他のユーザーに対するパーミッションです。"],
     explanation:
@@ -781,7 +799,12 @@ export const exercises: Exercise[] = [
     type: "quiz",
     prompt:
       "ファイルのパーミッションが `644` (数値モード)のとき、その他のユーザーができる操作はどれですか?",
-    choices: ["読み取りのみ", "読み書き両方", "読み書き実行すべて", "何もできない"],
+    choices: [
+      "読み取りのみ",
+      "読み書き両方",
+      "読み書き実行すべて",
+      "何もできない",
+    ],
     correctChoiceIndex: 0,
     hints: [
       "644を8進数の各桁に分解すると 6,4,4 になり、それぞれオーナー・グループ・その他に対応します。",
@@ -803,7 +826,9 @@ export const exercises: Exercise[] = [
       "読み書き実行すべて",
     ],
     correctChoiceIndex: 0,
-    hints: ["600を8進数の各桁に分解すると 6,0,0 です。グループとその他の桁が0ということは…?"],
+    hints: [
+      "600を8進数の各桁に分解すると 6,0,0 です。グループとその他の桁が0ということは…?",
+    ],
     explanation:
       "600 はオーナーが6(rw-)、グループとその他がともに0(---)です。オーナー以外のユーザーは読み取り・" +
       "書き込み・実行のいずれもできません。パスワードや秘密鍵など、自分だけが見られればよいファイルに" +
@@ -815,7 +840,8 @@ export const exercises: Exercise[] = [
     id: "ch09-ex23",
     chapterId: "ch09",
     type: "quiz",
-    prompt: "ディレクトリに対する「読み取り(r)」権限が意味することはどれですか?",
+    prompt:
+      "ディレクトリに対する「読み取り(r)」権限が意味することはどれですか?",
     choices: [
       "そのディレクトリに含まれるファイル一覧を取得できる(lsができる)",
       "そのディレクトリ内のファイルを自由に実行できる",
@@ -834,7 +860,8 @@ export const exercises: Exercise[] = [
     id: "ch09-ex24",
     chapterId: "ch09",
     type: "quiz",
-    prompt: "ディレクトリに対する「書き込み(w)」権限が意味することはどれですか?",
+    prompt:
+      "ディレクトリに対する「書き込み(w)」権限が意味することはどれですか?",
     choices: [
       "そのディレクトリの下にファイル・ディレクトリを作成・削除できる",
       "そのディレクトリに含まれるファイルの一覧を取得できる",
@@ -859,7 +886,9 @@ export const exercises: Exercise[] = [
       "そのディレクトリを圧縮・アーカイブできる",
     ],
     correctChoiceIndex: 0,
-    hints: ["ディレクトリの実行権限は、ファイルの実行権限とは全く違う意味を持ちます。"],
+    hints: [
+      "ディレクトリの実行権限は、ファイルの実行権限とは全く違う意味を持ちます。",
+    ],
     explanation:
       "ディレクトリの実行(x)権限は、そのディレクトリをカレントディレクトリにできる(cdで移動できる)ことを" +
       "意味します。ディレクトリ下のファイルの読み書きを行うためにも、この実行権限が必要です。",
@@ -877,7 +906,9 @@ export const exercises: Exercise[] = [
       "権限は無視され、常に一覧が表示される",
     ],
     correctChoiceIndex: 0,
-    hints: ["ディレクトリの中身の一覧取得には、そのディレクトリ自体への読み取り権限が必要です。"],
+    hints: [
+      "ディレクトリの中身の一覧取得には、そのディレクトリ自体への読み取り権限が必要です。",
+    ],
     explanation:
       "ディレクトリに読み取り(r)権限が設定されていない場合、lsコマンドはエラーとなり、そのディレクトリの" +
       "ファイル一覧を取得することができません。",
@@ -969,7 +1000,8 @@ export const exercises: Exercise[] = [
     id: "ch09-ex31",
     chapterId: "ch09",
     type: "quiz",
-    prompt: "ls -ld dir1 のように、-lオプションに加えて-dオプションを付ける目的は何ですか?",
+    prompt:
+      "ls -ld dir1 のように、-lオプションに加えて-dオプションを付ける目的は何ですか?",
     choices: [
       "ディレクトリの「中身」ではなく、ディレクトリ自体の情報(パーミッション等)を表示するため",
       "ディレクトリの中身を再帰的にすべて表示するため",
@@ -977,7 +1009,9 @@ export const exercises: Exercise[] = [
       "ディレクトリの中身を日付順にソートして表示するため",
     ],
     correctChoiceIndex: 0,
-    hints: ["-lだけだとディレクトリ「の中にあるもの」の詳細一覧になってしまいます。"],
+    hints: [
+      "-lだけだとディレクトリ「の中にあるもの」の詳細一覧になってしまいます。",
+    ],
     explanation:
       "-dオプションを付けると、ディレクトリの「中身」ではなく、そのディレクトリ自体の情報(パーミッションや" +
       "オーナーなど)を表示できます。ディレクトリ自身のパーミッションを確認したいときによく使われます。",
@@ -1011,7 +1045,12 @@ export const exercises: Exercise[] = [
     type: "quiz",
     prompt:
       "ターミナルで `ls -l` を実行すると、次のように表示されました。\n`-rw-r--r-- study study    32 memo.txt`\nこのファイルにその他のユーザーができる操作はどれですか?",
-    choices: ["読み取りのみ", "読み書き両方", "読み書き実行すべて", "何もできない"],
+    choices: [
+      "読み取りのみ",
+      "読み書き両方",
+      "読み書き実行すべて",
+      "何もできない",
+    ],
     correctChoiceIndex: 0,
     hints: ["末尾3文字「r--」がその他のユーザーへのパーミッションです。"],
     explanation:
@@ -1023,7 +1062,12 @@ export const exercises: Exercise[] = [
     type: "quiz",
     prompt:
       "ターミナルで `ls -l` を実行すると、次のように表示されました。\n`-rwx------ study study   120 backup.sh`\nこのファイルの所有者ができる操作はどれですか?",
-    choices: ["読み書き実行すべて", "読み取りのみ", "読み書きのみ(実行不可)", "何もできない"],
+    choices: [
+      "読み書き実行すべて",
+      "読み取りのみ",
+      "読み書きのみ(実行不可)",
+      "何もできない",
+    ],
     correctChoiceIndex: 0,
     hints: ["先頭3文字「rwx」がオーナーへのパーミッションです。"],
     explanation:
@@ -1053,7 +1097,12 @@ export const exercises: Exercise[] = [
     type: "quiz",
     prompt:
       "ターミナルで `ls -l` を実行すると、次のように表示されました。\n`-rw-rw---- study study    45 shared.txt`\nこのファイルのグループに属するユーザーができる操作はどれですか?",
-    choices: ["読み書き両方(実行は不可)", "読み取りのみ", "読み書き実行すべて", "何もできない"],
+    choices: [
+      "読み書き両方(実行は不可)",
+      "読み取りのみ",
+      "読み書き実行すべて",
+      "何もできない",
+    ],
     correctChoiceIndex: 0,
     hints: ["中央3文字「rw-」がグループへのパーミッションです。"],
     explanation:
@@ -1081,7 +1130,8 @@ export const exercises: Exercise[] = [
     id: "ch09-ex38",
     chapterId: "ch09",
     type: "quiz",
-    prompt: "ls -l の出力の先頭1文字が `-` (ハイフン)の場合、何を表していますか?",
+    prompt:
+      "ls -l の出力の先頭1文字が `-` (ハイフン)の場合、何を表していますか?",
     choices: [
       "通常のファイルであること",
       "ディレクトリであること",
@@ -1097,7 +1147,8 @@ export const exercises: Exercise[] = [
     id: "ch09-ex39",
     chapterId: "ch09",
     type: "quiz",
-    prompt: "パーミッションの記号表現 `rwxr-x---` を、数値モードで表すと何になりますか?",
+    prompt:
+      "パーミッションの記号表現 `rwxr-x---` を、数値モードで表すと何になりますか?",
     choices: ["750", "755", "700", "705"],
     correctChoiceIndex: 0,
     hints: ["rwx=4+2+1=7、r-x=4+1=5、---=0 を3桁並べます。"],
@@ -1107,7 +1158,8 @@ export const exercises: Exercise[] = [
     id: "ch09-ex40",
     chapterId: "ch09",
     type: "quiz",
-    prompt: "パーミッションの記号表現 `rw-rw-rw-` を、数値モードで表すと何になりますか?",
+    prompt:
+      "パーミッションの記号表現 `rw-rw-rw-` を、数値モードで表すと何になりますか?",
     choices: ["666", "664", "660", "777"],
     correctChoiceIndex: 0,
     hints: ["rw-=4+2=6 が3つ並びます。"],
@@ -1138,7 +1190,8 @@ export const exercises: Exercise[] = [
   {
     id: "ch09-ex43",
     chapterId: "ch09",
-    prompt: "memo.txt(644)を、オーナーだけが読み書きできる 600 に変更してください(数値モード)。",
+    prompt:
+      "memo.txt(644)を、オーナーだけが読み書きできる 600 に変更してください(数値モード)。",
     initialCwd: "/home/study/practice/ch09_permissions",
     referenceSolution: "chmod 600 memo.txt",
     hints: ["数値モードでは chmod <8進数> <ファイル名> の形式で指定します。"],
@@ -1148,17 +1201,21 @@ export const exercises: Exercise[] = [
   {
     id: "ch09-ex44",
     chapterId: "ch09",
-    prompt: "diary.txt(600)を、誰でも読み取れる 644 に変更してください(数値モード)。",
+    prompt:
+      "diary.txt(600)を、誰でも読み取れる 644 に変更してください(数値モード)。",
     initialCwd: "/home/study/practice/ch09_permissions",
     referenceSolution: "chmod 644 diary.txt",
-    hints: ["644はオーナーがrw-、グループ・その他がr--の一般的なファイル権限です。"],
+    hints: [
+      "644はオーナーがrw-、グループ・その他がr--の一般的なファイル権限です。",
+    ],
     explanation:
       "chmod 644 diary.txt により、オーナーは読み書き可能、グループとその他は読み取りのみ可能になります。",
   },
   {
     id: "ch09-ex45",
     chapterId: "ch09",
-    prompt: "todo.txt(664)を、その他のユーザーが書き込めない 644 に変更してください(数値モード)。",
+    prompt:
+      "todo.txt(664)を、その他のユーザーが書き込めない 644 に変更してください(数値モード)。",
     initialCwd: "/home/study/practice/ch09_permissions",
     referenceSolution: "chmod 644 todo.txt",
     hints: ["664と644の違いは、グループの書き込み権限の有無です。"],
@@ -1168,7 +1225,8 @@ export const exercises: Exercise[] = [
   {
     id: "ch09-ex46",
     chapterId: "ch09",
-    prompt: "report.csv(640)を、オーナーだけが読み書きできる 600 に変更してください(数値モード)。",
+    prompt:
+      "report.csv(640)を、オーナーだけが読み書きできる 600 に変更してください(数値モード)。",
     initialCwd: "/home/study/practice/ch09_permissions",
     referenceSolution: "chmod 600 report.csv",
     hints: ["現在はグループに読み取り権限(4)が与えられています。"],
@@ -1183,7 +1241,8 @@ export const exercises: Exercise[] = [
     initialCwd: "/home/study/practice/ch09_permissions",
     referenceSolution: "chmod 640 notes.md",
     hints: ["640は オーナー6・グループ4・その他0 です。"],
-    explanation: "chmod 640 notes.md により、グループに読み取り権限(r)が追加されます。",
+    explanation:
+      "chmod 640 notes.md により、グループに読み取り権限(r)が追加されます。",
   },
   {
     id: "ch09-ex48",
@@ -1199,10 +1258,13 @@ export const exercises: Exercise[] = [
   {
     id: "ch09-ex49",
     chapterId: "ch09",
-    prompt: "install.sh(644)を、誰でも実行できる 755 に変更してください(数値モード)。",
+    prompt:
+      "install.sh(644)を、誰でも実行できる 755 に変更してください(数値モード)。",
     initialCwd: "/home/study/practice/ch09_permissions",
     referenceSolution: "chmod 755 install.sh",
-    hints: ["755はオーナーがrwx、グループ・その他がr-xです。実行スクリプトの典型的な権限です。"],
+    hints: [
+      "755はオーナーがrwx、グループ・その他がr-xです。実行スクリプトの典型的な権限です。",
+    ],
     explanation:
       "chmod 755 install.sh により、オーナーは読み書き実行すべて、グループとその他は読み取りと実行が可能になります。",
   },
@@ -1214,12 +1276,14 @@ export const exercises: Exercise[] = [
     initialCwd: "/home/study/practice/ch09_permissions",
     referenceSolution: "chmod 750 deploy.sh",
     hints: ["750はオーナーがrwx、グループがr-x、その他が---です。"],
-    explanation: "chmod 750 deploy.sh により、グループに読み取りと実行の権限が追加されます。",
+    explanation:
+      "chmod 750 deploy.sh により、グループに読み取りと実行の権限が追加されます。",
   },
   {
     id: "ch09-ex51",
     chapterId: "ch09",
-    prompt: "backup.sh(750)を、オーナーだけがアクセスできる 700 に変更してください(数値モード)。",
+    prompt:
+      "backup.sh(750)を、オーナーだけがアクセスできる 700 に変更してください(数値モード)。",
     initialCwd: "/home/study/practice/ch09_permissions",
     referenceSolution: "chmod 700 backup.sh",
     hints: ["700はオーナーのみrwxで、グループ・その他は---です。"],
@@ -1229,11 +1293,13 @@ export const exercises: Exercise[] = [
   {
     id: "ch09-ex52",
     chapterId: "ch09",
-    prompt: "run.sh(600)に、オーナーの実行権限を追加した 700 に変更してください(数値モード)。",
+    prompt:
+      "run.sh(600)に、オーナーの実行権限を追加した 700 に変更してください(数値モード)。",
     initialCwd: "/home/study/practice/ch09_permissions",
     referenceSolution: "chmod 700 run.sh",
     hints: ["数値モードのオーナー桁は 読み取り4+書き込み2+実行1=7 です。"],
-    explanation: "chmod 700 run.sh により、オーナーに実行権限(x)が追加され、rwxすべてが揃います。",
+    explanation:
+      "chmod 700 run.sh により、オーナーに実行権限(x)が追加され、rwxすべてが揃います。",
   },
   {
     id: "ch09-ex53",
@@ -1243,24 +1309,30 @@ export const exercises: Exercise[] = [
     initialCwd: "/home/study/practice/ch09_permissions",
     referenceSolution: "chmod 660 config.yml",
     hints: ["660の最後の桁は0(---)です。"],
-    explanation: "chmod 660 config.yml により、その他のユーザーの読み取り権限が削除されます。",
+    explanation:
+      "chmod 660 config.yml により、その他のユーザーの読み取り権限が削除されます。",
   },
   {
     id: "ch09-ex54",
     chapterId: "ch09",
-    prompt: "app.conf(644)を、その他のユーザーが読み取れない 640 に変更してください(数値モード)。",
+    prompt:
+      "app.conf(644)を、その他のユーザーが読み取れない 640 に変更してください(数値モード)。",
     initialCwd: "/home/study/practice/ch09_permissions",
     referenceSolution: "chmod 640 app.conf",
     hints: ["640の最後の桁は0(---)です。"],
-    explanation: "chmod 640 app.conf により、その他のユーザーの読み取り権限が削除されます。",
+    explanation:
+      "chmod 640 app.conf により、その他のユーザーの読み取り権限が削除されます。",
   },
   {
     id: "ch09-ex55",
     chapterId: "ch09",
-    prompt: "debug.log(666)を、書き込みは所有者だけに限定した 644 に変更してください(数値モード)。",
+    prompt:
+      "debug.log(666)を、書き込みは所有者だけに限定した 644 に変更してください(数値モード)。",
     initialCwd: "/home/study/practice/ch09_permissions",
     referenceSolution: "chmod 644 debug.log",
-    hints: ["666は誰でも読み書きできてしまう、あまり安全とは言えないパーミッションです。"],
+    hints: [
+      "666は誰でも読み書きできてしまう、あまり安全とは言えないパーミッションです。",
+    ],
     explanation:
       "chmod 644 debug.log により、グループとその他の書き込み権限が削除され、書き込みはオーナーのみに限定されます。",
   },
@@ -1321,7 +1393,8 @@ export const exercises: Exercise[] = [
     initialCwd: "/home/study/practice/ch09_permissions",
     referenceSolution: "chmod 640 draft.txt",
     hints: ["640はグループが読み取りのみ(r--)可能です。"],
-    explanation: "chmod 640 draft.txt により、グループに読み取り権限が追加されます。",
+    explanation:
+      "chmod 640 draft.txt により、グループに読み取り権限が追加されます。",
   },
   {
     id: "ch09-ex61",
@@ -1331,7 +1404,8 @@ export const exercises: Exercise[] = [
     initialCwd: "/home/study/practice/ch09_permissions",
     referenceSolution: "chmod 666 shared.txt",
     hints: ["666はオーナー・グループ・その他すべてがrw-です。"],
-    explanation: "chmod 666 shared.txt により、その他のユーザーにも書き込み権限が追加されます。",
+    explanation:
+      "chmod 666 shared.txt により、その他のユーザーにも書き込み権限が追加されます。",
   },
   {
     id: "ch09-ex62",
@@ -1341,7 +1415,8 @@ export const exercises: Exercise[] = [
     initialCwd: "/home/study/practice/ch09_permissions",
     referenceSolution: "chmod 660 teamnotes.txt",
     hints: ["660はオーナー・グループがrw-、その他が---です。"],
-    explanation: "chmod 660 teamnotes.txt により、グループに書き込み権限が追加されます。",
+    explanation:
+      "chmod 660 teamnotes.txt により、グループに書き込み権限が追加されます。",
   },
   {
     id: "ch09-ex63",
@@ -1357,7 +1432,8 @@ export const exercises: Exercise[] = [
   {
     id: "ch09-ex64",
     chapterId: "ch09",
-    prompt: "script.sh(644)を、誰でも実行できる 755 に変更してください(数値モード)。",
+    prompt:
+      "script.sh(644)を、誰でも実行できる 755 に変更してください(数値モード)。",
     initialCwd: "/home/study/practice/ch09_permissions",
     referenceSolution: "chmod 755 script.sh",
     hints: ["755はスクリプトファイルの実行権限として典型的な設定です。"],
@@ -1406,7 +1482,9 @@ export const exercises: Exercise[] = [
       "memo.txt について、グループに書き込み権限を追加してください(シンボルモード、他は変更しないこと)。",
     initialCwd: "/home/study/practice/ch09_permissions",
     referenceSolution: "chmod g+w memo.txt",
-    hints: ["シンボルモードは 対象(u/g/o/a)+演算子(+/-/=)+権限(r/w/x) の形式です。"],
+    hints: [
+      "シンボルモードは 対象(u/g/o/a)+演算子(+/-/=)+権限(r/w/x) の形式です。",
+    ],
     explanation:
       "chmod g+w memo.txt は、グループ(g)に書き込み権限(w)を追加(+)します。オーナー・その他には影響しません。",
   },
@@ -1429,25 +1507,32 @@ export const exercises: Exercise[] = [
     initialCwd: "/home/study/practice/ch09_permissions",
     referenceSolution: "chmod g-w todo.txt",
     hints: ["禁止する場合は演算子に - を使います。"],
-    explanation: "chmod g-w todo.txt は、グループ(g)の書き込み権限(w)だけを禁止(-)します。",
+    explanation:
+      "chmod g-w todo.txt は、グループ(g)の書き込み権限(w)だけを禁止(-)します。",
   },
   {
     id: "ch09-ex71",
     chapterId: "ch09",
-    prompt: "report.csv について、グループの読み取り権限を禁止してください(シンボルモード)。",
+    prompt:
+      "report.csv について、グループの読み取り権限を禁止してください(シンボルモード)。",
     initialCwd: "/home/study/practice/ch09_permissions",
     referenceSolution: "chmod g-r report.csv",
-    hints: ["グループにはすでに読み取り権限が与えられています。それを禁止する操作です。"],
-    explanation: "chmod g-r report.csv は、グループ(g)の読み取り権限(r)を禁止します。",
+    hints: [
+      "グループにはすでに読み取り権限が与えられています。それを禁止する操作です。",
+    ],
+    explanation:
+      "chmod g-r report.csv は、グループ(g)の読み取り権限(r)を禁止します。",
   },
   {
     id: "ch09-ex72",
     chapterId: "ch09",
-    prompt: "notes.md について、オーナーに実行権限を追加してください(シンボルモード)。",
+    prompt:
+      "notes.md について、オーナーに実行権限を追加してください(シンボルモード)。",
     initialCwd: "/home/study/practice/ch09_permissions",
     referenceSolution: "chmod u+x notes.md",
     hints: ["オーナーはuで指定します。"],
-    explanation: "chmod u+x notes.md は、オーナー(u)に実行権限(x)を追加します。",
+    explanation:
+      "chmod u+x notes.md は、オーナー(u)に実行権限(x)を追加します。",
   },
   {
     id: "ch09-ex73",
@@ -1456,7 +1541,9 @@ export const exercises: Exercise[] = [
       "readonly.txt は誤って上書きされないよう444に設定していましたが、オーナーだけは編集できるようにしたくなりました。オーナーの書き込み権限を追加してください(シンボルモード)。",
     initialCwd: "/home/study/practice/ch09_permissions",
     referenceSolution: "chmod u+w readonly.txt",
-    hints: ["対象をuにすれば、グループ・その他の読み取り専用状態は変わりません。"],
+    hints: [
+      "対象をuにすれば、グループ・その他の読み取り専用状態は変わりません。",
+    ],
     explanation:
       "chmod u+w readonly.txt は、オーナー(u)にだけ書き込み権限(w)を追加します。グループ・その他は引き続き読み取り専用のままです。",
   },
@@ -1490,16 +1577,19 @@ export const exercises: Exercise[] = [
     initialCwd: "/home/study/practice/ch09_permissions",
     referenceSolution: "chmod o+r backup.sh",
     hints: ["対象をoにすれば、グループの実行権限はそのまま残ります。"],
-    explanation: "chmod o+r backup.sh は、その他(o)に読み取り権限(r)を追加します。",
+    explanation:
+      "chmod o+r backup.sh は、その他(o)に読み取り権限(r)を追加します。",
   },
   {
     id: "ch09-ex77",
     chapterId: "ch09",
-    prompt: "run.sh について、グループに読み取り権限を追加してください(シンボルモード)。",
+    prompt:
+      "run.sh について、グループに読み取り権限を追加してください(シンボルモード)。",
     initialCwd: "/home/study/practice/ch09_permissions",
     referenceSolution: "chmod g+r run.sh",
     hints: ["対象をgにすれば、その他のユーザーには権限が付与されません。"],
-    explanation: "chmod g+r run.sh は、グループ(g)に読み取り権限(r)を追加します。",
+    explanation:
+      "chmod g+r run.sh は、グループ(g)に読み取り権限(r)を追加します。",
   },
   {
     id: "ch09-ex78",
@@ -1509,16 +1599,19 @@ export const exercises: Exercise[] = [
     initialCwd: "/home/study/practice/ch09_permissions",
     referenceSolution: "chmod o-r config.yml",
     hints: ["禁止する演算子は - です。"],
-    explanation: "chmod o-r config.yml は、その他(o)の読み取り権限(r)を禁止します。",
+    explanation:
+      "chmod o-r config.yml は、その他(o)の読み取り権限(r)を禁止します。",
   },
   {
     id: "ch09-ex79",
     chapterId: "ch09",
-    prompt: "app.conf について、その他のユーザーの読み取り権限を禁止してください(シンボルモード)。",
+    prompt:
+      "app.conf について、その他のユーザーの読み取り権限を禁止してください(シンボルモード)。",
     initialCwd: "/home/study/practice/ch09_permissions",
     referenceSolution: "chmod o-r app.conf",
     hints: ["対象をoにすれば、グループの読み取り権限はそのまま残ります。"],
-    explanation: "chmod o-r app.conf は、その他(o)の読み取り権限(r)だけを禁止します。",
+    explanation:
+      "chmod o-r app.conf は、その他(o)の読み取り権限(r)だけを禁止します。",
   },
   {
     id: "ch09-ex80",
@@ -1528,7 +1621,8 @@ export const exercises: Exercise[] = [
     initialCwd: "/home/study/practice/ch09_permissions",
     referenceSolution: "chmod go-w debug.log",
     hints: ["対象はgoとまとめて指定できます。"],
-    explanation: "chmod go-w debug.log は、グループとその他(go)の書き込み権限(w)を禁止します。",
+    explanation:
+      "chmod go-w debug.log は、グループとその他(go)の書き込み権限(w)を禁止します。",
   },
   {
     id: "ch09-ex81",
@@ -1538,7 +1632,8 @@ export const exercises: Exercise[] = [
     initialCwd: "/home/study/practice/ch09_permissions",
     referenceSolution: "chmod o-r access.log",
     hints: ["対象をoにすれば、グループの読み取り権限には影響しません。"],
-    explanation: "chmod o-r access.log は、その他(o)の読み取り権限(r)を禁止します。",
+    explanation:
+      "chmod o-r access.log は、その他(o)の読み取り権限(r)を禁止します。",
   },
   {
     id: "ch09-ex82",
@@ -1565,11 +1660,13 @@ export const exercises: Exercise[] = [
   {
     id: "ch09-ex84",
     chapterId: "ch09",
-    prompt: "draft.txt について、グループに読み取り権限を追加してください(シンボルモード)。",
+    prompt:
+      "draft.txt について、グループに読み取り権限を追加してください(シンボルモード)。",
     initialCwd: "/home/study/practice/ch09_permissions",
     referenceSolution: "chmod g+r draft.txt",
     hints: ["対象をgにすれば、その他のユーザーには権限が付与されません。"],
-    explanation: "chmod g+r draft.txt は、グループ(g)に読み取り権限(r)を追加します。",
+    explanation:
+      "chmod g+r draft.txt は、グループ(g)に読み取り権限(r)を追加します。",
   },
   {
     id: "ch09-ex85",
@@ -1585,19 +1682,24 @@ export const exercises: Exercise[] = [
   {
     id: "ch09-ex86",
     chapterId: "ch09",
-    prompt: "teamnotes.txt について、グループに書き込み権限を追加してください(シンボルモード)。",
+    prompt:
+      "teamnotes.txt について、グループに書き込み権限を追加してください(シンボルモード)。",
     initialCwd: "/home/study/practice/ch09_permissions",
     referenceSolution: "chmod g+w teamnotes.txt",
     hints: ["現在グループには読み取り権限のみが与えられています。"],
-    explanation: "chmod g+w teamnotes.txt は、グループ(g)に書き込み権限(w)を追加します。",
+    explanation:
+      "chmod g+w teamnotes.txt は、グループ(g)に書き込み権限(w)を追加します。",
   },
   {
     id: "ch09-ex87",
     chapterId: "ch09",
-    prompt: "secret.txt について、オーナーの書き込み権限だけを禁止してください(シンボルモード)。",
+    prompt:
+      "secret.txt について、オーナーの書き込み権限だけを禁止してください(シンボルモード)。",
     initialCwd: "/home/study/practice/ch09_permissions",
     referenceSolution: "chmod u-w secret.txt",
-    hints: ["対象をuにすれば、グループ・その他(元々権限なし)には影響しません。"],
+    hints: [
+      "対象をuにすれば、グループ・その他(元々権限なし)には影響しません。",
+    ],
     explanation:
       "chmod u-w secret.txt は、オーナー(u)の書き込み権限(w)を禁止します。オーナー自身も読み取り専用になります。",
   },
@@ -1608,7 +1710,9 @@ export const exercises: Exercise[] = [
       "script.sh について、オーナーは変更せず、グループとその他に実行権限を追加してください(シンボルモード)。",
     initialCwd: "/home/study/practice/ch09_permissions",
     referenceSolution: "chmod go+x script.sh",
-    hints: ["対象はgoとまとめて指定できます。オーナーの権限(rw-)には影響しません。"],
+    hints: [
+      "対象はgoとまとめて指定できます。オーナーの権限(rw-)には影響しません。",
+    ],
     explanation:
       "chmod go+x script.sh は、グループとその他(go)に実行権限(x)だけを追加します。オーナーはrw-のままなので、結果はrw-r-xr-xになります。",
   },
@@ -1631,7 +1735,8 @@ export const exercises: Exercise[] = [
     initialCwd: "/home/study/practice/ch09_permissions",
     referenceSolution: "chmod go= private_dir",
     hints: ["=の後に権限記号を書かないと「権限なし」を意味します。"],
-    explanation: "chmod go= private_dir は、グループとその他(go)の権限をすべて禁止(空)にします。",
+    explanation:
+      "chmod go= private_dir は、グループとその他(go)の権限をすべて禁止(空)にします。",
   },
   {
     id: "ch09-ex91",
@@ -1640,7 +1745,9 @@ export const exercises: Exercise[] = [
       "shared_dir ディレクトリについて、グループに書き込み権限を追加してください(シンボルモード)。",
     initialCwd: "/home/study/practice/ch09_permissions",
     referenceSolution: "chmod g+w shared_dir",
-    hints: ["ディレクトリの書き込み権限は、その中にファイルを作成・削除できることを意味します。"],
+    hints: [
+      "ディレクトリの書き込み権限は、その中にファイルを作成・削除できることを意味します。",
+    ],
     explanation:
       "chmod g+w shared_dir は、グループ(g)に書き込み権限(w)を追加し、グループのメンバーもファイルの作成・削除ができるようになります。",
   },
@@ -1664,7 +1771,9 @@ export const exercises: Exercise[] = [
       "team_dir ディレクトリについて、オーナーとグループにrwxすべて、その他には権限なしとなるよう、カンマ区切りの1回のchmodで指定してください。",
     initialCwd: "/home/study/practice/ch09_permissions",
     referenceSolution: "chmod u=rwx,g=rwx,o= team_dir",
-    hints: ["シンボルモードは , (カンマ)区切りで複数の節を1回のchmodにまとめて指定できます。"],
+    hints: [
+      "シンボルモードは , (カンマ)区切りで複数の節を1回のchmodにまとめて指定できます。",
+    ],
     explanation:
       "chmod u=rwx,g=rwx,o= team_dir のように、カンマで区切ることで「オーナーとグループはrwx、その他は権限なし」を1回のコマンドで指定できます。",
   },
@@ -1795,7 +1904,9 @@ export const exercises: Exercise[] = [
     prompt:
       "/etc/crontab は study ユーザーの所有ではないため、study自身ではパーミッションを変更できません。su コマンドでrootに切り替えたうえで、/etc/crontab のパーミッションを 600 に変更してください(1行、;でつなぐこと)。",
     referenceSolution: "su root; chmod 600 /etc/crontab",
-    hints: ["chmodは、そのファイルのオーナーかスーパーユーザーしか実行できません。"],
+    hints: [
+      "chmodは、そのファイルのオーナーかスーパーユーザーしか実行できません。",
+    ],
     explanation:
       "/etc/crontab のオーナーはrootであり、study自身はオーナーでもスーパーユーザーでもないためchmodできません。su root で先にrootに切り替えることで、chmodが実行できるようになります。",
   },
@@ -1806,7 +1917,8 @@ export const exercises: Exercise[] = [
       "su コマンドでrootに切り替えたうえで(ユーザー名は省略して構いません)、/etc/bashrc のパーミッションを 640 に変更してください(1行、;でつなぐこと)。",
     referenceSolution: "su; chmod 640 /etc/bashrc",
     hints: ["/etc/bashrc のオーナーはrootです。"],
-    explanation: "su; chmod 640 /etc/bashrc のように、rootへの切り替えとchmodを1行で実行します。",
+    explanation:
+      "su; chmod 640 /etc/bashrc のように、rootへの切り替えとchmodを1行で実行します。",
   },
   {
     id: "ch09-ex107",
@@ -1834,7 +1946,9 @@ export const exercises: Exercise[] = [
     prompt:
       "su コマンドでrootに切り替えたうえで、/etc/temp.log という空ファイルを作成し、その後すぐに同じファイルを削除してください(すべて1行、;でつなぐこと)。",
     referenceSolution: "su root; touch /etc/temp.log; rm /etc/temp.log",
-    hints: ["; でつなげば、3つ以上のコマンドも1行にまとめて順番に実行できます。"],
+    hints: [
+      "; でつなげば、3つ以上のコマンドも1行にまとめて順番に実行できます。",
+    ],
     explanation:
       "su root; touch /etc/temp.log; rm /etc/temp.log のように、rootへの切り替え・ファイル作成・削除を1行で実行できます。suで切り替えたユーザーは、明示的にexitするまで維持されます。",
   },
@@ -1855,16 +1969,20 @@ export const exercises: Exercise[] = [
   {
     id: "ch09-ex111",
     chapterId: "ch09",
-    prompt: "sudo コマンドを使って、/etc/report.txt という空ファイルを作成してください。",
+    prompt:
+      "sudo コマンドを使って、/etc/report.txt という空ファイルを作成してください。",
     referenceSolution: "sudo touch /etc/report.txt",
-    hints: ["sudo <実行したいコマンド> の形式で、そのコマンド1つだけをroot権限で実行します。"],
+    hints: [
+      "sudo <実行したいコマンド> の形式で、そのコマンド1つだけをroot権限で実行します。",
+    ],
     explanation:
       "sudo touch /etc/report.txt は、touchコマンドだけをスーパーユーザー権限で実行し、/etcへの書き込み権限エラーを回避します。",
   },
   {
     id: "ch09-ex112",
     chapterId: "ch09",
-    prompt: "sudo コマンドを使って、/etc/scripts という空のディレクトリを作成してください。",
+    prompt:
+      "sudo コマンドを使って、/etc/scripts という空のディレクトリを作成してください。",
     referenceSolution: "sudo mkdir /etc/scripts",
     hints: ["sudo mkdir <パス> の形式です。"],
     explanation:
@@ -1873,7 +1991,8 @@ export const exercises: Exercise[] = [
   {
     id: "ch09-ex113",
     chapterId: "ch09",
-    prompt: "/etc/crontab のパーミッションを、sudo コマンドを使って 600 に変更してください。",
+    prompt:
+      "/etc/crontab のパーミッションを、sudo コマンドを使って 600 に変更してください。",
     referenceSolution: "sudo chmod 600 /etc/crontab",
     hints: [
       "chmodはファイルのオーナーかスーパーユーザーしか実行できないため、sudoで実行する必要があります。",
@@ -1884,7 +2003,8 @@ export const exercises: Exercise[] = [
   {
     id: "ch09-ex114",
     chapterId: "ch09",
-    prompt: "/etc/passwd のパーミッションを、sudo コマンドを使って 640 に変更してください。",
+    prompt:
+      "/etc/passwd のパーミッションを、sudo コマンドを使って 640 に変更してください。",
     referenceSolution: "sudo chmod 640 /etc/passwd",
     hints: ["sudo chmod <モード> <ファイル名> の形式です。"],
     explanation:
@@ -1893,18 +2013,22 @@ export const exercises: Exercise[] = [
   {
     id: "ch09-ex115",
     chapterId: "ch09",
-    prompt: "sudo コマンドを使って、/etc/motd という空ファイルを作成してください。",
+    prompt:
+      "sudo コマンドを使って、/etc/motd という空ファイルを作成してください。",
     referenceSolution: "sudo touch /etc/motd",
     hints: ["sudo touch <パス> の形式です。"],
-    explanation: "sudo touch /etc/motd は、touchコマンドだけをスーパーユーザー権限で実行します。",
+    explanation:
+      "sudo touch /etc/motd は、touchコマンドだけをスーパーユーザー権限で実行します。",
   },
   {
     id: "ch09-ex116",
     chapterId: "ch09",
-    prompt: "sudo コマンドを使って、/etc/opt という空のディレクトリを作成してください。",
+    prompt:
+      "sudo コマンドを使って、/etc/opt という空のディレクトリを作成してください。",
     referenceSolution: "sudo mkdir /etc/opt",
     hints: ["sudo mkdir <パス> の形式です。"],
-    explanation: "sudo mkdir /etc/opt は、mkdirコマンドだけをスーパーユーザー権限で実行します。",
+    explanation:
+      "sudo mkdir /etc/opt は、mkdirコマンドだけをスーパーユーザー権限で実行します。",
   },
   {
     id: "ch09-ex117",
@@ -1932,7 +2056,8 @@ export const exercises: Exercise[] = [
   {
     id: "ch09-ex119",
     chapterId: "ch09",
-    prompt: "/etc/bashrc のパーミッションを、sudo コマンドを使って 644 に変更してください。",
+    prompt:
+      "/etc/bashrc のパーミッションを、sudo コマンドを使って 644 に変更してください。",
     referenceSolution: "sudo chmod 644 /etc/bashrc",
     hints: ["sudo chmod <モード> <ファイル名> の形式です。"],
     explanation:
@@ -1941,7 +2066,8 @@ export const exercises: Exercise[] = [
   {
     id: "ch09-ex120",
     chapterId: "ch09",
-    prompt: "sudo コマンドを使って、/etc/config.d という空のディレクトリを作成してください。",
+    prompt:
+      "sudo コマンドを使って、/etc/config.d という空のディレクトリを作成してください。",
     referenceSolution: "sudo mkdir /etc/config.d",
     hints: ["sudo mkdir <パス> の形式です。"],
     explanation:
@@ -1972,7 +2098,8 @@ export const exercises: Exercise[] = [
     id: "ch09-ex122",
     chapterId: "ch09",
     type: "quiz",
-    prompt: "su コマンドを実行したときに尋ねられるパスワードは、誰のパスワードですか?",
+    prompt:
+      "su コマンドを実行したときに尋ねられるパスワードは、誰のパスワードですか?",
     choices: [
       "切り替え先のユーザー(通常はroot)のパスワード",
       "現在ログインしている自分自身のパスワード",
@@ -1988,7 +2115,8 @@ export const exercises: Exercise[] = [
     id: "ch09-ex123",
     chapterId: "ch09",
     type: "quiz",
-    prompt: "sudo コマンドを実行したときに尋ねられるパスワードは、誰のパスワードですか?",
+    prompt:
+      "sudo コマンドを実行したときに尋ねられるパスワードは、誰のパスワードですか?",
     choices: [
       "現在ログインしている自分自身のパスワード",
       "スーパーユーザー(root)のパスワード",
@@ -2023,7 +2151,8 @@ export const exercises: Exercise[] = [
     id: "ch09-ex125",
     chapterId: "ch09",
     type: "quiz",
-    prompt: "su でスーパーユーザーになった後、一般ユーザーに戻るにはどうすればよいですか?",
+    prompt:
+      "su でスーパーユーザーになった後、一般ユーザーに戻るにはどうすればよいですか?",
     choices: [
       "exit コマンドを実行する",
       "sudo コマンドを実行する",
@@ -2102,7 +2231,8 @@ export const exercises: Exercise[] = [
     id: "ch09-ex129",
     chapterId: "ch09",
     type: "quiz",
-    prompt: "あるユーザーにsudoの利用を許可するかどうかを管理しているファイルはどれですか?",
+    prompt:
+      "あるユーザーにsudoの利用を許可するかどうかを管理しているファイルはどれですか?",
     choices: ["/etc/sudoers", "/etc/passwd", "/etc/crontab", "/etc/bashrc"],
     correctChoiceIndex: 0,
     hints: ["sudoersという名前がそのままファイル名になっています。"],
@@ -2113,7 +2243,8 @@ export const exercises: Exercise[] = [
     id: "ch09-ex130",
     chapterId: "ch09",
     type: "quiz",
-    prompt: "/etc/sudoers を直接テキストエディタで開いて編集してはいけないとされる理由は何ですか?",
+    prompt:
+      "/etc/sudoers を直接テキストエディタで開いて編集してはいけないとされる理由は何ですか?",
     choices: [
       "書き方を誤ると文法エラーとなり、どのユーザーもsudoが使えなくなる致命的な状態になりうるため",
       "/etc/sudoersは読み取り専用で、そもそも編集自体が技術的に不可能なため",
@@ -2133,10 +2264,13 @@ export const exercises: Exercise[] = [
     id: "ch09-ex131",
     chapterId: "ch09",
     type: "quiz",
-    prompt: "/etc/sudoers を安全に編集するために使用する専用のコマンドは何ですか?",
+    prompt:
+      "/etc/sudoers を安全に編集するために使用する専用のコマンドは何ですか?",
     choices: ["visudo", "vim", "sudoedit-safe", "chmod"],
     correctChoiceIndex: 0,
-    hints: ["中で起動するエディタ(多くの場合vim、環境によってはnano等)とは別に、専用のコマンド名があります。"],
+    hints: [
+      "中で起動するエディタ(多くの場合vim、環境によってはnano等)とは別に、専用のコマンド名があります。",
+    ],
     explanation:
       "/etc/sudoersを編集するには、visudoという専用コマンドを使用します。保存時に文法チェックが行われる" +
       "ため、直接エディタで編集するよりも安全に作業できます。",
@@ -2145,7 +2279,8 @@ export const exercises: Exercise[] = [
     id: "ch09-ex132",
     chapterId: "ch09",
     type: "quiz",
-    prompt: "/etc/sudoers に記述された `%wheel ALL=(ALL) ALL` という設定が意味することは何ですか?",
+    prompt:
+      "/etc/sudoers に記述された `%wheel ALL=(ALL) ALL` という設定が意味することは何ですか?",
     choices: [
       "wheelグループに所属するユーザーは、すべてのマシンで、すべてのユーザーとして、すべてのコマンドを実行できる",
       "wheelという名前の1人のユーザーだけがsudoを利用できる",
@@ -2189,7 +2324,9 @@ export const exercises: Exercise[] = [
       "ネットワーク管理者としての証明書が必要",
     ],
     correctChoiceIndex: 0,
-    hints: ["/etc/sudoers自体が一般ユーザーには読み込み権限すら与えられていないファイルです。"],
+    hints: [
+      "/etc/sudoers自体が一般ユーザーには読み込み権限すら与えられていないファイルです。",
+    ],
     explanation:
       "visudoコマンドの実行にはスーパーユーザーの権限が必要なため、あらかじめsuまたはsudoでスーパー" +
       "ユーザーに昇格したうえでvisudoを実行します。",

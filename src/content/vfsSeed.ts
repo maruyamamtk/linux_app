@@ -468,7 +468,11 @@ function createCh09PracticeChildren(): Record<string, VfsNode> {
           group: "study",
           mode: 0o644,
         }),
-        id_rsa: createFile("id_rsa", CH09_ID_RSA, { owner: "study", group: "study", mode: 0o644 }),
+        id_rsa: createFile("id_rsa", CH09_ID_RSA, {
+          owner: "study",
+          group: "study",
+          mode: 0o644,
+        }),
         "id_rsa.pub": createFile("id_rsa.pub", CH09_ID_RSA_PUB, {
           owner: "study",
           group: "study",
