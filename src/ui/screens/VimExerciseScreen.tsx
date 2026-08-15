@@ -1,5 +1,6 @@
 import { useMemo, useRef, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { exercises } from "../../content/exercises";
@@ -24,7 +25,8 @@ export function VimExerciseScreen({ route }: Props) {
   const exercise = exercises.find((item) => item.id === route.params.exerciseId);
   const { recordAttempt } = useProgress();
   const { colors } = useSettings();
-  const styles = useMemo(() => createStyles(colors), [colors]);
+  const insets = useSafeAreaInsets();
+  const styles = useMemo(() => createStyles(colors, insets.bottom), [colors, insets.bottom]);
   const editorRef = useRef<VimEditorHandle>(null);
   const [visibleHintCount, setVisibleHintCount] = useState(0);
   const [passed, setPassed] = useState<boolean | null>(null);
@@ -109,7 +111,7 @@ export function VimExerciseScreen({ route }: Props) {
   );
 }
 
-function createStyles(colors: ThemeColors) {
+function createStyles(colors: ThemeColors, bottomInset: number) {
   return StyleSheet.create({
     container: { flex: 1, backgroundColor: colors.background },
     header: { maxHeight: 160 },
@@ -121,6 +123,7 @@ function createStyles(colors: ThemeColors) {
     actions: {
       flexDirection: "row",
       padding: 12,
+      paddingBottom: 12 + bottomInset,
       gap: 12,
       borderTopWidth: StyleSheet.hairlineWidth,
       borderTopColor: colors.border,

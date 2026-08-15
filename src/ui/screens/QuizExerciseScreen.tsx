@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { exercises } from "../../content/exercises";
@@ -19,7 +20,8 @@ export function QuizExerciseScreen({ route }: Props) {
   const exercise = exercises.find((item) => item.id === route.params.exerciseId);
   const { recordAttempt } = useProgress();
   const { colors } = useSettings();
-  const styles = useMemo(() => createStyles(colors), [colors]);
+  const insets = useSafeAreaInsets();
+  const styles = useMemo(() => createStyles(colors, insets.bottom), [colors, insets.bottom]);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [visibleHintCount, setVisibleHintCount] = useState(0);
   const [showExplanation, setShowExplanation] = useState(false);
@@ -116,10 +118,10 @@ export function QuizExerciseScreen({ route }: Props) {
   );
 }
 
-function createStyles(colors: ThemeColors) {
+function createStyles(colors: ThemeColors, bottomInset: number) {
   return StyleSheet.create({
     container: { flex: 1, backgroundColor: colors.background },
-    content: { padding: 16, gap: 12 },
+    content: { padding: 16, paddingBottom: 16 + bottomInset, gap: 12 },
     prompt: { fontSize: 16, color: colors.text },
     hint: { fontSize: 14, color: colors.textSecondary },
     choices: { gap: 8 },
