@@ -31,16 +31,19 @@ export function RootNavigator() {
             component={ChapterListScreen}
             options={({ navigation }) => ({
               title: "章一覧",
-              headerRight: () => (
-                <View style={styles.headerButtonRow}>
-                  <Pressable onPress={() => navigation.navigate("Help")}>
-                    <Text style={[styles.headerButtonText, { color: colors.primary }]}>使い方</Text>
-                  </Pressable>
-                  <Pressable onPress={() => navigation.navigate("MyPage")}>
-                    <Text style={[styles.headerButtonText, { color: colors.primary }]}>マイページ</Text>
-                  </Pressable>
-                </View>
-              ),
+              headerRight: () => {
+                const headerButtonTextStyle = [styles.headerButtonText, { color: colors.primary }];
+                return (
+                  <View style={styles.headerButtonRow}>
+                    <Pressable hitSlop={8} onPress={() => navigation.navigate("Help")}>
+                      <Text style={headerButtonTextStyle}>使い方</Text>
+                    </Pressable>
+                    <Pressable hitSlop={8} onPress={() => navigation.navigate("MyPage")}>
+                      <Text style={headerButtonTextStyle}>マイページ</Text>
+                    </Pressable>
+                  </View>
+                );
+              },
             })}
           />
           <Stack.Screen
