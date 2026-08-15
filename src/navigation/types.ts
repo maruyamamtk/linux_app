@@ -8,4 +8,5 @@ export type RootStackParamList = {
   GitExercise: { chapterId: string; exerciseId: string };
   MyPage: undefined;
   Settings: undefined;
+  Help: undefined;
 };
