@@ -29,13 +29,15 @@ QRコード読み取り後にExpo Go側で `Unknown error: The request timed out
 
 1. **PCとスマホが同じWi-Fiネットワークに接続されているか**。ゲストWi-Fi・法人/カフェ等のネットワークは端末間通信(クライアント分離)がブロックされていることが多く、同じSSIDでも繋がらない場合がある。
 2. **(macOS)ローカルネットワークの権限**: 「システム設定 → プライバシーとセキュリティ → ローカルネットワーク」で、ターミナル(Claude Codeを実行しているアプリ)へのアクセスが許可されているか確認する。ここが無効だと、ファイアウォールがオフでもスマホからの接続だけが到達しない。
-3. **上記で解決しない場合は`--tunnel`を使う**: LANを使わずngrok経由でどこからでも接続できるモードに切り替える。
+3. **上記で解決しない/ルーター設定を変更できない場合は`--tunnel`を使う**: LANを使わず、どこからでも接続できるモードに切り替える。
 
    ```sh
    npm run tunnel
    ```
 
-   初回は `@expo/ngrok` のセットアップが走ることがある(`devDependencies` に追加済み)。LAN方式より起動・反映が多少遅いが、ネットワーク構成に左右されず確実につながる。
+   LAN方式より起動・反映が多少遅いが、ネットワーク構成(Wi-Fi分離・ローカルネットワーク権限)に左右されず確実につながる。
+
+   内部的にはCloudflare Tunnel([`expo-cloudflared`](https://github.com/stacknide/expo-cloudflared)、`package.json`の`overrides`で`@expo/ngrok`をこれに差し替え済み)を使っている。標準の`expo start --tunnel`が内部で使うExpo社の共有ngrokサービスは、悪用によるトラフィック制限で現在不安定なため([expo/expo#43335](https://github.com/expo/expo/issues/43335))、より安定したCloudflareのトンネルに切り替えている。初回実行時に`cloudflared`バイナリ(~40MB)を`~/.expo/expo-cloudflared/`に自動ダウンロードする。
 
 ### 2. iOS / Androidシミュレータ
 
