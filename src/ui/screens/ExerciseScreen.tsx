@@ -65,7 +65,7 @@ export function ExerciseScreen({ route }: Props) {
     recordAttempt(exercise.id, result.passed);
   }
 
-  const canShowExplanation = gradeResult !== null && !gradeResult.passed;
+  const canShowExplanation = Boolean(exercise.referenceSolution);
 
   return (
     <View style={styles.container}>
@@ -118,10 +118,12 @@ export function ExerciseScreen({ route }: Props) {
         </Pressable>
         <Pressable
           style={styles.actionButton}
-          onPress={() => setShowExplanation(true)}
-          disabled={!canShowExplanation || showExplanation}
+          onPress={() => setShowExplanation((current) => !current)}
+          disabled={!canShowExplanation}
         >
-          <Text style={styles.actionButtonText}>解答・解説を見る</Text>
+          <Text style={styles.actionButtonText}>
+            {showExplanation ? "解答・解説を隠す" : "解答・解説を見る"}
+          </Text>
         </Pressable>
       </View>
     </View>

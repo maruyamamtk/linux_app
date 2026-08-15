@@ -74,7 +74,8 @@ export function ScriptExerciseScreen({ route }: Props) {
     }
   }
 
-  const canShowExplanation = results !== null && results.length > 0 && !results.every((result) => result.grade.passed);
+  const canShowExplanation = Boolean(exercise.referenceSolution);
+  const showResultsPanel = results !== null || (showExplanation && canShowExplanation);
 
   return (
     <View style={styles.container}>
@@ -89,7 +90,7 @@ export function ScriptExerciseScreen({ route }: Props) {
 
       <CodeEditor value={script} onChangeText={setScript} placeholder="#!/bin/bash" />
 
-      <View style={[styles.actions, !results && styles.actionsNoResults]}>
+      <View style={[styles.actions, !showResultsPanel && styles.actionsNoResults]}>
         <Pressable
           style={styles.actionButton}
           onPress={handleShowHint}
@@ -108,16 +109,18 @@ export function ScriptExerciseScreen({ route }: Props) {
         </Pressable>
         <Pressable
           style={styles.actionButton}
-          onPress={() => setShowExplanation(true)}
-          disabled={!canShowExplanation || showExplanation}
+          onPress={() => setShowExplanation((current) => !current)}
+          disabled={!canShowExplanation}
         >
-          <Text style={styles.actionButtonText}>解答・解説を見る</Text>
+          <Text style={styles.actionButtonText}>
+            {showExplanation ? "解答・解説を隠す" : "解答・解説を見る"}
+          </Text>
         </Pressable>
       </View>
 
-      {results && (
+      {showResultsPanel && (
         <ScrollView style={styles.resultsScroll} contentContainerStyle={styles.resultsContent}>
-          <TestCaseResultPanel results={results} />
+          {results && <TestCaseResultPanel results={results} />}
           {showExplanation && exercise.referenceSolution && (
             <ExplanationPanel
               referenceSolution={exercise.referenceSolution}

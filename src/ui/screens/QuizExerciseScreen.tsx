@@ -37,7 +37,7 @@ export function QuizExerciseScreen({ route }: Props) {
   const hints = exercise.hints ?? [];
   const answered = selectedIndex !== null;
   const passed = answered && selectedIndex === exercise.correctChoiceIndex;
-  const canShowExplanation = answered && !passed;
+  const canShowExplanation = Boolean(exercise.explanation);
 
   function handleShowHint() {
     setVisibleHintCount((count) => Math.min(count + 1, hints.length));
@@ -108,10 +108,10 @@ export function QuizExerciseScreen({ route }: Props) {
         </Pressable>
         <Pressable
           style={styles.actionButton}
-          onPress={() => setShowExplanation(true)}
-          disabled={!canShowExplanation || showExplanation}
+          onPress={() => setShowExplanation((current) => !current)}
+          disabled={!canShowExplanation}
         >
-          <Text style={styles.actionButtonText}>解説を見る</Text>
+          <Text style={styles.actionButtonText}>{showExplanation ? "解説を隠す" : "解説を見る"}</Text>
         </Pressable>
       </View>
     </ScrollView>
