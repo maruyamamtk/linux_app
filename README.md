@@ -4,6 +4,7 @@
 
 ## ドキュメント
 - [要件定義書](docs/requirements.md)
+- [ローカル開発環境での起動方法](docs/local-development.md)
 
 ## ステータス
 Phase1(MVP、Ch2-3・Ch4-6・Ch8-17)の中核機能を実装済み:
