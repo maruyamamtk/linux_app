@@ -422,6 +422,83 @@ Sato 65 70 60
 Suzuki 92 88 95
 `;
 
+const CH11_ACCESS_LOG = `192.168.1.10 GET /index.html 200
+192.168.1.11 GET /about.html 200
+192.168.1.12 POST /login 401
+192.168.1.10 GET /images/logo.png 200
+192.168.1.13 GET /missing.html 404
+192.168.1.11 GET /about.html 200
+192.168.1.14 POST /login 500
+192.168.1.10 GET /index.html 200
+192.168.1.15 GET /contact.html 200
+192.168.1.12 POST /login 200
+`;
+
+const CH11_MEMO1_TXT = `今日の予定
+午前: 会議
+`;
+
+const CH11_MEMO2_TXT = `午後: 資料作成
+夜: 読書
+`;
+
+const CH12_WORDS_TXT = `apple
+Banana
+apple
+cherry
+Banana
+date
+apple
+Elderberry
+cherry
+fig
+`;
+
+const CH12_DIFF_OLD_TXT = `朝ごはんを食べる
+歯を磨く
+学校へ行く
+宿題をする
+寝る
+`;
+
+const CH12_DIFF_NEW_TXT = `朝ごはんを食べる
+歯を磨く
+公園へ行く
+宿題をする
+本を読む
+寝る
+`;
+
+const CH13_CODES_TXT = `A-1234
+B-5678
+C-9012
+AB-345
+A-12
+X-0000
+A-1234X
+foo-bar
+A1234
+A-12345
+`;
+
+const CH13_EMAILS_TXT = `alice@example.com
+bob@example
+carol123@test.co.jp
+invalid-email
+dave.smith@company.org
+2024report@data.jp
+eve@@example.com
+frank@sub.example.com
+`;
+
+const CH14_EMPLOYEES_CSV = `Yamada,Sales,320000
+Sato,Engineering,410000
+Suzuki,Sales,290000
+Tanaka,Engineering,450000
+Ito,Marketing,300000
+Watanabe,Sales,330000
+`;
+
 const CH18_README_MD = `# sample-project
 
 アーカイブ演習用のサンプルプロジェクトです。
@@ -780,6 +857,21 @@ function createCh1114PracticeChildren(): Record<string, VfsNode> {
         group: "study",
         mode: 0o644,
       }),
+      "access.log": createFile("access.log", CH11_ACCESS_LOG, {
+        owner: "study",
+        group: "study",
+        mode: 0o644,
+      }),
+      "memo1.txt": createFile("memo1.txt", CH11_MEMO1_TXT, {
+        owner: "study",
+        group: "study",
+        mode: 0o644,
+      }),
+      "memo2.txt": createFile("memo2.txt", CH11_MEMO2_TXT, {
+        owner: "study",
+        group: "study",
+        mode: 0o644,
+      }),
     }, STUDY_DIR_OPTIONS),
 
     ch12_textproc: createDirectory("ch12_textproc", {
@@ -803,10 +895,35 @@ function createCh1114PracticeChildren(): Record<string, VfsNode> {
         group: "study",
         mode: 0o644,
       }),
+      "words.txt": createFile("words.txt", CH12_WORDS_TXT, {
+        owner: "study",
+        group: "study",
+        mode: 0o644,
+      }),
+      "diff_old.txt": createFile("diff_old.txt", CH12_DIFF_OLD_TXT, {
+        owner: "study",
+        group: "study",
+        mode: 0o644,
+      }),
+      "diff_new.txt": createFile("diff_new.txt", CH12_DIFF_NEW_TXT, {
+        owner: "study",
+        group: "study",
+        mode: 0o644,
+      }),
     }, STUDY_DIR_OPTIONS),
 
     ch13_regex: createDirectory("ch13_regex", {
       "drink.txt": createFile("drink.txt", CH13_DRINK_TXT, {
+        owner: "study",
+        group: "study",
+        mode: 0o644,
+      }),
+      "codes.txt": createFile("codes.txt", CH13_CODES_TXT, {
+        owner: "study",
+        group: "study",
+        mode: 0o644,
+      }),
+      "emails.txt": createFile("emails.txt", CH13_EMAILS_TXT, {
         owner: "study",
         group: "study",
         mode: 0o644,
@@ -820,6 +937,11 @@ function createCh1114PracticeChildren(): Record<string, VfsNode> {
         mode: 0o644,
       }),
       "score.txt": createFile("score.txt", CH14_SCORE_TXT, {
+        owner: "study",
+        group: "study",
+        mode: 0o644,
+      }),
+      "employees.csv": createFile("employees.csv", CH14_EMPLOYEES_CSV, {
         owner: "study",
         group: "study",
         mode: 0o644,
