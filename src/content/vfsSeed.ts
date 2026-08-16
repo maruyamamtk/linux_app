@@ -255,6 +255,18 @@ const CH06_APP_CONF = `port=8080
 const CH06_DB_CONF = `host=localhost
 `;
 
+const CH08_GREET_SH = `#!/bin/bash
+echo "Hello from greet!"
+`;
+
+const CH08_DEPLOY_SH = `#!/bin/bash
+echo "Deploying..."
+`;
+
+const CH08_SITE_CONF = `server_name=example.local
+port=8080
+`;
+
 const CH09_SECRET_TXT = `This is a confidential memo.
 `;
 
@@ -552,6 +564,35 @@ function createCh0406PracticeChildren(): Record<string, VfsNode> {
       }, STUDY_DIR_OPTIONS),
       empty_project: createDirectory("empty_project", {}, STUDY_DIR_OPTIONS),
     }, STUDY_DIR_OPTIONS),
+  };
+}
+
+function createCh08PracticeChildren(): Record<string, VfsNode> {
+  return {
+    // PATH操作・whichによるコマンド探索演習用。実行権限付きのダミーコマンドを
+    // ホームディレクトリ配下の非標準ディレクトリに置くことで、PATHに追加するまでは
+    // whichで見つからない状態を再現できる。
+    ch08_env: createDirectory(
+      "ch08_env",
+      {
+        mytools: createDirectory(
+          "mytools",
+          {
+            greet: createFile("greet", CH08_GREET_SH, { owner: "study", group: "study", mode: 0o755 }),
+            deploy: createFile("deploy", CH08_DEPLOY_SH, { owner: "study", group: "study", mode: 0o755 }),
+          },
+          STUDY_DIR_OPTIONS,
+        ),
+        config: createDirectory(
+          "config",
+          {
+            "site.conf": createFile("site.conf", CH08_SITE_CONF, { owner: "study", group: "study", mode: 0o644 }),
+          },
+          STUDY_DIR_OPTIONS,
+        ),
+      },
+      STUDY_DIR_OPTIONS,
+    ),
   };
 }
 
@@ -956,6 +997,11 @@ export const vfsSnapshots: Record<string, VfsSnapshot> = {
     "Ch4〜6(ファイル操作の基本)演習用のVFS初期シードデータ",
     createCh0406PracticeChildren(),
   ),
+  ch08: buildChapterSnapshot(
+    "ch08",
+    "Ch8(エイリアスと環境変数)演習用のVFS初期シードデータ",
+    createCh08PracticeChildren(),
+  ),
   ch09: buildChapterSnapshot(
     "ch09",
     "Ch9(パーミッション)演習用のVFS初期シードデータ",
@@ -983,7 +1029,7 @@ export const vfsSnapshots: Record<string, VfsSnapshot> = {
   ),
   default: buildChapterSnapshot(
     "default",
-    "practice配下の専用フィクスチャを持たない演習(Ch1, 2-3, 7, 8, 10, 20, appendix等)用の共通VFS初期シードデータ",
+    "practice配下の専用フィクスチャを持たない演習(Ch1, 2-3, 7, 10, 20, appendix等)用の共通VFS初期シードデータ",
   ),
 };
 

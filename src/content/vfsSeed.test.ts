@@ -83,6 +83,17 @@ describe("vfsSnapshots['ch04-06'] / /home/study/practice", () => {
   });
 });
 
+describe("vfsSnapshots.ch08 / /home/study/practice", () => {
+  it("contains executable dummy commands under ch08_env/mytools for PATH/which practice", () => {
+    const vfs = createVfs(vfsSnapshots.ch08);
+    for (const name of ["greet", "deploy"]) {
+      const stat = vfs.stat(`/home/study/practice/ch08_env/mytools/${name}`);
+      expect(stat.type).toBe("file");
+      expect(stat.mode & 0o111).not.toBe(0);
+    }
+  });
+});
+
 describe("vfsSnapshots.ch09 / /home/study/practice", () => {
   it("sets ch09_permissions modes to reproduce the permission-error exercises", () => {
     const vfs = createVfs(vfsSnapshots.ch09);
