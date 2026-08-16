@@ -151,13 +151,108 @@ export PATH
 const CH04_SAMPLE_TXT = `Hello, Linux!
 `;
 
+const CH04_NOTES_TXT = `今日の作業メモ。
+`;
+
+const CH04_TODO_TXT = `- 資料をまとめる
+- レビュー依頼をする
+`;
+
+const CH04_HIDDEN_NOTE_TXT = `これは隠しファイルです。
+`;
+
+const CH04_REPORT_TXT = `月次レポートの下書き。
+`;
+
+const CH04_PLAN_TXT = `プロジェクト計画書。
+`;
+
+const CH04_BUDGET_CSV = `item,amount
+server,5000
+license,3000
+`;
+
+const CH04_SUMMER_MEMO_TXT = `夏の思い出メモ。
+`;
+
+const CH04_WINTER_MEMO_TXT = `冬の思い出メモ。
+`;
+
 const CH05_MEMO_TXT = `買い物リスト
 - 牛乳
 - 卵
 - パン
 `;
 
+const CH05_REPORT_TXT = `週次レポート。
+`;
+
+const CH05_DATA_CSV = `id,value
+1,10
+2,20
+`;
+
+const CH05_CONFIG_INI = `[general]
+debug=false
+`;
+
+const CH05_IMAGE_PNG = `PNGDUMMYDATA`;
+
+const CH05_DRAFT1_TXT = `下書き1号。
+`;
+
+const CH05_DRAFT2_TXT = `下書き2号。
+`;
+
+const CH05_TEMP_LOG = `一時的なログファイル。
+`;
+
+const CH05_README_TXT = `このディレクトリの説明ファイル。
+`;
+
+const CH05_APP_JS = `console.log("hello");
+`;
+
 const CH06_TARGET_TXT = `This is the target file for the find practice.
+`;
+
+const CH06_README_MD = `# ch06_search 演習用ディレクトリ
+`;
+
+const CH06_JAN2023_TXT = `2023年1月のレポート。
+`;
+
+const CH06_FEB2023_TXT = `2023年2月のレポート。
+`;
+
+const CH06_SUMMARY2023_LOG = `2023年のサマリーログ。
+`;
+
+const CH06_JAN2024_TXT = `2024年1月のレポート。
+`;
+
+const CH06_MAR2024_TXT = `2024年3月のレポート。
+`;
+
+const CH06_NOTES2024_MD = `2024年のメモ。
+`;
+
+const CH06_LOGO_PNG = `PNGDUMMYDATA`;
+
+const CH06_BANNER_JPG = `JPGDUMMYDATA`;
+
+const CH06_SETUP_SH = `#!/bin/bash
+echo "setup"
+`;
+
+const CH06_DEPLOY_SH = `#!/bin/bash
+echo "deploy"
+`;
+
+const CH06_APP_CONF = `port=8080
+`;
+
+const CH06_DB_CONF = `host=localhost
 `;
 
 const CH09_SECRET_TXT = `This is a confidential memo.
@@ -346,26 +441,74 @@ const CH19_SYNC_MEMO_TXT = `同期演習用のメモ。
 
 function createCh0406PracticeChildren(): Record<string, VfsNode> {
   return {
+    // pwd/cd/ls演習用。ネストしたディレクトリと隠しファイルを持ち、絶対/相対パスでの移動や
+    // ls -a/-l の表示違いを確認できる構成にしている。
     ch04_fs: createDirectory("ch04_fs", {
-      documents: createDirectory("documents", {}, STUDY_DIR_OPTIONS),
-      photos: createDirectory("photos", {}, STUDY_DIR_OPTIONS),
+      documents: createDirectory("documents", {
+        "report.txt": createFile("report.txt", CH04_REPORT_TXT, { owner: "study", group: "study", mode: 0o644 }),
+        "plan.txt": createFile("plan.txt", CH04_PLAN_TXT, { owner: "study", group: "study", mode: 0o644 }),
+        "budget.csv": createFile("budget.csv", CH04_BUDGET_CSV, { owner: "study", group: "study", mode: 0o644 }),
+      }, STUDY_DIR_OPTIONS),
+      photos: createDirectory("photos", {
+        "2023": createDirectory("2023", {}, STUDY_DIR_OPTIONS),
+        "2024": createDirectory("2024", {
+          summer: createDirectory("summer", {
+            "memo.txt": createFile("memo.txt", CH04_SUMMER_MEMO_TXT, { owner: "study", group: "study", mode: 0o644 }),
+          }, STUDY_DIR_OPTIONS),
+          winter: createDirectory("winter", {
+            "memo.txt": createFile("memo.txt", CH04_WINTER_MEMO_TXT, { owner: "study", group: "study", mode: 0o644 }),
+          }, STUDY_DIR_OPTIONS),
+        }, STUDY_DIR_OPTIONS),
+      }, STUDY_DIR_OPTIONS),
+      work: createDirectory("work", {
+        reports: createDirectory("reports", {}, STUDY_DIR_OPTIONS),
+      }, STUDY_DIR_OPTIONS),
       "sample.txt": createFile("sample.txt", CH04_SAMPLE_TXT, {
+        owner: "study",
+        group: "study",
+        mode: 0o644,
+      }),
+      "notes.txt": createFile("notes.txt", CH04_NOTES_TXT, { owner: "study", group: "study", mode: 0o644 }),
+      "todo.txt": createFile("todo.txt", CH04_TODO_TXT, { owner: "study", group: "study", mode: 0o644 }),
+      ".hidden_note.txt": createFile(".hidden_note.txt", CH04_HIDDEN_NOTE_TXT, {
         owner: "study",
         group: "study",
         mode: 0o644,
       }),
     }, STUDY_DIR_OPTIONS),
 
+    // mkdir/touch/rm/rmdir/cp/mv/ln演習用。コピー元・移動先・削除対象を分けて用意している。
     ch05_fileops: createDirectory("ch05_fileops", {
       "memo.txt": createFile("memo.txt", CH05_MEMO_TXT, {
         owner: "study",
         group: "study",
         mode: 0o644,
       }),
+      "report.txt": createFile("report.txt", CH05_REPORT_TXT, { owner: "study", group: "study", mode: 0o644 }),
+      "data.csv": createFile("data.csv", CH05_DATA_CSV, { owner: "study", group: "study", mode: 0o644 }),
+      "config.ini": createFile("config.ini", CH05_CONFIG_INI, { owner: "study", group: "study", mode: 0o644 }),
+      "image.png": createFile("image.png", CH05_IMAGE_PNG, { owner: "study", group: "study", mode: 0o644 }),
       backup: createDirectory("backup", {}, STUDY_DIR_OPTIONS),
+      archive: createDirectory("archive", {}, STUDY_DIR_OPTIONS),
+      empty_folder: createDirectory("empty_folder", {}, STUDY_DIR_OPTIONS),
+      another_empty: createDirectory("another_empty", {}, STUDY_DIR_OPTIONS),
+      old_files: createDirectory("old_files", {
+        "draft1.txt": createFile("draft1.txt", CH05_DRAFT1_TXT, { owner: "study", group: "study", mode: 0o644 }),
+        "draft2.txt": createFile("draft2.txt", CH05_DRAFT2_TXT, { owner: "study", group: "study", mode: 0o644 }),
+        "temp.log": createFile("temp.log", CH05_TEMP_LOG, { owner: "study", group: "study", mode: 0o644 }),
+      }, STUDY_DIR_OPTIONS),
+      project: createDirectory("project", {
+        "README.md": createFile("README.md", CH05_README_TXT, { owner: "study", group: "study", mode: 0o644 }),
+        src: createDirectory("src", {
+          "app.js": createFile("app.js", CH05_APP_JS, { owner: "study", group: "study", mode: 0o644 }),
+        }, STUDY_DIR_OPTIONS),
+      }, STUDY_DIR_OPTIONS),
     }, STUDY_DIR_OPTIONS),
 
+    // find/locate/which演習用。拡張子や日付違いのファイルを複数のディレクトリに分散配置し、
+    // -name/-type による絞り込みの違いを確認できる構成にしている。
     ch06_search: createDirectory("ch06_search", {
+      "readme.md": createFile("readme.md", CH06_README_MD, { owner: "study", group: "study", mode: 0o644 }),
       deep: createDirectory("deep", {
         a: createDirectory("a", {
           b: createDirectory("b", {
@@ -379,6 +522,35 @@ function createCh0406PracticeChildren(): Record<string, VfsNode> {
           }, STUDY_DIR_OPTIONS),
         }, STUDY_DIR_OPTIONS),
       }, STUDY_DIR_OPTIONS),
+      reports: createDirectory("reports", {
+        "2023": createDirectory("2023", {
+          "jan.txt": createFile("jan.txt", CH06_JAN2023_TXT, { owner: "study", group: "study", mode: 0o644 }),
+          "feb.txt": createFile("feb.txt", CH06_FEB2023_TXT, { owner: "study", group: "study", mode: 0o644 }),
+          "summary.log": createFile("summary.log", CH06_SUMMARY2023_LOG, {
+            owner: "study",
+            group: "study",
+            mode: 0o644,
+          }),
+        }, STUDY_DIR_OPTIONS),
+        "2024": createDirectory("2024", {
+          "jan.txt": createFile("jan.txt", CH06_JAN2024_TXT, { owner: "study", group: "study", mode: 0o644 }),
+          "mar.txt": createFile("mar.txt", CH06_MAR2024_TXT, { owner: "study", group: "study", mode: 0o644 }),
+          "notes.md": createFile("notes.md", CH06_NOTES2024_MD, { owner: "study", group: "study", mode: 0o644 }),
+        }, STUDY_DIR_OPTIONS),
+      }, STUDY_DIR_OPTIONS),
+      images: createDirectory("images", {
+        "logo.png": createFile("logo.png", CH06_LOGO_PNG, { owner: "study", group: "study", mode: 0o644 }),
+        "banner.jpg": createFile("banner.jpg", CH06_BANNER_JPG, { owner: "study", group: "study", mode: 0o644 }),
+      }, STUDY_DIR_OPTIONS),
+      scripts: createDirectory("scripts", {
+        "setup.sh": createFile("setup.sh", CH06_SETUP_SH, { owner: "study", group: "study", mode: 0o755 }),
+        "deploy.sh": createFile("deploy.sh", CH06_DEPLOY_SH, { owner: "study", group: "study", mode: 0o755 }),
+      }, STUDY_DIR_OPTIONS),
+      config: createDirectory("config", {
+        "app.conf": createFile("app.conf", CH06_APP_CONF, { owner: "study", group: "study", mode: 0o644 }),
+        "db.conf": createFile("db.conf", CH06_DB_CONF, { owner: "study", group: "study", mode: 0o644 }),
+      }, STUDY_DIR_OPTIONS),
+      empty_project: createDirectory("empty_project", {}, STUDY_DIR_OPTIONS),
     }, STUDY_DIR_OPTIONS),
   };
 }

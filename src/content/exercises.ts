@@ -1944,6 +1944,1095 @@ export const exercises: Exercise[] = [
       "which は環境変数PATHに列挙されたディレクトリを順に探索し、指定したコマンドの実行ファイルの場所を表示します。" +
       "「そのコマンドが実際にどこにあるファイルなのか」を確認するのに使います。",
   },
+
+  // ---------------------------------------------------------------------
+  // Ch4-6: pwd/cd — 現在地の確認とディレクトリ移動
+  // ---------------------------------------------------------------------
+  {
+    id: "ch04-06-ex08",
+    chapterId: "ch04-06",
+    prompt: "documents ディレクトリに移動してから、現在のパスを表示してください。",
+    initialCwd: "/home/study/practice/ch04_fs",
+    referenceSolution: "cd documents\npwd",
+    hints: [
+      "まず cd documents で移動します。",
+      "移動した後に pwd を実行すると、現在地の絶対パスが表示されます。",
+    ],
+    explanation:
+      "cd はカレントディレクトリを変更する組み込みコマンドです。引数に相対パスを指定すると、現在地からの相対位置で移動先を解決します。" +
+      "移動後に pwd を実行することで、意図した場所に移動できたかを確認できます。",
+  },
+  {
+    id: "ch04-06-ex09",
+    chapterId: "ch04-06",
+    prompt: "絶対パス /home/study/practice/ch05_fileops を指定してディレクトリを移動し、現在のパスを表示してください。",
+    initialCwd: "/home/study/practice/ch04_fs",
+    referenceSolution: "cd /home/study/practice/ch05_fileops\npwd",
+    hints: ["cd に「/」から始まるパスを渡すと、現在地に関係なく絶対位置で移動できます。"],
+    explanation:
+      "絶対パスは「/」から始まり、ファイルシステムのルートからの位置を一意に表します。相対パスと違い、現在どこにいても" +
+      "同じ絶対パスを指定すれば必ず同じ場所に移動できます。",
+  },
+  {
+    id: "ch04-06-ex10",
+    chapterId: "ch04-06",
+    prompt: "1つ上の階層のディレクトリに移動してから、現在のパスを表示してください。",
+    initialCwd: "/home/study/practice/ch04_fs/documents",
+    referenceSolution: "cd ..\npwd",
+    hints: ["「..」は1つ上の階層(親ディレクトリ)を表す特殊な相対パスです。"],
+    explanation:
+      "「..」は親ディレクトリを指す特殊なパス表記です。cd .. を実行すると、現在地から見て1つ上の階層のディレクトリに移動します。",
+  },
+  {
+    id: "ch04-06-ex11",
+    chapterId: "ch04-06",
+    prompt: "2つ上の階層のディレクトリに移動してから、現在のパスを表示してください。",
+    initialCwd: "/home/study/practice/ch04_fs/photos/2024/summer",
+    referenceSolution: "cd ../..\npwd",
+    hints: ["「..」を「/」でつなげると、複数階層分まとめて上に移動できます。"],
+    explanation:
+      "「../..」のように「..」を連続して指定すると、1回のcdで複数階層分上に移動できます。summer の2つ上の階層は photos です。",
+  },
+  {
+    id: "ch04-06-ex12",
+    chapterId: "ch04-06",
+    prompt: "引数を付けずに cd を実行してホームディレクトリへ戻り、現在のパスを表示してください。",
+    initialCwd: "/home/study/practice/ch04_fs/documents",
+    referenceSolution: "cd\npwd",
+    hints: ["cd は引数を省略すると、環境変数HOMEが指すホームディレクトリに移動します。"],
+    explanation:
+      "cd は移動先の引数を省略すると、環境変数HOME(通常 /home/ユーザー名)に移動します。どこにいても cd だけでホームに戻れるため、" +
+      "作業の起点に戻りたいときによく使われます。",
+  },
+  {
+    id: "ch04-06-ex13",
+    chapterId: "ch04-06",
+    prompt: "環境変数 $HOME を使ってホームディレクトリに移動し、現在のパスを表示してください。",
+    initialCwd: "/home/study/practice/ch05_fileops",
+    referenceSolution: "cd $HOME\npwd",
+    hints: ["$HOME は環境変数展開により、ホームディレクトリの絶対パスに置き換わります。"],
+    explanation:
+      "$HOME はシェルによって環境変数の値(ここでは /home/study)に展開されてから cd に渡されます。明示的にホームディレクトリの" +
+      "パスを指定したいときに使えます。",
+  },
+  {
+    id: "ch04-06-ex14",
+    chapterId: "ch04-06",
+    prompt: "photos ディレクトリの下の 2024/winter へ、相対パスで1回のコマンドで移動し、現在のパスを表示してください。",
+    initialCwd: "/home/study/practice/ch04_fs",
+    referenceSolution: "cd photos/2024/winter\npwd",
+    hints: ["cd には「ディレクトリ名/ディレクトリ名」のように複数階層をまとめて指定できます。"],
+    explanation:
+      "cd の引数には「/」区切りで複数階層のパスをまとめて指定できます。1階層ずつ cd を繰り返さなくても、一度の実行で" +
+      "深い階層まで移動できます。",
+  },
+  {
+    id: "ch04-06-ex15",
+    chapterId: "ch04-06",
+    prompt: "project ディレクトリの下の src へ移動し、現在のパスを表示してください。",
+    initialCwd: "/home/study/practice/ch05_fileops",
+    referenceSolution: "cd project/src\npwd",
+    hints: ["project/src のように「/」でつなげると、project の中の src に直接移動できます。"],
+    explanation: "相対パスを「/」でつなげることで、複数階層下のディレクトリへも1回の cd で移動できます。",
+  },
+  {
+    id: "ch04-06-ex16",
+    chapterId: "ch04-06",
+    prompt: "ホームディレクトリにいる状態から、practice/ch06_search/deep/a/b/c へ移動し、現在のパスを表示してください。",
+    initialCwd: "/home/study",
+    referenceSolution: "cd practice/ch06_search/deep/a/b/c\npwd",
+    hints: ["ホームディレクトリからの相対パスとして、practice 以下のパスをそのまま指定できます。"],
+    explanation:
+      "現在地(ここではホームディレクトリ)を起点とした相対パスを指定することで、深い階層のディレクトリへも1回のcdで移動できます。",
+  },
+  {
+    id: "ch04-06-ex17",
+    chapterId: "ch04-06",
+    prompt: "cd .. を2回実行して2階層上に移動し、現在のパスを表示してください。",
+    initialCwd: "/home/study/practice/ch06_search/deep/a/b",
+    referenceSolution: "cd ..\ncd ..\npwd",
+    hints: ["cd .. を複数回実行すると、そのたびに1階層ずつ上へ移動します。"],
+    explanation:
+      "cd .. は実行するたびに現在地から1階層ずつ上へ移動します。../.. とまとめて指定する方法との違いとして、" +
+      "1回ずつ段階的に移動できる点があります。",
+  },
+  {
+    id: "ch04-06-ex18",
+    chapterId: "ch04-06",
+    prompt: "深い階層にいる状態から、絶対パスで /home/study/practice/ch04_fs に一気に移動し、現在のパスを表示してください。",
+    initialCwd: "/home/study/practice/ch06_search/deep/a/b/c",
+    referenceSolution: "cd /home/study/practice/ch04_fs\npwd",
+    hints: ["絶対パスを使えば、現在どれだけ深い階層にいても目的のディレクトリへ直接移動できます。"],
+    explanation:
+      "絶対パスでの移動は現在地に依存しないため、深い階層から遠く離れたディレクトリへ移動する場合でも、" +
+      "「..」を何度も重ねる必要がなく確実です。",
+  },
+  {
+    id: "ch04-06-ex19",
+    chapterId: "ch04-06",
+    prompt: "「.」を使って documents ディレクトリへ移動し(現在のディレクトリを起点に明示する)、現在のパスを表示してください。",
+    initialCwd: "/home/study/practice/ch04_fs",
+    referenceSolution: "cd ./documents\npwd",
+    hints: ["「.」は現在のディレクトリ自身を表す特殊なパス表記です。"],
+    explanation:
+      "「.」はカレントディレクトリ自身を指す特殊なパス表記です。./documents は documents だけを指定した場合と同じ場所を指しますが、" +
+      "「現在地から見た相対パスであること」を明示する書き方として使われます。",
+  },
+  {
+    id: "ch04-06-ex20",
+    chapterId: "ch04-06",
+    prompt: "summer ディレクトリから、documents ディレクトリへ相対パス(「..」を使用)で移動し、現在のパスを表示してください。",
+    initialCwd: "/home/study/practice/ch04_fs/photos/2024/summer",
+    referenceSolution: "cd ../../../documents\npwd",
+    hints: [
+      "summer から ch04_fs までは3階層上ります。",
+      "「../../../」で3階層上がってから documents を指定します。",
+    ],
+    explanation:
+      "summer → 2024 → photos → ch04_fs と3階層上ってから documents に入るため、「../../../documents」という相対パスになります。" +
+      "階層をまたいだ移動では、上る回数を正確に数えることが重要です。",
+  },
+
+  // ---------------------------------------------------------------------
+  // Ch4-6: ls — ディレクトリの内容確認
+  // ---------------------------------------------------------------------
+  {
+    id: "ch04-06-ex21",
+    chapterId: "ch04-06",
+    prompt: "ch04_fs ディレクトリの中身を一覧表示してください。",
+    initialCwd: "/home/study/practice/ch04_fs",
+    referenceSolution: "ls",
+    hints: ["引数なしで ls を実行すると、カレントディレクトリの中身が表示されます。"],
+    explanation: "ls は引数を省略すると、カレントディレクトリの中身を一覧表示します。隠しファイル(「.」で始まるもの)は表示されません。",
+  },
+  {
+    id: "ch04-06-ex22",
+    chapterId: "ch04-06",
+    prompt: "ch04_fs ディレクトリの中身を、隠しファイルも含めてすべて表示してください。",
+    initialCwd: "/home/study/practice/ch04_fs",
+    referenceSolution: "ls -a",
+    hints: ["-a オプションを付けると、「.」で始まる隠しファイルも表示されます。"],
+    explanation:
+      "ch04_fs には .hidden_note.txt という隠しファイルがあります。ls -a を使うことで、通常の ls では表示されないこのファイルも" +
+      "一覧に含めて表示できます。",
+  },
+  {
+    id: "ch04-06-ex23",
+    chapterId: "ch04-06",
+    prompt: "ch05_fileops ディレクトリの中身を、パーミッションやサイズを含む詳細形式で表示してください。",
+    initialCwd: "/home/study/practice/ch05_fileops",
+    referenceSolution: "ls -l",
+    hints: ["-l(long)オプションを付けると、詳細形式で一覧表示されます。"],
+    explanation:
+      "-l(long)オプションを付けると、各エントリのパーミッション・所有者・グループ・サイズなどを含む詳細形式で表示されます。" +
+      "ファイルの種類やサイズを確認したいときに使います。",
+  },
+  {
+    id: "ch04-06-ex24",
+    chapterId: "ch04-06",
+    prompt: "ch04_fs ディレクトリの中身を、隠しファイルも含めて詳細形式で表示してください。",
+    initialCwd: "/home/study/practice/ch04_fs",
+    referenceSolution: "ls -la",
+    hints: ["-a と -l は組み合わせて -la のように1つにまとめて指定できます。"],
+    explanation:
+      "-a と -l のように、単独文字のオプションは -la のようにまとめて指定できます。これは -a -l を別々に指定するのと同じ意味です。",
+  },
+  {
+    id: "ch04-06-ex25",
+    chapterId: "ch04-06",
+    prompt: "カレントディレクトリを移動せずに、documents ディレクトリの中身を一覧表示してください。",
+    initialCwd: "/home/study/practice/ch04_fs",
+    referenceSolution: "ls documents",
+    hints: ["ls に引数としてディレクトリ名を渡すと、そのディレクトリの中身を表示できます(移動は不要)。"],
+    explanation:
+      "ls は対象のパスを引数に指定できます。cd で移動しなくても、見たいディレクトリの名前を ls の引数として渡すだけで中身を確認できます。",
+  },
+  {
+    id: "ch04-06-ex26",
+    chapterId: "ch04-06",
+    prompt: "ホームディレクトリにいる状態から、絶対パスを指定して practice/ch05_fileops の中身を一覧表示してください。",
+    initialCwd: "/home/study",
+    referenceSolution: "ls /home/study/practice/ch05_fileops",
+    hints: ["ls の引数には絶対パスも指定できます。"],
+    explanation: "ls の引数には相対パスだけでなく絶対パスも指定できます。現在地に関係なく、見たい場所を直接指定できます。",
+  },
+  {
+    id: "ch04-06-ex27",
+    chapterId: "ch04-06",
+    prompt: "documents ディレクトリと photos ディレクトリの中身を、1回のコマンドでまとめて一覧表示してください。",
+    initialCwd: "/home/study/practice/ch04_fs",
+    referenceSolution: "ls documents photos",
+    hints: ["ls には複数のパスをスペース区切りで指定できます。"],
+    explanation:
+      "ls は複数の引数を受け取れます。複数のディレクトリを指定すると、それぞれの中身がディレクトリ名の見出し付きで表示されます。",
+  },
+  {
+    id: "ch04-06-ex28",
+    chapterId: "ch04-06",
+    prompt: "sample.txt ファイル自体の詳細情報(パーミッションやサイズ)を表示してください。",
+    initialCwd: "/home/study/practice/ch04_fs",
+    referenceSolution: "ls -l sample.txt",
+    hints: ["ls の引数にディレクトリではなくファイルを指定すると、そのファイル自体の情報が1行で表示されます。"],
+    explanation:
+      "ls の対象にファイルを指定した場合、ディレクトリの中身ではなく、そのファイル自身の情報が表示されます。-l と組み合わせることで、" +
+      "そのファイルのパーミッションやサイズを確認できます。",
+  },
+  {
+    id: "ch04-06-ex29",
+    chapterId: "ch04-06",
+    prompt: "カレントディレクトリを移動せずに、documents ディレクトリの中身を詳細形式で表示してください。",
+    initialCwd: "/home/study/practice/ch04_fs",
+    referenceSolution: "ls -l documents",
+    hints: ["オプションと対象パスは同時に指定できます: ls -l 対象パス"],
+    explanation: "オプションと対象パスを同時に指定することで、移動せずに他のディレクトリの詳細な中身を確認できます。",
+  },
+  {
+    id: "ch04-06-ex30",
+    chapterId: "ch04-06",
+    prompt: "reports/2023 ディレクトリの中身を詳細形式で表示してください。",
+    initialCwd: "/home/study/practice/ch06_search/reports/2023",
+    referenceSolution: "ls -l",
+    hints: ["カレントディレクトリにいる場合、引数を省略して -l だけを指定すれば構いません。"],
+    explanation: "reports/2023 には jan.txt・feb.txt・summary.log の3つのファイルがあります。-l で各ファイルのサイズを確認できます。",
+  },
+  {
+    id: "ch04-06-ex31",
+    chapterId: "ch04-06",
+    prompt: "documents ディレクトリにいる状態のまま、1つ上の階層(ch04_fs)の中身を一覧表示してください。",
+    initialCwd: "/home/study/practice/ch04_fs/documents",
+    referenceSolution: "ls ..",
+    hints: ["ls .. で、移動せずに親ディレクトリの中身を確認できます。"],
+    explanation: "「..」は親ディレクトリを表すため、ls .. と実行すると、cd で移動しなくても1つ上の階層の中身を確認できます。",
+  },
+  {
+    id: "ch04-06-ex32",
+    chapterId: "ch04-06",
+    prompt: "photos ディレクトリの中の 2024 ディレクトリの中身を、移動せずに一覧表示してください。",
+    initialCwd: "/home/study/practice/ch04_fs",
+    referenceSolution: "ls photos/2024",
+    hints: ["ls の引数に「ディレクトリ/ディレクトリ」のように相対パスを渡せます。"],
+    explanation: "photos/2024 には summer と winter という2つのサブディレクトリがあります。相対パスを引数に渡すことで、その中身を確認できます。",
+  },
+  {
+    id: "ch04-06-ex33",
+    chapterId: "ch04-06",
+    prompt: "photos ディレクトリの中の 2023 サブディレクトリ(中身は空です)を一覧表示してください。",
+    initialCwd: "/home/study/practice/ch04_fs/photos",
+    referenceSolution: "ls 2023",
+    hints: ["空のディレクトリに対して ls を実行すると、何も出力されません。"],
+    explanation: "2023 ディレクトリの中身は空のため、ls を実行しても出力は何もありません。「エラーにはならないが出力もない」という" +
+      "空ディレクトリの挙動を確認する演習です。",
+  },
+  {
+    id: "ch04-06-ex34",
+    chapterId: "ch04-06",
+    prompt: "/bin/pwd の詳細情報(パーミッションやサイズ)を表示してください。",
+    referenceSolution: "ls -l /bin/pwd",
+    hints: ["コマンドの実体も、他のファイルと同じように ls -l で確認できます。"],
+    explanation:
+      "pwd コマンドの実体は /bin/pwd という実行可能ファイルです。ls -l で確認すると、実行権限(x)が付与された" +
+      "パーミッションを持つことが分かります。",
+  },
+  {
+    id: "ch04-06-ex35",
+    chapterId: "ch04-06",
+    prompt: "project ディレクトリの中身を一覧表示してください。",
+    initialCwd: "/home/study/practice/ch05_fileops",
+    referenceSolution: "ls project",
+    hints: ["ls project で、project ディレクトリの中身(README.md と src)を確認できます。"],
+    explanation: "project ディレクトリには README.md というファイルと src というサブディレクトリが含まれています。",
+  },
+  {
+    id: "ch04-06-ex36",
+    chapterId: "ch04-06",
+    prompt: "config ディレクトリの中身を詳細形式で表示してください。",
+    initialCwd: "/home/study/practice/ch06_search",
+    referenceSolution: "ls -l config",
+    hints: ["ls -l config で、config ディレクトリ内の app.conf・db.conf の詳細を確認できます。"],
+    explanation: "config ディレクトリには app.conf と db.conf の2つの設定ファイルがあります。-l でそれぞれのサイズやパーミッションを確認できます。",
+  },
+
+  // ---------------------------------------------------------------------
+  // Ch4-6: mkdir/touch — ディレクトリ・ファイルの作成
+  // ---------------------------------------------------------------------
+  {
+    id: "ch04-06-ex37",
+    chapterId: "ch04-06",
+    prompt: "ch04_fs ディレクトリの中に、videos という名前のディレクトリを作成してください。",
+    initialCwd: "/home/study/practice/ch04_fs",
+    referenceSolution: "mkdir videos",
+    hints: ["mkdir ディレクトリ名 で新しいディレクトリを作成できます。"],
+    explanation: "mkdir は指定した名前の新しいディレクトリを作成するコマンドです。既に同じ名前のものが存在する場合はエラーになります。",
+  },
+  {
+    id: "ch04-06-ex38",
+    chapterId: "ch04-06",
+    prompt: "ch05_fileops ディレクトリの中に、logs と tmp という2つのディレクトリを1回のコマンドで作成してください。",
+    initialCwd: "/home/study/practice/ch05_fileops",
+    referenceSolution: "mkdir logs tmp",
+    hints: ["mkdir には複数のディレクトリ名をスペース区切りで指定できます。"],
+    explanation: "mkdir は複数の引数を受け取れるため、作成したいディレクトリ名を並べて指定すれば1回のコマンドでまとめて作成できます。",
+  },
+  {
+    id: "ch04-06-ex39",
+    chapterId: "ch04-06",
+    prompt: "archive ディレクトリの下に、2024/reports というネストしたディレクトリを一度のコマンドで作成してください。",
+    initialCwd: "/home/study/practice/ch05_fileops",
+    referenceSolution: "mkdir -p archive/2024/reports",
+    hints: ["mkdir に -p オプションを付けると、存在しない親ディレクトリもまとめて作成できます。"],
+    explanation:
+      "archive はすでに存在しますが、その下の 2024 はまだ存在しません。-p(parents)オプションを付けることで、" +
+      "途中の階層が無くてもエラーにならずまとめて作成できます。",
+  },
+  {
+    id: "ch04-06-ex40",
+    chapterId: "ch04-06",
+    prompt: "ホームディレクトリにいる状態から、practice/ch04_fs/photos/2025/spring というディレクトリを一度のコマンドで作成してください。",
+    initialCwd: "/home/study",
+    referenceSolution: "mkdir -p practice/ch04_fs/photos/2025/spring",
+    hints: ["相対パスと -p オプションを組み合わせて、深い階層のディレクトリを一度に作成できます。"],
+    explanation:
+      "2025 も spring もまだ存在しない新しい階層です。-p オプションを付けることで、途中の階層(2025)が無くても" +
+      "まとめて作成できます。",
+  },
+  {
+    id: "ch04-06-ex41",
+    chapterId: "ch04-06",
+    prompt: "ch04_fs ディレクトリの中に、diary.txt という空のファイルを作成してください。",
+    initialCwd: "/home/study/practice/ch04_fs",
+    referenceSolution: "touch diary.txt",
+    hints: ["touch ファイル名 で、中身が空の新しいファイルを作成できます。"],
+    explanation: "touch は指定したファイルが存在しない場合、中身が空の新しいファイルとして作成します。",
+  },
+  {
+    id: "ch04-06-ex42",
+    chapterId: "ch04-06",
+    prompt: "ch05_fileops ディレクトリの中に、a.txt と b.txt という2つの空ファイルを1回のコマンドで作成してください。",
+    initialCwd: "/home/study/practice/ch05_fileops",
+    referenceSolution: "touch a.txt b.txt",
+    hints: ["touch にも複数のファイル名をスペース区切りで指定できます。"],
+    explanation: "touch は複数の引数を受け取れるため、作成したいファイル名を並べて指定すれば1回のコマンドでまとめて作成できます。",
+  },
+  {
+    id: "ch04-06-ex43",
+    chapterId: "ch04-06",
+    prompt: "documents ディレクトリの中に、summary.txt という空のファイルを作成してください。",
+    initialCwd: "/home/study/practice/ch04_fs",
+    referenceSolution: "touch documents/summary.txt",
+    hints: ["touch の引数に相対パスを指定すると、カレントディレクトリ以外の場所にもファイルを作成できます。"],
+    explanation: "touch の引数にはパスを指定できるため、移動せずに他のディレクトリの中にファイルを作成できます。",
+  },
+  {
+    id: "ch04-06-ex44",
+    chapterId: "ch04-06",
+    prompt: "ch05_fileops ディレクトリの中に logs ディレクトリを作成し、その中に app.log という空ファイルを作成してください。",
+    initialCwd: "/home/study/practice/ch05_fileops",
+    referenceSolution: "mkdir logs\ntouch logs/app.log",
+    hints: [
+      "まず mkdir でディレクトリを作成します。",
+      "作成したディレクトリの中にファイルを作るには、touch ディレクトリ名/ファイル名 のように指定します。",
+    ],
+    explanation:
+      "mkdir でディレクトリを作った直後は中身が空です。touch にディレクトリ名を含むパスを渡すことで、そのディレクトリの中に" +
+      "新しいファイルを作成できます。",
+  },
+  {
+    id: "ch04-06-ex45",
+    chapterId: "ch04-06",
+    prompt: "work/reports ディレクトリの下に、2024 と 2025 という2つのディレクトリを1回のコマンドで作成してください。",
+    initialCwd: "/home/study/practice/ch04_fs",
+    referenceSolution: "mkdir work/reports/2024 work/reports/2025",
+    hints: ["mkdir の引数には、複数の異なるパスを指定することもできます。"],
+    explanation: "work/reports まではすでに存在するため、-p を付けなくても mkdir に2つのパスを並べて指定するだけで作成できます。",
+  },
+  {
+    id: "ch04-06-ex46",
+    chapterId: "ch04-06",
+    prompt: "ch05_fileops ディレクトリの中に、.gitignore という空の隠しファイルを作成してください。",
+    initialCwd: "/home/study/practice/ch05_fileops",
+    referenceSolution: "touch .gitignore",
+    hints: ["「.」で始まる名前を指定すると、隠しファイルとして作成されます。"],
+    explanation: "「.」で始まるファイル名は隠しファイルとして扱われます。touch はファイル名をそのまま使うため、.gitignore のような" +
+      "隠しファイルも通常のファイルと同じように作成できます。",
+  },
+  {
+    id: "ch04-06-ex47",
+    chapterId: "ch04-06",
+    prompt: "project ディレクトリの中に、dist という名前のディレクトリを作成してください。",
+    initialCwd: "/home/study/practice/ch05_fileops",
+    referenceSolution: "mkdir project/dist",
+    hints: ["mkdir project/dist のように、対象パスを直接指定して作成できます。"],
+    explanation: "project ディレクトリはすでに存在するため、その中に dist という名前のディレクトリを直接作成できます。",
+  },
+  {
+    id: "ch04-06-ex48",
+    chapterId: "ch04-06",
+    prompt: "ホームディレクトリから、絶対パスで practice/ch06_search/readme_draft.txt という空ファイルを作成してください。",
+    initialCwd: "/home/study",
+    referenceSolution: "touch practice/ch06_search/readme_draft.txt",
+    hints: ["ホームディレクトリからの相対パスとして practice 以下を指定します。"],
+    explanation: "touch の引数には相対パスも絶対パスも指定できます。ここではホームディレクトリを起点とした相対パスでファイルを作成しています。",
+  },
+  {
+    id: "ch04-06-ex49",
+    chapterId: "ch04-06",
+    prompt: "ch06_search ディレクトリの中に、archive/2025/q1 というネストしたディレクトリを一度のコマンドで作成してください。",
+    initialCwd: "/home/study/practice/ch06_search",
+    referenceSolution: "mkdir -p archive/2025/q1",
+    hints: ["archive はまだ存在しないため、-p オプションが必要です。"],
+    explanation:
+      "ch06_search には archive ディレクトリがまだ存在しません。-p オプションを付けることで、archive・2025・q1の3階層を" +
+      "まとめて作成できます。",
+  },
+  {
+    id: "ch04-06-ex50",
+    chapterId: "ch04-06",
+    prompt: "old_files ディレクトリの中に、new_memo.txt という空ファイルを作成してください。",
+    initialCwd: "/home/study/practice/ch05_fileops",
+    referenceSolution: "touch old_files/new_memo.txt",
+    hints: ["touch の引数に既存ディレクトリを含むパスを指定すると、その中にファイルを作成できます。"],
+    explanation: "old_files ディレクトリはすでに存在するため、その中に new_memo.txt という新しいファイルを直接作成できます。",
+  },
+
+  // ---------------------------------------------------------------------
+  // Ch4-6: rm/rmdir — ファイル・ディレクトリの削除
+  // ---------------------------------------------------------------------
+  {
+    id: "ch04-06-ex51",
+    chapterId: "ch04-06",
+    prompt: "old_files ディレクトリの中の temp.log を削除してください。",
+    initialCwd: "/home/study/practice/ch05_fileops",
+    referenceSolution: "rm old_files/temp.log",
+    hints: ["rm 対象ファイルのパス で、ファイルを削除できます。"],
+    explanation: "rm は指定したファイルを削除するコマンドです。パスを指定すれば、カレントディレクトリ以外にあるファイルも削除できます。",
+  },
+  {
+    id: "ch04-06-ex52",
+    chapterId: "ch04-06",
+    prompt: "old_files ディレクトリの中の draft1.txt と draft2.txt を1回のコマンドで削除してください。",
+    initialCwd: "/home/study/practice/ch05_fileops",
+    referenceSolution: "rm old_files/draft1.txt old_files/draft2.txt",
+    hints: ["rm には複数のファイルパスをスペース区切りで指定できます。"],
+    explanation: "rm は複数の引数を受け取れるため、削除したいファイルを並べて指定すれば1回のコマンドでまとめて削除できます。",
+  },
+  {
+    id: "ch04-06-ex53",
+    chapterId: "ch04-06",
+    prompt: "空の empty_folder ディレクトリを削除してください。",
+    initialCwd: "/home/study/practice/ch05_fileops",
+    referenceSolution: "rmdir empty_folder",
+    hints: ["空のディレクトリは rmdir で削除できます。"],
+    explanation: "rmdir は中身が空のディレクトリだけを削除できるコマンドです。中身がある場合は失敗するため、その場合は rm -r を使います。",
+  },
+  {
+    id: "ch04-06-ex54",
+    chapterId: "ch04-06",
+    prompt: "old_files ディレクトリを、中身ごと再帰的に削除してください。",
+    initialCwd: "/home/study/practice/ch05_fileops",
+    referenceSolution: "rm -r old_files",
+    hints: ["中身のあるディレクトリを削除するには、rm に -r オプションを付けます。"],
+    explanation:
+      "rm はデフォルトではディレクトリを削除できません。-r(recursive)オプションを付けることで、ディレクトリとその中身を" +
+      "すべて再帰的に削除できます。",
+  },
+  {
+    id: "ch04-06-ex55",
+    chapterId: "ch04-06",
+    prompt: "存在するかどうか分からない ghost.txt というファイルを、存在しなくてもエラーにならないように削除してください。",
+    initialCwd: "/home/study/practice/ch05_fileops",
+    referenceSolution: "rm -f ghost.txt",
+    hints: ["-f オプションを付けると、対象が存在しなくてもエラーになりません。"],
+    explanation:
+      "-f(force)オプションを付けると、削除対象が存在しない場合でもエラーメッセージを出さずに正常終了します。" +
+      "スクリプトなどで「存在すれば削除する」という処理をエラーなく書きたいときに使います。",
+  },
+  {
+    id: "ch04-06-ex56",
+    chapterId: "ch04-06",
+    prompt: "another_empty ディレクトリを削除してください。",
+    initialCwd: "/home/study/practice/ch05_fileops",
+    referenceSolution: "rmdir another_empty",
+    hints: ["another_empty の中身は空なので rmdir で削除できます。"],
+    explanation: "another_empty は中身が空のディレクトリなので、rmdir でそのまま削除できます。",
+  },
+  {
+    id: "ch04-06-ex57",
+    chapterId: "ch04-06",
+    prompt: "project ディレクトリの中の src ディレクトリを、中身ごと削除してください。",
+    initialCwd: "/home/study/practice/ch05_fileops",
+    referenceSolution: "rm -r project/src",
+    hints: ["削除したいディレクトリへの相対パスを rm -r の引数に指定します。"],
+    explanation: "src ディレクトリには app.js というファイルが含まれているため、rmdir では削除できません。rm -r を使うことで" +
+      "中身ごと削除できます。",
+  },
+  {
+    id: "ch04-06-ex58",
+    chapterId: "ch04-06",
+    prompt: "empty_folder ディレクトリを、rm コマンドの -r オプションを使って削除してください。",
+    initialCwd: "/home/study/practice/ch05_fileops",
+    referenceSolution: "rm -r empty_folder",
+    hints: ["rm -r は、中身が空のディレクトリに対しても使用できます。"],
+    explanation:
+      "rm -r は中身のあるディレクトリだけでなく、空のディレクトリに対しても使用できます。空のディレクトリの削除に限っては" +
+      "rmdir と同じ結果になりますが、rm -r の方がより汎用的です。",
+  },
+  {
+    id: "ch04-06-ex59",
+    chapterId: "ch04-06",
+    prompt: "ch05_fileops ディレクトリの直下にある data.csv を削除してください。",
+    initialCwd: "/home/study/practice/ch05_fileops",
+    referenceSolution: "rm data.csv",
+    hints: ["カレントディレクトリ直下のファイルは、ファイル名だけで指定できます。"],
+    explanation: "カレントディレクトリの直下にあるファイルは、パスを省略してファイル名だけで rm の対象に指定できます。",
+  },
+  {
+    id: "ch04-06-ex60",
+    chapterId: "ch04-06",
+    prompt: "project ディレクトリを、-rf オプションを使って中身ごと強制的に削除してください。",
+    initialCwd: "/home/study/practice/ch05_fileops",
+    referenceSolution: "rm -rf project",
+    hints: ["-r と -f は組み合わせて -rf のように1つにまとめて指定できます。"],
+    explanation:
+      "-r(再帰的に削除)と -f(存在しなくてもエラーにしない)を組み合わせた -rf は、ディレクトリを中身ごと確実に削除したいときに" +
+      "よく使われる組み合わせです。強力なオプションなので、対象を間違えないよう注意が必要です。",
+  },
+  {
+    id: "ch04-06-ex61",
+    chapterId: "ch04-06",
+    prompt: "backup ディレクトリを、-rf オプションを使って削除してください。",
+    initialCwd: "/home/study/practice/ch05_fileops",
+    referenceSolution: "rm -rf backup",
+    hints: ["backup は中身が空ですが、-rf を付けて削除しても問題ありません。"],
+    explanation: "backup ディレクトリの中身は空ですが、-rf オプションを付けて削除しても(空・非空にかかわらず)問題なく削除できます。",
+  },
+  {
+    id: "ch04-06-ex62",
+    chapterId: "ch04-06",
+    prompt: "ch06_search ディレクトリの中の空の empty_project ディレクトリを削除してください。",
+    initialCwd: "/home/study/practice/ch06_search",
+    referenceSolution: "rmdir empty_project",
+    hints: ["empty_project の中身は空なので rmdir で削除できます。"],
+    explanation: "empty_project は中身が空のディレクトリなので、rmdir で削除できます。",
+  },
+
+  // ---------------------------------------------------------------------
+  // Ch4-6: cp/mv/ln — コピー・移動・改名・リンク
+  // ---------------------------------------------------------------------
+  {
+    id: "ch04-06-ex63",
+    chapterId: "ch04-06",
+    prompt: "report.txt を backup ディレクトリにコピーしてください。",
+    initialCwd: "/home/study/practice/ch05_fileops",
+    referenceSolution: "cp report.txt backup/",
+    hints: ["cp コピー元 コピー先ディレクトリ/ のように指定します。"],
+    explanation: "コピー先にディレクトリを指定すると、コピー元と同じファイル名でそのディレクトリの中にコピーされます。",
+  },
+  {
+    id: "ch04-06-ex64",
+    chapterId: "ch04-06",
+    prompt: "report.txt を report_copy.txt という別名でコピーしてください。",
+    initialCwd: "/home/study/practice/ch05_fileops",
+    referenceSolution: "cp report.txt report_copy.txt",
+    hints: ["コピー先に新しいファイル名を指定すると、その名前でコピーが作成されます。"],
+    explanation: "コピー先として既存のディレクトリではなく新しいファイル名を指定すると、その名前を持つコピーが同じ場所に作成されます。",
+  },
+  {
+    id: "ch04-06-ex65",
+    chapterId: "ch04-06",
+    prompt: "project ディレクトリを、project_copy という名前で丸ごとコピーしてください。",
+    initialCwd: "/home/study/practice/ch05_fileops",
+    referenceSolution: "cp -r project project_copy",
+    hints: ["ディレクトリをコピーするには、cp に -r オプションが必要です。"],
+    explanation:
+      "cp はデフォルトではディレクトリをコピーできません。-r(recursive)オプションを付けることで、ディレクトリとその中身を" +
+      "すべて再帰的にコピーできます。",
+  },
+  {
+    id: "ch04-06-ex66",
+    chapterId: "ch04-06",
+    prompt: "report.txt と data.csv を、1回のコマンドで archive ディレクトリにコピーしてください。",
+    initialCwd: "/home/study/practice/ch05_fileops",
+    referenceSolution: "cp report.txt data.csv archive/",
+    hints: ["cp には複数のコピー元と、最後にコピー先ディレクトリを指定できます。"],
+    explanation: "cp は最後の引数をコピー先として扱い、それより前の引数をすべてコピー元として扱います。コピー先がディレクトリであれば、" +
+      "複数のファイルを一度にコピーできます。",
+  },
+  {
+    id: "ch04-06-ex67",
+    chapterId: "ch04-06",
+    prompt: "documents ディレクトリの中の report.txt を、photos ディレクトリにコピーしてください。",
+    initialCwd: "/home/study/practice/ch04_fs",
+    referenceSolution: "cp documents/report.txt photos/",
+    hints: ["コピー元・コピー先どちらにも相対パスを指定できます。"],
+    explanation: "コピー元・コピー先には、カレントディレクトリからの相対パスをそれぞれ指定できます。移動せずに別々の場所にあるファイルを扱えます。",
+  },
+  {
+    id: "ch04-06-ex68",
+    chapterId: "ch04-06",
+    prompt: "photos ディレクトリの中の 2024 ディレクトリを、archive_photos という名前で丸ごとコピーしてください。",
+    initialCwd: "/home/study/practice/ch04_fs",
+    referenceSolution: "cp -r photos/2024 archive_photos",
+    hints: ["コピー先が存在しない名前の場合、その名前で新しくコピーが作成されます。"],
+    explanation:
+      "コピー先に存在しない名前を指定すると、その名前でコピー元の複製が作成されます(既存のディレクトリを指定した場合は" +
+      "その中に同名でコピーされる点と異なります)。",
+  },
+  {
+    id: "ch04-06-ex69",
+    chapterId: "ch04-06",
+    prompt: "config.ini を settings.ini という名前に変更してください。",
+    initialCwd: "/home/study/practice/ch05_fileops",
+    referenceSolution: "mv config.ini settings.ini",
+    hints: ["mv は移動先を同じディレクトリ内の別名にすると、ファイルの改名として働きます。"],
+    explanation: "mv はファイルを移動するコマンドですが、移動先が同じディレクトリ内の別名であれば、実質的にファイルの改名として働きます。",
+  },
+  {
+    id: "ch04-06-ex70",
+    chapterId: "ch04-06",
+    prompt: "data.csv を archive ディレクトリに移動してください。",
+    initialCwd: "/home/study/practice/ch05_fileops",
+    referenceSolution: "mv data.csv archive/",
+    hints: ["mv 移動元 移動先ディレクトリ/ のように指定します。"],
+    explanation: "mv の移動先にディレクトリを指定すると、移動元と同じファイル名でそのディレクトリの中に移動します。cpと違い、元の場所には残りません。",
+  },
+  {
+    id: "ch04-06-ex71",
+    chapterId: "ch04-06",
+    prompt: "report.txt と config.ini を、1回のコマンドで backup ディレクトリに移動してください。",
+    initialCwd: "/home/study/practice/ch05_fileops",
+    referenceSolution: "mv report.txt config.ini backup/",
+    hints: ["mv にも複数の移動元と、最後に移動先ディレクトリを指定できます。"],
+    explanation: "mv も cp と同様、最後の引数を移動先として扱い、それより前の引数をすべて移動元として扱います。移動先がディレクトリであれば、" +
+      "複数のファイルを一度に移動できます。",
+  },
+  {
+    id: "ch04-06-ex72",
+    chapterId: "ch04-06",
+    prompt: "old_files ディレクトリの名前を past_files に変更してください。",
+    initialCwd: "/home/study/practice/ch05_fileops",
+    referenceSolution: "mv old_files past_files",
+    hints: ["mv はファイルだけでなくディレクトリの改名にも使えます。"],
+    explanation: "mv はファイルだけでなくディレクトリに対しても使えます。同じ場所で別名に移動することで、ディレクトリの改名になります。",
+  },
+  {
+    id: "ch04-06-ex73",
+    chapterId: "ch04-06",
+    prompt: "old_files ディレクトリを、archive ディレクトリの中に移動してください。",
+    initialCwd: "/home/study/practice/ch05_fileops",
+    referenceSolution: "mv old_files archive/",
+    hints: ["mv の移動先ディレクトリを指定すると、ディレクトリ自体をその中に移動できます。"],
+    explanation: "mv の移動先に既存のディレクトリを指定すると、移動元のディレクトリ(中身ごと)がその中に入る形で移動されます。",
+  },
+  {
+    id: "ch04-06-ex74",
+    chapterId: "ch04-06",
+    prompt: "memo.txt へのハードリンクを memo_hardlink.txt という名前で作成してください。",
+    initialCwd: "/home/study/practice/ch05_fileops",
+    referenceSolution: "ln memo.txt memo_hardlink.txt",
+    hints: ["ln リンク元 リンク先 で、オプションなしの場合はハードリンクが作成されます。"],
+    explanation: "ln はファイルへのリンクを作成するコマンドです。-s オプションを付けない場合、デフォルトではハードリンクを作成します。",
+  },
+  {
+    id: "ch04-06-ex75",
+    chapterId: "ch04-06",
+    prompt: "report.txt へのシンボリックリンクを report_link.txt という名前で作成してください。",
+    initialCwd: "/home/study/practice/ch05_fileops",
+    referenceSolution: "ln -s report.txt report_link.txt",
+    hints: ["ln に -s オプションを付けると、シンボリックリンクを作成できます。"],
+    explanation:
+      "-s(symbolic)オプションを付けると、実体を指し示すシンボリックリンクを作成します。ハードリンクと違い、リンク先の" +
+      "実体が別のファイルシステム上にあっても作成できるという特徴があります。",
+  },
+  {
+    id: "ch04-06-ex76",
+    chapterId: "ch04-06",
+    prompt: "documents ディレクトリを丸ごと、photos ディレクトリの中に documents_backup という名前でコピーしてください。",
+    initialCwd: "/home/study/practice/ch04_fs",
+    referenceSolution: "cp -r documents photos/documents_backup",
+    hints: ["コピー先に「既存ディレクトリ/新しい名前」を指定すると、そのディレクトリの中に指定した名前で作成されます。"],
+    explanation: "コピー先のパスに新しい名前を含めることで、既存のディレクトリの中に指定した名前でコピーを作成できます。",
+  },
+  {
+    id: "ch04-06-ex77",
+    chapterId: "ch04-06",
+    prompt: "documents ディレクトリの中の report.txt を、monthly_report.txt という名前に変更してください。",
+    initialCwd: "/home/study/practice/ch04_fs",
+    referenceSolution: "mv documents/report.txt documents/monthly_report.txt",
+    hints: ["移動元・移動先のどちらにも documents/ を付けて、同じディレクトリ内での改名にします。"],
+    explanation: "移動元と移動先を同じディレクトリ内の異なるファイル名にすることで、そのディレクトリ内でのファイル名変更になります。",
+  },
+  {
+    id: "ch04-06-ex78",
+    chapterId: "ch04-06",
+    prompt: "ch04_fs ディレクトリにいる状態のまま、sample.txt を隣の ch05_fileops ディレクトリにコピーしてください。",
+    initialCwd: "/home/study/practice/ch04_fs",
+    referenceSolution: "cp sample.txt ../ch05_fileops/",
+    hints: ["「..」で1つ上の階層(practice)に上がってから、隣の ch05_fileops を指定します。"],
+    explanation:
+      "ch04_fs と ch05_fileops はどちらも practice ディレクトリの直下にあります。「../ch05_fileops/」のように「..」を使うことで、" +
+      "移動せずに隣接するディレクトリへファイルをコピーできます。",
+  },
+  {
+    id: "ch04-06-ex79",
+    chapterId: "ch04-06",
+    prompt: "ホームディレクトリにいる状態から、絶対パスを使って ch05_fileops の memo.txt を ch04_fs ディレクトリに移動してください。",
+    initialCwd: "/home/study",
+    referenceSolution: "mv /home/study/practice/ch05_fileops/memo.txt /home/study/practice/ch04_fs/",
+    hints: ["移動元・移動先のどちらにも絶対パスを指定できます。"],
+    explanation: "mv の移動元・移動先には、それぞれ独立して絶対パスを指定できます。現在地に関係なく、任意の場所同士でファイルを移動できます。",
+  },
+  {
+    id: "ch04-06-ex80",
+    chapterId: "ch04-06",
+    prompt: "reports ディレクトリの中の 2023 ディレクトリを丸ごと、2023_backup という名前でコピーしてください。",
+    initialCwd: "/home/study/practice/ch06_search",
+    referenceSolution: "cp -r reports/2023 reports/2023_backup",
+    hints: ["コピー元・コピー先のどちらにも reports/ を付けて、同じディレクトリ内でのコピーにします。"],
+    explanation: "コピー元・コピー先を同じ reports ディレクトリ内の異なる名前にすることで、中身ごとのバックアップコピーを作成できます。",
+  },
+  {
+    id: "ch04-06-ex81",
+    chapterId: "ch04-06",
+    prompt: "memo.txt へのシンボリックリンクを、backup ディレクトリの中に memo_link.txt という名前で作成してください。",
+    initialCwd: "/home/study/practice/ch05_fileops",
+    referenceSolution: "ln -s memo.txt backup/memo_link.txt",
+    hints: ["リンク元はカレントディレクトリのファイル名、リンク先には別ディレクトリへのパスを指定できます。"],
+    explanation: "ln -s のリンク元・リンク先には、それぞれ別々のディレクトリを指定できます。ここでは backup ディレクトリの中に" +
+      "シンボリックリンクを作成しています。",
+  },
+  {
+    id: "ch04-06-ex82",
+    chapterId: "ch04-06",
+    prompt: "archive ディレクトリの名前を old_archive に変更してから、カレントディレクトリの中身を一覧表示してください。",
+    initialCwd: "/home/study/practice/ch05_fileops",
+    referenceSolution: "mv archive old_archive\nls",
+    hints: [
+      "まず mv でディレクトリ名を変更します。",
+      "変更後に ls を実行すると、archive ではなく old_archive という名前で表示されることを確認できます。",
+    ],
+    explanation:
+      "mv によるディレクトリの改名は、直後に ls を実行することで結果を確認できます。改名前の名前(archive)は一覧から消え、" +
+      "新しい名前(old_archive)が表示されます。",
+  },
+
+  // ---------------------------------------------------------------------
+  // Ch4-6: find — ディレクトリツリーの再帰検索
+  // ---------------------------------------------------------------------
+  {
+    id: "ch04-06-ex83",
+    chapterId: "ch04-06",
+    prompt: "reports ディレクトリ以下から、拡張子が .txt のファイルをすべて検索してください。",
+    initialCwd: "/home/study/practice/ch06_search/reports",
+    referenceSolution: "find . -name *.txt",
+    hints: ["find . -name パターン で、カレントディレクトリ以下を再帰的に検索できます。", "拡張子で絞り込むには *.txt のようにワイルドカードを使います。"],
+    explanation:
+      "-name オプションには「*」を使ったパターンを指定できます。*.txt は「.txtで終わる任意の名前」にマッチするため、" +
+      "拡張子で検索対象を絞り込めます。",
+  },
+  {
+    id: "ch04-06-ex84",
+    chapterId: "ch04-06",
+    prompt: "reports ディレクトリ以下から、jan.txt という名前のファイルをすべて検索してください(複数見つかります)。",
+    initialCwd: "/home/study/practice/ch06_search/reports",
+    referenceSolution: "find . -name jan.txt",
+    hints: ["同じ名前のファイルが異なるディレクトリに複数存在することもあります。"],
+    explanation:
+      "find は名前が一致するファイルをディレクトリツリー全体から探すため、2023 と 2024 のそれぞれにある jan.txt が" +
+      "両方とも見つかります。",
+  },
+  {
+    id: "ch04-06-ex85",
+    chapterId: "ch04-06",
+    prompt: "ch06_search ディレクトリ以下にあるディレクトリだけを検索してください。",
+    initialCwd: "/home/study/practice/ch06_search",
+    referenceSolution: "find . -type d",
+    hints: ["-type d を指定すると、ファイルを除いてディレクトリだけに絞り込めます。"],
+    explanation: "-type オプションに d を指定すると、検索結果をディレクトリのみに絞り込めます。ファイルを除外してディレクトリ構造だけを" +
+      "確認したいときに使います。",
+  },
+  {
+    id: "ch04-06-ex86",
+    chapterId: "ch04-06",
+    prompt: "scripts ディレクトリ以下にあるファイルだけを検索してください。",
+    initialCwd: "/home/study/practice/ch06_search/scripts",
+    referenceSolution: "find . -type f",
+    hints: ["-type f を指定すると、ディレクトリを除いてファイルだけに絞り込めます。"],
+    explanation: "-type オプションに f を指定すると、検索結果を通常のファイルのみに絞り込めます。",
+  },
+  {
+    id: "ch04-06-ex87",
+    chapterId: "ch04-06",
+    prompt: "ch06_search ディレクトリ以下から、拡張子が .sh のファイルを検索してください。",
+    initialCwd: "/home/study/practice/ch06_search",
+    referenceSolution: "find . -name *.sh",
+    hints: ["*.sh というパターンで、拡張子 .sh のファイルに絞り込めます。"],
+    explanation: "*.sh というパターンにより、scripts ディレクトリ内の setup.sh と deploy.sh の2つのシェルスクリプトが見つかります。",
+  },
+  {
+    id: "ch04-06-ex88",
+    chapterId: "ch04-06",
+    prompt: "ホームディレクトリにいる状態から、絶対パスで practice/ch06_search/deep 以下の target.txt を検索してください。",
+    initialCwd: "/home/study",
+    referenceSolution: "find /home/study/practice/ch06_search/deep -name target.txt",
+    hints: ["find の最初の引数には、検索を開始するパス(絶対パスも可)を指定できます。"],
+    explanation: "find の検索開始位置には絶対パスを指定できます。現在地に関係なく、指定したディレクトリ以下を検索対象にできます。",
+  },
+  {
+    id: "ch04-06-ex89",
+    chapterId: "ch04-06",
+    prompt: "ch06_search ディレクトリ以下から、app.conf という名前のファイルを検索してください。",
+    initialCwd: "/home/study/practice/ch06_search",
+    referenceSolution: "find . -name app.conf",
+    hints: ["-name には拡張子込みの完全なファイル名も指定できます。"],
+    explanation: "-name にはワイルドカードを使わず、完全に一致するファイル名を指定することもできます。この場合は config ディレクトリの" +
+      "中にある app.conf だけが見つかります。",
+  },
+  {
+    id: "ch04-06-ex90",
+    chapterId: "ch04-06",
+    prompt: "images ディレクトリ以下から、拡張子が .png のファイルを検索してください。",
+    initialCwd: "/home/study/practice/ch06_search/images",
+    referenceSolution: "find . -name *.png -type f",
+    hints: ["-name と -type は同時に指定でき、両方の条件を満たすものだけが検索結果に残ります。"],
+    explanation: "-name と -type を同時に指定すると、両方の条件を満たすものだけが検索結果になります。ここでは「.pngで終わる」かつ" +
+      "「ファイルである」という2条件で logo.png のみが見つかります。",
+  },
+  {
+    id: "ch04-06-ex91",
+    chapterId: "ch04-06",
+    prompt: "現在地(deep/a)以下から、target.txt という名前のファイルを検索してください。",
+    initialCwd: "/home/study/practice/ch06_search/deep/a",
+    referenceSolution: "find . -name target.txt",
+    hints: ["検索開始位置を deep/a にすることで、それより浅い階層は検索対象から除外されます。"],
+    explanation: "find はカレントディレクトリ以下だけを検索します。deep/a を起点にした場合でも、その下の b/c/target.txt までは" +
+      "再帰的に探索されるため見つかります。",
+  },
+  {
+    id: "ch04-06-ex92",
+    chapterId: "ch04-06",
+    prompt: "reports ディレクトリ以下から、2024 という名前のディレクトリを検索してください。",
+    initialCwd: "/home/study/practice/ch06_search/reports",
+    referenceSolution: "find . -type d -name 2024",
+    hints: ["ファイル名だけでなく、ディレクトリ名も -name で検索できます。"],
+    explanation: "-name はファイルだけでなくディレクトリの名前にもマッチします。-type d と組み合わせることで、" +
+      "「2024という名前のディレクトリ」だけに絞り込めます。",
+  },
+  {
+    id: "ch04-06-ex93",
+    chapterId: "ch04-06",
+    prompt: "practice ディレクトリ以下全体から、target.txt という名前のファイルを検索してください。",
+    initialCwd: "/home/study/practice",
+    referenceSolution: "find . -name target.txt",
+    hints: ["practice を起点にすると、ch04_fs・ch05_fileops・ch06_search のすべてが検索対象になります。"],
+    explanation: "find は検索開始位置以下のすべての階層を再帰的にたどります。practice を起点にすることで、3つの章グループ用" +
+      "ディレクトリ全体から目的のファイルを探せます。",
+  },
+  {
+    id: "ch04-06-ex94",
+    chapterId: "ch04-06",
+    prompt: "images ディレクトリ以下から、拡張子が .jpg のファイルを検索してください。",
+    initialCwd: "/home/study/practice/ch06_search/images",
+    referenceSolution: "find . -name *.jpg",
+    hints: ["*.jpg というパターンで、拡張子 .jpg のファイルに絞り込めます。"],
+    explanation: "*.jpg というパターンにより、images ディレクトリ内の banner.jpg が見つかります。",
+  },
+  {
+    id: "ch04-06-ex95",
+    chapterId: "ch04-06",
+    prompt: "scripts ディレクトリの中から、deploy.sh という名前のファイルを検索してください(検索開始位置に scripts を指定します)。",
+    initialCwd: "/home/study/practice/ch06_search",
+    referenceSolution: "find scripts -name deploy.sh",
+    hints: ["「.」の代わりに、検索開始位置としてディレクトリ名を直接指定できます。"],
+    explanation: "find の検索開始位置には「.」以外にも、任意のディレクトリ名(相対パス)を指定できます。ここでは scripts を" +
+      "起点にして検索しています。",
+  },
+  {
+    id: "ch04-06-ex96",
+    chapterId: "ch04-06",
+    prompt: "config ディレクトリ以下にあるファイルだけを検索してください。",
+    initialCwd: "/home/study/practice/ch06_search/config",
+    referenceSolution: "find . -type f",
+    hints: ["-type f を指定すると、ファイルだけに絞り込めます。"],
+    explanation: "config ディレクトリには app.conf と db.conf の2つのファイルがあり、サブディレクトリはありません。-type f を" +
+      "指定することで、それらのファイルだけを結果として得られます。",
+  },
+  {
+    id: "ch04-06-ex97",
+    chapterId: "ch04-06",
+    prompt: "ch06_search ディレクトリ以下から、notes.md という名前のファイルを検索してください。",
+    initialCwd: "/home/study/practice/ch06_search",
+    referenceSolution: "find . -name notes.md",
+    hints: ["拡張子まで含めた完全なファイル名を -name に指定します。"],
+    explanation: "-name notes.md のように拡張子まで含めて完全一致で指定すると、reports/2024/notes.md のみが見つかります。",
+  },
+  {
+    id: "ch04-06-ex98",
+    chapterId: "ch04-06",
+    prompt: "empty_project ディレクトリ自体を検索対象にして、ディレクトリを検索してください。",
+    initialCwd: "/home/study/practice/ch06_search",
+    referenceSolution: "find empty_project -type d",
+    hints: ["find は検索開始位置に指定したディレクトリ自身も検索対象に含めます。"],
+    explanation: "find は検索開始位置として指定したパス自体も判定対象に含めます。empty_project の中身は空でも、" +
+      "empty_project というディレクトリ自身がヒットします。",
+  },
+
+  // ---------------------------------------------------------------------
+  // Ch4-6: locate/which — 高速なファイル名検索・コマンドの実体確認
+  // ---------------------------------------------------------------------
+  {
+    id: "ch04-06-ex99",
+    chapterId: "ch04-06",
+    prompt: "target.txt という名前を含むパスを、locate コマンドで検索してください。",
+    referenceSolution: "locate target.txt",
+    hints: ["locate パターン で、ファイルシステム全体からパターンを含むパスを検索できます。"],
+    explanation:
+      "locate は find と違い、検索開始位置を指定せずファイルシステム全体を対象に検索します。ここではカレントディレクトリに" +
+      "関係なく target.txt を含むパスが見つかります。",
+  },
+  {
+    id: "ch04-06-ex100",
+    chapterId: "ch04-06",
+    prompt: "jan.txt という名前を含むパスをすべて検索してください(複数見つかります)。",
+    referenceSolution: "locate jan.txt",
+    hints: ["同じ名前のファイルが複数の場所にある場合、locate はそのすべてを表示します。"],
+    explanation: "locate はパターンを含むパスをすべて列挙します。reports/2023 と reports/2024 の両方の jan.txt がヒットします。",
+  },
+  {
+    id: "ch04-06-ex101",
+    chapterId: "ch04-06",
+    prompt: "ファイル名に .sh を含むパスをすべて検索してください。",
+    referenceSolution: "locate .sh",
+    hints: ["locate はファイル名だけでなく拡張子を含む部分一致でも検索できます。"],
+    explanation: "locate はパスの一部分に一致するかどうかで判定するため、「.sh」のような拡張子を含む文字列でも検索できます。",
+  },
+  {
+    id: "ch04-06-ex102",
+    chapterId: "ch04-06",
+    prompt: "パスに config という文字列を含むものをすべて検索してください。",
+    referenceSolution: "locate config",
+    hints: ["locate はディレクトリ名にも一致します。ファイル名だけとは限りません。"],
+    explanation: "locate はパス全体を対象に部分一致で検索するため、config.ini のようなファイル名だけでなく、config という" +
+      "名前のディレクトリを含むパスもヒットします。",
+  },
+  {
+    id: "ch04-06-ex103",
+    chapterId: "ch04-06",
+    prompt: "パスに 2024 という文字列を含むものをすべて検索してください。",
+    referenceSolution: "locate 2024",
+    hints: ["年号のような数字も、文字列として部分一致で検索できます。"],
+    explanation: "locate は文字列であれば数字も含めて部分一致検索できます。ch04_fs/photos/2024 や ch06_search/reports/2024 など、" +
+      "複数の場所がヒットします。",
+  },
+  {
+    id: "ch04-06-ex104",
+    chapterId: "ch04-06",
+    prompt: "cp コマンドの実体がどこにあるか、which コマンドで調べてください。",
+    referenceSolution: "which cp",
+    hints: ["which コマンド名 で、環境変数PATH上から実行ファイルの場所を調べられます。"],
+    explanation: "which はコマンド名を受け取り、環境変数PATHに列挙されたディレクトリを順に探索して実行ファイルの場所を表示します。",
+  },
+  {
+    id: "ch04-06-ex105",
+    chapterId: "ch04-06",
+    prompt: "cp コマンドと mv コマンドの実体のパスを、1回のコマンドでまとめて調べてください。",
+    referenceSolution: "which cp mv",
+    hints: ["which には複数のコマンド名をスペース区切りで指定できます。"],
+    explanation: "which は複数の引数を受け取れるため、複数のコマンド名を並べて指定すれば、それぞれの実体のパスを一度に調べられます。",
+  },
+  {
+    id: "ch04-06-ex106",
+    chapterId: "ch04-06",
+    prompt: "find コマンドの実体がどこにあるか調べてください。",
+    referenceSolution: "which find",
+    hints: ["find は /usr/bin 以下にインストールされているコマンドです。"],
+    explanation: "find のような多くのコマンドは /usr/bin ディレクトリに実体があります。which で確認することで実際の場所が分かります。",
+  },
+  {
+    id: "ch04-06-ex107",
+    chapterId: "ch04-06",
+    prompt: "mkdir・touch・rm、3つのコマンドの実体のパスをまとめて調べてください。",
+    referenceSolution: "which mkdir touch rm",
+    hints: ["3つ以上のコマンド名を並べても、which は問題なく処理できます。"],
+    explanation: "which に指定できるコマンド名の数に制限はありません。複数のコマンドの実体を一度に確認したい場合にまとめて指定できます。",
+  },
+  {
+    id: "ch04-06-ex108",
+    chapterId: "ch04-06",
+    prompt: "locate コマンドの実体がどこにあるか調べてください。",
+    referenceSolution: "which locate",
+    hints: ["locate も find と同様、/usr/bin 以下にインストールされているコマンドです。"],
+    explanation: "locate コマンド自身も、which を使って実体のパスを確認できます。",
+  },
+
+  // ---------------------------------------------------------------------
+  // Ch4-6: man — マニュアルページの参照
+  // ---------------------------------------------------------------------
+  {
+    id: "ch04-06-ex109",
+    chapterId: "ch04-06",
+    prompt: "mkdir コマンドのマニュアルページを表示してください。",
+    referenceSolution: "man mkdir",
+    hints: ["man コマンド名 で、そのコマンドのマニュアルページを表示できます。"],
+    explanation: "man は指定したコマンドのマニュアルページを表示します。NAME・SYNOPSIS・DESCRIPTIONといった構成で、" +
+      "コマンドの概要や使い方、オプションの意味を確認できます。",
+  },
+  {
+    id: "ch04-06-ex110",
+    chapterId: "ch04-06",
+    prompt: "cp コマンドのマニュアルページを表示してください。",
+    referenceSolution: "man cp",
+    hints: ["man cp と実行すると、-r オプションの説明などが確認できます。"],
+    explanation: "man cp を実行すると、cp コマンドの基本的な使い方や -r オプションの意味など、SYNOPSISとDESCRIPTIONの内容を確認できます。",
+  },
+  {
+    id: "ch04-06-ex111",
+    chapterId: "ch04-06",
+    prompt: "rm コマンドのマニュアルページを表示してください。",
+    referenceSolution: "man rm",
+    hints: ["man rm で、-r や -f オプションの意味を確認できます。"],
+    explanation: "man rm を実行すると、rm コマンドの -r(再帰的に削除)・-f(強制的に削除)オプションの意味を確認できます。",
+  },
+  {
+    id: "ch04-06-ex112",
+    chapterId: "ch04-06",
+    prompt: "find コマンドのマニュアルページを表示してください。",
+    referenceSolution: "man find",
+    hints: ["man find で、-name や -type オプションの意味を確認できます。"],
+    explanation: "man find を実行すると、find コマンドの検索条件を指定する -name・-type オプションの意味を確認できます。",
+  },
+  {
+    id: "ch04-06-ex113",
+    chapterId: "ch04-06",
+    prompt: "mv コマンドのマニュアルページを表示してください。",
+    referenceSolution: "man mv",
+    hints: ["分からないコマンドがあれば、まず man で調べる習慣をつけましょう。"],
+    explanation: "man mv を実行すると、mv コマンドが移動と改名の両方に使えることなど、コマンドの基本的な説明を確認できます。",
+  },
+  {
+    id: "ch04-06-ex114",
+    chapterId: "ch04-06",
+    prompt: "ls コマンドのマニュアルページを表示してください。",
+    referenceSolution: "man ls",
+    hints: ["man ls で、-a や -l オプションの意味を確認できます。"],
+    explanation: "man ls を実行すると、ls コマンドの -a(隠しファイル表示)・-l(詳細形式)オプションの意味を確認できます。",
+  },
+  {
+    id: "ch04-06-ex115",
+    chapterId: "ch04-06",
+    prompt: "touch コマンドのマニュアルページを表示してください。",
+    referenceSolution: "man touch",
+    hints: ["man touch で、touch コマンドの動作の説明を確認できます。"],
+    explanation: "man touch を実行すると、touch がファイルの新規作成と更新時刻の更新の両方に使われることを確認できます。",
+  },
+  {
+    id: "ch04-06-ex116",
+    chapterId: "ch04-06",
+    prompt: "which コマンドのマニュアルページを表示してください。",
+    referenceSolution: "man which",
+    hints: ["man which で、which コマンドの動作の説明を確認できます。"],
+    explanation: "man which を実行すると、which が環境変数PATHを探索してコマンドの実体を表示することを確認できます。",
+  },
+
   // ---------------------------------------------------------------------
   // Ch8: エイリアスと環境変数
   // ---------------------------------------------------------------------
