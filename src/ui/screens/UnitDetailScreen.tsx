@@ -16,8 +16,22 @@ type Props = NativeStackScreenProps<RootStackParamList, "UnitDetail">;
  * ユニット詳細画面(docs/requirements.md 5章2節): 章内の演習リストと
  * ミニ解説テキストを表示する。演習をタップすると該当のExercise/ScriptExercise画面へ遷移する。
  */
+type ExerciseStatus = "正解" | "要復習" | "未着手";
+
+const STATUS_LABEL: Record<ExerciseStatus, string> = {
+  正解: "正解済み",
+  要復習: "要復習",
+  未着手: "未着手",
+};
+
+const BADGE_STYLE_KEY: Record<ExerciseStatus, "badgeCleared" | "badgeReview" | "badgePending"> = {
+  正解: "badgeCleared",
+  要復習: "badgeReview",
+  未着手: "badgePending",
+};
+
 export function UnitDetailScreen({ navigation, route }: Props) {
-  const { isCleared } = useProgress();
+  const { isCleared, getStatus } = useProgress();
   const { colors } = useSettings();
   const styles = useMemo(() => createStyles(colors), [colors]);
   const chapter = chapters.find((item) => item.id === route.params.chapterId);
@@ -59,7 +73,7 @@ export function UnitDetailScreen({ navigation, route }: Props) {
         contentContainerStyle={styles.list}
         ListEmptyComponent={<Text style={styles.empty}>この章の演習は準備中です。</Text>}
         renderItem={({ item: exercise, index }) => {
-          const cleared = isCleared(exercise.id);
+          const status = getStatus(exercise.id);
           return (
             <Pressable
               style={styles.row}
@@ -86,8 +100,8 @@ export function UnitDetailScreen({ navigation, route }: Props) {
                   {exercise.prompt}
                 </Text>
               </View>
-              <Text style={[styles.badge, cleared ? styles.badgeCleared : styles.badgePending]}>
-                {cleared ? "完了" : "未完了"}
+              <Text style={[styles.badge, styles[BADGE_STYLE_KEY[status]]]}>
+                {STATUS_LABEL[status]}
               </Text>
             </Pressable>
           );
@@ -134,7 +148,8 @@ function createStyles(colors: ThemeColors) {
       borderRadius: 4,
       overflow: "hidden",
     },
-    badgeCleared: { backgroundColor: colors.primary, color: colors.primaryContrast },
+    badgeCleared: { backgroundColor: colors.successBg, color: colors.success },
+    badgeReview: { backgroundColor: colors.warningBg, color: colors.warning },
     badgePending: { backgroundColor: colors.chip, color: colors.textSecondary },
   });
 }
