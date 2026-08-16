@@ -3110,6 +3110,1398 @@ export const exercises: Exercise[] = [
       "忘れられてしまうため、$HOME/.bashrc に追記(>>)しておくことで、シェルを起動するたびに自動的に定義されるようになります。",
   },
 
+  // --- Ch8: シェル変数の作成と参照 ---
+  {
+    id: "ch08-ex07",
+    chapterId: "ch08",
+    prompt: "変数 PROJECT に \"linux-dojo\" という値を設定し、echoで表示してください。",
+    referenceSolution: 'PROJECT="linux-dojo"; echo $PROJECT',
+    hints: ["変数名=値 の形式で値を設定します。", "$変数名 で値を参照できます。"],
+    explanation:
+      'PROJECT="linux-dojo" のように代入すると、それ以降 $PROJECT でその値を参照できるようになります(シェル変数の基本)。',
+  },
+  {
+    id: "ch08-ex08",
+    chapterId: "ch08",
+    prompt: "変数 COUNT に 42 を設定し、\"現在のカウント: $COUNT\" のように文中に埋め込んで表示してください。",
+    referenceSolution: 'COUNT=42; echo "現在のカウント: $COUNT"',
+    hints: ["ダブルクォートの中でも$による変数展開は行われます。"],
+    explanation:
+      "ダブルクォートで囲んだ文字列の中でも $COUNT のような変数展開は行われるため、他の文字列と組み合わせて表示できます。",
+  },
+  {
+    id: "ch08-ex09",
+    chapterId: "ch08",
+    prompt: "変数 FIRST に \"Linux\"、変数 SECOND に \"Dojo\" を設定し、\"$FIRST$SECOND\" のように連結して1行で表示してください。",
+    referenceSolution: 'FIRST="Linux"; SECOND="Dojo"; echo "$FIRST$SECOND"',
+    hints: ["2つの変数を続けて書くと、そのまま連結されます。"],
+    explanation: "$FIRST$SECOND のように変数を並べて書くと、それぞれの展開結果がそのまま連結されます(間に区切り文字は入りません)。",
+  },
+  {
+    id: "ch08-ex10",
+    chapterId: "ch08",
+    prompt: "変数 SPACED に \"a   b\"(aとbの間に半角スペース3つ)を設定し、ダブルクォートで囲んで echo \"$SPACED\" のように表示してスペースをそのまま保持して表示してください。",
+    referenceSolution: 'SPACED="a   b"; echo "$SPACED"',
+    hints: ["ダブルクォートを外すと、単語分割によって連続する空白が1つにまとめられてしまいます。"],
+    explanation:
+      "$SPACEDをダブルクォートで囲むと、値が1つの文字列としてそのまま展開され、内部の連続する空白もそのまま保持されます。" +
+      "クォートを外すとシェルの単語分割によって空白がまとめられてしまいます。",
+  },
+  {
+    id: "ch08-ex11",
+    chapterId: "ch08",
+    prompt: "変数 LEVEL に \"beginner\" を設定したあと、同じ変数に \"advanced\" を再代入し、echoで表示してください。",
+    referenceSolution: 'LEVEL="beginner"; LEVEL="advanced"; echo $LEVEL',
+    hints: ["同じ変数名に再度代入すると、後の値で上書きされます。"],
+    explanation: "変数に再代入すると、以前の値は失われ新しい値で上書きされます。",
+  },
+  {
+    id: "ch08-ex12",
+    chapterId: "ch08",
+    prompt: "一度も設定していない変数 UNDEFINED_VARIABLE を \"[$UNDEFINED_VARIABLE]\" のように角括弧で囲んで表示してください(空文字列として展開されることを確認します)。",
+    referenceSolution: 'echo "[$UNDEFINED_VARIABLE]"',
+    hints: ["定義していない変数を参照するとエラーにはならず、空文字列として扱われます。"],
+    explanation: "一度も代入していない変数を参照しても、シェルはエラーにせず空文字列として展開します(そのため[]の中身は何もない状態で表示されます)。",
+  },
+  {
+    id: "ch08-ex13",
+    chapterId: "ch08",
+    prompt: "変数 DIR に \"reports\"、変数 FILE に \"summary.txt\" を設定し、\"$DIR/$FILE\" のようにパス風の文字列を組み立てて表示してください。",
+    referenceSolution: 'DIR="reports"; FILE="summary.txt"; echo "$DIR/$FILE"',
+    hints: ["変数展開の間に固定の文字(この場合 / )を挟むこともできます。"],
+    explanation: "$DIR/$FILE のように、変数展開の間に固定の文字列を挟むことで、パスのような文字列を組み立てられます。",
+  },
+  {
+    id: "ch08-ex14",
+    chapterId: "ch08",
+    prompt: "変数 PROJECT に \"webapp\" を設定し、mkdirで\"$PROJECT\"という名前のディレクトリを作成したうえで、そのディレクトリに移動してpwdで確認してください。",
+    referenceSolution: 'PROJECT="webapp"; mkdir "$PROJECT"; cd "$PROJECT"; pwd',
+    hints: ["変数展開の結果をmkdir/cdの引数としてそのまま使えます。", "スペースを含む可能性がある変数はダブルクォートで囲むのが安全です。"],
+    explanation:
+      "変数の展開結果はmkdirやcdなどのコマンドの引数としてそのまま利用できます。ディレクトリ名を変数化しておくと、" +
+      "同じ名前を複数箇所で使い回すときに便利です。",
+  },
+  {
+    id: "ch08-ex15",
+    chapterId: "ch08",
+    prompt: "変数 FILENAME に \"notes.txt\" を設定し、touchでそのファイルを作成したあと、lsで一覧表示してください。",
+    referenceSolution: 'FILENAME="notes.txt"; touch "$FILENAME"; ls',
+    hints: ["touchの引数にも変数展開を使えます。"],
+    explanation: 'touch "$FILENAME" のように、作成するファイル名を変数で指定できます。lsで一覧表示すると、作成したファイルが確認できます。',
+  },
+  {
+    id: "ch08-ex16",
+    chapterId: "ch08",
+    prompt: "変数 EXT1, EXT2, EXT3 をそれぞれ \"txt\", \"csv\", \"md\" として設定し、\"許可されている拡張子: $EXT1, $EXT2, $EXT3\" の形式で表示してください。",
+    referenceSolution: 'EXT1="txt"; EXT2="csv"; EXT3="md"; echo "許可されている拡張子: $EXT1, $EXT2, $EXT3"',
+    hints: ["複数の変数を1つの文の中で組み合わせて表示できます。"],
+    explanation: "複数の変数をそれぞれ展開しながら、固定の文字列と組み合わせて1つのメッセージを組み立てられます。",
+  },
+  {
+    id: "ch08-ex17",
+    chapterId: "ch08",
+    prompt: "変数 STATUS を空文字列に設定したうえで、testを使って値が空かどうかを判定し、空であれば \"空です\"、そうでなければ \"値: $STATUS\" と表示してください。",
+    referenceSolution: 'STATUS=""; if [ -z "$STATUS" ]; then echo "空です"; else echo "値: $STATUS"; fi',
+    hints: ['[ -z "$VAR" ] は、変数が空文字列かどうかを判定します。'],
+    explanation:
+      '[ -z "$STATUS" ] は $STATUS が空文字列(または未設定)であればtrueになります。空の変数かどうかを条件分岐で判定する典型的な書き方です。',
+  },
+  {
+    id: "ch08-ex18",
+    chapterId: "ch08",
+    prompt: "変数 PRICE に \"$100\"(ドル記号込みの文字列)を、シングルクォートを使って文字通りの値として設定し、表示してください。",
+    referenceSolution: "PRICE='$100'; echo \"$PRICE\"",
+    hints: ["シングルクォートで囲むと$による変数展開が起こらず、文字通りの文字列として扱われます。"],
+    explanation:
+      "ダブルクォートは変数展開を行いますが、シングルクォートは中身をすべて文字通りの文字列として扱います。" +
+      "$自体を文字として使いたい場合はシングルクォートで囲みます(alias定義で右辺をシングルクォートで囲む理由にもつながります)。",
+  },
+
+  // --- Ch8: 変数のデフォルト値(パラメータ展開) ---
+  {
+    id: "ch08-ex19",
+    chapterId: "ch08",
+    prompt: "未設定の変数 EDITOR に対して、${EDITOR:-vim} のように値が未設定なら \"vim\" を使うデフォルト値付きで \"エディタ: ...\" と表示してください。",
+    referenceSolution: 'echo "エディタ: ${EDITOR:-vim}"',
+    hints: ["${変数名:-デフォルト値} は、変数が未設定または空のときにデフォルト値を使います。"],
+    explanation:
+      "${EDITOR:-vim} は、EDITORが未設定(または空文字列)の場合にデフォルト値vimを使う書き方です。" +
+      "EDITORが設定されていればその値がそのまま使われます。",
+  },
+  {
+    id: "ch08-ex20",
+    chapterId: "ch08",
+    prompt: "未設定の変数 LANG に対して、デフォルト値 \"ja_JP.UTF-8\" を使って ${LANG:-ja_JP.UTF-8} のように表示してください。",
+    referenceSolution: 'echo "${LANG:-ja_JP.UTF-8}"',
+    hints: ["未設定の環境変数に対してデフォルト値を用意しておくと、設定漏れによる予期しない動作を防げます。"],
+    explanation: "LANGが未設定の場合にデフォルトのロケール ja_JP.UTF-8 を使うようにする書き方です。",
+  },
+  {
+    id: "ch08-ex21",
+    chapterId: "ch08",
+    prompt: "変数 NAME に \"Alice\" を設定したうえで、${NAME:-Guest} のようにデフォルト値付きで表示し、既に設定されている値が優先されることを確認してください。",
+    referenceSolution: 'NAME="Alice"; echo "${NAME:-Guest}"',
+    hints: ["変数にすでに値が設定されている場合、デフォルト値は使われません。"],
+    explanation: 'NAMEにはすでに"Alice"という値が設定されているため、${NAME:-Guest}はデフォルト値Guestではなく、設定済みの値Aliceを返します。',
+  },
+  {
+    id: "ch08-ex22",
+    chapterId: "ch08",
+    prompt: "未設定の変数 WORKDIR に対して ${WORKDIR:=/home/study/work} と展開して表示し、続けてもう一度 $WORKDIR を表示して値が保持されていることを確認してください。",
+    referenceSolution: 'echo "${WORKDIR:=/home/study/work}"; echo "$WORKDIR"',
+    hints: [":-とは異なり、:=はデフォルト値をその変数自身に代入します。"],
+    explanation:
+      "${WORKDIR:=/home/study/work} は、WORKDIRが未設定であればデフォルト値を返すだけでなく、その値をWORKDIRに代入します。" +
+      'そのため直後にecho "$WORKDIR"としても、同じ値が保持されていることが確認できます。',
+  },
+  {
+    id: "ch08-ex23",
+    chapterId: "ch08",
+    prompt: "未設定の変数 TIMEOUT に対してデフォルト値 30 を使い、\"タイムアウト: ${TIMEOUT:-30}秒\" のように表示してください。",
+    referenceSolution: 'echo "タイムアウト: ${TIMEOUT:-30}秒"',
+    hints: ["デフォルト値の後ろに、さらに固定の文字列を続けて表示することもできます。"],
+    explanation: "${TIMEOUT:-30}のように、変数展開の直後に「秒」という固定の文字列を続けて、読みやすいメッセージを組み立てられます。",
+  },
+  {
+    id: "ch08-ex24",
+    chapterId: "ch08",
+    prompt: "変数 NICKNAME を空文字列に設定したうえで、${NICKNAME:-名無し} のようにコロン付きの:-演算子を使うとデフォルト値が使われることを確認してください。",
+    referenceSolution: 'NICKNAME=""; echo "${NICKNAME:-名無し}"',
+    hints: [":-演算子は、変数が「未設定」の場合だけでなく「空文字列」の場合にもデフォルト値を使います。"],
+    explanation:
+      "NICKNAMEは空文字列に設定されていますが、:-演算子(コロン付き)は空文字列の場合もデフォルト値名無しを使います" +
+      "(コロンなしの-演算子との違いに注意)。",
+  },
+  {
+    id: "ch08-ex25",
+    chapterId: "ch08",
+    prompt: "未設定の変数 WORKSPACE に対して ${WORKSPACE:=/home/study/workspace} でデフォルトのパスを代入しつつmkdir -pでディレクトリを作成し、lsで中身を確認してください。",
+    referenceSolution: 'mkdir -p "${WORKSPACE:=/home/study/workspace}"; ls "$WORKSPACE"',
+    hints: ["${WORKSPACE:=...}は、変数が未設定の場合にそのディレクトリパスを代入してから展開します。"],
+    explanation: "${WORKSPACE:=/home/study/workspace}によって、未設定だったWORKSPACEにデフォルトのパスが代入され、そのままmkdir -pの引数として使われています。",
+  },
+  {
+    id: "ch08-ex26",
+    chapterId: "ch08",
+    prompt: "変数 HOST に \"localhost\" を設定し、未設定の変数 PORT にはデフォルト値 8080 を使って \"http://$HOST:${PORT:-8080}/\" のようなURL風の文字列を表示してください。",
+    referenceSolution: 'HOST="localhost"; echo "http://$HOST:${PORT:-8080}/"',
+    hints: ["変数展開とデフォルト値付きの変数展開を1つの文字列の中で組み合わせられます。"],
+    explanation: "$HOSTと${PORT:-8080}を組み合わせることで、PORTが未設定でもデフォルトのポート番号を使ったURLらしい文字列を組み立てられます。",
+  },
+
+  // --- Ch8: PATHの仕組みと操作 ---
+  {
+    id: "ch08-ex27",
+    chapterId: "ch08",
+    prompt: "PATHの末尾に /opt/tools を追加し、PATHの値を表示してください。",
+    referenceSolution: 'PATH="$PATH:/opt/tools"; echo $PATH',
+    hints: ["既存のPATHを保つには、展開結果の中に$PATHを含めます。"],
+    explanation: 'PATH="$PATH:/opt/tools" のように、既存の$PATHの末尾に新しいディレクトリを追加できます。既存の検索パスを保ったまま検索対象を増やせます。',
+  },
+  {
+    id: "ch08-ex28",
+    chapterId: "ch08",
+    prompt: "$HOME/practice/ch08_env/mytools をPATHの先頭に追加し、PATHの値を表示してください。",
+    referenceSolution: 'PATH="$HOME/practice/ch08_env/mytools:$PATH"; echo $PATH',
+    hints: ["先頭に追加すると、そのディレクトリが最初に検索されるようになります。"],
+    explanation: "新しいディレクトリをPATHの先頭に追加すると、同名のコマンドがあった場合にそちらが優先して検索されます。",
+  },
+  {
+    id: "ch08-ex29",
+    chapterId: "ch08",
+    prompt: "$HOME/bin と $HOME/scripts の2つのディレクトリを一度にPATHの先頭に追加し、PATHの値を表示してください。",
+    referenceSolution: 'PATH="$HOME/bin:$HOME/scripts:$PATH"; echo $PATH',
+    hints: ["複数のディレクトリを:区切りで一度に追加することもできます。"],
+    explanation: "$HOME/bin:$HOME/scripts のように:区切りで複数のディレクトリを並べることで、一度に複数のディレクトリをPATHへ追加できます。",
+  },
+  {
+    id: "ch08-ex30",
+    chapterId: "ch08",
+    prompt: "PATHの末尾に /opt/bin と /opt/sbin の2つのディレクトリをまとめて追加し、PATHの値を表示してください。",
+    referenceSolution: 'PATH="$PATH:/opt/bin:/opt/sbin"; echo $PATH',
+    hints: ["末尾に追加する場合も、複数ディレクトリをまとめて追加できます。"],
+    explanation: "既存のPATHの末尾に複数のディレクトリをまとめて追加する例です。末尾に追加すると、既存の標準コマンドが優先されます。",
+  },
+  {
+    id: "ch08-ex31",
+    chapterId: "ch08",
+    prompt: "PATHを変更する前に、変数 ORIGINAL_PATH に現在のPATHの値をコピーしてください。そのあとPATHの先頭に $HOME/bin を追加し、最後にORIGINAL_PATHの値(変更前の値)を表示してください。",
+    referenceSolution: 'ORIGINAL_PATH="$PATH"; PATH="$HOME/bin:$PATH"; echo "$ORIGINAL_PATH"',
+    hints: ["変更する前に別の変数へ退避しておくと、後で元の値を確認・復元できます。"],
+    explanation: "PATHを変更する前にORIGINAL_PATHという別の変数へ値をコピーしておくことで、変更後も元のPATHの内容を確認できます。",
+  },
+  {
+    id: "ch08-ex32",
+    chapterId: "ch08",
+    prompt: "PATHを /usr/local/bin:/usr/bin:/bin という値に完全に置き換えて(既存の$PATHは含めずに)、PATHの値を表示してください。",
+    referenceSolution: 'PATH="/usr/local/bin:/usr/bin:/bin"; echo $PATH',
+    hints: ["既存の$PATHを含めずに代入すると、それまでの内容は失われて完全に置き換わります。"],
+    explanation: "$PATHを含めずに新しい値をそのまま代入すると、既存のPATHの内容は失われ、指定した3つのディレクトリだけに完全に置き換わります。",
+  },
+  {
+    id: "ch08-ex33",
+    chapterId: "ch08",
+    prompt: "変更前のPATHを \"変更前: $PATH\" として表示したあと、PATHの末尾に $HOME/bin を追加し、\"変更後: $PATH\" として表示してください。",
+    referenceSolution: 'echo "変更前: $PATH"; PATH="$PATH:$HOME/bin"; echo "変更後: $PATH"',
+    hints: ["変更前後の値を並べて表示すると、追加された部分がわかりやすくなります。"],
+    explanation: "PATHを変更する前後でそれぞれ表示することで、末尾に$HOME/binが追加されたことを確認できます。",
+  },
+  {
+    id: "ch08-ex34",
+    chapterId: "ch08",
+    prompt: "追加したいディレクトリを変数 PROJECT_BIN に $HOME/practice/ch08_env/mytools として設定してから、PATHの先頭に追加し、PATHの値を表示してください。",
+    referenceSolution: 'PROJECT_BIN="$HOME/practice/ch08_env/mytools"; PATH="$PROJECT_BIN:$PATH"; echo $PATH',
+    hints: ["追加したいディレクトリを一旦別の変数にしてから使うと、PATHの設定が読みやすくなります。"],
+    explanation: "追加するディレクトリを一旦PROJECT_BINという変数に入れてからPATHに追加することで、意図が読み取りやすい設定にできます。",
+  },
+  {
+    id: "ch08-ex35",
+    chapterId: "ch08",
+    prompt: "$HOME/bin をPATHの先頭に2回連続で追加してしまった場合の結果を、PATHの値を表示して確認してください。",
+    referenceSolution: 'PATH="$HOME/bin:$PATH"; PATH="$HOME/bin:$PATH"; echo $PATH',
+    hints: ["同じディレクトリを重ねて追加すると、PATHの中に同じパスが複数回現れます。"],
+    explanation:
+      "同じディレクトリを2回追加すると、PATHの文字列の中にそのディレクトリが重複して含まれてしまいます。" +
+      "動作上は問題なくても、コマンド探索の効率やPATHの見通しの良さの観点からは避けるべきです。",
+  },
+  {
+    id: "ch08-ex36",
+    chapterId: "ch08",
+    prompt: "現在のPATHの文字数をwc -cで数えて表示したあと、PATHの末尾に $HOME/bin を追加してから、再びPATHの文字数を表示して比較してください。",
+    referenceSolution: 'echo -n "$PATH" | wc -c; PATH="$PATH:$HOME/bin"; echo -n "$PATH" | wc -c',
+    hints: ["echo -n は末尾の改行を付けずに出力します。", "wc -c で文字数(バイト数)を数えられます。"],
+    explanation:
+      "PATHにディレクトリを追加すると、その分だけPATHという文字列自体の長さが伸びます。" +
+      "echo -nとwc -cを組み合わせることで、追加前後の文字数を比較できます。",
+  },
+
+  // --- Ch8: PATH上のコマンドの検索(which) ---
+  {
+    id: "ch08-ex37",
+    chapterId: "ch08",
+    prompt: "$HOME/practice/ch08_env/mytools/greet というコマンドを、PATHに追加する前の状態でwhichを使って検索してください(見つからない状態を確認します)。",
+    referenceSolution: "which greet",
+    hints: ["PATHに含まれていないディレクトリにあるコマンドは、whichで見つけることができません。"],
+    explanation:
+      "greetコマンドの実体は/home/study/practice/ch08_env/mytools/greetにありますが、このディレクトリはまだPATHに" +
+      "含まれていないため、whichで見つけることができません。",
+  },
+  {
+    id: "ch08-ex38",
+    chapterId: "ch08",
+    prompt: "$HOME/practice/ch08_env/mytools をPATHの先頭に追加してから、whichでgreetコマンドの場所を検索してください。",
+    referenceSolution: 'PATH="$HOME/practice/ch08_env/mytools:$PATH"; which greet',
+    hints: ["まずコマンドのあるディレクトリをPATHに追加してから、whichで検索します。"],
+    explanation: "PATHにmytoolsディレクトリを追加したことで、whichがgreetコマンドの実体を見つけられるようになります。",
+  },
+  {
+    id: "ch08-ex39",
+    chapterId: "ch08",
+    prompt: "$HOME/practice/ch08_env/mytools をPATHの先頭に追加してから、whichでgreetとdeployの2つのコマンドをまとめて検索してください。",
+    referenceSolution: 'PATH="$HOME/practice/ch08_env/mytools:$PATH"; which greet deploy',
+    hints: ["whichは複数のコマンド名をまとめて指定することもできます。"],
+    explanation: "whichにはスペース区切りで複数のコマンド名を渡すことができ、それぞれの実体のパスがまとめて表示されます。",
+  },
+  {
+    id: "ch08-ex40",
+    chapterId: "ch08",
+    prompt: "変数 EXTRA_BIN に $HOME/practice/ch08_env/mytools を設定し、PATHの先頭に追加してから、whichでdeployコマンドを検索してください。",
+    referenceSolution: 'EXTRA_BIN="$HOME/practice/ch08_env/mytools"; PATH="$EXTRA_BIN:$PATH"; which deploy',
+    hints: ["追加するディレクトリを変数にしてから使うと、複数箇所で使い回しやすくなります。"],
+    explanation: "追加するディレクトリをEXTRA_BINという変数にまとめてからPATHへ追加し、whichで検索できることを確認します。",
+  },
+  {
+    id: "ch08-ex41",
+    chapterId: "ch08",
+    prompt: "whichを使ってlsコマンドの実体のパスを確認してください。",
+    referenceSolution: "which ls",
+    hints: ["標準コマンドの実体は/binや/usr/binの下にあります。"],
+    explanation: "lsコマンドの実体は/bin/lsにあり、標準のPATH(/bin:/usr/bin)の中から見つけられます。",
+  },
+  {
+    id: "ch08-ex42",
+    chapterId: "ch08",
+    prompt: "whichを使ってgrepコマンドの実体のパスを確認してください。",
+    referenceSolution: "which grep",
+    hints: ["grepのような一部のコマンドは/usr/bin以下に置かれています。"],
+    explanation: "grepコマンドの実体は/usr/bin/grepにあります。",
+  },
+  {
+    id: "ch08-ex43",
+    chapterId: "ch08",
+    prompt: "PATHを存在しないディレクトリ /no/such/dir だけに設定してしまった場合に、whichでlsを検索するとどうなるか確認してください。",
+    referenceSolution: 'PATH="/no/such/dir"; which ls',
+    hints: ["存在しないディレクトリだけをPATHに設定すると、標準コマンドすら見つからなくなります。"],
+    explanation:
+      "PATHを実在しないディレクトリだけに設定してしまうと、/binや/usr/binが検索対象から外れてしまい、" +
+      "lsのような基本的なコマンドすら見つけられなくなります。",
+  },
+  {
+    id: "ch08-ex44",
+    chapterId: "ch08",
+    prompt: "PATHを誤って /no/such/dir に設定してしまったあと、/bin:/usr/bin という正しい値で設定し直し、whichでlsが再び見つかることを確認してください。",
+    referenceSolution: 'PATH="/no/such/dir"; PATH="/bin:/usr/bin"; which ls',
+    hints: ["誤った値を設定してしまっても、正しい値で再設定すれば元通りに使えるようになります。"],
+    explanation: "誤ってPATHを壊してしまっても、正しいディレクトリを含む値で再設定すれば、再びlsなどのコマンドが見つかるようになります。",
+  },
+
+  // --- Ch8: .bashrcへのエイリアス定義の追記 ---
+  {
+    id: "ch08-ex45",
+    chapterId: "ch08",
+    prompt: "$HOME/.bashrc の末尾に、ls -a を実行するエイリアス la を定義する行(alias la='ls -a')を追記してください。",
+    referenceSolution: "echo \"alias la='ls -a'\" >> $HOME/.bashrc",
+    hints: [">>を使うと、ファイルの末尾に追記できます(>だと上書きされてしまいます)。"],
+    explanation: "echo \"alias la='ls -a'\" >> $HOME/.bashrc により、.bashrcの末尾にエイリアス定義の行を追記できます。",
+  },
+  {
+    id: "ch08-ex46",
+    chapterId: "ch08",
+    prompt: "$HOME/.bashrc の末尾に、ls -la を実行するエイリアス lla を定義する行(alias lla='ls -la')を追記してください。",
+    referenceSolution: "echo \"alias lla='ls -la'\" >> $HOME/.bashrc",
+    hints: ["エイリアスの右辺はシングルクォートで囲み、1つの文字列としてまとめます。"],
+    explanation: "ls -laのようにオプションが複数付いたコマンドも、シングルクォートで囲んで1つのエイリアスにまとめられます。",
+  },
+  {
+    id: "ch08-ex47",
+    chapterId: "ch08",
+    prompt: "$HOME/.bashrc の末尾に、1つ上のディレクトリへ移動するエイリアス up を定義する行(alias up='cd ..')を追記してください。",
+    referenceSolution: "echo \"alias up='cd ..'\" >> $HOME/.bashrc",
+    hints: ["cd ..のような複数の単語からなるコマンドも、シングルクォートで1つにまとめます。"],
+    explanation: "alias up='cd ..' を追記すると、以後upと入力するだけで1つ上のディレクトリへ移動できるようになります。",
+  },
+  {
+    id: "ch08-ex48",
+    chapterId: "ch08",
+    prompt: "$HOME/.bashrc の末尾に、全ユーザーのプロセスを表示するエイリアス psx を定義する行(alias psx='ps -e')を追記してください。",
+    referenceSolution: "echo \"alias psx='ps -e'\" >> $HOME/.bashrc",
+    hints: ["psに-eを付けると全ユーザーのプロセスを表示できます。"],
+    explanation: "alias psx='ps -e' により、全ユーザーのプロセス一覧を短いコマンドで表示できるようになります。",
+  },
+  {
+    id: "ch08-ex49",
+    chapterId: "ch08",
+    prompt: "$HOME/.bashrc の末尾に、数値として並び替えるエイリアス sortn を定義する行(alias sortn='sort -n')を追記してください。",
+    referenceSolution: "echo \"alias sortn='sort -n'\" >> $HOME/.bashrc",
+    hints: ["sortに-nを付けると数値として並び替えられます。"],
+    explanation: "alias sortn='sort -n' により、数値としての並び替えを短いコマンドで実行できるようになります。",
+  },
+  {
+    id: "ch08-ex50",
+    chapterId: "ch08",
+    prompt: "$HOME/.bashrc の末尾に、行番号付きで検索するエイリアス grepn を定義する行(alias grepn='grep -n')を追記してください。",
+    referenceSolution: "echo \"alias grepn='grep -n'\" >> $HOME/.bashrc",
+    hints: ["grepに-nを付けると行番号付きで検索結果を表示できます。"],
+    explanation: "alias grepn='grep -n' により、行番号付きの検索を短いコマンドで実行できるようになります。",
+  },
+  {
+    id: "ch08-ex51",
+    chapterId: "ch08",
+    prompt: "$HOME/.bashrc の末尾に、カレントディレクトリ以下のファイルだけを検索するエイリアス findf を定義する行(alias findf='find . -type f')を追記してください。",
+    referenceSolution: "echo \"alias findf='find . -type f'\" >> $HOME/.bashrc",
+    hints: ["findのオプションを含む長いコマンドも1つのエイリアスにまとめられます。"],
+    explanation: "alias findf='find . -type f' により、カレントディレクトリ以下のファイルだけを検索する長いコマンドを短く呼び出せるようになります。",
+  },
+  {
+    id: "ch08-ex52",
+    chapterId: "ch08",
+    prompt: "ヒアドキュメント(cat >> ファイル <<EOF ... EOF)を使って、mkdirp='mkdir -p' と cpr='cp -r' の2つのエイリアスを $HOME/.bashrc にまとめて追記してください。",
+    referenceSolution: "cat >> $HOME/.bashrc <<EOF\nalias mkdirp='mkdir -p'\nalias cpr='cp -r'\nEOF",
+    hints: ["cat >> ファイル <<EOF ... EOF のヒアドキュメントを使うと、複数行を一度にまとめて追記できます。"],
+    explanation:
+      "ヒアドキュメント(<<EOF 〜 EOF)を使うと、複数行のテキストを一度のコマンドでまとめてファイルに追記できます。" +
+      "1行ずつechoで追記するよりも効率的です。",
+  },
+  {
+    id: "ch08-ex53",
+    chapterId: "ch08",
+    prompt: "ヒアドキュメントを使って、catn='cat'、wcl='wc -l'、dufu='diff -u' の3つのエイリアスを $HOME/.bashrc にまとめて追記してください。",
+    referenceSolution: "cat >> $HOME/.bashrc <<EOF\nalias catn='cat'\nalias wcl='wc -l'\nalias dufu='diff -u'\nEOF",
+    hints: ["ヒアドキュメントの中には何行でも書くことができます。"],
+    explanation: "ヒアドキュメントの中に複数のalias行を書くことで、3つのエイリアスを1回のコマンドでまとめて.bashrcに追記できます。",
+  },
+  {
+    id: "ch08-ex54",
+    chapterId: "ch08",
+    prompt: "$HOME/.bashrc に ff='find . -type f' というエイリアスを追記したあと、catでファイル全体を出力しwc -lで行数を数えてください。",
+    referenceSolution: "echo \"alias ff='find . -type f'\" >> $HOME/.bashrc; cat $HOME/.bashrc | wc -l",
+    hints: ["追記の前後で行数を確認すると、正しく1行増えたかどうかを確かめられます。"],
+    explanation:
+      "catでファイルの内容を出力し、それをパイプでwc -lに渡すことで、.bashrc全体の行数を確認できます。" +
+      "追記のたびに行数が増えていくことが確認できます。",
+  },
+
+  // --- Ch8: .bashrcへの環境変数(export)設定の追記 ---
+  {
+    id: "ch08-ex55",
+    chapterId: "ch08",
+    prompt: "$HOME/.bashrc の末尾に、デフォルトエディタをvimに設定する行(export EDITOR=vim)を追記してください。",
+    referenceSolution: 'echo "export EDITOR=vim" >> $HOME/.bashrc',
+    hints: ["exportを付けて書いておくことで、環境変数として設定する行になります。"],
+    explanation: "export EDITOR=vim という行を.bashrcに追記しておくと、シェルを起動するたびにEDITORが自動的に環境変数として設定されます。",
+  },
+  {
+    id: "ch08-ex56",
+    chapterId: "ch08",
+    prompt: "$HOME/.bashrc の末尾に、日本語ロケールを設定する行(export LANG=ja_JP.UTF-8)を追記してください。",
+    referenceSolution: 'echo "export LANG=ja_JP.UTF-8" >> $HOME/.bashrc',
+    hints: ["ロケールの設定も.bashrcに書いておくことで自動化できます。"],
+    explanation: "export LANG=ja_JP.UTF-8 を.bashrcに追記しておくと、シェルを開くたびに日本語ロケールが自動的に設定されます。",
+  },
+  {
+    id: "ch08-ex57",
+    chapterId: "ch08",
+    prompt: "$HOME/.bashrc の末尾に、PATHへ$HOME/binを追加する設定行(export PATH=\"$HOME/bin:$PATH\")を、この場では変数展開させずに文字通り追記してください。",
+    referenceSolution: 'echo \'export PATH="$HOME/bin:$PATH"\' >> $HOME/.bashrc',
+    hints: ["この時点では$HOMEや$PATHを展開してほしくないので、シングルクォートで囲みます。"],
+    explanation:
+      'シングルクォートで囲むことで$HOMEや$PATHがこの場では展開されず、文字通りの文字列export PATH="$HOME/bin:$PATH"として' +
+      ".bashrcに書き込まれます。次回シェルを起動したときに、その時点のPATHを使って評価されます。",
+  },
+  {
+    id: "ch08-ex58",
+    chapterId: "ch08",
+    prompt: "$HOME/.bashrc の末尾に、ロケールをすべてCに統一する行(export LC_ALL=C)を追記してください。",
+    referenceSolution: 'echo "export LC_ALL=C" >> $HOME/.bashrc',
+    hints: ["LC_ALLはLANGよりも優先されるロケール設定です。"],
+    explanation: "export LC_ALL=C を追記すると、すべてのロケールカテゴリをC(標準的な英語表記)に統一する設定が、シェル起動時に自動的に適用されます。",
+  },
+  {
+    id: "ch08-ex59",
+    chapterId: "ch08",
+    prompt: "$HOME/.bashrc の末尾に、タイムゾーンを日本時間に設定する行(export TZ=Asia/Tokyo)を追記してください。",
+    referenceSolution: 'echo "export TZ=Asia/Tokyo" >> $HOME/.bashrc',
+    hints: ["TZはタイムゾーンを指定する環境変数です。"],
+    explanation: "export TZ=Asia/Tokyo を追記すると、シェル起動時にタイムゾーンが日本時間に設定されます。",
+  },
+  {
+    id: "ch08-ex60",
+    chapterId: "ch08",
+    prompt: "ヒアドキュメントを使って、EDITOR、LANG、TZの3つの環境変数の設定(export行)を $HOME/.bashrc にまとめて追記してください。",
+    referenceSolution: "cat >> $HOME/.bashrc <<EOF\nexport EDITOR=vim\nexport LANG=ja_JP.UTF-8\nexport TZ=Asia/Tokyo\nEOF",
+    hints: ["export行も、aliasと同様にヒアドキュメントでまとめて追記できます。"],
+    explanation: "複数のexport行をヒアドキュメントでまとめて追記することで、一度に3つの環境変数の設定を.bashrcに反映できます。",
+  },
+  {
+    id: "ch08-ex61",
+    chapterId: "ch08",
+    prompt: "$HOME/.bashrc の末尾に export HISTSIZE=1000 を追記したあと、tail -n 3 で末尾3行を表示して確認してください。",
+    referenceSolution: 'echo "export HISTSIZE=1000" >> $HOME/.bashrc; tail -n 3 $HOME/.bashrc',
+    hints: ["末尾に追記した内容がtailで確認できるはずです。"],
+    explanation: "追記した直後にtail -n 3で末尾3行を確認することで、export行が正しく追加されたかをすぐに確かめられます。",
+  },
+  {
+    id: "ch08-ex62",
+    chapterId: "ch08",
+    prompt: "ヒアドキュメントを使って、export EDITOR=vim と alias ll='ls -l' の2行を $HOME/.bashrc にまとめて追記してください。",
+    referenceSolution: "cat >> $HOME/.bashrc <<EOF\nexport EDITOR=vim\nalias ll='ls -l'\nEOF",
+    hints: ["エイリアスと環境変数の設定を同じヒアドキュメントの中にまとめて書くこともできます。"],
+    explanation: "1つのヒアドキュメントの中にexport行とalias行を両方含めることで、環境変数の設定とエイリアスの定義をまとめて.bashrcに追記できます。",
+  },
+
+  // --- Ch8: .bashrcの内容の確認・検索 ---
+  {
+    id: "ch08-ex63",
+    chapterId: "ch08",
+    prompt: "$HOME/.bashrc の中身をcatで表示してください。",
+    referenceSolution: "cat $HOME/.bashrc",
+    hints: ["catコマンドでファイルの中身をそのまま表示できます。"],
+    explanation: "catコマンドで.bashrcの内容を表示すると、現在どのような設定が書かれているかを確認できます。",
+  },
+  {
+    id: "ch08-ex64",
+    chapterId: "ch08",
+    prompt: "$HOME/.bashrc に ll='ls -l' というエイリアスを追記したあと、grepで\"alias\"という単語を含む行だけを検索してください。",
+    referenceSolution: "echo \"alias ll='ls -l'\" >> $HOME/.bashrc; grep alias $HOME/.bashrc",
+    hints: ["grepでファイルの中から特定の単語を含む行だけを検索できます。"],
+    explanation: "grep alias $HOME/.bashrc により、.bashrcの中からaliasという単語を含む行だけを抽出して確認できます。",
+  },
+  {
+    id: "ch08-ex65",
+    chapterId: "ch08",
+    prompt: "$HOME/.bashrc に export EDITOR=vim を追記したあと、grepで\"export\"という単語を含む行だけを検索してください。",
+    referenceSolution: 'echo "export EDITOR=vim" >> $HOME/.bashrc; grep export $HOME/.bashrc',
+    hints: ["exportという単語で検索すると、環境変数の設定行だけを抽出できます。"],
+    explanation: "grep export $HOME/.bashrc により、.bashrcの中からexportという単語を含む行(環境変数の設定行)だけを抽出できます。",
+  },
+  {
+    id: "ch08-ex66",
+    chapterId: "ch08",
+    prompt: "$HOME/.bashrc の行数をwc -lで数えてください。",
+    referenceSolution: "wc -l $HOME/.bashrc",
+    hints: ["wc -l でファイルの行数を数えられます。"],
+    explanation: "wc -l $HOME/.bashrc により、.bashrcファイルの行数を確認できます。",
+  },
+  {
+    id: "ch08-ex67",
+    chapterId: "ch08",
+    prompt: "$HOME/.bashrc の先頭5行をheadで表示してください。",
+    referenceSolution: "head -n 5 $HOME/.bashrc",
+    hints: ["head -n 行数 で、ファイルの先頭から指定した行数だけを表示できます。"],
+    explanation: "head -n 5 $HOME/.bashrc により、.bashrcの先頭5行だけを表示できます。",
+  },
+  {
+    id: "ch08-ex68",
+    chapterId: "ch08",
+    prompt: "$HOME/.bashrc に la='ls -a' というエイリアスを追記したあと、tail -n 2 で末尾2行を表示してください。",
+    referenceSolution: "echo \"alias la='ls -a'\" >> $HOME/.bashrc; tail -n 2 $HOME/.bashrc",
+    hints: ["tail -n 行数 で、ファイルの末尾から指定した行数だけを表示できます。"],
+    explanation: "tail -n 2 $HOME/.bashrc により、追記した直後の.bashrcの末尾2行を確認できます。",
+  },
+  {
+    id: "ch08-ex69",
+    chapterId: "ch08",
+    prompt: "$HOME/.bashrc に ll='ls -l' というエイリアスを追記したあと、grep -n を使ってalias行の行番号を確認してください。",
+    referenceSolution: "echo \"alias ll='ls -l'\" >> $HOME/.bashrc; grep -n alias $HOME/.bashrc",
+    hints: ["grep -n を使うと、マッチした行の行番号も一緒に表示されます。"],
+    explanation: "grep -n alias $HOME/.bashrc により、alias行が.bashrcの中の何行目にあるかを行番号付きで確認できます。",
+  },
+  {
+    id: "ch08-ex70",
+    chapterId: "ch08",
+    prompt: "ヒアドキュメントで ll, la, lla の3つのエイリアスを $HOME/.bashrc に追記したあと、grepとwc -lを組み合わせてエイリアスの定義数を数えてください。",
+    referenceSolution:
+      "cat >> $HOME/.bashrc <<EOF\nalias ll='ls -l'\nalias la='ls -a'\nalias lla='ls -la'\nEOF\ngrep alias $HOME/.bashrc | wc -l",
+    hints: ["grepの結果をパイプでwc -lに渡すと、マッチした行数を数えられます。"],
+    explanation: "grep alias $HOME/.bashrc | wc -l のように、grepの検索結果をwc -lに渡すことで、定義されているエイリアスの数を数えられます。",
+  },
+  {
+    id: "ch08-ex71",
+    chapterId: "ch08",
+    prompt: "$HOME/.bash_profile の中身をcatで表示してください。",
+    referenceSolution: "cat $HOME/.bash_profile",
+    hints: [".bash_profileにも.bashrcを読み込むための記述が含まれています。"],
+    explanation: ".bash_profileの中身を確認すると、if [ -f ~/.bashrc ]; then . ~/.bashrc; fi のように、.bashrcを読み込む記述が含まれていることがわかります。",
+  },
+  {
+    id: "ch08-ex72",
+    chapterId: "ch08",
+    prompt: "$HOME/.bashrc と $HOME/.bash_profile をdiffで比較し、内容の違いを確認してください。",
+    referenceSolution: "diff $HOME/.bashrc $HOME/.bash_profile",
+    hints: ["diffで2つのファイルを比較すると、内容の違いを行単位で確認できます。"],
+    explanation: "diffコマンドで.bashrcと.bash_profileを比較すると、それぞれのファイルにどのような内容の違いがあるかを行単位で確認できます。",
+  },
+
+  // --- Ch8: .bashrcの編集・バックアップ ---
+  {
+    id: "ch08-ex73",
+    chapterId: "ch08",
+    prompt: "$HOME/.bashrc を $HOME/.bashrc.bak という名前でコピーし、バックアップを作成してください。",
+    referenceSolution: "cp $HOME/.bashrc $HOME/.bashrc.bak",
+    hints: ["設定ファイルを編集する前にコピーしてバックアップを取っておくと安全です。"],
+    explanation: "cpコマンドで.bashrcを.bashrc.bakという名前でコピーしておくことで、後から元の状態に戻せるようになります。",
+  },
+  {
+    id: "ch08-ex74",
+    chapterId: "ch08",
+    prompt: "$HOME/.bashrc を $HOME/.bashrc.bak にコピーしたあと、diffで両者を比較して差分がないことを確認してください。",
+    referenceSolution: "cp $HOME/.bashrc $HOME/.bashrc.bak; diff $HOME/.bashrc $HOME/.bashrc.bak",
+    hints: ["コピー直後は内容が同一のはずなので、diffの出力は何もないはずです。"],
+    explanation: "コピーした直後の.bashrcと.bashrc.bakの内容は同一であるため、diffを実行しても差分は表示されません。",
+  },
+  {
+    id: "ch08-ex75",
+    chapterId: "ch08",
+    prompt: "$HOME/.bashrc をバックアップしたあと、ll='ls -l' というエイリアスを追記し、diffでバックアップとの差分を確認してください。",
+    referenceSolution: "cp $HOME/.bashrc $HOME/.bashrc.bak; echo \"alias ll='ls -l'\" >> $HOME/.bashrc; diff $HOME/.bashrc.bak $HOME/.bashrc",
+    hints: ["バックアップを取った後に変更を加えると、diffでその差分が確認できます。"],
+    explanation:
+      "バックアップ後に.bashrcへ行を追記すると、diff $HOME/.bashrc.bak $HOME/.bashrc の結果に追記した行が差分として" +
+      "表示されます。",
+  },
+  {
+    id: "ch08-ex76",
+    chapterId: "ch08",
+    prompt: "$HOME/.bashrc をバックアップしたあと、誤ったエイリアス(alias mistake='rm -r /')を追記してしまったので、バックアップから復元し、diffで差分がないことを確認してください。",
+    referenceSolution:
+      "cp $HOME/.bashrc $HOME/.bashrc.bak; echo \"alias mistake='rm -r /'\" >> $HOME/.bashrc; " +
+      "cp $HOME/.bashrc.bak $HOME/.bashrc; diff $HOME/.bashrc $HOME/.bashrc.bak",
+    hints: ["バックアップファイルを元のファイルへ上書きコピーすれば、変更前の状態に戻せます。"],
+    explanation:
+      "誤った内容を追記してしまっても、あらかじめ取っておいたバックアップを元のファイル名へコピーし直すことで、" +
+      "変更前の状態に復元できます。復元後にdiffを実行すると差分がないことが確認できます。",
+  },
+  {
+    id: "ch08-ex77",
+    chapterId: "ch08",
+    prompt: "$HOME/.bashrc に誤ったエイリアス(alias mistake='rm -r /')を追記してしまったので、grep -vでその行だけを取り除いた内容に置き換えてください。",
+    referenceSolution:
+      "echo \"alias mistake='rm -r /'\" >> $HOME/.bashrc; grep -v mistake $HOME/.bashrc > $HOME/.bashrc.new; " +
+      "mv $HOME/.bashrc.new $HOME/.bashrc; grep mistake $HOME/.bashrc",
+    hints: ["grep -v を使うと、指定した単語を含まない行だけを抽出できます。", "抽出結果を別名のファイルに保存してから、mvで元のファイル名に置き換えます。"],
+    explanation:
+      "grep -v mistakeで「mistakeを含まない行」だけを抽出して新しいファイルに保存し、mvで元の.bashrcへ置き換えることで、" +
+      "特定の行だけを取り除いた内容に更新できます。最後のgrepで該当行が見つからないことを確認します。",
+  },
+  {
+    id: "ch08-ex78",
+    chapterId: "ch08",
+    prompt: "$HOME/.bashrc に alias oldtool='ls -l' を追記したあと、sedを使ってoldtoolを含む行を削除してください。",
+    referenceSolution:
+      "echo \"alias oldtool='ls -l'\" >> $HOME/.bashrc; sed '/oldtool/d' $HOME/.bashrc > $HOME/.bashrc.tmp; " +
+      "mv $HOME/.bashrc.tmp $HOME/.bashrc; grep oldtool $HOME/.bashrc",
+    hints: ["sedの'/パターン/d'は、パターンにマッチした行を削除します。"],
+    explanation:
+      "sed '/oldtool/d' は、oldtoolという文字列を含む行を削除して残りの内容を出力します。出力を別ファイルに保存してから" +
+      "mvで置き換えることで、該当行だけを取り除いた.bashrcに更新できます。",
+  },
+  {
+    id: "ch08-ex79",
+    chapterId: "ch08",
+    prompt: "$HOME/.bashrc に alias ll='ls -l' を追記したあと、sedでls -lをls -laに置換してエイリアスの中身を書き換えてください。",
+    referenceSolution:
+      "echo \"alias ll='ls -l'\" >> $HOME/.bashrc; sed 's/ls -l/ls -la/' $HOME/.bashrc > $HOME/.bashrc.tmp; " +
+      "mv $HOME/.bashrc.tmp $HOME/.bashrc; grep ll $HOME/.bashrc",
+    hints: ["sedの's/前/後/'は、最初にマッチした部分を置換します。"],
+    explanation:
+      "sed 's/ls -l/ls -la/' は、行内のls -lという文字列をls -laに置き換えます。この結果を別ファイルに保存してから" +
+      "mvで置き換えることで、エイリアスの中身を書き換えられます。",
+  },
+  {
+    id: "ch08-ex80",
+    chapterId: "ch08",
+    prompt: "$HOME/.bashrc をバックアップしたあと、z='ls -la' というエイリアスを追記し、diffの結果をwc -lに渡して差分の行数を数えてください。",
+    referenceSolution: "cp $HOME/.bashrc $HOME/.bashrc.bak; echo \"alias z='ls -la'\" >> $HOME/.bashrc; diff $HOME/.bashrc.bak $HOME/.bashrc | wc -l",
+    hints: ["diffの出力をwc -lに渡すと、差分の行数を数えられます。"],
+    explanation:
+      "diffの出力をパイプでwc -lに渡すことで、バックアップと現在の内容との間にどれだけの差分(変更行)があるかを" +
+      "数値で確認できます。",
+  },
+
+  // --- Ch8: エイリアスの概念 ---
+  {
+    id: "ch08-ex81",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "aliasコマンドの目的として、最も適切なものはどれですか?",
+    choices: [
+      "よく使うコマンドに短い別名(エイリアス)を付けて、入力の手間を減らす",
+      "ファイルの権限を変更する",
+      "環境変数の値を一覧表示する",
+      "シェルスクリプトを実行可能にする",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["「alias」は英語で「別名」を意味します。"],
+    explanation: "aliasコマンドは、よく使う長いコマンドやオプション付きのコマンドに短い別名を付けることで、タイプ数を減らし、入力ミスを防ぐことができます。",
+  },
+  {
+    id: "ch08-ex82",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "エイリアスを定義する構文として正しいものはどれですか?",
+    choices: ["alias ll='ls -l'", "alias ll = ls -l", "ll alias='ls -l'", "set alias ll='ls -l'"],
+    correctChoiceIndex: 0,
+    hints: ["代入と同様、= の前後にスペースを入れません。"],
+    explanation:
+      "alias 名前=コマンド の形式で定義します。=の前後にスペースを入れるとエラーになります(変数代入と同じルール)。" +
+      "コマンドにスペースを含む場合はシングルクォート等で囲みます。",
+  },
+  {
+    id: "ch08-ex83",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "エイリアス ll='ls -l' を定義したあとに ll と入力すると、実際にはどのコマンドが実行されますか?",
+    choices: ["ls -l", "ll という名前の新しいコマンド", "ls コマンドのヘルプ", "何も実行されない(定義しただけでは使えない)"],
+    correctChoiceIndex: 0,
+    hints: ["エイリアスは入力されたコマンド名を、定義した内容にそのまま置き換えて実行します。"],
+    explanation: "エイリアスを定義すると、シェルはコマンド名として ll が入力された際にそれを ls -l に置き換えてから実行します。",
+  },
+  {
+    id: "ch08-ex84",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "定義済みのエイリアスを一覧表示するコマンドはどれですか?",
+    choices: ["alias(引数なし)", "alias -l", "ls alias", "cat /etc/alias"],
+    correctChoiceIndex: 0,
+    hints: ["aliasコマンドは、引数を付けて定義する他に、引数なしで実行する使い方もあります。"],
+    explanation: "alias を引数なしで実行すると、現在定義されているすべてのエイリアスの一覧が表示されます。",
+  },
+  {
+    id: "ch08-ex85",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "定義したエイリアスを削除するコマンドはどれですか?",
+    choices: ["unalias ll", "alias -d ll", "rm alias ll", "delalias ll"],
+    correctChoiceIndex: 0,
+    hints: ["「un」は「〜を取り消す」という意味の接頭辞です。"],
+    explanation: "unalias 名前 で指定したエイリアスの定義を削除できます。すべてのエイリアスを一括削除するには unalias -a を使います。",
+  },
+  {
+    id: "ch08-ex86",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "エイリアス rm='rm -i' の主な目的として、最も適切なものはどれですか?",
+    choices: [
+      "rmコマンド実行時に毎回確認を挟むことで、誤って重要なファイルを削除してしまう事故を防ぐ",
+      "rmコマンドの実行速度を高速化する",
+      "rmコマンドで削除したファイルを復元できるようにする",
+      "rmコマンドの出力を日本語化する",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["-iオプションは「確認(interactive)」を意味します。"],
+    explanation: "rm -i は削除前に確認を求めるオプションです。rmを常にrm -iとしてエイリアス化しておくと、誤操作による事故を防ぐ安全対策になります。",
+  },
+  {
+    id: "ch08-ex87",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "一時的にではなく、ログインするたびに自動的にエイリアスを有効にしたい場合、どうするのが適切ですか?",
+    choices: [
+      "aliasコマンドを ~/.bashrc に書いておく",
+      "aliasコマンドを毎回手入力する",
+      "エイリアスは一度定義すれば永久に有効なので何もしなくてよい",
+      "/etc/passwd に書いておく",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["シェル起動時に自動的に読み込まれる設定ファイルはどれだったか、Ch8前半の内容を思い出しましょう。"],
+    explanation:
+      "ターミナルを閉じたりログアウトしたりするとaliasコマンドで定義した内容は失われます。~/.bashrcに書いておくことで、" +
+      "シェルを起動するたびに自動的に同じエイリアスが定義されます。",
+  },
+  {
+    id: "ch08-ex88",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "次のうち、エイリアスの右辺(コマンド部分)をシングルクォートで囲む理由として最も適切なものはどれですか?",
+    choices: [
+      "スペースを含むコマンド文字列を1つの引数としてまとめ、かつ$などの特殊文字が意図せず展開されるのを防ぐため",
+      "エイリアス名を大文字小文字を区別せずに扱うため",
+      "定義したエイリアスをroot権限で実行するため",
+      "コマンドの実行結果をファイルに保存するため",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["シングルクォートは変数展開やコマンド置換を抑制し、文字列をそのまま扱います。"],
+    explanation:
+      "alias ll='ls -l' のようにシングルクォートで囲むことで、スペースを含む文字列を1つの値としてまとめられ、また$や" +
+      "`のような特殊文字が定義時に展開されてしまうのを防げます。",
+  },
+  {
+    id: "ch08-ex89",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "すでに存在するコマンド名と同じ名前でエイリアスを定義した場合(例: alias ls='ls --color=auto')、どうなりますか?",
+    choices: [
+      "以後そのシェルでlsと入力すると、エイリアスの定義(ls --color=auto)が優先して実行される",
+      "エラーになり、エイリアスは定義できない",
+      "元のlsコマンドが常に優先され、エイリアスは無視される",
+      "lsという名前のファイルが自動的に作成される",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["エイリアスは既存のコマンド名を「上書き」するように働きます。"],
+    explanation:
+      "エイリアスは同名の外部コマンドよりも優先して解釈されます。元のコマンドを使いたい場合は \\ls のようにバックスラッシュを" +
+      "前置するか、フルパスで指定します。",
+  },
+  {
+    id: "ch08-ex90",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "次のうち、エイリアスの使い道として最も適切ではないものはどれですか?",
+    choices: [
+      "ネットワーク越しに他のユーザーのファイルを暗号化して送信する",
+      "ls -l を ll という短い名前で呼び出せるようにする",
+      "grep --color=auto のように、よく使うオプション付きのコマンドを短い名前にする",
+      "rm -i のように、危険な操作に確認を挟むようにする",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["エイリアスはあくまで「既存コマンドの短縮・安全な呼び出し」のための仕組みです。"],
+    explanation: "エイリアスは既存のコマンドに別名を付けたり、よく使うオプションを省略できるようにする仕組みであり、暗号化通信のような新しい機能を追加するものではありません。",
+  },
+
+  // --- Ch8: 主要な環境変数の意味 ---
+  {
+    id: "ch08-ex91",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "環境変数 HOME が保持する情報として、最も適切なものはどれですか?",
+    choices: [
+      "ログインユーザーのホームディレクトリの絶対パス",
+      "現在のカレントディレクトリ",
+      "ユーザーが使用しているシェルの種類",
+      "システムにログイン中の全ユーザー数",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["cd を引数なしで実行すると移動する先のディレクトリです。"],
+    explanation: "HOMEはログインユーザーのホームディレクトリ(例: /home/study)を保持する環境変数で、cdを引数なしで実行した際の移動先や、~の展開先としても使われます。",
+  },
+  {
+    id: "ch08-ex92",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "環境変数 PATH の役割として、最も適切なものはどれですか?",
+    choices: [
+      "コマンドを実行する際に、その実行ファイルを探索するディレクトリの一覧をコロン区切りで保持する",
+      "現在のシェルのプロセスIDを保持する",
+      "ユーザーのパスワードをハッシュ化して保持する",
+      "直前に実行したコマンドの実行結果(標準出力)を保持する",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["whichコマンドはこの環境変数に列挙されたディレクトリを順に探索します。"],
+    explanation: "PATHはコマンド名からその実行ファイルを探すディレクトリの一覧を:区切りで保持する環境変数です。コマンドを実行すると、シェルはPATHに列挙されたディレクトリを順番に探索します。",
+  },
+  {
+    id: "ch08-ex93",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "環境変数 USER(またはLOGNAME)が保持する情報は?",
+    choices: ["現在ログインしているユーザー名", "システムの総ユーザー数", "ユーザーのホームディレクトリ", "ユーザーが最後にログインした日時"],
+    correctChoiceIndex: 0,
+    hints: ["whoamiコマンドの実行結果に近い情報です。"],
+    explanation: "USER(ディストリビューションによってはLOGNAME)は現在ログインしているユーザーのユーザー名を保持する環境変数です。",
+  },
+  {
+    id: "ch08-ex94",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "環境変数 SHELL が保持する情報は?",
+    choices: [
+      "ログインシェルとして設定されている実行ファイルのパス(例: /bin/bash)",
+      "現在実行中のシェルスクリプトのファイル名",
+      "シェルのバージョン番号",
+      "シェルが起動してからの経過時間",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["/etc/passwdの各行の最後のフィールドと対応する情報です。"],
+    explanation:
+      "SHELLはそのユーザーのログインシェルとして設定されている実行ファイルのパス(/bin/bash等)を保持する環境変数です。" +
+      "/etc/passwdの各ユーザーのエントリの最後のフィールドに設定されているものと対応します。",
+  },
+  {
+    id: "ch08-ex95",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "環境変数 LANG の役割は?",
+    choices: [
+      "メッセージの言語や文字コード(ロケール)を指定する(例: ja_JP.UTF-8)",
+      "ネットワークの言語プロトコルを指定する",
+      "ログに記録する言語を指定する",
+      "キーボードの配列を指定する",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["日本語のエラーメッセージを表示させたいときに設定する環境変数です。"],
+    explanation: "LANGはメッセージの表示言語や文字コードなどのロケールを指定する環境変数です。ja_JP.UTF-8に設定すると、対応したコマンドは日本語・UTF-8でメッセージを表示します。",
+  },
+  {
+    id: "ch08-ex96",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "環境変数 TERM の役割は?",
+    choices: [
+      "使用している端末(ターミナル)の種類を示し、対応する制御シーケンスを決める",
+      "ターミナルの文字色を直接指定する",
+      "ターミナルウィンドウのサイズ(幅・高さ)そのものを保持する",
+      "ターミナルにログインしているユーザー数を保持する",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["xtermやscreenなど、端末エミュレータの「種類」を表す文字列が入ります。"],
+    explanation: "TERMは使用している端末の種類(xterm, screen等)を示す環境変数で、この値によってカーソル移動や色表示などの制御シーケンスの解釈方法が決まります。",
+  },
+  {
+    id: "ch08-ex97",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "環境変数 PWD の役割は?",
+    choices: [
+      "現在のカレントディレクトリの絶対パスを保持する",
+      "直前にいたディレクトリのパスを保持する",
+      "プロセスの作業優先度を保持する",
+      "ホームディレクトリのパスを保持する",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["pwdコマンドの出力結果に近い情報を、シェル自身が変数としても保持しています。"],
+    explanation: "PWDは現在のカレントディレクトリの絶対パスを保持する環境変数で、cdコマンドで移動するたびにシェルによって更新されます。",
+  },
+  {
+    id: "ch08-ex98",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "環境変数 OLDPWD の役割は?",
+    choices: [
+      "1つ前にいたディレクトリのパスを保持し、cd -で戻る際に使われる",
+      "最も古い(最初に作成された)ファイルのパスを保持する",
+      "削除されたファイルの一時保管場所を保持する",
+      "システムが最初に起動したディレクトリを保持する",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["「cd -」で直前のディレクトリに戻れるのは、この変数のおかげです。"],
+    explanation: "OLDPWDはcdで移動する前にいたディレクトリのパスを保持する環境変数です。cd -を実行すると、この値のディレクトリへ移動します。",
+  },
+  {
+    id: "ch08-ex99",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "環境変数 HOSTNAME の役割は?",
+    choices: [
+      "そのコンピュータ(ホスト)自身のネットワーク上の名前を保持する",
+      "接続中のリモートホストのIPアドレスを保持する",
+      "ホームディレクトリがあるパーティション名を保持する",
+      "インストールされているホストOSの種類を保持する",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["プロンプトに表示される「ユーザー名@ホスト名」の後半部分に対応します。"],
+    explanation: "HOSTNAMEはそのコンピュータ自身のネットワーク上の名前(ホスト名)を保持する環境変数です。",
+  },
+  {
+    id: "ch08-ex100",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "環境変数 EDITOR の役割は?",
+    choices: [
+      "各種コマンドがテキスト編集のために起動するデフォルトのエディタを指定する",
+      "ファイルの拡張子と関連付けるプログラムの一覧を保持する",
+      "エディタのライセンスキーを保持する",
+      "最後に編集したファイルのパスを保持する",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["git commitなどでコミットメッセージを書くエディタが起動する際にも参照されることがあります。"],
+    explanation: "EDITORはvisudoやgit commit等、テキスト編集が必要な場面でどのエディタを起動するかを指定する環境変数です(例: export EDITOR=vim)。",
+  },
+  {
+    id: "ch08-ex101",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "環境変数 MAIL の役割は?",
+    choices: [
+      "そのユーザー宛てのローカルメールボックスのファイルパスを保持する",
+      "送信済みメールの件数を保持する",
+      "SMTPサーバーのアドレスを保持する",
+      "メールソフトの自動起動間隔(秒)を保持する",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["昔ながらのUNIXシステムでは、ユーザー宛てのメールは/var/spool/mail以下のファイルに届きました。"],
+    explanation: "MAILはそのユーザー宛てのローカルメールボックスファイルのパスを保持する環境変数で、シェルが新着メールの有無を確認する際などに使われます。",
+  },
+  {
+    id: "ch08-ex102",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "環境変数 HISTSIZE の役割は?",
+    choices: [
+      "シェルのコマンド履歴として、メモリ上に保持する件数の上限を指定する",
+      "ヒストリファイルの1行あたりの最大文字数を指定する",
+      "ディスク上のファイルシステムの履歴バージョン数を指定する",
+      "画面に表示する履歴の色を指定する",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["「HISTORY」+「SIZE」で「履歴の件数」を表します。"],
+    explanation: "HISTSIZEは、現在のシェルセッションがメモリ上に保持するコマンド履歴の最大件数を指定する環境変数です。",
+  },
+  {
+    id: "ch08-ex103",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "環境変数 PS1 の役割は?",
+    choices: [
+      "通常のコマンド入力を待つ際に表示されるプロンプト文字列の書式を指定する",
+      "2番目のシェルスクリプトの実行優先度を指定する",
+      "パスワード入力時にマスクする文字を指定する",
+      "プロセスのスケジューリング優先度を指定する",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["「PS」はPrompt String(プロンプト文字列)の略です。"],
+    explanation:
+      "PS1は通常のコマンド入力待ちの際に表示されるプロンプトの書式を指定する環境変数です。\\uでユーザー名、\\hでホスト名、" +
+      "\\Wでカレントディレクトリ名などを埋め込めます。",
+  },
+  {
+    id: "ch08-ex104",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "LOGNAME と USER: 一般的にこの2つの環境変数が保持する情報の関係として、最も適切な説明はどれですか?",
+    choices: [
+      "どちらも現在ログインしているユーザー名を保持しており、実質的に同じ情報を指す",
+      "LOGNAMEはrootユーザー専用、USERは一般ユーザー専用の変数である",
+      "LOGNAMEはログイン日時、USERはユーザー名を保持する",
+      "LOGNAMEはリモートユーザー、USERはローカルユーザーの名前を保持する",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["歴史的経緯で2種類の名前が使われていますが、指している内容はほぼ同じです。"],
+    explanation:
+      "LOGNAMEとUSERはどちらも現在ログインしているユーザー名を保持する環境変数で、多くのシステムで両方が同じ値に" +
+      "設定されています(歴史的にSystem V系はLOGNAME、BSD系はUSERを使っていた名残です)。",
+  },
+
+  // --- Ch8: シェル変数と環境変数の違い ---
+  {
+    id: "ch08-ex105",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "「シェル変数」と「環境変数」の違いを説明したものとして、最も適切なものはどれですか?",
+    choices: [
+      "シェル変数はそのシェル自身の中でのみ有効だが、環境変数はexportすることで、その後起動する子プロセス(コマンドやスクリプト)にも値が引き継がれる",
+      "シェル変数は数値のみ、環境変数は文字列のみを保持できる",
+      "シェル変数は読み取り専用、環境変数は書き込み可能という違いがある",
+      "シェル変数は/etc配下に、環境変数は/home配下に保存される",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["exportというコマンド名は「外部に(子プロセスに)持ち出す」という意味合いです。"],
+    explanation:
+      "VAR=valueのように定義しただけの変数はそのシェル内でのみ有効な「シェル変数」です。export VARとすることで" +
+      "「環境変数」となり、以後起動する子プロセス(コマンドやシェルスクリプトなど)にも値が引き継がれます。",
+  },
+  {
+    id: "ch08-ex106",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "NAME=\"Alice\" のようにシェル変数として定義した後、そのシェルから新しいシェルスクリプト(子プロセス)を実行した場合、そのスクリプトの中で $NAME を参照するとどうなりますか?",
+    choices: [
+      "exportしていないため、子プロセスには引き継がれず空文字列として扱われる",
+      "自動的に引き継がれ、Aliceと表示される",
+      "エラーになりスクリプトの実行が止まる",
+      "親プロセス側の変数の値が書き換わる",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["子プロセスに値を引き継ぐには、あらかじめexportしておく必要があります。"],
+    explanation: "exportしていないシェル変数は、そのシェル自身の中でしか参照できません。子プロセス(スクリプトや別のコマンド)からは見えず、空文字列として扱われます。",
+  },
+  {
+    id: "ch08-ex107",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "export NAME という操作を説明したものとして、最も適切なものはどれですか?",
+    choices: [
+      "既に定義されているシェル変数NAMEを環境変数に変換し、以後起動する子プロセスにも値を引き継がせるようにする",
+      "変数NAMEの値を大文字に変換する",
+      "変数NAMEを他のユーザーと共有できるようにする",
+      "変数NAMEの値をファイルにエクスポート(書き出す)する",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["「エクスポート」は「外部に持ち出す」という意味です。"],
+    explanation: "exportは指定したシェル変数を環境変数に変換するコマンドです。以後そのシェルから起動されるすべての子プロセスに、その変数の値が自動的に引き継がれるようになります。",
+  },
+  {
+    id: "ch08-ex108",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "次のうち、環境変数の説明として誤っているものはどれですか?",
+    choices: [
+      "環境変数は必ず/etc/environmentというファイルに保存されていないと利用できない",
+      "環境変数は子プロセスに引き継がれる",
+      "PATHやHOMEは環境変数の一例である",
+      "exportコマンドでシェル変数を環境変数にできる",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["環境変数はメモリ上のプロセスの実行環境の一部として保持され、必ずしも特定のファイルに保存されている必要はありません。"],
+    explanation:
+      "環境変数はプロセスが持つメモリ上の情報であり、特定のファイルへの保存を必須としません。.bashrc等のファイルに" +
+      "書いておくのは「シェル起動時に自動的にexportし直すための工夫」であり、環境変数そのものの保存場所ではありません。",
+  },
+  {
+    id: "ch08-ex109",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "あるコマンドを実行する際に、そのコマンドの実行中だけ一時的に環境変数を設定したい場合の書き方として適切なものはどれですか?",
+    choices: [
+      "VAR=value command のように、コマンドの前に変数代入を書く",
+      "command --env VAR=value のようにコマンドの後にオプションとして書く",
+      "command; VAR=value のようにコマンドの後にセミコロンで区切って書く",
+      "一時的な設定はできず、必ずexportで永続化する必要がある",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["コマンドの前に「変数名=値」を1つ以上並べて書く形式です。"],
+    explanation:
+      "VAR=value command のように、コマンドの前に変数代入を書くと、そのコマンドの実行中だけ一時的にその変数" +
+      "(環境変数として)が設定されます。実行後、シェル自身の変数の値には影響しません。",
+  },
+  {
+    id: "ch08-ex110",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "「HOMEはシェル変数であり環境変数ではない」という主張について、最も適切な評価はどれですか?",
+    choices: [
+      "誤りである。HOMEはログイン時にexportされた環境変数であり、子プロセスにも引き継がれる",
+      "正しい。HOMEは常にシェル変数としてのみ扱われる",
+      "どちらとも言えない。ディストリビューションによって扱いが異なる",
+      "正しい。HOMEはexportできない特別な変数である",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["別のコマンド(子プロセス)を実行しても$HOMEの値が引き継がれることを、これまでの演習で確認しています。"],
+    explanation: "HOMEはログイン時にシェルによって自動的にexportされる環境変数の代表例で、子プロセスにも値が引き継がれます。",
+  },
+
+  // --- Ch8: env/printenv/setコマンド ---
+  {
+    id: "ch08-ex111",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "現在設定されている環境変数を一覧表示するコマンドとして、代表的なものはどれですか?",
+    choices: ["env", "ps", "who", "df"],
+    correctChoiceIndex: 0,
+    hints: ["「environment(環境)」の略です。"],
+    explanation: "envコマンドを引数なしで実行すると、現在設定されているすべての環境変数を一覧表示できます。",
+  },
+  {
+    id: "ch08-ex112",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "printenv PATH のように、コマンド名の後に変数名を指定して実行した場合の動作は?",
+    choices: [
+      "指定した環境変数(この場合PATH)の値だけを表示する",
+      "PATHという名前の新しい環境変数を作成する",
+      "PATHに設定されているコマンドをすべて実行する",
+      "エラーになる(printenvは引数を取らない)",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["printは「表示する」、envは「環境変数」を意味します。"],
+    explanation: "printenv 変数名 は指定した環境変数の値だけを表示します。引数を省略すると、envと同様にすべての環境変数を一覧表示します。",
+  },
+  {
+    id: "ch08-ex113",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "env コマンドと echo $VAR の違いとして、最も適切な説明はどれですか?",
+    choices: [
+      "envは設定されているすべての環境変数を一覧表示するのに対し、echo $VARは指定した1つの変数の値だけを表示する",
+      "envはシェル変数、echo $VARは環境変数専用のコマンドである",
+      "envはネットワーク環境の設定を変更するコマンドである",
+      "両者はまったく同じ動作をする",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["envは「一覧」、echo $VARは「1つの値」を表示する点に注目しましょう。"],
+    explanation: "env(引数なし)は現在の環境変数をすべて一覧表示するのに対し、echo $VARは指定した1つの変数の値のみを表示します。",
+  },
+  {
+    id: "ch08-ex114",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "set コマンド(組み込みコマンド、引数なしで実行)の役割として、最も適切なものはどれですか?",
+    choices: [
+      "シェル変数・環境変数を含む、現在定義されている変数の一覧を表示する",
+      "ファイルのパーミッションを設定する",
+      "システムの日時を設定する",
+      "ネットワークインターフェースを設定する",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["chmodやdateとは異なるコマンドです。"],
+    explanation: "setを引数なしで実行すると、環境変数だけでなくシェル変数や関数を含めた、現在定義されている変数等の一覧を表示します(chmodのようなファイル権限の設定とは無関係です)。",
+  },
+  {
+    id: "ch08-ex115",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "unset VAR の役割として、最も適切なものはどれですか?",
+    choices: [
+      "変数VARの定義そのものを削除する(空文字列を代入するのとは異なる)",
+      "変数VARの値を空文字列に設定する(定義自体は残る)",
+      "変数VARをシェル変数から環境変数に変換する",
+      "変数VARの値を読み取り専用にする",
+    ],
+    correctChoiceIndex: 0,
+    hints: ['VAR=""と違い、「変数が存在すること」自体をなくします。'],
+    explanation:
+      'unset VARはその変数の定義自体を削除します。VAR=""(空文字列を代入)とは異なり、削除後は${VAR:-default}の' +
+      "ような判定でも「未設定」として扱われます。",
+  },
+  {
+    id: "ch08-ex116",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "env コマンドには、もう1つ「一時的に環境変数を設定してコマンドを実行する」という使い方(env VAR=value command)もあります。この使い方と最も近い効果を持つ書き方はどれですか?",
+    choices: ["VAR=value command", "VAR=value; command", "export VAR=value(その後commandは実行しない)", "command > VAR=value"],
+    correctChoiceIndex: 0,
+    hints: ["どちらも「そのコマンドの実行中だけ」変数を設定する点で共通しています。"],
+    explanation:
+      "env VAR=value command は、コマンドの前に一時的な変数代入を書く VAR=value command とほぼ同じ効果を持ちます。" +
+      "どちらもそのコマンドの実行中だけ変数が設定され、シェル自体の変数には影響しません。",
+  },
+
+  // --- Ch8: .bashrcと.bash_profileの違い ---
+  {
+    id: "ch08-ex117",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "~/.bashrc が読み込まれるタイミングとして、最も適切なものはどれですか?",
+    choices: [
+      "bash(対話的な非ログインシェルを含む)が新しく起動するたびに読み込まれる",
+      "システム起動時に1度だけ読み込まれる",
+      "シャットダウン時にのみ読み込まれる",
+      "cdコマンドを実行するたびに読み込まれる",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["新しいターミナルウィンドウを開くたびに読み込まれる設定ファイルです。"],
+    explanation: "~/.bashrcは対話的なシェル(ターミナルを新しく開いたとき等)が起動するたびに読み込まれる設定ファイルです。エイリアスや関数など、シェルを使うたびに必要な設定を書いておくのに適しています。",
+  },
+  {
+    id: "ch08-ex118",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "~/.bash_profile(または~/.bash_login, ~/.profile)が読み込まれるタイミングとして、最も適切なものはどれですか?",
+    choices: [
+      "ログインシェルとして起動したとき(例: システムへのログイン時、su -の実行時)に読み込まれる",
+      "lsコマンドを実行するたびに読み込まれる",
+      "ファイルを保存するたびに読み込まれる",
+      "毎回のコマンド実行後に読み込まれる",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["「ログイン」という言葉が名前に含まれています。"],
+    explanation: "~/.bash_profileはログインシェルとして起動した際に一度だけ読み込まれる設定ファイルです。環境変数の設定など、ログインセッション全体に対して1度だけ行えばよい設定を書くのに適しています。",
+  },
+  {
+    id: "ch08-ex119",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "一般的な.bash_profileの中に、if [ -f ~/.bashrc ]; then . ~/.bashrc; fi のような記述がある目的として、最も適切なものはどれですか?",
+    choices: [
+      "ログインシェル起動時にも.bashrcの内容(エイリアス等)を読み込ませ、設定を一本化するため",
+      ".bashrcファイルの存在確認のためだけに書かれており、実際には何も読み込まない",
+      "bash_profileの実行を無効化するため",
+      ".bashrcファイルを自動的に削除するため",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["ログインシェルではデフォルトでは.bashrcが自動的には読み込まれないため、明示的に読み込む記述が必要です。"],
+    explanation:
+      "ログインシェルでは.bash_profileだけが自動的に読み込まれ、.bashrcは自動的には読み込まれません。そのため、" +
+      "多くの.bash_profileには.bashrcを明示的に読み込む記述があり、ログインシェルでも同じエイリアス等の設定を使えるように" +
+      "しています。",
+  },
+  {
+    id: "ch08-ex120",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "新しいターミナルウィンドウを開いたときに設定したエイリアスがいつも消えてしまうという問題を解決する方法として、最も適切なものはどれですか?",
+    choices: [
+      "ターミナルで直接aliasコマンドを打つのではなく、~/.bashrcにalias定義を書いておく",
+      "エイリアスは1度定義すれば永久に有効なので、原因は別にある",
+      "ターミナルの設定でエイリアス機能を有効にする",
+      "/etc/passwdにエイリアスを書いておく",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["ターミナルで直接打っただけのエイリアスは、そのシェルを閉じると消えてしまいます。"],
+    explanation: "ターミナル上で直接aliasコマンドを実行しただけでは、そのシェルを終了すると定義は失われます。~/.bashrcに書いておくことで、シェルが起動するたびに自動的に同じエイリアスが再定義されます。",
+  },
+  {
+    id: "ch08-ex121",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "「非ログインシェル」の例として最も適切なものはどれですか?",
+    choices: [
+      "すでにログイン済みの状態で、ターミナルエミュレータから新しく開いたシェル",
+      "SSHでリモートサーバーにログインした際に起動するシェル",
+      "システムに初めてログインした際に起動するシェル",
+      "su - でユーザーを切り替えた際に起動するシェル",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["すでにデスクトップ環境にログイン済みの状態で、GUIのターミナルアプリから新しく開くシェルです。"],
+    explanation:
+      "デスクトップ環境にログイン済みの状態でターミナルエミュレータから新しく開くシェルは、通常「非ログインシェル」として" +
+      "起動し、.bashrcのみが自動的に読み込まれます。一方、システムへのログイン時やssh、su -では「ログインシェル」として" +
+      "起動し、.bash_profile等が読み込まれます。",
+  },
+  {
+    id: "ch08-ex122",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: ".bashrcと.bash_profileの使い分けとして、一般的に推奨される考え方はどれですか?",
+    choices: [
+      ".bash_profileには環境変数の設定など1度だけ行えばよい設定を、.bashrcにはエイリアスなどシェルを開くたびに必要な設定を書く",
+      "どちらに何を書いても違いは一切ない",
+      ".bashrcには環境変数のみ、.bash_profileにはエイリアスのみを書く",
+      ".bash_profileは削除しても問題ない、常に不要なファイルである",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["「1度だけでよいもの」と「シェルを開くたびに必要なもの」という違いに注目しましょう。"],
+    explanation:
+      "一般的には、PATHの設定など1度だけ行えばよい設定は.bash_profileに、エイリアスや関数などシェルを新しく開くたびに" +
+      "必要な設定は.bashrcに書き、.bash_profileから.bashrcを読み込むことで両方を使い分けます。",
+  },
+
+  // --- Ch8: PATHの検索順序 ---
+  {
+    id: "ch08-ex123",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "PATH=/usr/local/bin:/usr/bin:/bin と設定されている場合、mycmdというコマンドを実行するとどの順序でディレクトリを探索しますか?",
+    choices: [
+      "/usr/local/bin → /usr/bin → /bin の順に探索し、最初に見つかった実行可能ファイルを実行する",
+      "/bin → /usr/bin → /usr/local/bin の順(右から左)に探索する",
+      "3つのディレクトリを同時に探索し、ファイルサイズが最も小さいものを実行する",
+      "アルファベット順に並び替えてから探索する",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["PATHはコロン区切りで、先頭に書かれたディレクトリから順に探索されます。"],
+    explanation:
+      "PATHに列挙されたディレクトリは、コロンで区切られた左(先頭)から右(末尾)へ順番に探索されます。同名のコマンドが" +
+      "複数のディレクトリに存在する場合は、より先頭に近いディレクトリのものが優先して実行されます。",
+  },
+  {
+    id: "ch08-ex124",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "独自に作成したコマンドを標準のコマンドより優先して実行させたい場合、PATHへの追加方法として適切なものはどれですか?",
+    choices: [
+      'PATHの先頭に自分のディレクトリを追加する(例: PATH="$HOME/bin:$PATH")',
+      'PATHの末尾に自分のディレクトリを追加する(例: PATH="$PATH:$HOME/bin")',
+      "PATHには追加できないため、常にフルパスで実行するしかない",
+      "PATHをすべて削除してから自分のディレクトリだけを設定する",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["探索は先頭から行われるため、優先させたいディレクトリは先頭に置きます。"],
+    explanation:
+      "PATHは先頭から順に探索されるため、自作のコマンドを標準コマンドより優先して使いたい場合は、PATHの先頭に自分の" +
+      "ディレクトリを追加します(末尾に追加すると標準コマンドが優先されてしまいます)。",
+  },
+  {
+    id: "ch08-ex125",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "PATHに /home/study/bin というディレクトリが含まれていても、そのディレクトリの中にある myscript というファイルが実行可能な状態(実行権限)になっていない場合、どうなりますか?",
+    choices: [
+      "whichやコマンド実行の際に見つからない、または実行できないものとして扱われる",
+      "実行権限がなくても、PATHに含まれていれば常に正常に実行できる",
+      "自動的に実行権限が付与されてから実行される",
+      "ファイルの中身が自動的に削除される",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["PATHに含まれるだけでは不十分で、実行権限(xビット)も必要です。"],
+    explanation: "PATHに列挙されたディレクトリの中にファイルがあっても、実行権限(xビット)が付いていなければコマンドとして実行できません。whichコマンドも実行権限のあるファイルのみを検索対象とします。",
+  },
+  {
+    id: "ch08-ex126",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "カレントディレクトリ(.)がPATHに含まれていない一般的な設定において、./myscript のようにパスを明示せず myscript とだけ入力してカレントディレクトリのスクリプトを実行しようとするとどうなりますか?",
+    choices: [
+      "PATHに含まれるディレクトリの中からしか探索されないため、コマンドが見つからずエラーになる",
+      "自動的にカレントディレクトリからも探索されるため、正常に実行できる",
+      "常にエラーになり、./を付けても実行できない",
+      "自動的にPATHへカレントディレクトリが追加される",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["セキュリティ上の理由から、多くのLinuxディストリビューションではカレントディレクトリはPATHに含まれません。"],
+    explanation:
+      "多くのLinuxディストリビューションでは、悪意あるスクリプトが誤って実行されるのを防ぐため、カレントディレクトリ(.)は" +
+      "デフォルトでPATHに含まれていません。そのため、カレントディレクトリのスクリプトを実行する場合は./myscriptのように" +
+      "明示的にパスを指定する必要があります。",
+  },
+  {
+    id: "ch08-ex127",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "echo $PATH を実行した結果、/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin と表示されました。このPATHに含まれるディレクトリの数はいくつですか?",
+    choices: ["6", "5", "7", "1(1つの長い文字列として扱われる)"],
+    correctChoiceIndex: 0,
+    hints: [":(コロン)の数を数えると、区切られたディレクトリの数がわかります。"],
+    explanation: "/usr/local/sbin, /usr/local/bin, /usr/sbin, /usr/bin, /sbin, /bin の6つのディレクトリが:区切りで列挙されています。",
+  },
+  {
+    id: "ch08-ex128",
+    chapterId: "ch08",
+    type: "quiz",
+    prompt: "PATHの設定を誤って PATH=/home/study/bin のように上書きしてしまった場合、どのような問題が起こりますか?",
+    choices: [
+      "/bin や /usr/bin など、それまで使えていた標準コマンド(ls, catなど)が軒並み見つからなくなる",
+      "特に問題は起こらず、すべてのコマンドが今まで通り使える",
+      "ファイルシステムがすべて読み取り専用になる",
+      "ログインパスワードがリセットされる",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["元々のPATHに含まれていたディレクトリ(/bin, /usr/bin等)が失われてしまう点に注目しましょう。"],
+    explanation:
+      "PATHを新しい値で完全に上書きしてしまうと、それまで含まれていた/binや/usr/binなどの標準的なディレクトリが失われ、" +
+      'ls等の基本コマンドさえ見つからなくなってしまいます。既存のPATHを保持しつつ追加したい場合は、PATH="新しいディレクトリ:' +
+      '$PATH"のように$PATHを含めて指定する必要があります。',
+  },
+
   // ---------------------------------------------------------------------
   // Ch9: パーミッション
   // ---------------------------------------------------------------------
