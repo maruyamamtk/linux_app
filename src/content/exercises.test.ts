@@ -171,7 +171,8 @@ describe("vim exercises", () => {
 
   /**
    * referenceSolution(表示用のキー入力列)を実際のVimエンジンに1キーずつ再生し、
-   * expectedFileText と一致するかを検証する。`<Esc>` はEscapeキー、`:`で始まる場合は
+   * expectedFileText と一致するかを検証する。`<Esc>` はEscapeキー、`<C-r>` はredo、
+   * `<CR>` は(exコマンドの確定を伴わない)行中のEnterキー、`:`で始まる場合は
    * 末尾に暗黙のEnter(exコマンドの確定)を1つ補う、という表示上の省略規則をここでのみ展開する。
    */
   function toVimKeys(referenceSolution: string): VimKey[] {
@@ -181,6 +182,12 @@ describe("vim exercises", () => {
       if (referenceSolution.startsWith("<Esc>", i)) {
         keys.push("Escape");
         i += "<Esc>".length;
+      } else if (referenceSolution.startsWith("<C-r>", i)) {
+        keys.push("Ctrl-r");
+        i += "<C-r>".length;
+      } else if (referenceSolution.startsWith("<CR>", i)) {
+        keys.push("Enter");
+        i += "<CR>".length;
       } else {
         keys.push(referenceSolution[i]);
         i += 1;

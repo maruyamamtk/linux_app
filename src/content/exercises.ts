@@ -5642,6 +5642,1536 @@ export const exercises: Exercise[] = [
       ":%s/old/new/g がバッファ全体(1,$)を対象にするのに対し、:{n},{m}s/old/new/g のように行番号を明示すると、" +
       "n行目からm行目までの範囲だけを置換対象にできます。範囲外の行(この演習では1行目)は変更されません。",
   },
+  {
+    id: "ch07-ex09",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "1単語目(The)の右端の文字にカーソルを合わせ、dl で1文字削除してください。",
+    initialFileText: "The quick brown fox\n",
+    expectedFileText: "Th quick brown fox\n",
+    referenceSolution: "lldl",
+    hints: [
+      "l で1文字ずつ右へ移動できます。",
+      "dl は「dコマンド + l モーション」の組み合わせで、カーソル上の1文字を削除します(x と同じ結果になります)。"
+    ],
+    explanation: "d はオペレータ、l はモーションです。d に続けてモーションキーを入力すると、「現在位置からモーションで移動する範囲」を削除対象にできます。dl はカーソル上の1文字だけを対象にするため、結果的に x と同じ動作になります。"
+  },
+  {
+    id: "ch07-ex10",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "1単語目(foo)の右端の文字にカーソルを合わせ、dl で1文字削除してください。",
+    initialFileText: "foo bar baz qux\n",
+    expectedFileText: "fo bar baz qux\n",
+    referenceSolution: "lldl",
+    hints: [
+      "l で1文字ずつ右へ移動できます。",
+      "dl は「dコマンド + l モーション」の組み合わせで、カーソル上の1文字を削除します(x と同じ結果になります)。"
+    ],
+    explanation: "d はオペレータ、l はモーションです。d に続けてモーションキーを入力すると、「現在位置からモーションで移動する範囲」を削除対象にできます。dl はカーソル上の1文字だけを対象にするため、結果的に x と同じ動作になります。"
+  },
+  {
+    id: "ch07-ex11",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "1単語目(apple)の右端の文字にカーソルを合わせ、dl で1文字削除してください。",
+    initialFileText: "apple banana cherry date\n",
+    expectedFileText: "appl banana cherry date\n",
+    referenceSolution: "lllldl",
+    hints: [
+      "l で1文字ずつ右へ移動できます。",
+      "dl は「dコマンド + l モーション」の組み合わせで、カーソル上の1文字を削除します(x と同じ結果になります)。"
+    ],
+    explanation: "d はオペレータ、l はモーションです。d に続けてモーションキーを入力すると、「現在位置からモーションで移動する範囲」を削除対象にできます。dl はカーソル上の1文字だけを対象にするため、結果的に x と同じ動作になります。"
+  },
+  {
+    id: "ch07-ex12",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "2単語目(green)の先頭にカーソルを移動し、dh で直前の1文字(区切りのスペース)を削除してください。",
+    initialFileText: "red green blue yellow\n",
+    expectedFileText: "redgreen blue yellow\n",
+    referenceSolution: "wdh",
+    hints: [
+      "w で次の単語の先頭へ移動できます。",
+      "dh は「dコマンド + h モーション」で、カーソルの直前の1文字を削除します。"
+    ],
+    explanation: "dh はカーソル位置から h モーション(左へ1文字)の範囲、つまりカーソルの直前の1文字を削除します。単語の先頭にいる状態で dh を実行すると、区切りのスペースが削除され前後の単語がつながります。"
+  },
+  {
+    id: "ch07-ex13",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "2単語目(two)の先頭にカーソルを移動し、dh で直前の1文字(区切りのスペース)を削除してください。",
+    initialFileText: "one two three four\n",
+    expectedFileText: "onetwo three four\n",
+    referenceSolution: "wdh",
+    hints: [
+      "w で次の単語の先頭へ移動できます。",
+      "dh は「dコマンド + h モーション」で、カーソルの直前の1文字を削除します。"
+    ],
+    explanation: "dh はカーソル位置から h モーション(左へ1文字)の範囲、つまりカーソルの直前の1文字を削除します。単語の先頭にいる状態で dh を実行すると、区切りのスペースが削除され前後の単語がつながります。"
+  },
+  {
+    id: "ch07-ex14",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "2単語目(dog)の先頭にカーソルを移動し、dh で直前の1文字(区切りのスペース)を削除してください。",
+    initialFileText: "cat dog bird fish\n",
+    expectedFileText: "catdog bird fish\n",
+    referenceSolution: "wdh",
+    hints: [
+      "w で次の単語の先頭へ移動できます。",
+      "dh は「dコマンド + h モーション」で、カーソルの直前の1文字を削除します。"
+    ],
+    explanation: "dh はカーソル位置から h モーション(左へ1文字)の範囲、つまりカーソルの直前の1文字を削除します。単語の先頭にいる状態で dh を実行すると、区切りのスペースが削除され前後の単語がつながります。"
+  },
+  {
+    id: "ch07-ex15",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "3単語目(brown)の先頭にカーソルを移動し、d0 で行頭までを削除してください。",
+    initialFileText: "The quick brown fox\n",
+    expectedFileText: "brown fox\n",
+    referenceSolution: "wwd0",
+    hints: [
+      "w を複数回押すと、その回数分だけ次の単語へ移動できます。",
+      "d0 は「dコマンド + 0 モーション」で、カーソル位置から行頭までを削除します。"
+    ],
+    explanation: "0 は行頭へ移動するモーションです。d0 はカーソル位置から行頭の直前までを削除範囲とするため、カーソルより左側にあったテキストがすべて消え、カーソルがあった位置から行が始まります。"
+  },
+  {
+    id: "ch07-ex16",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "3単語目(cherry)の先頭にカーソルを移動し、d0 で行頭までを削除してください。",
+    initialFileText: "apple banana cherry date\n",
+    expectedFileText: "cherry date\n",
+    referenceSolution: "wwd0",
+    hints: [
+      "w を複数回押すと、その回数分だけ次の単語へ移動できます。",
+      "d0 は「dコマンド + 0 モーション」で、カーソル位置から行頭までを削除します。"
+    ],
+    explanation: "0 は行頭へ移動するモーションです。d0 はカーソル位置から行頭の直前までを削除範囲とするため、カーソルより左側にあったテキストがすべて消え、カーソルがあった位置から行が始まります。"
+  },
+  {
+    id: "ch07-ex17",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "3単語目(three)の先頭にカーソルを移動し、d0 で行頭までを削除してください。",
+    initialFileText: "one two three four\n",
+    expectedFileText: "three four\n",
+    referenceSolution: "wwd0",
+    hints: [
+      "w を複数回押すと、その回数分だけ次の単語へ移動できます。",
+      "d0 は「dコマンド + 0 モーション」で、カーソル位置から行頭までを削除します。"
+    ],
+    explanation: "0 は行頭へ移動するモーションです。d0 はカーソル位置から行頭の直前までを削除範囲とするため、カーソルより左側にあったテキストがすべて消え、カーソルがあった位置から行が始まります。"
+  },
+  {
+    id: "ch07-ex18",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "2単語目(bar)の先頭にカーソルを移動し、d$ で行末までを削除してください。",
+    initialFileText: "foo bar baz qux\n",
+    expectedFileText: "foo \n",
+    referenceSolution: "wd$",
+    hints: [
+      "w で次の単語の先頭へ移動できます。",
+      "d$ は「dコマンド + $ モーション」で、カーソル位置から行末までを削除します(大文字の D と同じ結果です)。"
+    ],
+    explanation: "$ は行末へ移動するモーションです。d$ はカーソル位置から行末までを削除範囲とするため、カーソルより右側にあったテキストがすべて消えます。これは D コマンド1つで行うのと同じ結果になります。"
+  },
+  {
+    id: "ch07-ex19",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "2単語目(green)の先頭にカーソルを移動し、d$ で行末までを削除してください。",
+    initialFileText: "red green blue yellow\n",
+    expectedFileText: "red \n",
+    referenceSolution: "wd$",
+    hints: [
+      "w で次の単語の先頭へ移動できます。",
+      "d$ は「dコマンド + $ モーション」で、カーソル位置から行末までを削除します(大文字の D と同じ結果です)。"
+    ],
+    explanation: "$ は行末へ移動するモーションです。d$ はカーソル位置から行末までを削除範囲とするため、カーソルより右側にあったテキストがすべて消えます。これは D コマンド1つで行うのと同じ結果になります。"
+  },
+  {
+    id: "ch07-ex20",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "2単語目(dog)の先頭にカーソルを移動し、d$ で行末までを削除してください。",
+    initialFileText: "cat dog bird fish\n",
+    expectedFileText: "cat \n",
+    referenceSolution: "wd$",
+    hints: [
+      "w で次の単語の先頭へ移動できます。",
+      "d$ は「dコマンド + $ モーション」で、カーソル位置から行末までを削除します(大文字の D と同じ結果です)。"
+    ],
+    explanation: "$ は行末へ移動するモーションです。d$ はカーソル位置から行末までを削除範囲とするため、カーソルより右側にあったテキストがすべて消えます。これは D コマンド1つで行うのと同じ結果になります。"
+  },
+  {
+    id: "ch07-ex21",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "dw を使って、1単語目(The)とその後ろの区切りスペースを削除してください。",
+    initialFileText: "The quick brown fox\n",
+    expectedFileText: "quick brown fox\n",
+    referenceSolution: "dw",
+    hints: [
+      "dw は「dコマンド + w モーション」で、カーソル位置から次の単語の先頭までを削除します。",
+      "そのため単語だけでなく、後ろの区切りスペースも一緒に削除されます。"
+    ],
+    explanation: "dw はカーソル位置から w モーション(次の単語の先頭)までの範囲を削除します。w モーションは単語の先頭で止まるため、dw を実行すると単語本体に加えて後ろの区切りスペースまで削除される点が d$ 等との違いです。"
+  },
+  {
+    id: "ch07-ex22",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "dw を使って、1単語目(apple)とその後ろの区切りスペースを削除してください。",
+    initialFileText: "apple banana cherry date\n",
+    expectedFileText: "banana cherry date\n",
+    referenceSolution: "dw",
+    hints: [
+      "dw は「dコマンド + w モーション」で、カーソル位置から次の単語の先頭までを削除します。",
+      "そのため単語だけでなく、後ろの区切りスペースも一緒に削除されます。"
+    ],
+    explanation: "dw はカーソル位置から w モーション(次の単語の先頭)までの範囲を削除します。w モーションは単語の先頭で止まるため、dw を実行すると単語本体に加えて後ろの区切りスペースまで削除される点が d$ 等との違いです。"
+  },
+  {
+    id: "ch07-ex23",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "dw を使って、1単語目(one)とその後ろの区切りスペースを削除してください。",
+    initialFileText: "one two three four\n",
+    expectedFileText: "two three four\n",
+    referenceSolution: "dw",
+    hints: [
+      "dw は「dコマンド + w モーション」で、カーソル位置から次の単語の先頭までを削除します。",
+      "そのため単語だけでなく、後ろの区切りスペースも一緒に削除されます。"
+    ],
+    explanation: "dw はカーソル位置から w モーション(次の単語の先頭)までの範囲を削除します。w モーションは単語の先頭で止まるため、dw を実行すると単語本体に加えて後ろの区切りスペースまで削除される点が d$ 等との違いです。"
+  },
+  {
+    id: "ch07-ex24",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "dw を使って、1単語目(cat)とその後ろの区切りスペースを削除してください。",
+    initialFileText: "cat dog bird fish\n",
+    expectedFileText: "dog bird fish\n",
+    referenceSolution: "dw",
+    hints: [
+      "dw は「dコマンド + w モーション」で、カーソル位置から次の単語の先頭までを削除します。",
+      "そのため単語だけでなく、後ろの区切りスペースも一緒に削除されます。"
+    ],
+    explanation: "dw はカーソル位置から w モーション(次の単語の先頭)までの範囲を削除します。w モーションは単語の先頭で止まるため、dw を実行すると単語本体に加えて後ろの区切りスペースまで削除される点が d$ 等との違いです。"
+  },
+  {
+    id: "ch07-ex25",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "3単語目(baz)の先頭にカーソルを移動し、db で直前の単語(bar)を削除してください。",
+    initialFileText: "foo bar baz qux\n",
+    expectedFileText: "foo baz qux\n",
+    referenceSolution: "wwdb",
+    hints: [
+      "w を2回押すと3単語目の先頭へ移動できます。",
+      "db は「dコマンド + b モーション」で、カーソル位置から直前の単語の先頭までを削除します。"
+    ],
+    explanation: "b は直前の単語の先頭へ戻るモーションです。db はカーソル位置から b モーションの移動先までを削除するため、カーソルの直前にあった単語が削除されます。"
+  },
+  {
+    id: "ch07-ex26",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "3単語目(blue)の先頭にカーソルを移動し、db で直前の単語(green)を削除してください。",
+    initialFileText: "red green blue yellow\n",
+    expectedFileText: "red blue yellow\n",
+    referenceSolution: "wwdb",
+    hints: [
+      "w を2回押すと3単語目の先頭へ移動できます。",
+      "db は「dコマンド + b モーション」で、カーソル位置から直前の単語の先頭までを削除します。"
+    ],
+    explanation: "b は直前の単語の先頭へ戻るモーションです。db はカーソル位置から b モーションの移動先までを削除するため、カーソルの直前にあった単語が削除されます。"
+  },
+  {
+    id: "ch07-ex27",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "3単語目(bird)の先頭にカーソルを移動し、db で直前の単語(dog)を削除してください。",
+    initialFileText: "cat dog bird fish\n",
+    expectedFileText: "cat bird fish\n",
+    referenceSolution: "wwdb",
+    hints: [
+      "w を2回押すと3単語目の先頭へ移動できます。",
+      "db は「dコマンド + b モーション」で、カーソル位置から直前の単語の先頭までを削除します。"
+    ],
+    explanation: "b は直前の単語の先頭へ戻るモーションです。db はカーソル位置から b モーションの移動先までを削除するため、カーソルの直前にあった単語が削除されます。"
+  },
+  {
+    id: "ch07-ex28",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "de を使って、1単語目(The)の文字だけを削除してください(区切りのスペースは残します)。",
+    initialFileText: "The quick brown fox\n",
+    expectedFileText: " quick brown fox\n",
+    referenceSolution: "de",
+    hints: [
+      "de は「dコマンド + e モーション」で、カーソル位置から現在の単語の末尾までを削除します。",
+      "e モーションは単語の最後の文字で止まるため、後ろの区切りスペースは削除されません。"
+    ],
+    explanation: "e は現在(またはカーソルの後ろにある)単語の末尾の文字へ移動するモーションで、移動先を含む(inclusive)点が w との違いです。de は単語本体だけを削除範囲とし、区切りのスペースは残るため、dw との結果の違いを確認できる演習です。"
+  },
+  {
+    id: "ch07-ex29",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "de を使って、1単語目(apple)の文字だけを削除してください(区切りのスペースは残します)。",
+    initialFileText: "apple banana cherry date\n",
+    expectedFileText: " banana cherry date\n",
+    referenceSolution: "de",
+    hints: [
+      "de は「dコマンド + e モーション」で、カーソル位置から現在の単語の末尾までを削除します。",
+      "e モーションは単語の最後の文字で止まるため、後ろの区切りスペースは削除されません。"
+    ],
+    explanation: "e は現在(またはカーソルの後ろにある)単語の末尾の文字へ移動するモーションで、移動先を含む(inclusive)点が w との違いです。de は単語本体だけを削除範囲とし、区切りのスペースは残るため、dw との結果の違いを確認できる演習です。"
+  },
+  {
+    id: "ch07-ex30",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "de を使って、1単語目(one)の文字だけを削除してください(区切りのスペースは残します)。",
+    initialFileText: "one two three four\n",
+    expectedFileText: " two three four\n",
+    referenceSolution: "de",
+    hints: [
+      "de は「dコマンド + e モーション」で、カーソル位置から現在の単語の末尾までを削除します。",
+      "e モーションは単語の最後の文字で止まるため、後ろの区切りスペースは削除されません。"
+    ],
+    explanation: "e は現在(またはカーソルの後ろにある)単語の末尾の文字へ移動するモーションで、移動先を含む(inclusive)点が w との違いです。de は単語本体だけを削除範囲とし、区切りのスペースは残るため、dw との結果の違いを確認できる演習です。"
+  },
+  {
+    id: "ch07-ex31",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "1行目(apple)にカーソルがある状態で dj を実行し、1行目と2行目(banana)の2行をまとめて削除してください。",
+    initialFileText: "apple\nbanana\ncherry\ndate\n",
+    expectedFileText: "cherry\ndate\n",
+    referenceSolution: "dj",
+    hints: [
+      "j は1行下へ移動するモーションです。",
+      "dj のように行単位(linewise)のモーションと組み合わせると、現在行と移動先の行をまとめて削除できます。"
+    ],
+    explanation: "j/k は行単位(linewise)のモーションです。d と組み合わせると、カーソル行と移動先の行の「両方」を含めた範囲がまとめて削除対象になります。dj は現在行と次の行の2行を削除します。"
+  },
+  {
+    id: "ch07-ex32",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "1行目(red)にカーソルがある状態で dj を実行し、1行目と2行目(green)の2行をまとめて削除してください。",
+    initialFileText: "red\ngreen\nblue\nyellow\n",
+    expectedFileText: "blue\nyellow\n",
+    referenceSolution: "dj",
+    hints: [
+      "j は1行下へ移動するモーションです。",
+      "dj のように行単位(linewise)のモーションと組み合わせると、現在行と移動先の行をまとめて削除できます。"
+    ],
+    explanation: "j/k は行単位(linewise)のモーションです。d と組み合わせると、カーソル行と移動先の行の「両方」を含めた範囲がまとめて削除対象になります。dj は現在行と次の行の2行を削除します。"
+  },
+  {
+    id: "ch07-ex33",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "2行目(two)にカーソルを移動し、dk を実行して1行目(one)と2行目の2行をまとめて削除してください。",
+    initialFileText: "one\ntwo\nthree\nfour\n",
+    expectedFileText: "three\nfour\n",
+    referenceSolution: "jdk",
+    hints: [
+      "j で2行目へ移動できます。",
+      "dk は現在行と、k モーションの移動先である直前の行をまとめて削除します。"
+    ],
+    explanation: "dk は dj と同様に行単位で操作しますが、対象がカーソル行と「直前」の行になる点が異なります。2行目で dk を実行すると、1行目と2行目がまとめて削除されます。"
+  },
+  {
+    id: "ch07-ex34",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "2行目(Tuesday)にカーソルを移動し、dk を実行して1行目(Monday)と2行目の2行をまとめて削除してください。",
+    initialFileText: "Monday\nTuesday\nWednesday\nThursday\n",
+    expectedFileText: "Wednesday\nThursday\n",
+    referenceSolution: "jdk",
+    hints: [
+      "j で2行目へ移動できます。",
+      "dk は現在行と、k モーションの移動先である直前の行をまとめて削除します。"
+    ],
+    explanation: "dk は dj と同様に行単位で操作しますが、対象がカーソル行と「直前」の行になる点が異なります。2行目で dk を実行すると、1行目と2行目がまとめて削除されます。"
+  },
+  {
+    id: "ch07-ex35",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "4行目(fish)にカーソルを移動し、dgg で先頭行までをまとめて削除してください。",
+    initialFileText: "cat\ndog\nbird\nfish\n",
+    expectedFileText: "\n",
+    referenceSolution: "jjjdgg",
+    hints: [
+      "j を複数回押すと最終行まで移動できます。",
+      "gg は先頭行(1行目)へ移動するモーションです。dgg はカーソル行から先頭行までをまとめて削除します。"
+    ],
+    explanation: "gg はファイル先頭行へ移動する linewise モーションです。dgg はカーソルがある行から1行目までの範囲をまとめて削除します。カーソルが最終行にある場合、dgg でバッファ全体を削除できます。"
+  },
+  {
+    id: "ch07-ex36",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "4行目(delta)にカーソルを移動し、dgg で先頭行までをまとめて削除してください。",
+    initialFileText: "alpha\nbeta\ngamma\ndelta\n",
+    expectedFileText: "\n",
+    referenceSolution: "jjjdgg",
+    hints: [
+      "j を複数回押すと最終行まで移動できます。",
+      "gg は先頭行(1行目)へ移動するモーションです。dgg はカーソル行から先頭行までをまとめて削除します。"
+    ],
+    explanation: "gg はファイル先頭行へ移動する linewise モーションです。dgg はカーソルがある行から1行目までの範囲をまとめて削除します。カーソルが最終行にある場合、dgg でバッファ全体を削除できます。"
+  },
+  {
+    id: "ch07-ex37",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "2行目(summer)にカーソルを移動し、dG で最終行までをまとめて削除してください。",
+    initialFileText: "spring\nsummer\nautumn\nwinter\n",
+    expectedFileText: "spring\n",
+    referenceSolution: "jdG",
+    hints: [
+      "j で2行目へ移動できます。",
+      "G は最終行へ移動するモーションです。dG はカーソル行から最終行までをまとめて削除します。"
+    ],
+    explanation: "G はファイル末尾の行へ移動する linewise モーションです。dG はカーソルがある行から最終行までの範囲をまとめて削除します。ファイルの後半をまとめて消したいときによく使われます。"
+  },
+  {
+    id: "ch07-ex38",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "2行目(south)にカーソルを移動し、dG で最終行までをまとめて削除してください。",
+    initialFileText: "north\nsouth\neast\nwest\n",
+    expectedFileText: "north\n",
+    referenceSolution: "jdG",
+    hints: [
+      "j で2行目へ移動できます。",
+      "G は最終行へ移動するモーションです。dG はカーソル行から最終行までをまとめて削除します。"
+    ],
+    explanation: "G はファイル末尾の行へ移動する linewise モーションです。dG はカーソルがある行から最終行までの範囲をまとめて削除します。ファイルの後半をまとめて消したいときによく使われます。"
+  },
+  {
+    id: "ch07-ex39",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "数字の 3 に続けて dd を実行し(3dd)、1行目から3行分をまとめて削除してください。",
+    initialFileText: "apple\nbanana\ncherry\ndate\n",
+    expectedFileText: "date\n",
+    referenceSolution: "3dd",
+    hints: [
+      "ddの前に数字を入力すると、その行数分をまとめて削除できます。",
+      "3dd で現在行から3行分が削除されます。"
+    ],
+    explanation: "{count}dd はカーソル行を含めて count 行分をまとめて削除します。3dd は1〜3行目を削除し、4行目(date)だけが残ります。"
+  },
+  {
+    id: "ch07-ex40",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "2行目にカーソルを移動し、数字の 2 に続けて dd を実行して(2dd)、2〜3行目の2行をまとめて削除してください。",
+    initialFileText: "one\ntwo\nthree\nfour\n",
+    expectedFileText: "one\nfour\n",
+    referenceSolution: "j2dd",
+    hints: [
+      "j で2行目へ移動できます。",
+      "2dd はカーソル行から2行分をまとめて削除します。"
+    ],
+    explanation: "{count}dd はカーソル行がどこにあっても、その行を先頭に count 行分を削除します。2行目で2ddを実行すると、2〜3行目が削除され、1行目と4行目が残ります。"
+  },
+  {
+    id: "ch07-ex41",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "先頭行にカーソルがある状態で 4dd を実行し、1〜4行目すべてを削除してください。",
+    initialFileText: "red\ngreen\nblue\nyellow\n",
+    expectedFileText: "\n",
+    referenceSolution: "4dd",
+    hints: [
+      "4dd はカーソル行から4行分をまとめて削除します。",
+      "バッファの行数と削除する行数が一致する場合、結果は空行1行だけになります。"
+    ],
+    explanation: "{count}dd で削除する行数がバッファの残り行数と一致すると、全行が削除されます。Vimではバッファが完全に空になることはなく、内容が空の行が1行だけ残ります。"
+  },
+  {
+    id: "ch07-ex42",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "cw を使って、1単語目(The)を \"slow\" に置き換えてください。",
+    initialFileText: "The quick brown fox\n",
+    expectedFileText: "slow quick brown fox\n",
+    referenceSolution: "cwslow<Esc>",
+    hints: [
+      "cw は「cコマンド + w モーション」ですが、カーソルが単語の文字上にあるときは ce と同じ挙動(単語の末尾まで)になります。",
+      "文字を削除したあと自動的にインサートモードへ入るので、そのまま新しい文字を入力できます。",
+      "入力し終えたら Escape でノーマルモードに戻ります。"
+    ],
+    explanation: "c はオペレータで、対象範囲を削除したうえで自動的にインサートモードに入ります。cw はカーソルが非空白文字上にあるとき ce と同じ挙動になり、単語の末尾までを置き換えます(区切りのスペースは残ります)。"
+  },
+  {
+    id: "ch07-ex43",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "cw を使って、1単語目(apple)を \"melon\" に置き換えてください。",
+    initialFileText: "apple banana cherry date\n",
+    expectedFileText: "melon banana cherry date\n",
+    referenceSolution: "cwmelon<Esc>",
+    hints: [
+      "cw は「cコマンド + w モーション」ですが、カーソルが単語の文字上にあるときは ce と同じ挙動(単語の末尾まで)になります。",
+      "文字を削除したあと自動的にインサートモードへ入るので、そのまま新しい文字を入力できます。",
+      "入力し終えたら Escape でノーマルモードに戻ります。"
+    ],
+    explanation: "c はオペレータで、対象範囲を削除したうえで自動的にインサートモードに入ります。cw はカーソルが非空白文字上にあるとき ce と同じ挙動になり、単語の末尾までを置き換えます(区切りのスペースは残ります)。"
+  },
+  {
+    id: "ch07-ex44",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "cw を使って、1単語目(one)を \"ten\" に置き換えてください。",
+    initialFileText: "one two three four\n",
+    expectedFileText: "ten two three four\n",
+    referenceSolution: "cwten<Esc>",
+    hints: [
+      "cw は「cコマンド + w モーション」ですが、カーソルが単語の文字上にあるときは ce と同じ挙動(単語の末尾まで)になります。",
+      "文字を削除したあと自動的にインサートモードへ入るので、そのまま新しい文字を入力できます。",
+      "入力し終えたら Escape でノーマルモードに戻ります。"
+    ],
+    explanation: "c はオペレータで、対象範囲を削除したうえで自動的にインサートモードに入ります。cw はカーソルが非空白文字上にあるとき ce と同じ挙動になり、単語の末尾までを置き換えます(区切りのスペースは残ります)。"
+  },
+  {
+    id: "ch07-ex45",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "3単語目(baz)の先頭にカーソルを移動し、cb で直前の単語(bar)を \"XXX\"(末尾に区切りスペースを1つ追加)に置き換えてください。",
+    initialFileText: "foo bar baz qux\n",
+    expectedFileText: "foo XXX baz qux\n",
+    referenceSolution: "wwcbXXX <Esc>",
+    hints: [
+      "w を複数回押して目的の単語の先頭へ移動できます。",
+      "cb は「cコマンド + b モーション」で、直前の単語とその後ろの区切りスペースをまとめて削除してインサートモードに入ります。",
+      "区切りスペースも削除されるため、入力する文字列の末尾にスペースを1つ加えてください。"
+    ],
+    explanation: "cb はカーソル位置から b モーション(直前の単語の先頭)までを削除し、インサートモードに入ります。b は単語の先頭で止まるモーションのため、直前の単語だけでなく、その後ろの区切りスペースまで削除対象に含まれる点に注意してください。"
+  },
+  {
+    id: "ch07-ex46",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "3単語目(blue)の先頭にカーソルを移動し、cb で直前の単語(green)を \"purple\"(末尾に区切りスペースを1つ追加)に置き換えてください。",
+    initialFileText: "red green blue yellow\n",
+    expectedFileText: "red purple blue yellow\n",
+    referenceSolution: "wwcbpurple <Esc>",
+    hints: [
+      "w を複数回押して目的の単語の先頭へ移動できます。",
+      "cb は「cコマンド + b モーション」で、直前の単語とその後ろの区切りスペースをまとめて削除してインサートモードに入ります。",
+      "区切りスペースも削除されるため、入力する文字列の末尾にスペースを1つ加えてください。"
+    ],
+    explanation: "cb はカーソル位置から b モーション(直前の単語の先頭)までを削除し、インサートモードに入ります。b は単語の先頭で止まるモーションのため、直前の単語だけでなく、その後ろの区切りスペースまで削除対象に含まれる点に注意してください。"
+  },
+  {
+    id: "ch07-ex47",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "ce を使って、1単語目(The)を \"Them\" に置き換えてください。",
+    initialFileText: "The quick brown fox\n",
+    expectedFileText: "Them quick brown fox\n",
+    referenceSolution: "ceThem<Esc>",
+    hints: [
+      "ce は「cコマンド + e モーション」で、現在の単語の末尾までを削除してインサートモードに入ります。",
+      "cw と違い、e は単語の末尾で常に止まる点が特徴です。"
+    ],
+    explanation: "ce はカーソル位置から e モーション(単語の末尾、inclusive)までを削除し、インサートモードに入ります。区切りのスペースは削除対象に含まれません。"
+  },
+  {
+    id: "ch07-ex48",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "ce を使って、1単語目(cat)を \"Cats\" に置き換えてください。",
+    initialFileText: "cat dog bird fish\n",
+    expectedFileText: "Cats dog bird fish\n",
+    referenceSolution: "ceCats<Esc>",
+    hints: [
+      "ce は「cコマンド + e モーション」で、現在の単語の末尾までを削除してインサートモードに入ります。",
+      "cw と違い、e は単語の末尾で常に止まる点が特徴です。"
+    ],
+    explanation: "ce はカーソル位置から e モーション(単語の末尾、inclusive)までを削除し、インサートモードに入ります。区切りのスペースは削除対象に含まれません。"
+  },
+  {
+    id: "ch07-ex49",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "3単語目(baz)の先頭にカーソルを移動し、c0 でそれより前の部分を \"BAZ\"(末尾に区切りスペースを1つ追加)に置き換えてください。",
+    initialFileText: "foo bar baz qux\n",
+    expectedFileText: "BAZ baz qux\n",
+    referenceSolution: "wwc0BAZ <Esc>",
+    hints: [
+      "c0 は「cコマンド + 0 モーション」で、行頭からカーソルの直前までを削除してインサートモードに入ります。",
+      "カーソルがあった位置の文字そのものは削除されないため、入力する文字列の末尾にスペースを1つ加えて区切ってください。"
+    ],
+    explanation: "c0 はカーソル位置から行頭までの範囲(カーソル自身の文字は含まない)を削除し、インサートモードに入ります。行の前半部分だけをまとめて書き換えたいときに使えます。"
+  },
+  {
+    id: "ch07-ex50",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "4単語目(yellow)の先頭にカーソルを移動し、c0 でそれより前の部分を \"black\"(末尾に区切りスペースを1つ追加)に置き換えてください。",
+    initialFileText: "red green blue yellow\n",
+    expectedFileText: "black yellow\n",
+    referenceSolution: "wwwc0black <Esc>",
+    hints: [
+      "c0 は「cコマンド + 0 モーション」で、行頭からカーソルの直前までを削除してインサートモードに入ります。",
+      "カーソルがあった位置の文字そのものは削除されないため、入力する文字列の末尾にスペースを1つ加えて区切ってください。"
+    ],
+    explanation: "c0 はカーソル位置から行頭までの範囲(カーソル自身の文字は含まない)を削除し、インサートモードに入ります。行の前半部分だけをまとめて書き換えたいときに使えます。"
+  },
+  {
+    id: "ch07-ex51",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "2単語目(quick)の先頭にカーソルを移動し、c$ でそれ以降を \"jumps here\" に置き換えてください。",
+    initialFileText: "The quick brown fox\n",
+    expectedFileText: "The jumps here\n",
+    referenceSolution: "wc$jumps here<Esc>",
+    hints: [
+      "c$ は「cコマンド + $ モーション」で、カーソル位置から行末までを削除してインサートモードに入ります(大文字の C と同じ結果です)。"
+    ],
+    explanation: "c$ はカーソル位置から行末までを削除してインサートモードに入ります。カーソル自身の文字も削除対象に含まれる点が c0 との違いです。"
+  },
+  {
+    id: "ch07-ex52",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "2単語目(two)の先頭にカーソルを移動し、c$ でそれ以降を \"2\" に置き換えてください。",
+    initialFileText: "one two three four\n",
+    expectedFileText: "one 2\n",
+    referenceSolution: "wc$2<Esc>",
+    hints: [
+      "c$ は「cコマンド + $ モーション」で、カーソル位置から行末までを削除してインサートモードに入ります(大文字の C と同じ結果です)。"
+    ],
+    explanation: "c$ はカーソル位置から行末までを削除してインサートモードに入ります。カーソル自身の文字も削除対象に含まれる点が c0 との違いです。"
+  },
+  {
+    id: "ch07-ex53",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "cc を使って、1行目(apple)の内容を \"kiwi\" に置き換えてください。",
+    initialFileText: "apple\nbanana\ncherry\ndate\n",
+    expectedFileText: "kiwi\nbanana\ncherry\ndate\n",
+    referenceSolution: "cckiwi<Esc>",
+    hints: [
+      "cc は「cコマンド + cコマンド(doubled)」で、現在行の内容をすべて削除してインサートモードに入ります。",
+      "行自体は残るので、そのまま新しい内容を入力できます。"
+    ],
+    explanation: "cc は dd と同様に現在行を対象にしますが、行を削除したあと空行を1行残してインサートモードに入る点が異なります。行の中身だけを丸ごと書き換えたいときに使います。"
+  },
+  {
+    id: "ch07-ex54",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "cc を使って、1行目(alpha)の内容を \"epsilon\" に置き換えてください。",
+    initialFileText: "alpha\nbeta\ngamma\ndelta\n",
+    expectedFileText: "epsilon\nbeta\ngamma\ndelta\n",
+    referenceSolution: "ccepsilon<Esc>",
+    hints: [
+      "cc は「cコマンド + cコマンド(doubled)」で、現在行の内容をすべて削除してインサートモードに入ります。",
+      "行自体は残るので、そのまま新しい内容を入力できます。"
+    ],
+    explanation: "cc は dd と同様に現在行を対象にしますが、行を削除したあと空行を1行残してインサートモードに入る点が異なります。行の中身だけを丸ごと書き換えたいときに使います。"
+  },
+  {
+    id: "ch07-ex55",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "1行目(one)にカーソルがある状態で cj を実行し、1〜2行目を \"TWO\" の1行に置き換えてください。",
+    initialFileText: "one\ntwo\nthree\nfour\n",
+    expectedFileText: "TWO\nthree\nfour\n",
+    referenceSolution: "cjTWO<Esc>",
+    hints: [
+      "cj は「cコマンド + j モーション」で、現在行と次の行の2行を削除し、空行1行にしてインサートモードに入ります。"
+    ],
+    explanation: "cj は dj と同様に現在行と次の行を対象にしますが、2行を削除したあと空行1行を残してインサートモードに入ります。複数行を1行にまとめて書き換えるのに便利です。"
+  },
+  {
+    id: "ch07-ex56",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "1行目(Monday)にカーソルがある状態で cj を実行し、1〜2行目を \"TUE\" の1行に置き換えてください。",
+    initialFileText: "Monday\nTuesday\nWednesday\nThursday\n",
+    expectedFileText: "TUE\nWednesday\nThursday\n",
+    referenceSolution: "cjTUE<Esc>",
+    hints: [
+      "cj は「cコマンド + j モーション」で、現在行と次の行の2行を削除し、空行1行にしてインサートモードに入ります。"
+    ],
+    explanation: "cj は dj と同様に現在行と次の行を対象にしますが、2行を削除したあと空行1行を残してインサートモードに入ります。複数行を1行にまとめて書き換えるのに便利です。"
+  },
+  {
+    id: "ch07-ex57",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "2行目(green)にカーソルを移動し、ck を実行して1〜2行目を \"RG\" の1行に置き換えてください。",
+    initialFileText: "red\ngreen\nblue\nyellow\n",
+    expectedFileText: "RG\nblue\nyellow\n",
+    referenceSolution: "jckRG<Esc>",
+    hints: [
+      "j で2行目へ移動できます。",
+      "ck は「cコマンド + k モーション」で、現在行と直前の行の2行を1行に置き換えます。"
+    ],
+    explanation: "ck は dk と同様に現在行と直前の行を対象にしますが、削除後に空行1行を残してインサートモードに入ります。"
+  },
+  {
+    id: "ch07-ex58",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "2行目(summer)にカーソルを移動し、ck を実行して1〜2行目を \"SS\" の1行に置き換えてください。",
+    initialFileText: "spring\nsummer\nautumn\nwinter\n",
+    expectedFileText: "SS\nautumn\nwinter\n",
+    referenceSolution: "jckSS<Esc>",
+    hints: [
+      "j で2行目へ移動できます。",
+      "ck は「cコマンド + k モーション」で、現在行と直前の行の2行を1行に置き換えます。"
+    ],
+    explanation: "ck は dk と同様に現在行と直前の行を対象にしますが、削除後に空行1行を残してインサートモードに入ります。"
+  },
+  {
+    id: "ch07-ex59",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "4行目(fish)にカーソルを移動し、cgg を実行して先頭行までを \"ALL\" の1行に置き換えてください。",
+    initialFileText: "cat\ndog\nbird\nfish\n",
+    expectedFileText: "ALL\n",
+    referenceSolution: "jjjcggALL<Esc>",
+    hints: [
+      "j を複数回押すと最終行まで移動できます。",
+      "cgg は「cコマンド + gg モーション」で、カーソル行から先頭行までを1行に置き換えます。"
+    ],
+    explanation: "cgg は dgg と同様にカーソル行から1行目までを対象にしますが、削除後に空行1行を残してインサートモードに入ります。"
+  },
+  {
+    id: "ch07-ex60",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "2行目(south)にカーソルを移動し、cG を実行して最終行までを \"ALL\" の1行に置き換えてください。",
+    initialFileText: "north\nsouth\neast\nwest\n",
+    expectedFileText: "north\nALL\n",
+    referenceSolution: "jcGALL<Esc>",
+    hints: [
+      "j で2行目へ移動できます。",
+      "cG は「cコマンド + G モーション」で、カーソル行から最終行までを1行に置き換えます。"
+    ],
+    explanation: "cG は dG と同様にカーソル行から最終行までを対象にしますが、削除後に空行1行を残してインサートモードに入ります。"
+  },
+  {
+    id: "ch07-ex61",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "yw で1単語目(foo)と区切りスペースをヤンクし、P で貼り付けて単語を複製してください。",
+    initialFileText: "foo bar baz qux\n",
+    expectedFileText: "foo foo bar baz qux\n",
+    referenceSolution: "ywP",
+    hints: [
+      "yw は「yコマンド + w モーション」で、単語と区切りスペースをヤンク(コピー)します。",
+      "ヤンク後、カーソルはヤンクした範囲の先頭に戻ります。P はそのカーソル位置の直前に貼り付けます。"
+    ],
+    explanation: "y はヤンク(コピー)のオペレータで、d と同様にモーションと組み合わせて対象範囲を指定します。yw はバッファを変更せず、指定範囲を無名レジスタへコピーするだけです。区切りスペースまでヤンクしているため、P で貼り付けると単語が自然な区切りで複製されます。"
+  },
+  {
+    id: "ch07-ex62",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "yw で1単語目(red)と区切りスペースをヤンクし、P で貼り付けて単語を複製してください。",
+    initialFileText: "red green blue yellow\n",
+    expectedFileText: "red red green blue yellow\n",
+    referenceSolution: "ywP",
+    hints: [
+      "yw は「yコマンド + w モーション」で、単語と区切りスペースをヤンク(コピー)します。",
+      "ヤンク後、カーソルはヤンクした範囲の先頭に戻ります。P はそのカーソル位置の直前に貼り付けます。"
+    ],
+    explanation: "y はヤンク(コピー)のオペレータで、d と同様にモーションと組み合わせて対象範囲を指定します。yw はバッファを変更せず、指定範囲を無名レジスタへコピーするだけです。区切りスペースまでヤンクしているため、P で貼り付けると単語が自然な区切りで複製されます。"
+  },
+  {
+    id: "ch07-ex63",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "ye で1単語目(cat)の文字だけをヤンクし、P で貼り付けてください(区切りスペースはヤンクされないため、貼り付けた文字列は直前の単語に直接つながります)。",
+    initialFileText: "cat dog bird fish\n",
+    expectedFileText: "catcat dog bird fish\n",
+    referenceSolution: "yeP",
+    hints: [
+      "ye は「yコマンド + e モーション」で、単語の末尾までをヤンクします(区切りスペースは含みません)。",
+      "yw との違いは区切りスペースをヤンクするかどうかです。"
+    ],
+    explanation: "ye は de と同じ範囲(単語本体のみ)をヤンクします。区切りスペースを含まないため、P で貼り付けた文字列は元の単語と直接つながります。yw では区切りスペースごとヤンクされるため、この点が結果の違いとして表れます。"
+  },
+  {
+    id: "ch07-ex64",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "ye で1単語目(The)の文字だけをヤンクし、P で貼り付けてください(区切りスペースはヤンクされないため、貼り付けた文字列は直前の単語に直接つながります)。",
+    initialFileText: "The quick brown fox\n",
+    expectedFileText: "TheThe quick brown fox\n",
+    referenceSolution: "yeP",
+    hints: [
+      "ye は「yコマンド + e モーション」で、単語の末尾までをヤンクします(区切りスペースは含みません)。",
+      "yw との違いは区切りスペースをヤンクするかどうかです。"
+    ],
+    explanation: "ye は de と同じ範囲(単語本体のみ)をヤンクします。区切りスペースを含まないため、P で貼り付けた文字列は元の単語と直接つながります。yw では区切りスペースごとヤンクされるため、この点が結果の違いとして表れます。"
+  },
+  {
+    id: "ch07-ex65",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "2単語目(banana)の先頭にカーソルを移動し、y0 で行頭からカーソル直前までをヤンクしたうえで、$ で行末へ移動して p で貼り付けてください。",
+    initialFileText: "apple banana cherry date\n",
+    expectedFileText: "apple banana cherry dateapple \n",
+    referenceSolution: "wy0$p",
+    hints: [
+      "y0 は行頭からカーソル直前までをヤンクします。",
+      "$ でその行の末尾へ移動してから p で貼り付けられます。"
+    ],
+    explanation: "y0 は d0/c0 と同じ範囲(行頭からカーソル直前まで)をヤンクします。ヤンク後カーソルは範囲の先頭に移動する点に注意してください。"
+  },
+  {
+    id: "ch07-ex66",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "3単語目(three)の先頭にカーソルを移動し、y0 で行頭からカーソル直前までをヤンクしたうえで、$ で行末へ移動して p で貼り付けてください。",
+    initialFileText: "one two three four\n",
+    expectedFileText: "one two three fourone two \n",
+    referenceSolution: "wwy0$p",
+    hints: [
+      "y0 は行頭からカーソル直前までをヤンクします。",
+      "$ でその行の末尾へ移動してから p で貼り付けられます。"
+    ],
+    explanation: "y0 は d0/c0 と同じ範囲(行頭からカーソル直前まで)をヤンクします。ヤンク後カーソルは範囲の先頭に移動する点に注意してください。"
+  },
+  {
+    id: "ch07-ex67",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "1単語目(foo)の先頭にカーソルを移動し、y$ で行末までをヤンクしたうえで、行頭(0)へ戻って P で貼り付けてください。",
+    initialFileText: "foo bar baz qux\n",
+    expectedFileText: "foo bar baz quxfoo bar baz qux\n",
+    referenceSolution: "y$0P",
+    hints: [
+      "y$ は「yコマンド + $ モーション」で、カーソル位置から行末までをヤンクします。",
+      "0 で行頭へ戻り、P で貼り付けます。"
+    ],
+    explanation: "y$ は d$/c$ と同じ範囲(カーソル位置から行末まで)をヤンクします。ヤンクした内容は無名レジスタに文字単位(charwise)で保持されます。"
+  },
+  {
+    id: "ch07-ex68",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "2単語目(green)の先頭にカーソルを移動し、y$ で行末までをヤンクしたうえで、行頭(0)へ戻って P で貼り付けてください。",
+    initialFileText: "red green blue yellow\n",
+    expectedFileText: "green blue yellowred green blue yellow\n",
+    referenceSolution: "wy$0P",
+    hints: [
+      "y$ は「yコマンド + $ モーション」で、カーソル位置から行末までをヤンクします。",
+      "0 で行頭へ戻り、P で貼り付けます。"
+    ],
+    explanation: "y$ は d$/c$ と同じ範囲(カーソル位置から行末まで)をヤンクします。ヤンクした内容は無名レジスタに文字単位(charwise)で保持されます。"
+  },
+  {
+    id: "ch07-ex69",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "1行目(apple)にカーソルがある状態で yj を実行し、1〜2行目をヤンクしたうえで、最終行まで移動して p で貼り付けてください。",
+    initialFileText: "apple\nbanana\ncherry\ndate\n",
+    expectedFileText: "apple\nbanana\ncherry\ndate\napple\nbanana\n",
+    referenceSolution: "yjGp",
+    hints: [
+      "yj は「yコマンド + j モーション」で、現在行と次の行をヤンクします(行単位)。",
+      "G で最終行へ移動してから p で貼り付けられます。"
+    ],
+    explanation: "yj は dj と同じ範囲(現在行と次の行)を行単位でヤンクします。行単位でヤンクされた内容を貼り付けると、常に「行」として挿入されます。"
+  },
+  {
+    id: "ch07-ex70",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "1行目(red)にカーソルがある状態で yj を実行し、1〜2行目をヤンクしたうえで、最終行まで移動して p で貼り付けてください。",
+    initialFileText: "red\ngreen\nblue\nyellow\n",
+    expectedFileText: "red\ngreen\nblue\nyellow\nred\ngreen\n",
+    referenceSolution: "yjGp",
+    hints: [
+      "yj は「yコマンド + j モーション」で、現在行と次の行をヤンクします(行単位)。",
+      "G で最終行へ移動してから p で貼り付けられます。"
+    ],
+    explanation: "yj は dj と同じ範囲(現在行と次の行)を行単位でヤンクします。行単位でヤンクされた内容を貼り付けると、常に「行」として挿入されます。"
+  },
+  {
+    id: "ch07-ex71",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "2行目(two)にカーソルを移動し、yk を実行して1〜2行目をヤンクしたうえで、最終行まで移動して p で貼り付けてください。",
+    initialFileText: "one\ntwo\nthree\nfour\n",
+    expectedFileText: "one\ntwo\nthree\nfour\none\ntwo\n",
+    referenceSolution: "jykGp",
+    hints: [
+      "j で2行目へ移動できます。",
+      "yk は現在行と直前の行を行単位でヤンクします。"
+    ],
+    explanation: "yk は dk と同じ範囲(現在行と直前の行)を行単位でヤンクします。"
+  },
+  {
+    id: "ch07-ex72",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "2行目(Tuesday)にカーソルを移動し、yk を実行して1〜2行目をヤンクしたうえで、最終行まで移動して p で貼り付けてください。",
+    initialFileText: "Monday\nTuesday\nWednesday\nThursday\n",
+    expectedFileText: "Monday\nTuesday\nWednesday\nThursday\nMonday\nTuesday\n",
+    referenceSolution: "jykGp",
+    hints: [
+      "j で2行目へ移動できます。",
+      "yk は現在行と直前の行を行単位でヤンクします。"
+    ],
+    explanation: "yk は dk と同じ範囲(現在行と直前の行)を行単位でヤンクします。"
+  },
+  {
+    id: "ch07-ex73",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "4行目(fish)にカーソルを移動し、ygg で先頭行までをヤンクしたうえで、そのまま p で貼り付けてください。",
+    initialFileText: "cat\ndog\nbird\nfish\n",
+    expectedFileText: "cat\ncat\ndog\nbird\nfish\ndog\nbird\nfish\n",
+    referenceSolution: "jjjyggp",
+    hints: [
+      "gg は先頭行へ移動するモーションです。ygg はカーソル行から先頭行までを行単位でヤンクします。"
+    ],
+    explanation: "ygg は dgg と同じ範囲をヤンクします。ヤンク後カーソルは範囲の先頭行(1行目)に移動します。"
+  },
+  {
+    id: "ch07-ex74",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "2行目(summer)にカーソルを移動し、yG で最終行までをヤンクしたうえで、そのまま P で貼り付けてください。",
+    initialFileText: "spring\nsummer\nautumn\nwinter\n",
+    expectedFileText: "spring\nsummer\nautumn\nwinter\nsummer\nautumn\nwinter\n",
+    referenceSolution: "jyGP",
+    hints: [
+      "G は最終行へ移動するモーションです。yG はカーソル行から最終行までを行単位でヤンクします。"
+    ],
+    explanation: "yG は dG と同じ範囲をヤンクします。"
+  },
+  {
+    id: "ch07-ex75",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "2行目にカーソルを移動し、Y で現在行をヤンクしたうえで、p で直後に貼り付けてください。",
+    initialFileText: "alpha\nbeta\ngamma\ndelta\n",
+    expectedFileText: "alpha\nbeta\nbeta\ngamma\ndelta\n",
+    referenceSolution: "jYp",
+    hints: [
+      "Y は yy の糖衣コマンドで、現在行をヤンクします。",
+      "p で直後に貼り付けられます。"
+    ],
+    explanation: "Y は yy と全く同じ動作をする糖衣コマンドです。D が d$ の糖衣であるのと同様の関係です。"
+  },
+  {
+    id: "ch07-ex76",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "数字の 2 に続けて yy を実行し(2yy)、1〜2行目をヤンクしたうえで、最終行まで移動して p で貼り付けてください。",
+    initialFileText: "north\nsouth\neast\nwest\n",
+    expectedFileText: "north\nsouth\neast\nwest\nnorth\nsouth\n",
+    referenceSolution: "2yyGp",
+    hints: [
+      "{count}yy は現在行から count 行分をヤンクします。",
+      "G で最終行へ移動してから貼り付けます。"
+    ],
+    explanation: "{count}yy は {count}dd と同様に、カーソル行を含めて count 行分をまとめてヤンクします。"
+  },
+  {
+    id: "ch07-ex77",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "3行目にカーソルを移動し、yy でヤンクしたうえで、P で直前(3行目の上)に貼り付けてください。",
+    initialFileText: "apple\nbanana\ncherry\ndate\n",
+    expectedFileText: "apple\nbanana\ncherry\ncherry\ndate\n",
+    referenceSolution: "jjyyP",
+    hints: [
+      "j を2回押すと3行目へ移動できます。",
+      "P はヤンクした内容をカーソル行の直前に貼り付けます。"
+    ],
+    explanation: "P は行単位のレジスタを貼り付けるとき、カーソル行の直前に新しい行として挿入します。"
+  },
+  {
+    id: "ch07-ex78",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "1行目にカーソルがある状態で yy でヤンクし、j で2行目へ移動してから p で貼り付けてください。",
+    initialFileText: "one\ntwo\nthree\nfour\n",
+    expectedFileText: "one\ntwo\none\nthree\nfour\n",
+    referenceSolution: "yyjp",
+    hints: [
+      "yy はバッファを変更しないため、ヤンク後にカーソルを自由に動かしてから貼り付けられます。"
+    ],
+    explanation: "ヤンク(y系のコマンド)はレジスタにコピーするだけでバッファを変更しないため、貼り付け位置をヤンク後に自由に選べます。"
+  },
+  {
+    id: "ch07-ex79",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "先頭の文字の直後に a でインサートモードに入り、\"e\" を入力して Escape でノーマルモードに戻り、単語を正しく直してください。",
+    initialFileText: "Hllo\n",
+    expectedFileText: "Hello\n",
+    referenceSolution: "ae<Esc>",
+    hints: [
+      "a はカーソル位置の直後からインサートモードに入るコマンドです(i はカーソル位置の直前から入る点が異なります)。",
+      "文字を入力したら Escape でノーマルモードに戻ります。"
+    ],
+    explanation: "a はカーソルの直後(1文字右)からインサートモードに入ります。i がカーソル位置の直前から入るのに対し、a は「追記」のニュアンスを持つコマンドです。"
+  },
+  {
+    id: "ch07-ex80",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "先頭の文字の直後に a でインサートモードに入り、\"o\" を入力して Escape でノーマルモードに戻り、単語を正しく直してください。",
+    initialFileText: "Wrld\n",
+    expectedFileText: "World\n",
+    referenceSolution: "ao<Esc>",
+    hints: [
+      "a はカーソル位置の直後からインサートモードに入るコマンドです(i はカーソル位置の直前から入る点が異なります)。",
+      "文字を入力したら Escape でノーマルモードに戻ります。"
+    ],
+    explanation: "a はカーソルの直後(1文字右)からインサートモードに入ります。i がカーソル位置の直前から入るのに対し、a は「追記」のニュアンスを持つコマンドです。"
+  },
+  {
+    id: "ch07-ex81",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "先頭の文字の直後に a でインサートモードに入り、\"oo\" を入力して Escape でノーマルモードに戻り、単語を正しく直してください。",
+    initialFileText: "Gd\n",
+    expectedFileText: "Good\n",
+    referenceSolution: "aoo<Esc>",
+    hints: [
+      "a はカーソル位置の直後からインサートモードに入るコマンドです(i はカーソル位置の直前から入る点が異なります)。",
+      "文字を入力したら Escape でノーマルモードに戻ります。"
+    ],
+    explanation: "a はカーソルの直後(1文字右)からインサートモードに入ります。i がカーソル位置の直前から入るのに対し、a は「追記」のニュアンスを持つコマンドです。"
+  },
+  {
+    id: "ch07-ex82",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "A を使って行末に \" World\" を追加してください。",
+    initialFileText: "Hello\n",
+    expectedFileText: "Hello World\n",
+    referenceSolution: "A World<Esc>",
+    hints: [
+      "A はカーソルの位置に関係なく、常に行末からインサートモードに入るコマンドです(c$/a$ と同じ結果になります)。"
+    ],
+    explanation: "A はカーソル位置に関わらず行末へ移動してからインサートモードに入る糖衣コマンドです($ と a を組み合わせたのと同じ結果になります)。"
+  },
+  {
+    id: "ch07-ex83",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "A を使って行末に \" bar\" を追加してください。",
+    initialFileText: "foo\n",
+    expectedFileText: "foo bar\n",
+    referenceSolution: "A bar<Esc>",
+    hints: [
+      "A はカーソルの位置に関係なく、常に行末からインサートモードに入るコマンドです(c$/a$ と同じ結果になります)。"
+    ],
+    explanation: "A はカーソル位置に関わらず行末へ移動してからインサートモードに入る糖衣コマンドです($ と a を組み合わせたのと同じ結果になります)。"
+  },
+  {
+    id: "ch07-ex84",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "A を使って行末に \"-01-01\" を追加してください。",
+    initialFileText: "2024\n",
+    expectedFileText: "2024-01-01\n",
+    referenceSolution: "A-01-01<Esc>",
+    hints: [
+      "A はカーソルの位置に関係なく、常に行末からインサートモードに入るコマンドです(c$/a$ と同じ結果になります)。"
+    ],
+    explanation: "A はカーソル位置に関わらず行末へ移動してからインサートモードに入る糖衣コマンドです($ と a を組み合わせたのと同じ結果になります)。"
+  },
+  {
+    id: "ch07-ex85",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "I を使って行頭に \"Hello\" を追加してください。",
+    initialFileText: "World\n",
+    expectedFileText: "Hello World\n",
+    referenceSolution: "IHello <Esc>",
+    hints: [
+      "I はカーソルの位置に関係なく、常に行頭からインサートモードに入るコマンドです(c0/0i と同じ結果になります)。"
+    ],
+    explanation: "I はカーソル位置に関わらず行頭へ移動してからインサートモードに入る糖衣コマンドです(0 と i を組み合わせたのと同じ結果になります)。"
+  },
+  {
+    id: "ch07-ex86",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "I を使って行頭に \"foo\" を追加してください。",
+    initialFileText: "bar\n",
+    expectedFileText: "foo bar\n",
+    referenceSolution: "Ifoo <Esc>",
+    hints: [
+      "I はカーソルの位置に関係なく、常に行頭からインサートモードに入るコマンドです(c0/0i と同じ結果になります)。"
+    ],
+    explanation: "I はカーソル位置に関わらず行頭へ移動してからインサートモードに入る糖衣コマンドです(0 と i を組み合わせたのと同じ結果になります)。"
+  },
+  {
+    id: "ch07-ex87",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "I を使って行頭に \"2024-\" を追加してください。",
+    initialFileText: "01\n",
+    expectedFileText: "2024-01\n",
+    referenceSolution: "I2024-<Esc>",
+    hints: [
+      "I はカーソルの位置に関係なく、常に行頭からインサートモードに入るコマンドです(c0/0i と同じ結果になります)。"
+    ],
+    explanation: "I はカーソル位置に関わらず行頭へ移動してからインサートモードに入る糖衣コマンドです(0 と i を組み合わせたのと同じ結果になります)。"
+  },
+  {
+    id: "ch07-ex88",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "2行目(third)にカーソルを移動し、O で2行目の上に新しい行を開いて \"second\" と入力してください。",
+    initialFileText: "first\nthird\n",
+    expectedFileText: "first\nsecond\nthird\n",
+    referenceSolution: "jOsecond<Esc>",
+    hints: [
+      "j で2行目へ移動できます。",
+      "O は現在行の「上」に新しい空行を作り、その行頭からインサートモードに入ります(小文字の o は「下」に作ります)。"
+    ],
+    explanation: "O は o と対になるコマンドで、現在行の上に新しい行を挿入してインサートモードに入ります。大文字/小文字でカーソルの上下どちらに行を作るかが変わります。"
+  },
+  {
+    id: "ch07-ex89",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "2行目(gamma)にカーソルを移動し、O で2行目の上に新しい行を開いて \"beta\" と入力してください。",
+    initialFileText: "alpha\ngamma\n",
+    expectedFileText: "alpha\nbeta\ngamma\n",
+    referenceSolution: "jObeta<Esc>",
+    hints: [
+      "j で2行目へ移動できます。",
+      "O は現在行の「上」に新しい空行を作り、その行頭からインサートモードに入ります(小文字の o は「下」に作ります)。"
+    ],
+    explanation: "O は o と対になるコマンドで、現在行の上に新しい行を挿入してインサートモードに入ります。大文字/小文字でカーソルの上下どちらに行を作るかが変わります。"
+  },
+  {
+    id: "ch07-ex90",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "2行目(blue)にカーソルを移動し、O で2行目の上に新しい行を開いて \"green\" と入力してください。",
+    initialFileText: "red\nblue\n",
+    expectedFileText: "red\ngreen\nblue\n",
+    referenceSolution: "jOgreen<Esc>",
+    hints: [
+      "j で2行目へ移動できます。",
+      "O は現在行の「上」に新しい空行を作り、その行頭からインサートモードに入ります(小文字の o は「下」に作ります)。"
+    ],
+    explanation: "O は o と対になるコマンドで、現在行の上に新しい行を挿入してインサートモードに入ります。大文字/小文字でカーソルの上下どちらに行を作るかが変わります。"
+  },
+  {
+    id: "ch07-ex91",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "$ で行末へ移動してから a でインサートモードに入り、\" done\" を追加してください(結果は A で行った場合と同じになります)。",
+    initialFileText: "task\n",
+    expectedFileText: "task done\n",
+    referenceSolution: "$a done<Esc>",
+    hints: [
+      "$ は行末の文字へ移動するモーションです。",
+      "そこから a で直後にインサートモードへ入ると、行末に追記できます。"
+    ],
+    explanation: "$a は「行末へ移動してから直後に挿入する」操作で、A コマンド1つで行うのと全く同じ結果になります。A は $a の糖衣コマンドです。"
+  },
+  {
+    id: "ch07-ex92",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "0 で行頭へ移動してから i でインサートモードに入り、\"pre-\" を追加してください(結果は I で行った場合と同じになります)。",
+    initialFileText: "fix\n",
+    expectedFileText: "pre-fix\n",
+    referenceSolution: "0ipre-<Esc>",
+    hints: [
+      "0 は行頭へ移動するモーションです。",
+      "そこから i でインサートモードに入ると、行頭に追記できます。"
+    ],
+    explanation: "0i は「行頭へ移動してから直前に挿入する」操作で、I コマンド1つで行うのと全く同じ結果になります。I は 0i の糖衣コマンドです。"
+  },
+  {
+    id: "ch07-ex93",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "数字の 3 に続けて x を実行し(3x)、先頭から3文字を削除してください。",
+    initialFileText: "banana\n",
+    expectedFileText: "ana\n",
+    referenceSolution: "3x",
+    hints: [
+      "xの前に数字を入力すると、その文字数分をまとめて削除できます。",
+      "3x はカーソル位置から右へ3文字を削除します。"
+    ],
+    explanation: "{count}x は x コマンドを count 回繰り返すのと同じで、カーソル位置から count 文字をまとめて削除します。"
+  },
+  {
+    id: "ch07-ex94",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "数字の 4 に続けて x を実行し(4x)、先頭から4文字を削除してください。",
+    initialFileText: "elephant\n",
+    expectedFileText: "hant\n",
+    referenceSolution: "4x",
+    hints: [
+      "xの前に数字を入力すると、その文字数分をまとめて削除できます。",
+      "4x はカーソル位置から右へ4文字を削除します。"
+    ],
+    explanation: "{count}x は x コマンドを count 回繰り返すのと同じで、カーソル位置から count 文字をまとめて削除します。"
+  },
+  {
+    id: "ch07-ex95",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "数字の 5 に続けて x を実行し(5x)、先頭から5文字を削除してください。",
+    initialFileText: "chocolate\n",
+    expectedFileText: "late\n",
+    referenceSolution: "5x",
+    hints: [
+      "xの前に数字を入力すると、その文字数分をまとめて削除できます。",
+      "5x はカーソル位置から右へ5文字を削除します。"
+    ],
+    explanation: "{count}x は x コマンドを count 回繰り返すのと同じで、カーソル位置から count 文字をまとめて削除します。"
+  },
+  {
+    id: "ch07-ex96",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "2単語目(quick)の先頭にカーソルを移動し、D を実行して行末までを削除してください。",
+    initialFileText: "The quick brown fox\n",
+    expectedFileText: "The \n",
+    referenceSolution: "wD",
+    hints: [
+      "D は d$ の糖衣コマンドで、カーソル位置から行末までを削除します。"
+    ],
+    explanation: "D は d$ の糖衣コマンドです。数あるオペレータ+モーションの組み合わせの中でも特によく使うため、専用の1文字コマンドが用意されています。"
+  },
+  {
+    id: "ch07-ex97",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "2単語目(banana)の先頭にカーソルを移動し、D を実行して行末までを削除してください。",
+    initialFileText: "apple banana cherry date\n",
+    expectedFileText: "apple \n",
+    referenceSolution: "wD",
+    hints: [
+      "D は d$ の糖衣コマンドで、カーソル位置から行末までを削除します。"
+    ],
+    explanation: "D は d$ の糖衣コマンドです。数あるオペレータ+モーションの組み合わせの中でも特によく使うため、専用の1文字コマンドが用意されています。"
+  },
+  {
+    id: "ch07-ex98",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "dd を2回実行して1行目と2行目を削除したあと、u で1回分だけ元に戻し、1行目(apple)の削除だけを取り消してください。",
+    initialFileText: "apple\nbanana\ncherry\ndate\n",
+    expectedFileText: "banana\ncherry\ndate\n",
+    referenceSolution: "ddddu",
+    hints: [
+      "dd を2回実行すると、1行目と2行目がこの順に削除されます。",
+      "u は直前の1回分の変更だけを元に戻します。2回分の dd のうち、直前(2回目)の削除だけが取り消されます。"
+    ],
+    explanation: "u は undoスタックに積まれた変更を1回分ずつ取り消します。dd を2回実行したあとに u を1回押すと、2回目の dd(2行目の削除)だけが取り消され、1回目の dd(1行目の削除)は残ります。"
+  },
+  {
+    id: "ch07-ex99",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "dd を2回実行して1行目と2行目を削除したあと、u で1回分だけ元に戻し、1行目(one)の削除だけを取り消してください。",
+    initialFileText: "one\ntwo\nthree\nfour\n",
+    expectedFileText: "two\nthree\nfour\n",
+    referenceSolution: "ddddu",
+    hints: [
+      "dd を2回実行すると、1行目と2行目がこの順に削除されます。",
+      "u は直前の1回分の変更だけを元に戻します。2回分の dd のうち、直前(2回目)の削除だけが取り消されます。"
+    ],
+    explanation: "u は undoスタックに積まれた変更を1回分ずつ取り消します。dd を2回実行したあとに u を1回押すと、2回目の dd(2行目の削除)だけが取り消され、1回目の dd(1行目の削除)は残ります。"
+  },
+  {
+    id: "ch07-ex100",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "dd を2回実行して1行目と2行目を削除したあと、u で1回分だけ元に戻し、1行目(red)の削除だけを取り消してください。",
+    initialFileText: "red\ngreen\nblue\nyellow\n",
+    expectedFileText: "green\nblue\nyellow\n",
+    referenceSolution: "ddddu",
+    hints: [
+      "dd を2回実行すると、1行目と2行目がこの順に削除されます。",
+      "u は直前の1回分の変更だけを元に戻します。2回分の dd のうち、直前(2回目)の削除だけが取り消されます。"
+    ],
+    explanation: "u は undoスタックに積まれた変更を1回分ずつ取り消します。dd を2回実行したあとに u を1回押すと、2回目の dd(2行目の削除)だけが取り消され、1回目の dd(1行目の削除)は残ります。"
+  },
+  {
+    id: "ch07-ex101",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "dd を2回実行したあと、u で1回元に戻し、続けて Ctrl-r でやり直してください(結果は dd を2回実行した場合と同じになります)。",
+    initialFileText: "Monday\nTuesday\nWednesday\nThursday\n",
+    expectedFileText: "Wednesday\nThursday\n",
+    referenceSolution: "ddddu<C-r>",
+    hints: [
+      "u で直前の変更を1回取り消せます。",
+      "Ctrl-r(redo)は、u で取り消した変更をもう一度やり直すコマンドです。"
+    ],
+    explanation: "Ctrl-r は undo(u)で取り消した変更をやり直す(redo)コマンドです。dd→dd→u→Ctrl-r の結果は、undo/redoを挟まずに dd を2回実行した場合と同じになります。"
+  },
+  {
+    id: "ch07-ex102",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "dd を2回実行したあと、u で1回元に戻し、続けて Ctrl-r でやり直してください(結果は dd を2回実行した場合と同じになります)。",
+    initialFileText: "cat\ndog\nbird\nfish\n",
+    expectedFileText: "bird\nfish\n",
+    referenceSolution: "ddddu<C-r>",
+    hints: [
+      "u で直前の変更を1回取り消せます。",
+      "Ctrl-r(redo)は、u で取り消した変更をもう一度やり直すコマンドです。"
+    ],
+    explanation: "Ctrl-r は undo(u)で取り消した変更をやり直す(redo)コマンドです。dd→dd→u→Ctrl-r の結果は、undo/redoを挟まずに dd を2回実行した場合と同じになります。"
+  },
+  {
+    id: "ch07-ex103",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "コマンドラインモードで :s/cat/dog/ を実行し(gフラグなし)、行内で最初に見つかった cat だけを dog に置換してください。",
+    initialFileText: "cat cat cat\n",
+    expectedFileText: "dog cat cat\n",
+    referenceSolution: ":s/cat/dog/",
+    hints: [
+      ": でコマンドラインモードに入れます。",
+      "gフラグを付けない :s/old/new/ は、その行で最初に見つかった1箇所だけを置換します。"
+    ],
+    explanation: ":s/old/new/ はアドレス省略時カーソル行だけを対象にし、gフラグがない場合は行内で最初に一致した1箇所だけを置換します。全ての一致箇所を置換したい場合は末尾に g を付けます。"
+  },
+  {
+    id: "ch07-ex104",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "コマンドラインモードで :s/a/b/ を実行し(gフラグなし)、行内で最初に見つかった a だけを b に置換してください。",
+    initialFileText: "aaa\n",
+    expectedFileText: "baa\n",
+    referenceSolution: ":s/a/b/",
+    hints: [
+      ": でコマンドラインモードに入れます。",
+      "gフラグを付けない :s/old/new/ は、その行で最初に見つかった1箇所だけを置換します。"
+    ],
+    explanation: ":s/old/new/ はアドレス省略時カーソル行だけを対象にし、gフラグがない場合は行内で最初に一致した1箇所だけを置換します。全ての一致箇所を置換したい場合は末尾に g を付けます。"
+  },
+  {
+    id: "ch07-ex105",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "コマンドラインモードで :s/go/stop/ を実行し(gフラグなし)、行内で最初に見つかった go だけを stop に置換してください。",
+    initialFileText: "go go go\n",
+    expectedFileText: "stop go go\n",
+    referenceSolution: ":s/go/stop/",
+    hints: [
+      ": でコマンドラインモードに入れます。",
+      "gフラグを付けない :s/old/new/ は、その行で最初に見つかった1箇所だけを置換します。"
+    ],
+    explanation: ":s/old/new/ はアドレス省略時カーソル行だけを対象にし、gフラグがない場合は行内で最初に一致した1箇所だけを置換します。全ての一致箇所を置換したい場合は末尾に g を付けます。"
+  },
+  {
+    id: "ch07-ex106",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "1行目にカーソルがある状態で :s/foo/bar/g を実行し、1行目内のすべての foo を bar に置換してください(2行目は変更しないこと)。",
+    initialFileText: "foo foo\nfoo foo\n",
+    expectedFileText: "bar bar\nfoo foo\n",
+    referenceSolution: ":s/foo/bar/g",
+    hints: [
+      "アドレス(範囲)を指定しない :s コマンドは、カーソルがある行だけを対象にします。",
+      "末尾の g フラグを付けると、その行内の全ての一致箇所を置換できます。"
+    ],
+    explanation: ":%s との違いは対象範囲です。アドレスを省略した :s/old/new/g は「カーソル行のみ」が対象になるため、他の行にある同じパターンは変更されません。"
+  },
+  {
+    id: "ch07-ex107",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "1行目にカーソルがある状態で :s/red/blue/g を実行し、1行目内のすべての red を blue に置換してください(2行目は変更しないこと)。",
+    initialFileText: "red red red\nred red red\n",
+    expectedFileText: "blue blue blue\nred red red\n",
+    referenceSolution: ":s/red/blue/g",
+    hints: [
+      "アドレス(範囲)を指定しない :s コマンドは、カーソルがある行だけを対象にします。",
+      "末尾の g フラグを付けると、その行内の全ての一致箇所を置換できます。"
+    ],
+    explanation: ":%s との違いは対象範囲です。アドレスを省略した :s/old/new/g は「カーソル行のみ」が対象になるため、他の行にある同じパターンは変更されません。"
+  },
+  {
+    id: "ch07-ex108",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "コマンドラインモードで :2,4s/cat/dog/g を実行し、2,4行目の cat だけを dog に置換してください(範囲外の行は変更しないこと)。",
+    initialFileText: "cat\ncat\ncat\ncat\ncat\n",
+    expectedFileText: "cat\ndog\ndog\ndog\ncat\n",
+    referenceSolution: ":2,4s/cat/dog/g",
+    hints: [
+      ": でコマンドラインモードに入れます。",
+      ":{n},{m}s/old/new/g のように行番号の範囲を指定すると、その範囲だけを置換対象にできます。"
+    ],
+    explanation: ":%s/old/new/g がバッファ全体(1,$)を対象にするのに対し、:{n},{m}s/old/new/g のように行番号を明示すると、n行目からm行目までの範囲だけを置換対象にできます。"
+  },
+  {
+    id: "ch07-ex109",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "コマンドラインモードで :1,2s/x/y/g を実行し、1,2行目の x だけを y に置換してください(範囲外の行は変更しないこと)。",
+    initialFileText: "x\nx\nx\nx\n",
+    expectedFileText: "y\ny\nx\nx\n",
+    referenceSolution: ":1,2s/x/y/g",
+    hints: [
+      ": でコマンドラインモードに入れます。",
+      ":{n},{m}s/old/new/g のように行番号の範囲を指定すると、その範囲だけを置換対象にできます。"
+    ],
+    explanation: ":%s/old/new/g がバッファ全体(1,$)を対象にするのに対し、:{n},{m}s/old/new/g のように行番号を明示すると、n行目からm行目までの範囲だけを置換対象にできます。"
+  },
+  {
+    id: "ch07-ex110",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "コマンドラインモードで :3,5s/red/blue/g を実行し、3,5行目の red だけを blue に置換してください(範囲外の行は変更しないこと)。",
+    initialFileText: "red\nred\nred\nred\nred\n",
+    expectedFileText: "red\nred\nblue\nblue\nblue\n",
+    referenceSolution: ":3,5s/red/blue/g",
+    hints: [
+      ": でコマンドラインモードに入れます。",
+      ":{n},{m}s/old/new/g のように行番号の範囲を指定すると、その範囲だけを置換対象にできます。"
+    ],
+    explanation: ":%s/old/new/g がバッファ全体(1,$)を対象にするのに対し、:{n},{m}s/old/new/g のように行番号を明示すると、n行目からm行目までの範囲だけを置換対象にできます。"
+  },
+  {
+    id: "ch07-ex111",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "コマンドラインモードで :%s/apple/orange/g を実行し、すべての行の apple を orange に一括置換してください。",
+    initialFileText: "apple pie\napple juice\n",
+    expectedFileText: "orange pie\norange juice\n",
+    referenceSolution: ":%s/apple/orange/g",
+    hints: [
+      ": でコマンドラインモードに入れます。",
+      "% は全行(1,$)を表すアドレスです。"
+    ],
+    explanation: ":%s/old/new/g は % (全行)を対象に old を new へ置換するexコマンドです。gフラグを付けることで、各行内の全ての一致箇所が置換対象になります。"
+  },
+  {
+    id: "ch07-ex112",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "コマンドラインモードで :%s/foo/bar/g を実行し、すべての行の foo を bar に一括置換してください。",
+    initialFileText: "foo1\nfoo2\nfoo3\n",
+    expectedFileText: "bar1\nbar2\nbar3\n",
+    referenceSolution: ":%s/foo/bar/g",
+    hints: [
+      ": でコマンドラインモードに入れます。",
+      "% は全行(1,$)を表すアドレスです。"
+    ],
+    explanation: ":%s/old/new/g は % (全行)を対象に old を new へ置換するexコマンドです。gフラグを付けることで、各行内の全ての一致箇所が置換対象になります。"
+  },
+  {
+    id: "ch07-ex113",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "コマンドラインモードで :%s/cat/fish/g を実行し、すべての行の cat を fish に一括置換してください。",
+    initialFileText: "cat\ndog\ncat\n",
+    expectedFileText: "fish\ndog\nfish\n",
+    referenceSolution: ":%s/cat/fish/g",
+    hints: [
+      ": でコマンドラインモードに入れます。",
+      "% は全行(1,$)を表すアドレスです。"
+    ],
+    explanation: ":%s/old/new/g は % (全行)を対象に old を new へ置換するexコマンドです。gフラグを付けることで、各行内の全ての一致箇所が置換対象になります。"
+  },
+  {
+    id: "ch07-ex114",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "コマンドラインモードで :%s/cat/dog/gi を実行し、大文字・小文字を区別せずにすべての cat を dog に置換してください。",
+    initialFileText: "Cat cat CAT\n",
+    expectedFileText: "dog dog dog\n",
+    referenceSolution: ":%s/cat/dog/gi",
+    hints: [
+      "フラグに i を付けると、大文字・小文字を区別せずにパターンを検索できます。",
+      "g と i は組み合わせて使えます(gi)。"
+    ],
+    explanation: "s コマンドのフラグに i を付けると大文字・小文字を無視してパターンにマッチさせられます。g と組み合わせた gi にすると、大文字・小文字を問わず行内の全ての一致箇所を置換できます。"
+  },
+  {
+    id: "ch07-ex115",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "コマンドラインモードで :%s/red/blue/gi を実行し、大文字・小文字を区別せずにすべての red を blue に置換してください。",
+    initialFileText: "Red RED red\n",
+    expectedFileText: "blue blue blue\n",
+    referenceSolution: ":%s/red/blue/gi",
+    hints: [
+      "フラグに i を付けると、大文字・小文字を区別せずにパターンを検索できます。",
+      "g と i は組み合わせて使えます(gi)。"
+    ],
+    explanation: "s コマンドのフラグに i を付けると大文字・小文字を無視してパターンにマッチさせられます。g と組み合わせた gi にすると、大文字・小文字を問わず行内の全ての一致箇所を置換できます。"
+  },
+  {
+    id: "ch07-ex116",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "コマンドラインモードで :3 を実行して3行目(three)へ直接移動し、dd でその行を削除してください。",
+    initialFileText: "one\ntwo\nthree\nfour\nfive\n",
+    expectedFileText: "one\ntwo\nfour\nfive\n",
+    referenceSolution: ":3<CR>dd",
+    hints: [
+      ": に続けて行番号だけを入力して Enter を押すと、その行番号へ直接ジャンプできます(gg/G のようにファイルの先頭/末尾に限定されません)。",
+      "移動したあとは通常どおりノーマルモードのコマンドを実行できます。"
+    ],
+    explanation: ":{行番号} はその行番号へ直接カーソルを移動するexコマンドです。gg/G が先頭行・最終行に限定されるのに対し、:{行番号}は任意の行番号を指定できます。"
+  },
+  {
+    id: "ch07-ex117",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "コマンドラインモードで :2 を実行して2行目(tue)へ直接移動し、x で先頭の1文字を削除してください。",
+    initialFileText: "mon\ntue\nwed\nthu\n",
+    expectedFileText: "mon\nue\nwed\nthu\n",
+    referenceSolution: ":2<CR>x",
+    hints: [
+      ": に続けて行番号だけを入力して Enter を押すと、その行番号へ直接ジャンプできます(gg/G のようにファイルの先頭/末尾に限定されません)。",
+      "移動したあとは通常どおりノーマルモードのコマンドを実行できます。"
+    ],
+    explanation: ":{行番号} はその行番号へ直接カーソルを移動するexコマンドです。gg/G が先頭行・最終行に限定されるのに対し、:{行番号}は任意の行番号を指定できます。"
+  },
+  {
+    id: "ch07-ex118",
+    chapterId: "ch07",
+    type: "vim",
+    prompt: "コマンドラインモードで :3 を実行して3行目(east)へ直接移動し、A で行末に \"!\" を追加してください。",
+    initialFileText: "north\nsouth\neast\n",
+    expectedFileText: "north\nsouth\neast!\n",
+    referenceSolution: ":3<CR>A!<Esc>",
+    hints: [
+      ": に続けて行番号だけを入力して Enter を押すと、その行番号へ直接ジャンプできます(gg/G のようにファイルの先頭/末尾に限定されません)。",
+      "移動したあとは通常どおりノーマルモードのコマンドを実行できます。"
+    ],
+    explanation: ":{行番号} はその行番号へ直接カーソルを移動するexコマンドです。gg/G が先頭行・最終行に限定されるのに対し、:{行番号}は任意の行番号を指定できます。"
+  },
 
   // ---------------------------------------------------------------------
   // Ch19: Gitによるバージョン管理
