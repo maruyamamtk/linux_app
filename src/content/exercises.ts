@@ -148,12 +148,12 @@ export const exercises: Exercise[] = [
     type: "quiz",
     prompt: "書籍で挙げられているLinuxの特長として、正しいものはどれですか?",
     choices: [
-      "オープンソースソフトウェアであり、誰でも自由に無償で利用できる",
       "WindowsやmacOSと違い、常に商用アプリケーションが豊富に用意されている",
+      "オープンソースソフトウェアであり、誰でも自由に無償で利用できる",
       "ソースコードが非公開なため、内部の動作を外部から推測する必要がない",
       "サーバ用途では信頼性が低く、あまり利用されていない",
     ],
-    correctChoiceIndex: 0,
+    correctChoiceIndex: 1,
     hints: ["Linuxは無償で公開されているソフトウェアの一種です。"],
     explanation:
       "Linuxはオープンソースソフトウェアとして誰でも自由に無償で利用できる点が大きな特長です。また、" +
@@ -166,12 +166,12 @@ export const exercises: Exercise[] = [
     type: "quiz",
     prompt: "Linuxの欠点として書籍で挙げられているものはどれですか?",
     choices: [
-      "商用アプリケーションがあまり存在せず、Microsoft Officeも動作しない",
+      "無償で利用できないため、学習用途には向かない",
       "オープンソースであるため、ソースコードを読むことができない",
       "サーバ用途としての実績がなく、信頼性が低い",
-      "無償で利用できないため、学習用途には向かない",
+      "商用アプリケーションがあまり存在せず、Microsoft Officeも動作しない",
     ],
-    correctChoiceIndex: 0,
+    correctChoiceIndex: 3,
     hints: ["WordやExcelのファイルを編集する際に困る、という話が本文にありました。"],
     explanation:
       "Linuxには商用アプリケーションがあまり存在せず、特にMicrosoft Officeが動作しないことが欠点として挙げられて" +
@@ -204,12 +204,12 @@ export const exercises: Exercise[] = [
       "書籍が、GUIの操作方法をあまり解説せずCLI(コマンドラインインタフェース)の習得に重点を置いている理由として、" +
       "最も適切なものはどれですか?",
     choices: [
-      "GUIの操作方法は数年で変わってしまうことが多いが、CLIによるシェルの活用はLinuxを使う上での本質的で長く役立つ基礎知識だから",
-      "LinuxにはそもそもGUI機能が存在しないから",
       "CLIの方がGUIよりも覚える必要のあるコマンドの数が少ないから",
+      "LinuxにはそもそもGUI機能が存在しないから",
+      "GUIの操作方法は数年で変わってしまうことが多いが、CLIによるシェルの活用はLinuxを使う上での本質的で長く役立つ基礎知識だから",
       "GUIを使うと必ずシステムが不安定になるから",
     ],
-    correctChoiceIndex: 0,
+    correctChoiceIndex: 2,
     hints: ["著者は20年以上前に学んだCLI操作の知識が今も役立っている、と述べています。"],
     explanation:
       "GUIは進化が早く、操作方法を覚えても数年でインタフェースが変わってしまい役に立たなくなることがあります。" +
@@ -222,12 +222,12 @@ export const exercises: Exercise[] = [
     type: "quiz",
     prompt: "Linuxがオープンソースソフトウェアであることの利点として、書籍で説明されているものはどれですか?",
     choices: [
-      "ソースコードを直接読んで、内部でどのように処理されているかを確かめることができる",
+      "オープンソースのソフトウェアは、商用ソフトウェアより機能が少ないことが保証されている",
       "オープンソースであるため、Linuxを利用する際は必ず料金の支払いが必要になる",
       "ソースコードが公開されていることで、コマンドの実行速度が常に高速になる",
-      "オープンソースのソフトウェアは、商用ソフトウェアより機能が少ないことが保証されている",
+      "ソースコードを直接読んで、内部でどのように処理されているかを確かめることができる",
     ],
-    correctChoiceIndex: 0,
+    correctChoiceIndex: 3,
     hints: ["「ブラックボックスな部分がない」という表現が本文にありました。"],
     explanation:
       "Linuxはオープンソースソフトウェアとして自由に利用できるため、ブラックボックスな部分がなく、ソースコードを" +
@@ -257,12 +257,12 @@ export const exercises: Exercise[] = [
     type: "quiz",
     prompt: "Linuxディストリビューションの系統の組み合わせとして、書籍の内容に合っているものはどれですか?",
     choices: [
-      "Red Hat系: CentOS Stream、Fedora / Debian系: Debian GNU/Linux、Ubuntu",
-      "Red Hat系: Ubuntu、Debian / Debian系: CentOS Stream、Fedora",
       "Red Hat系: Windows Server / Debian系: macOS Server",
+      "Red Hat系: Ubuntu、Debian / Debian系: CentOS Stream、Fedora",
+      "Red Hat系: CentOS Stream、Fedora / Debian系: Debian GNU/Linux、Ubuntu",
       "Red Hat系とDebian系は同一の系統であり、区別は存在しない",
     ],
-    correctChoiceIndex: 0,
+    correctChoiceIndex: 2,
     hints: ["本書ではRed Hat系のCentOS Streamを使って解説すると述べています。"],
     explanation:
       "Linuxディストリビューションの主流はRed Hat系とDebian系の2系統です。Red Hat系にはRed Hat Enterprise Linux、" +
@@ -274,12 +274,12 @@ export const exercises: Exercise[] = [
     type: "quiz",
     prompt: "CentOSとCentOS Streamの関係について、書籍で説明されている内容として正しいものはどれですか?",
     choices: [
-      "無償のCentOSは2024年にサポート終了となり、代わりに同じく無償のCentOS Streamが開発されている",
       "CentOS StreamはCentOSの商用版であり、無償では利用できない",
+      "無償のCentOSは2024年にサポート終了となり、代わりに同じく無償のCentOS Streamが開発されている",
       "CentOS StreamはUbuntuの後継として開発されたディストリビューションである",
       "CentOSとCentOS Streamはまったく別系統(Red Hat系とDebian系)のディストリビューションである",
     ],
-    correctChoiceIndex: 0,
+    correctChoiceIndex: 1,
     hints: ["Red Hat Enterprise Linuxをベースとした無償のディストリビューションの話です。"],
     explanation:
       "Red Hat系の代表的なディストリビューションとして、Red Hat Enterprise Linuxをベースとした無償のCentOSが" +
@@ -309,12 +309,12 @@ export const exercises: Exercise[] = [
     type: "quiz",
     prompt: "Apple Silicon(M1・M2など)を搭載したMacでLinux学習環境を構築する場合について、書籍の説明として正しいものはどれですか?",
     choices: [
-      "本書執筆時点ではOracle VM VirtualBoxが正式対応していないため、代わりにUTMというソフトウェアを使うとよい",
-      "Apple Silicon MacではLinuxの仮想マシンを作成すること自体が不可能である",
       "Apple Silicon MacはIntel Macよりも仮想化ソフトウェアの対応状況が優れている",
+      "Apple Silicon MacではLinuxの仮想マシンを作成すること自体が不可能である",
+      "本書執筆時点ではOracle VM VirtualBoxが正式対応していないため、代わりにUTMというソフトウェアを使うとよい",
       "Apple Silicon MacではCentOS Stream以外のディストリビューションしか利用できない",
     ],
-    correctChoiceIndex: 0,
+    correctChoiceIndex: 2,
     hints: ["Intel MacであればOracle VM VirtualBoxがそのまま正式対応しています。"],
     explanation:
       "本書執筆時点ではApple SiliconのMacに対応したVirtualBoxは正式にリリースされていません(開発版はあるものの" +
@@ -328,12 +328,12 @@ export const exercises: Exercise[] = [
     type: "quiz",
     prompt: "VirtualBoxで仮想マシンを新規作成する際の設定として、書籍の説明に合っているものはどれですか?",
     choices: [
-      "「自動インストールをスキップ」にチェックを入れ、メモリやディスクサイズは学習用途に応じて増やしてもよい",
       "メモリはどれだけ多くの作業を行う場合でも、常に2048MBのまま変更してはいけない",
+      "「自動インストールをスキップ」にチェックを入れ、メモリやディスクサイズは学習用途に応じて増やしてもよい",
       "仮想ハードディスクのサイズは必ず10GB以下に設定しなければならない",
       "仮想マシン作成時に「自動インストールをスキップ」を選ぶと、OSを一切インストールできなくなる",
     ],
-    correctChoiceIndex: 0,
+    correctChoiceIndex: 1,
     hints: ["メモリのデフォルトは2048MBで、作業量が多い場合は4096MB程度に増やしてもよいとされています。"],
     explanation:
       "仮想マシン作成時には「自動インストールをスキップ」にチェックを入れて手動でインストールを進めます。" +
@@ -346,12 +346,12 @@ export const exercises: Exercise[] = [
     type: "quiz",
     prompt: "CentOS Stream 9のインストーラの「インストール概要」画面で、設定が必須となる3つの項目の組み合わせとして正しいものはどれですか?",
     choices: [
-      "インストール先、rootパスワード、ユーザーの作成",
+      "ソフトウェア選択、インストールソース、インストール先の3つのみで、パスワード設定は不要",
       "キーボード、言語サポート、時刻と日付",
       "ネットワークとホスト名、セキュリティープロファイル、KDUMP",
-      "ソフトウェア選択、インストールソース、インストール先の3つのみで、パスワード設定は不要",
+      "インストール先、rootパスワード、ユーザーの作成",
     ],
-    correctChoiceIndex: 0,
+    correctChoiceIndex: 3,
     hints: ["この3項目を設定しないと、画面右下の「インストールの開始」ボタンが有効になりません。"],
     explanation:
       "「インストール概要」画面では、インストール先(D)・rootパスワード(R)・ユーザーの作成(U)の3項目を設定する" +
@@ -365,12 +365,12 @@ export const exercises: Exercise[] = [
       "CentOS Stream 9のインストール時、「ユーザーの作成」画面にある「このユーザーを管理者にする」に" +
       "チェックを入れる意味として、最も適切なものはどれですか?",
     choices: [
-      "作成する一般ユーザーに、管理者(スーパーユーザ)としての権限を扱えるようにする",
-      "作成するユーザーのパスワードを自動生成する",
       "作成するユーザーのフルネームを自動的にrootに変更する",
+      "作成するユーザーのパスワードを自動生成する",
+      "作成する一般ユーザーに、管理者(スーパーユーザ)としての権限を扱えるようにする",
       "ログイン時にパスワード入力を不要にする",
     ],
-    correctChoiceIndex: 0,
+    correctChoiceIndex: 2,
     hints: ["CHAPTER09で詳しく解説される、スーパーユーザに関する設定です。"],
     explanation:
       "「このユーザーを管理者にする」にチェックを入れると、作成した一般ユーザーが管理者(スーパーユーザ)としての" +
@@ -383,12 +383,12 @@ export const exercises: Exercise[] = [
     type: "quiz",
     prompt: "グラフィカルログインとテキストログインについて、書籍の説明として正しいものはどれですか?",
     choices: [
-      "どちらも本質的には同じ「ログイン」処理であり、ユーザ名とパスワードを入力する点は共通している",
       "グラフィカルログインではパスワードの入力が不要になる",
+      "どちらも本質的には同じ「ログイン」処理であり、ユーザ名とパスワードを入力する点は共通している",
       "テキストログインは、Linuxではサポートされていない古い仕組みである",
       "グラフィカルログインとテキストログインでは、ログインするユーザ名の付け方の規則が異なる",
     ],
-    correctChoiceIndex: 0,
+    correctChoiceIndex: 1,
     hints: ["どちらの画面が表示されるかは環境によって異なりますが、行うことは同じだと説明されています。"],
     explanation:
       "グラフィカルログイン画面とテキストログイン画面のどちらが表示されるかは読者の環境によって異なりますが、" +
@@ -401,12 +401,12 @@ export const exercises: Exercise[] = [
     type: "quiz",
     prompt: "テキストログイン画面でパスワードを入力しても画面に何も表示されない理由として、書籍で説明されているものはどれですか?",
     choices: [
-      "背後から画面を覗き見されたときなどに、入力中のパスワードがわからないようにするため",
+      "パスワードには文字を入力できず、マウス操作でのみ設定できるため",
       "パスワード入力機能自体が正しく動作していないため",
       "キー入力が正しく認識されていないことを示すため",
-      "パスワードには文字を入力できず、マウス操作でのみ設定できるため",
+      "背後から画面を覗き見されたときなどに、入力中のパスワードがわからないようにするため",
     ],
-    correctChoiceIndex: 0,
+    correctChoiceIndex: 3,
     hints: ["きちんとキー入力はされているので、気にせず入力してEnterキーを押してよい、とされています。"],
     explanation:
       "テキストログインの画面でパスワードを入力しても何も表示されないのは、背後から画面を覗き見されたときなどに、" +
@@ -437,12 +437,12 @@ export const exercises: Exercise[] = [
     type: "quiz",
     prompt: "書籍がCLIの利点の1つとして挙げている「プログラムの連携がしやすい」ことの具体例として適切なものはどれですか?",
     choices: [
-      "`grep abc sample.txt | sort` のように、パイプ`|`を使って複数のコマンドの出力と入力をつなげられる",
       "GUIでファイルアイコンをドラッグ&ドロップしてコピーできる",
+      "`grep abc sample.txt | sort` のように、パイプ`|`を使って複数のコマンドの出力と入力をつなげられる",
       "マウスで複数のファイルを同時に選択できる",
       "ウィンドウを複数並べて同時に表示できる",
     ],
-    correctChoiceIndex: 0,
+    correctChoiceIndex: 1,
     hints: ["grepコマンドとsortコマンドをつなぐ記号が本文で紹介されていました。"],
     explanation:
       "CLIでは、たとえば`grep abc sample.txt | sort`のように、あるコマンドの出力を別のコマンドの入力としてパイプ" +
@@ -455,12 +455,12 @@ export const exercises: Exercise[] = [
     type: "quiz",
     prompt: "`exit`コマンドと`logout`コマンドの違いについて、書籍の説明として正しいものはどれですか?",
     choices: [
-      "`logout`コマンドは、現在のシェルがログインシェルである場合しか動作しないが、`exit`コマンドは常にログアウトに使える",
-      "`exit`コマンドはシステムをシャットダウンするコマンドであり、ログアウトには使えない",
       "`logout`コマンドはrootユーザーしか実行できないコマンドである",
+      "`exit`コマンドはシステムをシャットダウンするコマンドであり、ログアウトには使えない",
+      "`logout`コマンドは、現在のシェルがログインシェルである場合しか動作しないが、`exit`コマンドは常にログアウトに使える",
       "`exit`コマンドと`logout`コマンドはまったく同じ動作をするため、どちらを使っても違いはない",
     ],
-    correctChoiceIndex: 0,
+    correctChoiceIndex: 2,
     hints: ["ログインシェルでない状態で`logout`を実行すると、エラーメッセージが表示されます。"],
     explanation:
       "`exit`コマンドは現在のシェルを終了させるコマンドで、シェルが終了することにより自動的にログアウトされます。" +
@@ -492,12 +492,12 @@ export const exercises: Exercise[] = [
     type: "quiz",
     prompt: "学習中に仮想マシンの設定を誤って壊してしまいました。スナップショット機能を使っていた場合の対処として、最も適切なものはどれですか?",
     choices: [
-      "スナップショットを取得した時点の状態に仮想マシンを復元し、壊れる前の状態からやり直す",
+      "スナップショットを取得していても、一度壊れた仮想マシンは復元できない",
       "仮想マシンを削除し、ホストOS自体を再インストールする",
       "スナップショットはネットワーク速度を計測する機能なので、この場面では利用できない",
-      "スナップショットを取得していても、一度壊れた仮想マシンは復元できない",
+      "スナップショットを取得した時点の状態に仮想マシンを復元し、壊れる前の状態からやり直す",
     ],
-    correctChoiceIndex: 0,
+    correctChoiceIndex: 3,
     hints: ["スナップショットは、ある時点のVMの状態を保存しておき、後からその状態に戻せる機能でした。"],
     explanation:
       "スナップショットは、ある時点でのVM全体の状態を保存しておく機能です。設定変更やコマンド操作で環境を壊して" +
