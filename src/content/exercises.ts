@@ -8523,50 +8523,50 @@ export const exercises: Exercise[] = [
     "続けて> sorted_access.txtを付けることで、その並べ替え結果を新しいファイルとして保存できます。",
 },
 
-// --- Ch11: ヒアドキュメント << ---
+// --- Ch11: /dev/null と標準入出力の組み合わせ ---
 {
   id: "ch11-14-ex35",
   chapterId: "ch11-14",
-  prompt: "ヒアドキュメント(<<)を使って、終端語EOFまでの「1行目」「2行目」という2行のテキストをcatに渡し、その結果を heredoc_out.txt に保存してください。",
+  prompt: "/dev/null を標準入力リダイレクト < でcatコマンドに渡し、何も出力されないことを確認してください。",
   initialCwd: "/home/study/practice/ch11_pipeline",
-  referenceSolution: "cat > heredoc_out.txt << EOF\n1行目\n2行目\nEOF",
+  referenceSolution: "cat < /dev/null",
   hints: [
-    "<< 終端語 の後に複数行のテキストを書き、最後に終端語だけの行を置くとヒアドキュメントになります。",
-    "> heredoc_out.txt を組み合わせると、ヒアドキュメントの内容をファイルに保存できます。",
+    "/dev/nullは入力元として指定しても、何も内容を返さない特殊なファイルです。",
+    "< でファイルの中身を標準入力として渡せます。",
   ],
   explanation:
-    "cat << EOF はEOFという行が現れるまでの入力をすべて標準入力として読み込む書き方です。> heredoc_out.txtを" +
-    "併用することで、キーボードから入力する代わりにコマンド内に直接書いた複数行のテキストをファイルへ保存できます。",
+    "/dev/nullはスペシャルファイルと呼ばれる特別なファイルで、入力元として指定しても何も内容を返しません。" +
+    "cat < /dev/null は標準入力を空っぽにする書き方で、結果として何も表示されません。",
 },
 {
   id: "ch11-14-ex36",
   chapterId: "ch11-14",
-  prompt: "ヒアドキュメントを使って、終端語EOFまでの「買い物リスト」「牛乳」「卵」という3行のテキストを memo3.txt という新規ファイルに保存してください。",
+  prompt: "access.log の内容を /dev/null にリダイレクトして、コマンドの実行結果を画面に一切表示しないようにしてください。",
   initialCwd: "/home/study/practice/ch11_pipeline",
-  referenceSolution: "cat > memo3.txt << EOF\n買い物リスト\n牛乳\n卵\nEOF",
+  referenceSolution: "cat access.log > /dev/null",
   hints: [
-    "ヒアドキュメントは複数行のテキストをまとめて1つのコマンドの入力にできます。",
-    "終端語の行は他の行と紛らわしくない単語(EOFなど)を使います。",
+    "/dev/nullは書き込んだ内容をどこにも保存せずに消してしまう特殊なファイルです。",
+    "標準出力を/dev/nullにリダイレクトすると、通常なら画面に表示される内容が消えます。",
   ],
   explanation:
-    "cat > memo3.txt << EOF ...  EOF という書き方で、EOFに挟まれた3行のテキストがcatの標準入力として渡され、" +
-    "それがそのまま> memo3.txtによってファイルに書き込まれます。エディタを使わずに複数行のファイルを作成できる" +
-    "便利な方法です。",
+    "/dev/nullは出力先として指定すると、書き込まれたデータをどこにも保存せずに消してしまうスペシャルファイルです。" +
+    "cat access.log > /dev/null によって、本来画面に表示されるはずのaccess.logの内容が破棄され、何も表示" +
+    "されなくなります。",
 },
 {
   id: "ch11-14-ex37",
   chapterId: "ch11-14",
-  prompt: "<<- を使ったヒアドキュメントで、終端語ENDまでの「開始」「終了」という2行をcatに渡し、result.txt に保存してください。",
+  prompt: "存在しない no_such_file.txt を cat しようとした際、標準出力と標準エラー出力の両方を /dev/null にリダイレクトして、画面に何も表示されないようにしてください(2>&1を使用)。",
   initialCwd: "/home/study/practice/ch11_pipeline",
-  referenceSolution: "cat > result.txt <<- END\n開始\n終了\nEND",
+  referenceSolution: "cat no_such_file.txt > /dev/null 2>&1",
   hints: [
-    "<<- は<<の変種で、行頭のタブを無視できるヒアドキュメントです。",
-    "基本的な使い方は<<と同じで、終端語(この場合はEND)を最後の行に置きます。",
+    "先に標準出力を/dev/nullへリダイレクトし、続けて2>&1で標準エラー出力もそこへ合流させます。",
+    "> /dev/null 2>&1 という順番が重要です。順序が逆だとうまくいきません。",
   ],
   explanation:
-    "<<- は<<と同じくヒアドキュメントを開始する演算子ですが、各行の先頭にあるタブ文字を無視できる点が異なります。" +
-    "この演習ではタブを使っていませんが、<<-END ... ENDという書き方自体は<<END ... ENDと同じように動作し、" +
-    "「開始」「終了」の2行がresult.txtに保存されます。",
+    "> /dev/null で標準出力の向き先を先に/dev/nullへ変更し、続けて2>&1を書くことで、標準エラー出力も同じ" +
+    "/dev/nullへ合流します。この結果、no_such_file.txtが存在しないために発生するエラーメッセージも画面に" +
+    "表示されなくなります。",
 },
 
 // --- Ch11: パイプの基本 | ---
@@ -8734,96 +8734,96 @@ export const exercises: Exercise[] = [
   correctChoiceIndex: 0,
 },
 
-// --- Ch11: xargsの基本 ---
+// --- Ch11: パイプラインの応用(cat -n・2>&1・リダイレクトとの組み合わせ) ---
 {
   id: "ch11-14-ex49",
   chapterId: "ch11-14",
-  prompt: "echoで「memo1.txt memo2.txt」という文字列を出力し、それをxargsでcatコマンドに渡して両方のファイルの内容をまとめて表示してください。",
+  prompt: "output.log からERRORを含む行を抽出し、catの-nオプションを使って行番号付きで表示してください。",
   initialCwd: "/home/study/practice/ch11_pipeline",
-  referenceSolution: 'echo "memo1.txt memo2.txt" | xargs cat',
+  referenceSolution: "grep ERROR output.log | cat -n",
   hints: [
-    "xargsは標準入力から受け取った文字列を、指定したコマンドの引数として渡します。",
-    "xargsのデフォルトの区切りは空白文字なので、スペースで区切られた2つの単語は2つの引数になります。",
+    "grepで絞り込んだ結果をパイプでcat -nに渡すと、その行に行番号を付けられます。",
+    "cat -n はファイルだけでなく、パイプ経由で渡された標準入力に対しても行番号を付けられます。",
   ],
   explanation:
-    'echo "memo1.txt memo2.txt" は1行の文字列を出力しますが、これをパイプでxargs catに渡すと、xargsが' +
-    "その文字列を空白で区切ってcatの引数として展開し、cat memo1.txt memo2.txtと同じ効果になります。",
+    "catの-nオプションは、パイプでつないだ出力に行番号を付けるためによく使われます。grep ERROR output.log で" +
+    "ERRORを含む行を抽出し、その結果をパイプでcat -nに渡すことで、抽出された行に行番号が付いた状態で表示" +
+    "されます。",
 },
 {
   id: "ch11-14-ex50",
   chapterId: "ch11-14",
-  prompt: "echoで「output.log access.log memo1.txt」という文字列を出力し、xargsの-nオプションを使って1行に1つずつファイル名を表示してください。",
+  prompt: "access.log を並び替えたうえで、先頭3行を new_access.txt という新しいファイルに保存してください(パイプとリダイレクトを組み合わせてください)。",
   initialCwd: "/home/study/practice/ch11_pipeline",
-  referenceSolution: 'echo "output.log access.log memo1.txt" | xargs -n 1',
+  referenceSolution: "sort access.log | head -n 3 > new_access.txt",
   hints: [
-    "xargs -n 数値 は、1回のコマンド実行に渡す引数の個数を指定します。",
-    "xargsに実行するコマンドを指定しない場合、デフォルトでechoが使われます。",
+    "sortの結果をパイプでheadに渡し、その先頭数行だけに絞り込めます。",
+    "パイプでつないだ結果の末尾に、さらにリダイレクト(>)を付けてファイルに保存できます。",
   ],
   explanation:
-    "xargs -n 1は、受け取った引数を1個ずつに区切って実行することを指定するオプションです。xargsのデフォルトの" +
-    "コマンドはechoなので、3つのファイル名がそれぞれ別の行に1つずつ表示されます。",
+    "sort access.log は並び替えた結果を標準出力に書き出し、それをパイプでhead -n 3に渡すことで先頭3行だけに" +
+    "絞り込めます。パイプとリダイレクトは組み合わせて使うことができ、最後に> new_access.txtを付けることで、" +
+    "パイプラインの最終結果をファイルに保存できます。",
 },
 {
   id: "ch11-14-ex51",
   chapterId: "ch11-14",
-  prompt: "ヒアドキュメントを使って、dir1・dir2・dir3という3行のテキストを names.txt というファイルに保存してください。次に、names.txtの内容をxargsの-Iオプションで1行ずつmkdirコマンドに渡し、3つのディレクトリを作成してください。",
+  prompt: "output.log からINFOを含む行を抽出してその行数を数え、結果を info_count.txt というファイルに保存してください(grepとwc -lをパイプでつなぎ、最後にリダイレクトしてください)。",
   initialCwd: "/home/study/practice/ch11_pipeline",
-  referenceSolution: "cat > names.txt << EOF\ndir1\ndir2\ndir3\nEOF\ncat names.txt | xargs -I{} mkdir {}",
+  referenceSolution: "grep INFO output.log | wc -l > info_count.txt",
   hints: [
-    "xargs -I 置換文字列 を使うと、入力の各行を1つの塊としてコマンドの好きな位置に挿入できます。",
-    "-Iを使う場合、入力は空白ではなく行単位で区切られます。",
+    "パイプでコマンドをつないだ後、最後にもう一度リダイレクトを付けることもできます。",
+    "grep ... | wc -l の結果全体を > でファイルに保存します。",
   ],
   explanation:
-    "まずヒアドキュメントでdir1・dir2・dir3の3行をnames.txtに保存します。次にcat names.txt | xargs -I{} mkdir {}" +
-    "では、names.txtの各行が順番に{}の位置へ挿入され、mkdir dir1、mkdir dir2、mkdir dir3という3回のコマンド" +
-    "実行に展開されます。",
+    "パイプとリダイレクトは1つのコマンドラインの中で組み合わせて使えます。grep INFO output.log | wc -l で" +
+    "INFOを含む行数を数え、その結果を> info_count.txtでファイルに保存しています。パイプラインの最後の結果を" +
+    "ファイルに残しておきたい場合によく使われる書き方です。",
 },
 {
   id: "ch11-14-ex52",
   chapterId: "ch11-14",
-  prompt: "access.log の1列目(IPアドレス)を取り出し、sortで並べ替えて重複を除去したうえで、その一覧をxargsに渡して1行にまとめて表示してください。",
+  prompt: "access.log からHTTPメソッド(2列目)を抽出し、それぞれのメソッドが何回登場するか集計してください。",
   initialCwd: "/home/study/practice/ch11_pipeline",
-  referenceSolution: "cut -d ' ' -f1 access.log | sort -u | xargs",
+  referenceSolution: "cut -d ' ' -f2 access.log | sort | uniq -c",
   hints: [
-    "xargsはコマンドを指定しない場合、デフォルトでechoとして動作します。",
-    "複数行の入力をxargsに渡すと、それらがスペース区切りの1行にまとめられて出力されます。",
+    "cut -d ' ' -f2 でスペース区切りの2列目(GETやPOST)を取り出せます。",
+    "uniq -cで件数を数える前に、sortで同じ値を隣接させておく必要があります。",
   ],
   explanation:
-    "cut -d ' ' -f1 access.logで1列目のIPアドレスを取り出し、sort -uで並べ替えながら重複を除去します。その" +
-    "複数行の結果を最後にxargsへ渡すと、デフォルトのechoによってすべての行がスペース区切りの1行にまとめられて" +
-    "表示されます。",
+    "cut -d ' ' -f2 access.log でHTTPメソッドの列だけを取り出し、sortで同じ値を隣接させたうえでuniq -cに渡す" +
+    "ことで、GETやPOSTといったメソッドがそれぞれ何回登場したかを集計できます。",
 },
 
-// --- Ch11: findとxargs・パイプの組み合わせ ---
+// --- Ch11: リダイレクトとパイプの組み合わせ ---
 {
   id: "ch11-14-ex53",
   chapterId: "ch11-14",
-  prompt: "findコマンドでカレントディレクトリ以下の拡張子.txtのファイルを検索し、その結果をxargsでcatコマンドに渡して、すべての内容をまとめて表示してください。",
+  prompt: "access.log からステータスコード200を含む行を抽出し、先頭3行だけ表示してください。",
   initialCwd: "/home/study/practice/ch11_pipeline",
-  referenceSolution: 'find . -name "*.txt" | xargs cat',
+  referenceSolution: "grep 200 access.log | head -n 3",
   hints: [
-    "find パス -name パターン で条件に合うファイルを検索できます。",
-    "findの検索結果をパイプでxargs catに渡すと、見つかった各ファイルをまとめてcatできます。",
+    "grepで絞り込んだ結果をパイプでheadに渡せます。",
+    "head -n 数値 で先頭から指定した行数だけを表示できます。",
   ],
   explanation:
-    'find . -name "*.txt" はカレントディレクトリ以下から拡張子.txtのファイル(memo1.txtとmemo2.txt)を検索し、' +
-    "そのパス一覧を出力します。それをパイプでxargs catに渡すことで、見つかったすべてのファイルの内容を続けて" +
-    "表示できます。",
+    "grep 200 access.log で200を含む行を抽出し、その結果をパイプでhead -n 3に渡すことで、抽出された行の先頭" +
+    "3件だけを表示できます。",
 },
 {
   id: "ch11-14-ex54",
   chapterId: "ch11-14",
-  prompt: "findコマンドでカレントディレクトリ以下の拡張子.logのファイルを検索し、その結果をxargsでwc -lに渡して、それぞれの行数を表示してください。",
+  prompt: "access.log を標準入力リダイレクト < でsortコマンドに渡して並べ替え、その結果をさらにパイプでuniqに渡して重複行を取り除いてください。",
   initialCwd: "/home/study/practice/ch11_pipeline",
-  referenceSolution: 'find . -name "*.log" | xargs wc -l',
+  referenceSolution: "sort < access.log | uniq",
   hints: [
-    "find . -name パターン でカレントディレクトリ以下を再帰的に検索できます。",
-    "findの結果をxargs wc -lに渡すと、見つかった各ファイルの行数をまとめて確認できます。",
+    "< でファイルの中身を標準入力として渡し、そのコマンドの出力をさらに | で別のコマンドにつなげます。",
+    "uniqは連続する重複行だけをまとめるコマンドなので、事前にsortしておく必要があります。",
   ],
   explanation:
-    'find . -name "*.log" はカレントディレクトリ以下から拡張子.logのファイル(output.logとaccess.log)を検索し、' +
-    "そのパス一覧を出力します。xargs wc -lに渡すことで、findが見つけた各ファイルの行数がそれぞれ表示され、" +
-    "最後に合計行数も表示されます。",
+    "sort < access.log はaccess.logの内容を標準入力として読み込み、並べ替えて標準出力に書き出します。その" +
+    "結果をパイプでuniqに渡すことで、並べ替えによって隣接した重複行がまとめられます。リダイレクトとパイプは" +
+    "1つのコマンドラインの中で組み合わせて使うことができます。",
 },
 // --- Ch12: wc(行数・単語数・バイト数のカウント) ---
 {
@@ -9743,26 +9743,33 @@ export const exercises: Exercise[] = [
   id: "ch11-14-ex132",
   chapterId: "ch11-14",
   prompt:
-    "drink2.txt 内で最初に見つかった 700 を、その前後に括弧を付けた (700) という形に置換して表示してください(&を使って元の文字列を活かしてください)。",
+    "drink2.txt の各行について、カンマ区切りの1列目(飲み物の名前)を()で囲んだ形に書き換えて表示してください(グループ化 \\( \\) と後方参照 \\1 を使用)。",
   initialCwd: "/home/study/practice/ch14_sedawk",
-  referenceSolution: "sed 's/700/(&)/' drink2.txt",
+  referenceSolution: "sed 's/^\\([^,]*\\),/(\\1),/' drink2.txt",
   hints: [
-    "置換文字列の中で & はマッチした文字列全体を表す特殊記号です。",
-    "s/700/(&)/ とすると、700 というマッチ部分の前後に括弧を追加できます。",
+    "正規表現を \\( \\) でグループ化すると、マッチした部分を置換文字列側で \\1 として参照できます。",
+    "[^,]* は「カンマ以外の文字の0回以上の繰り返し」、つまり最初のカンマまでの部分を表します。",
   ],
   explanation:
-    "& は置換文字列の中でマッチした文字列全体を意味する特殊記号です。s/700/(&)/ とすることで、マッチした 700 を消さずに、その前後に括弧を付けた (700) に置換できます。sed は各行につき最初に見つかった箇所だけを置換するため、700 を含む複数の行それぞれで同様の置換が行われます。",
+    "\\( \\) は基本正規表現でグループ化を行うためのメタ文字で、そのマッチ部分を置換文字列側で \\1 として参照できます" +
+    "(後方参照)。^\\([^,]*\\), は行頭から最初のカンマまで(飲み物の名前)をグループ化しており、置換文字列側の" +
+    "(\\1), でその部分を括弧付きに書き換えています。",
 },
 {
   id: "ch11-14-ex133",
   chapterId: "ch11-14",
   prompt:
-    "employees.csv 内で最初に見つかった 320000 を、末尾に円を付けた 320000円 という形に置換して表示してください(&を使用)。",
+    "drink2.txt の Whisky の行(3行目)だけを対象に、価格の数字(1文字以上の連続した数字)を 800 に置換して表示してください(\\+ を使って拡張正規表現の1回以上の繰り返しを基本正規表現の中で使用してください)。",
   initialCwd: "/home/study/practice/ch14_sedawk",
-  referenceSolution: "sed 's/320000/&円/' employees.csv",
-  hints: ["& はマッチした文字列全体を表すので、置換文字列の末尾に & を置けば元の数値を残したまま文字を追加できます。"],
+  referenceSolution: "sed '/Whisky/s/[0-9]\\+/800/' drink2.txt",
+  hints: [
+    "sedの正規表現はデフォルトでは基本正規表現(BRE)として解釈されるため、+はそのままではリテラル文字です。",
+    "GNU sedの拡張により、\\+ と書くとバックスラッシュなしの拡張正規表現の+と同じ「1回以上の繰り返し」の意味になります。",
+  ],
   explanation:
-    "s/320000/&円/ は、320000 というマッチ部分を & で参照しつつ、その直後に円という文字を追加しています。結果として 320000 という数値はそのまま残り、末尾に円が付いた形で表示されます。",
+    "sedでは正規表現はデフォルトで基本正規表現(BRE)として解釈されるため、+はメタ文字として働きません。GNU sedの" +
+    "独自拡張により、\\+ と書くことで拡張正規表現の+(1回以上の繰り返し)と同じ意味を基本正規表現のまま使えます。" +
+    "/Whisky/s/[0-9]\\+/800/ は、Whiskyを含む行だけを対象に、1文字以上連続する数字(700)を800に置換します。",
 },
 
 // --- Ch14: sedのgフラグ・iフラグ ---
@@ -9784,26 +9791,33 @@ export const exercises: Exercise[] = [
   id: "ch11-14-ex135",
   chapterId: "ch11-14",
   prompt:
-    "drink2.txt 内で大文字小文字を区別せずに JAPAN という文字列を検索し、一致した Japan を 国産 に置換して表示してください(iフラグを使用)。",
+    "employees.csv 内の Sales を Sales/営業 という文字列(スラッシュを含む)に置換して表示してください。置換文字列にスラッシュが含まれるので、区切り文字にスラッシュ以外の文字(!など)を使ってください。",
   initialCwd: "/home/study/practice/ch14_sedawk",
-  referenceSolution: "sed 's/JAPAN/国産/i' drink2.txt",
-  hints: ["s/パターン/置換後/i のようにiフラグを付けると、大文字小文字を区別せずにマッチします。"],
+  referenceSolution: "sed 's!Sales!Sales/営業!' employees.csv",
+  hints: [
+    "sの後ろに続く文字が自動的に区切り文字とみなされるため、/以外の文字を区切り文字として使うこともできます。",
+    "区切り文字を!に変えれば、置換文字列中の/をエスケープせずにそのまま書けます。",
+  ],
   explanation:
-    "iフラグを付けると、パターン中の大文字・小文字の違いを無視してマッチします。検索パターンは大文字の JAPAN ですが、iフラグにより実際のファイル中の Japan(先頭のみ大文字)にもマッチし、国産 に置換されます。",
+    "sedのs///コマンドの区切り文字は/である必要はなく、sの直後に書いた文字が自動的に区切り文字とみなされます。" +
+    "置換文字列に/そのものを含めたい場合、/を区切り文字のまま使うと\\/とエスケープする必要がありますが、" +
+    "s!Sales!Sales/営業! のように!を区切り文字にすれば、/をそのまま書くことができます。",
 },
 {
   id: "ch11-14-ex136",
   chapterId: "ch11-14",
   prompt:
-    "employees.csv 内で大文字小文字を区別せず A を @ に置換し、各行内のすべての該当箇所を対象にしてください(gとiの両方のフラグを使用)。",
+    "score.txt の各行について、名前(1列目)を<>で囲んだ形に書き換えて表示してください(グループ化 \\( \\) と後方参照 \\1 を使用)。",
   initialCwd: "/home/study/practice/ch14_sedawk",
-  referenceSolution: "sed 's/A/@/gi' employees.csv",
+  referenceSolution: "sed 's/^\\([A-Za-z]*\\)/<\\1>/' score.txt",
   hints: [
-    "iフラグで大文字小文字を無視してマッチさせ、gフラグで行内のすべての一致を対象にします。",
-    "Watanabe のように同じ行に複数のaが含まれる場合、gフラグがないと最初の1つしか置換されません。",
+    "\\([A-Za-z]*\\) のようにグループ化すると、マッチした部分を置換文字列側で \\1 として参照できます。",
+    "^ は行頭を表すアンカーです。名前は各行の先頭にあります。",
   ],
   explanation:
-    "iフラグにより大文字のAと小文字のaのどちらもマッチし、gフラグにより1行の中に複数の一致があってもすべて置換されます。例えばWatanabeのようにaを複数含む名前では、giフラグを組み合わせることですべてのaが@に置き換わります。",
+    "^\\([A-Za-z]*\\) は行頭にあるアルファベットの並び(名前)をグループ化しています。置換文字列側の <\\1> は、" +
+    "そのグループでマッチした文字列(後方参照)を<>で挟んで書き出す指定です。結果として各行の名前部分だけが" +
+    "<>で囲まれます。",
 },
 {
   id: "ch11-14-ex137",
@@ -9862,12 +9876,12 @@ export const exercises: Exercise[] = [
   id: "ch11-14-ex142",
   chapterId: "ch11-14",
   prompt:
-    "drink2.txt の5行目(Vodka)を除くすべての行を対象に、700 を 800 に置換して表示してください(5行目の700はそのまま残してください)。",
+    "employees.csv の4行目(Tanaka)だけを対象に、Engineering を エンジニア に置換して表示してください。",
   initialCwd: "/home/study/practice/ch14_sedawk",
-  referenceSolution: "sed '5!s/700/800/' drink2.txt",
-  hints: ["アドレスの前に ! を付けると、そのアドレスに一致しない行が対象になります。"],
+  referenceSolution: "sed '4s/Engineering/エンジニア/' employees.csv",
+  hints: ["行番号s/パターン/置換後/ のように、コマンドの前に行番号を付けるとその行だけが対象になります。"],
   explanation:
-    "5! は「5行目以外」を意味する否定アドレスです。5!s/700/800/ とすることで、3行目(Whisky,700,...)の700は800に置換されますが、5行目(Vodka,700,...)は対象外となり700のまま残ります。",
+    "sedのコマンドの前にアドレスとして行番号を指定すると、その行だけにコマンドが適用されます。4s/Engineering/エンジニア/ は4行目に対してのみs///を実行するため、2行目(Sato,Engineering,...)にEngineeringがあっても影響を受けません。",
 },
 
 // --- Ch14: sedの正規表現アドレス /pattern/ ---
@@ -9895,12 +9909,12 @@ export const exercises: Exercise[] = [
 {
   id: "ch11-14-ex145",
   chapterId: "ch11-14",
-  prompt: "score.txt 内で 9 という数字を含まない行を削除して表示してください(9を含む行だけ残してください)。",
+  prompt: "employees.csv から Marketing を含む行を削除して表示してください(正規表現アドレスを使用)。",
   initialCwd: "/home/study/practice/ch14_sedawk",
-  referenceSolution: "sed '/9/!d' score.txt",
-  hints: ["/正規表現/!コマンド とすると、パターンに一致しない行が対象になります。"],
+  referenceSolution: "sed '/Marketing/d' employees.csv",
+  hints: ["/正規表現/コマンド の形式で、パターンに一致する行だけにコマンドを適用できます。"],
   explanation:
-    "/9/!d は「9を含まない行」に対してdコマンド(削除)を実行するという意味です。Satoの行(65 70 60)には9が含まれないため削除され、9を含むYamadaとSuzukiの行だけが残ります。",
+    "/Marketing/ は「Marketingという文字列を含む行」を表す正規表現アドレスです。/Marketing/d とすることで、行番号を意識せずに条件に一致する行(Itoの行)だけを削除できます。",
 },
 
 // --- Ch14: sedのdコマンド(削除) ---
@@ -9927,12 +9941,12 @@ export const exercises: Exercise[] = [
 {
   id: "ch11-14-ex148",
   chapterId: "ch11-14",
-  prompt: "employees.csv の2行目と3行目以外を削除して表示してください(2〜3行目だけが残るようにしてください)。",
+  prompt: "score.txt の1行目から2行目までを削除して表示してください(範囲指定を使用)。",
   initialCwd: "/home/study/practice/ch14_sedawk",
-  referenceSolution: "sed '2,3!d' employees.csv",
-  hints: ["範囲アドレスの前に ! を付けると、その範囲に含まれない行が対象になります。"],
+  referenceSolution: "sed '1,2d' score.txt",
+  hints: ["開始行,終了行d のように範囲アドレスとdコマンドを組み合わせると、指定範囲の行をまとめて削除できます。"],
   explanation:
-    "2,3!d は「2〜3行目以外」を対象にdコマンドを実行します。結果として2行目のSatoと3行目のSuzukiの行だけが削除されずに残り、他の行はすべて削除されます。これは特定の行だけを抜き出したいときの一つの方法です。",
+    "1,2d は1行目から2行目までを対象にdコマンド(削除)を実行します。結果としてYamadaとSatoの行が削除され、3行目のSuzukiの行だけが残ります。",
 },
 {
   id: "ch11-14-ex149",
@@ -10032,17 +10046,21 @@ export const exercises: Exercise[] = [
     "NRは現在の行番号を表す組み込み変数です。print NR \":\" $1 のように式を並べて書くと、行番号と\":\"と1列目の値が連結されて1つの文字列として出力されます。",
 },
 
-// --- Ch14: awkのBEGIN/END ---
+// --- Ch14: awkのEND ---
 {
   id: "ch11-14-ex158",
   chapterId: "ch11-14",
   prompt:
-    "score.txt を処理する前に「=== 集計結果 ===」という見出しを表示し、その後に各行の名前(1列目)を表示してください(BEGINを使用)。",
+    "score.txt の1回目の点数(2列目)の合計を計算し、「1回目の合計はX点」という形式で表示してください(sum+=とENDを使用)。",
   initialCwd: "/home/study/practice/ch14_sedawk",
-  referenceSolution: "awk 'BEGIN{print \"=== 集計結果 ===\"}{print $1}' score.txt",
-  hints: ["BEGIN{...}は行の処理を始める前に1回だけ実行されるブロックです。"],
+  referenceSolution: "awk '{sum+=$2} END{print \"1回目の合計は\" sum \"点\"}' score.txt",
+  hints: [
+    "{sum+=$2}で各行の2列目を変数sumに加算していきます。",
+    "END{...}はすべての行を処理し終えたあとに1回だけ実行されるブロックです。式を並べて文字列と数値を連結できます。",
+  ],
   explanation:
-    "BEGIN{...}はファイルの読み込みを開始する前に1回だけ実行されるアクションです。ここでは見出しを表示した後、パターンなしの{print $1}によって各行の1列目(名前)が順番に出力されます。",
+    "{sum+=$2}は各行の2列目(1回目の点数)を変数sumに加算していくアクションです。END{print \"1回目の合計は\" sum \"点\"}" +
+    "は全行処理後に1回だけ実行され、文字列とsumの値を連結して「1回目の合計はX点」の形式で表示します。",
 },
 {
   id: "ch11-14-ex159",
@@ -10099,26 +10117,29 @@ export const exercises: Exercise[] = [
     "NRは処理した行数を数える組み込み変数で、END内で参照すると全行処理後の最終的な行数、つまり総レコード数になります。各行に対するアクションを何も書かなくても、END{print NR}だけで従業員数を数えられます。",
 },
 
-// --- Ch14: awkのパターンマッチ(条件式・~) ---
+// --- Ch14: awkのパターンマッチ(正規表現・~) ---
 {
   id: "ch11-14-ex164",
   chapterId: "ch11-14",
-  prompt: "employees.csv から部署が Engineering である行だけを表示してください。",
+  prompt: "employees.csv から部署名に Engineering を含む行だけを表示してください(正規表現マッチ~を使用)。",
   initialCwd: "/home/study/practice/ch14_sedawk",
-  referenceSolution: "awk -F, '$2==\"Engineering\"' employees.csv",
-  hints: ["パターンだけを書いてアクションを省略すると、マッチした行がそのまま($0が)出力されます。"],
+  referenceSolution: "awk -F, '$2 ~ /Engineering/' employees.csv",
+  hints: [
+    "パターンだけを書いてアクションを省略すると、マッチした行がそのまま($0が)出力されます。",
+    "フィールド ~ /正規表現/ の形式で、そのフィールドが正規表現にマッチするかを判定できます。",
+  ],
   explanation:
-    "$2==\"Engineering\" は2列目がEngineeringと等しい行だけにマッチするパターンです。アクション部分{...}を省略すると、マッチした行の$0(行全体)がそのまま出力されるため、部署がEngineeringの行だけが表示されます。",
+    "$2 ~ /Engineering/ は2列目がEngineeringという正規表現にマッチする行だけにマッチするパターンです。アクション部分{...}を省略すると、マッチした行の$0(行全体)がそのまま出力されるため、部署にEngineeringを含む行だけが表示されます。",
 },
 {
   id: "ch11-14-ex165",
   chapterId: "ch11-14",
-  prompt: "drink2.txt から価格(2列目)が700以上の飲み物の行だけを表示してください。",
+  prompt: "drink2.txt から価格(2列目)の先頭が7で始まる飲み物の行だけを表示してください(正規表現パターンを使用)。",
   initialCwd: "/home/study/practice/ch14_sedawk",
-  referenceSolution: "awk -F, '$2>=700' drink2.txt",
-  hints: ["数値の比較には>=のような比較演算子をそのままパターンとして使えます。"],
+  referenceSolution: "awk -F, '$2 ~ /^7/' drink2.txt",
+  hints: ["フィールド ~ /正規表現/ の形式で、そのフィールドが正規表現にマッチするかを判定できます。", "^7 は「先頭が7である」ことを表す正規表現です。"],
   explanation:
-    "$2>=700 は2列目の値が700以上である行だけにマッチする条件パターンです。アクションを省略しているため、条件に一致した行(Wine、Whisky、Sake、Vodka)がそのまま出力されます。",
+    "$2 ~ /^7/ は2列目の値が7で始まる行だけにマッチする条件パターンです。アクションを省略しているため、条件に一致した行(Wine、Whisky、Sake、Vodka)がそのまま出力されます。",
 },
 {
   id: "ch11-14-ex166",
@@ -10133,15 +10154,15 @@ export const exercises: Exercise[] = [
 {
   id: "ch11-14-ex167",
   chapterId: "ch11-14",
-  prompt: "employees.csv から Sales部門の従業員の給与合計を awk で計算して表示してください。",
+  prompt: "employees.csv から Sales部門の従業員の給与合計を awk で計算して表示してください(正規表現マッチ~を使用)。",
   initialCwd: "/home/study/practice/ch14_sedawk",
-  referenceSolution: "awk -F, '$2==\"Sales\"{sum+=$3} END{print sum}' employees.csv",
+  referenceSolution: "awk -F, '$2 ~ /Sales/{sum+=$3} END{print sum}' employees.csv",
   hints: [
     "パターン{アクション}の形で、条件に一致した行だけにアクションを適用できます。",
-    "$2==\"Sales\"{sum+=$3} とすると、部署がSalesの行だけ給与をsumに加算します。",
+    "$2 ~ /Sales/{sum+=$3} とすると、部署にSalesを含む行だけ給与をsumに加算します。",
   ],
   explanation:
-    "$2==\"Sales\"{sum+=$3} は、2列目がSalesと等しい行だけを対象に3列目(給与)をsumへ加算するという条件付きアクションです。END{print sum}で全行処理後にSales部門の給与合計だけが出力されます。",
+    "$2 ~ /Sales/{sum+=$3} は、2列目がSalesという正規表現にマッチする行だけを対象に3列目(給与)をsumへ加算するという条件付きアクションです。END{print sum}で全行処理後にSales部門の給与合計だけが出力されます。",
 },
 
 // --- Ch14: sedとawkの使い分け(概念問題) ---
