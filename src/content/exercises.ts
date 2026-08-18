@@ -1889,9 +1889,9 @@ export const exercises: Exercise[] = [
   {
     id: "ch04-06-ex03",
     chapterId: "ch04-06",
-    prompt: "photos ディレクトリの下に、2024/summer というネストしたディレクトリを一度のコマンドで作成してください。",
+    prompt: "photos ディレクトリの下に、2025/autumn というネストしたディレクトリを一度のコマンドで作成してください。",
     initialCwd: "/home/study/practice/ch04_fs",
-    referenceSolution: "mkdir -p photos/2024/summer",
+    referenceSolution: "mkdir -p photos/2025/autumn",
     hints: ["mkdir に -p オプションを付けると、存在しない親ディレクトリもまとめて作成できます。"],
     explanation:
       "mkdir は通常、親ディレクトリが存在しないとエラーになります。-p(parents)オプションを付けることで、" +
@@ -2723,11 +2723,15 @@ export const exercises: Exercise[] = [
     chapterId: "ch04-06",
     prompt: "reports ディレクトリ以下から、拡張子が .txt のファイルをすべて検索してください。",
     initialCwd: "/home/study/practice/ch06_search/reports",
-    referenceSolution: "find . -name *.txt",
-    hints: ["find . -name パターン で、カレントディレクトリ以下を再帰的に検索できます。", "拡張子で絞り込むには *.txt のようにワイルドカードを使います。"],
+    referenceSolution: "find . -name '*.txt'",
+    hints: [
+      "find . -name パターン で、カレントディレクトリ以下を再帰的に検索できます。",
+      "拡張子で絞り込むには '*.txt' のようにワイルドカードを使います。シェルによる展開を防ぐため、'' で囲むのを忘れないようにしましょう。",
+    ],
     explanation:
       "-name オプションには「*」を使ったパターンを指定できます。*.txt は「.txtで終わる任意の名前」にマッチするため、" +
-      "拡張子で検索対象を絞り込めます。",
+      "拡張子で検索対象を絞り込めます。なお*や?をfindの-nameに渡すときは、bashのパス名展開と解釈されないよう" +
+      "'*.txt' のように''(シングルクォート)で囲むのが原則です。",
   },
   {
     id: "ch04-06-ex84",
@@ -2764,8 +2768,8 @@ export const exercises: Exercise[] = [
     chapterId: "ch04-06",
     prompt: "ch06_search ディレクトリ以下から、拡張子が .sh のファイルを検索してください。",
     initialCwd: "/home/study/practice/ch06_search",
-    referenceSolution: "find . -name *.sh",
-    hints: ["*.sh というパターンで、拡張子 .sh のファイルに絞り込めます。"],
+    referenceSolution: "find . -name '*.sh'",
+    hints: ["'*.sh' というパターンで、拡張子 .sh のファイルに絞り込めます。ワイルドカードは''で囲みます。"],
     explanation: "*.sh というパターンにより、scripts ディレクトリ内の setup.sh と deploy.sh の2つのシェルスクリプトが見つかります。",
   },
   {
@@ -2792,7 +2796,7 @@ export const exercises: Exercise[] = [
     chapterId: "ch04-06",
     prompt: "images ディレクトリ以下から、拡張子が .png のファイルを検索してください。",
     initialCwd: "/home/study/practice/ch06_search/images",
-    referenceSolution: "find . -name *.png -type f",
+    referenceSolution: "find . -name '*.png' -type f",
     hints: ["-name と -type は同時に指定でき、両方の条件を満たすものだけが検索結果に残ります。"],
     explanation: "-name と -type を同時に指定すると、両方の条件を満たすものだけが検索結果になります。ここでは「.pngで終わる」かつ" +
       "「ファイルである」という2条件で logo.png のみが見つかります。",
@@ -2832,9 +2836,9 @@ export const exercises: Exercise[] = [
     chapterId: "ch04-06",
     prompt: "images ディレクトリ以下から、拡張子が .jpg のファイルを検索してください。",
     initialCwd: "/home/study/practice/ch06_search/images",
-    referenceSolution: "find . -name *.jpg",
-    hints: ["*.jpg というパターンで、拡張子 .jpg のファイルに絞り込めます。"],
-    explanation: "*.jpg というパターンにより、images ディレクトリ内の banner.jpg が見つかります。",
+    referenceSolution: "find . -name '*.jpg'",
+    hints: ["'*.jpg' というパターンで、拡張子 .jpg のファイルに絞り込めます。ワイルドカードは''で囲みます。"],
+    explanation: "'*.jpg' というパターンにより、images ディレクトリ内の banner.jpg が見つかります。",
   },
   {
     id: "ch04-06-ex95",
