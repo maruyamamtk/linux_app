@@ -3052,7 +3052,7 @@ export const exercises: Exercise[] = [
   {
     id: "ch08-ex02",
     chapterId: "ch08",
-    prompt: "GREETING という環境変数に Hello, Linux! という値を設定し、echoで表示してください。",
+    prompt: "GREETING というシェル変数に Hello, Linux! という値を設定し、echoで表示してください。",
     referenceSolution: 'GREETING="Hello, Linux!"; echo $GREETING',
     hints: [
       "変数名=値 の形式(イコールの前後にスペースを入れない)で変数を設定できます。",
@@ -3200,11 +3200,17 @@ export const exercises: Exercise[] = [
   {
     id: "ch08-ex17",
     chapterId: "ch08",
-    prompt: "変数 STATUS を空文字列に設定したうえで、testを使って値が空かどうかを判定し、空であれば \"空です\"、そうでなければ \"値: $STATUS\" と表示してください。",
-    referenceSolution: 'STATUS=""; if [ -z "$STATUS" ]; then echo "空です"; else echo "値: $STATUS"; fi',
-    hints: ['[ -z "$VAR" ] は、変数が空文字列かどうかを判定します。'],
+    prompt:
+      '変数 FILE に "log" を設定し、その値の直後に "s" を続けた "logs" という文字列を ${FILE}s の形式(波括弧で変数名の範囲を明示する書き方)で表示してください。',
+    referenceSolution: 'FILE="log"; echo "${FILE}s"',
+    hints: [
+      "$FILEsと続けて書くと、シェルは「FILEs」という別の変数名として解釈してしまいます。",
+      "${変数名}のように波括弧で囲むと、変数名の範囲を明示的に区切ったうえで直後に文字を連結できます。",
+    ],
     explanation:
-      '[ -z "$STATUS" ] は $STATUS が空文字列(または未設定)であればtrueになります。空の変数かどうかを条件分岐で判定する典型的な書き方です。',
+      "$FILEsのように書くと、シェルは$の直後から続く英数字とアンダースコアをまとめて変数名とみなすため、" +
+      '"FILEs"という(存在しない)別の変数を参照しようとしてしまいます。${FILE}のように波括弧で変数名を囲むことで、' +
+      "変数名の範囲をはっきり区切り、直後に任意の文字列を安全に連結できます。",
   },
   {
     id: "ch08-ex18",
