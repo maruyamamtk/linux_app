@@ -3042,6 +3042,223 @@ export const exercises: Exercise[] = [
   },
 
   // ---------------------------------------------------------------------
+  // Ch4-6: cat — ファイル内容の表示
+  // ---------------------------------------------------------------------
+  {
+    id: "ch04-06-ex117",
+    chapterId: "ch04-06",
+    prompt: "sample.txt の内容を画面に表示してください。",
+    initialCwd: "/home/study/practice/ch04_fs",
+    referenceSolution: "cat sample.txt",
+    hints: ["cat ファイル名 で、ファイルの中身をそのまま画面に表示できます。"],
+    explanation:
+      "cat は指定したファイルの内容を標準出力にそのまま表示します。短いファイルの中身をすぐ確認したいときによく使います。",
+  },
+  {
+    id: "ch04-06-ex118",
+    chapterId: "ch04-06",
+    prompt: "todo.txt の内容を画面に表示してください。",
+    initialCwd: "/home/study/practice/ch04_fs",
+    referenceSolution: "cat todo.txt",
+    hints: ["cat todo.txt のように、対象のファイル名を1つ渡します。"],
+    explanation:
+      "todo.txt には複数行のテキストが含まれています。cat は行数に関わらず、ファイルの内容を先頭から末尾まで表示します。",
+  },
+  {
+    id: "ch04-06-ex119",
+    chapterId: "ch04-06",
+    prompt:
+      "documents ディレクトリの report.txt と plan.txt の内容を、1回のコマンドでまとめて表示してください。",
+    initialCwd: "/home/study/practice/ch04_fs",
+    referenceSolution: "cat documents/report.txt documents/plan.txt",
+    hints: ["cat には複数のファイル名をスペース区切りで指定できます。"],
+    explanation:
+      "cat は複数のファイルを引数に渡すと、指定した順番で内容を連結して表示します(catは「concatenate(連結する)」の略)。" +
+      "report.txt の内容に続けて plan.txt の内容が表示されます。",
+  },
+  {
+    id: "ch04-06-ex120",
+    chapterId: "ch04-06",
+    prompt: "todo.txt の内容を、各行に行番号を付けて表示してください。",
+    initialCwd: "/home/study/practice/ch04_fs",
+    referenceSolution: "cat -n todo.txt",
+    hints: ["-n オプションを付けると、行番号付きで表示されます。"],
+    explanation:
+      "cat -n を使うと、各行の先頭に行番号が付いた状態で内容が表示されます。行数の多いファイルで特定の行を指し示したいときに便利です。",
+  },
+  {
+    id: "ch04-06-ex121",
+    chapterId: "ch04-06",
+    prompt:
+      "「.」で始まる隠しファイル .hidden_note.txt の内容を表示してください。",
+    initialCwd: "/home/study/practice/ch04_fs",
+    referenceSolution: "cat .hidden_note.txt",
+    hints: [
+      "ls では表示されなくても、ファイル名が分かっていれば cat でそのまま中身を確認できます。",
+    ],
+    explanation:
+      "ls (オプションなし)では .hidden_note.txt のような隠しファイルは一覧に表示されませんが、cat はファイル名さえ分かっていれば" +
+      "隠しファイルかどうかに関わらず中身を表示できます。",
+  },
+  {
+    id: "ch04-06-ex122",
+    chapterId: "ch04-06",
+    prompt:
+      "ホームディレクトリにいる状態から、絶対パスを指定して budget.csv の内容を表示してください。",
+    initialCwd: "/home/study",
+    referenceSolution: "cat /home/study/practice/ch04_fs/documents/budget.csv",
+    hints: ["cat の引数には絶対パスも指定できます。"],
+    explanation:
+      "cat の引数には ls と同様、相対パスだけでなく絶対パスも指定できます。現在地に関係なくファイルの中身を確認できます。",
+  },
+
+  // ---------------------------------------------------------------------
+  // Ch4-6: less/--help/-i(上書き確認) — 知っておきたいオプション
+  // ---------------------------------------------------------------------
+  {
+    id: "ch04-06-ex123",
+    chapterId: "ch04-06",
+    type: "quiz",
+    prompt:
+      "cat の代わりに less でファイルを閲覧する主な利点として、最も適切なものはどれですか?",
+    choices: [
+      "画面に収まりきらない大きなファイルでも、1画面ずつスクロールしながら閲覧できる",
+      "catよりファイルの内容を高速に書き換えられる",
+      "ファイルの中身を自動的に日本語に翻訳して表示する",
+      "ファイルの内容をそのままプリンターに送信する",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["less は「ページャ」と呼ばれる種類のコマンドです。"],
+    explanation:
+      "cat はファイル全体を一度に出力してしまうため、長いファイルだと先頭部分が流れて見えなくなります。less はページャと呼ばれ、" +
+      "1画面分ずつ表示しながら、キー操作で前後にスクロールして閲覧できます。",
+  },
+  {
+    id: "ch04-06-ex124",
+    chapterId: "ch04-06",
+    type: "quiz",
+    prompt:
+      "less でファイルを閲覧しているとき、次の1画面分を表示して読み進めるキーはどれですか?",
+    choices: ["スペースキー", "Tabキー", "Ctrl+c", "矢印キーの左"],
+    correctChoiceIndex: 0,
+    hints: [
+      "「次のページへ進む」動作は、片手で押しやすいスペースキーに割り当てられています。",
+    ],
+    explanation:
+      "less の画面でスペースキーを押すと、次の1画面分が表示されます(bキーで1画面分戻ることもできます)。",
+  },
+  {
+    id: "ch04-06-ex125",
+    chapterId: "ch04-06",
+    type: "quiz",
+    prompt:
+      "less でファイルを閲覧しているとき、閲覧を終了して元のプロンプトに戻るキーはどれですか?",
+    choices: ["q", "e", "x", "Ctrl+d"],
+    correctChoiceIndex: 0,
+    hints: ["「quit(終了する)」の頭文字です。"],
+    explanation:
+      "less の画面で q キーを押すと、閲覧を終了して元のシェルのプロンプトに戻ります。",
+  },
+  {
+    id: "ch04-06-ex126",
+    chapterId: "ch04-06",
+    type: "quiz",
+    prompt: "cat --help を実行すると、何が表示されますか?",
+    choices: [
+      "catコマンドの使用法・利用可能なオプション一覧など、簡潔な使い方の要約",
+      "man cat と全く同じ、ページ形式の詳しいマニュアル",
+      "catコマンドの実行ログの一覧",
+      "catコマンドをアンインストールするかどうかの確認",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "--help は多くのコマンドに共通して用意されている、簡易的な使い方の確認手段です。初めて使うコマンドは、まず--helpで概要をつかむとよいでしょう。",
+    ],
+    explanation:
+      "コマンド --help を実行すると、そのコマンド自身が用意している使用法・オプション一覧などの簡潔なヘルプメッセージが表示されます。" +
+      "manコマンドによる詳しいマニュアルとは異なり、初めて使うコマンドの概要を手早くつかみたいときに使います。",
+  },
+  {
+    id: "ch04-06-ex127",
+    chapterId: "ch04-06",
+    type: "quiz",
+    prompt:
+      "--help オプションと man コマンドの違いとして、最も適切なものはどれですか?",
+    choices: [
+      "--helpはコマンド自身が表示する簡潔な使い方の要約、manはOSに用意された詳しいマニュアルページ",
+      "--helpは日本語、manは英語でしか表示されない",
+      "--helpはroot権限がないと使えないが、manは誰でも使える",
+      "--helpとmanは全く同じ内容を、表示形式だけ変えて出力する",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "man mkdir のようにコマンド名を引数に渡す man と、mkdir --help のようにコマンド自体に付ける --help を比べてみましょう。",
+    ],
+    explanation:
+      "--help はコマンドを実行するときに付けるオプションの1つで、そのコマンド自身が簡単な使い方を表示します。" +
+      "man はコマンド名を引数に取る別のコマンドで、より詳しい説明が載ったマニュアルページを表示します。",
+  },
+  {
+    id: "ch04-06-ex128",
+    chapterId: "ch04-06",
+    type: "quiz",
+    prompt:
+      "cp -i memo.txt note.txt を実行したとき、-i オプションによって上書きの確認が求められるのはどのような場合ですか?",
+    choices: [
+      "コピー先の note.txt という名前のファイルが、すでに存在している場合",
+      "コピー元の memo.txt が存在しない場合",
+      "note.txt の拡張子が memo.txt と異なる場合",
+      "memo.txt のファイルサイズが note.txt より大きい場合",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "-i は「interactive(対話的)」の頭文字です。何も上書きされない場合には確認は発生しません。",
+    ],
+    explanation:
+      "-i オプションを付けると、コピー先に同名のファイルがすでに存在し、そのまま実行すると内容が上書きされて消えてしまう場合にのみ、" +
+      "実行前に確認が求められます。誤って大事なファイルを上書きしてしまう事故を防げます。",
+  },
+  {
+    id: "ch04-06-ex129",
+    chapterId: "ch04-06",
+    type: "quiz",
+    prompt:
+      "rm -i file.txt を実行し、削除してよいか確認された際に n(no)と答えると、どうなりますか?",
+    choices: [
+      "file.txt は削除されず、そのまま残る",
+      "確認をスキップして、結局そのまま削除される",
+      "file.txt の中身が空のファイルに置き換えられる",
+      "n という名前の新しいファイルが作成される",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "-i の確認で「いいえ」と答えた場合、そのファイルに対する操作そのものが取りやめになります。",
+    ],
+    explanation:
+      "rm -i の確認で n(または y 以外の入力)を答えると、そのファイルへの削除操作は取りやめになり、file.txt はそのまま残ります。",
+  },
+  {
+    id: "ch04-06-ex130",
+    chapterId: "ch04-06",
+    type: "quiz",
+    prompt:
+      "mv -i old.txt existing.txt を実行し、上書き確認で y(yes)と答えた場合、最終的にどうなりますか?",
+    choices: [
+      "existing.txt の内容が old.txt の内容で上書きされ、old.txt という名前のファイルは無くなる",
+      "old.txt と existing.txt の両方が、内容そのままで残る",
+      "existing.txt の内容が old.txt にコピーされ、existing.txt は無くなる",
+      "確認にyと答えても、上書きは行われず操作全体が中止される",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "mv は「移動(改名)」なので、コピーとは違い元のファイル名は残りません。",
+    ],
+    explanation:
+      "mv -i は上書きが発生する場合に確認するだけで、動作自体は通常の mv と同じです。y と答えると existing.txt の内容が" +
+      "old.txt の内容で上書きされ、移動元の old.txt という名前は無くなります。",
+  },
+
+  // ---------------------------------------------------------------------
   // Ch8: エイリアスと環境変数
   // ---------------------------------------------------------------------
   {
