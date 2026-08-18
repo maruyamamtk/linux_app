@@ -12005,29 +12005,33 @@ export const exercises: Exercise[] = [
     id: "ch07-ex114",
     chapterId: "ch07",
     type: "vim",
-    prompt: "コマンドラインモードで :%s/cat/dog/gi を実行し、大文字・小文字を区別せずにすべての cat を dog に置換してください。",
-    initialFileText: "Cat cat CAT\n",
-    expectedFileText: "dog dog dog\n",
-    referenceSolution: ":%s/cat/dog/gi",
+    prompt:
+      "コマンドラインモードで :%s/cat/dog/g を実行し、すべての行の cat を dog に置換してください(1行に複数回出現する cat もすべて置換されることを確認してください)。",
+    initialFileText: "cat cat\ncat cat cat\n",
+    expectedFileText: "dog dog\ndog dog dog\n",
+    referenceSolution: ":%s/cat/dog/g",
     hints: [
-      "フラグに i を付けると、大文字・小文字を区別せずにパターンを検索できます。",
-      "g と i は組み合わせて使えます(gi)。"
+      ": でコマンドラインモードに入れます。",
+      "% は全行(1,$)を表すアドレスです。g フラグを付けないと、各行で最初の1箇所しか置換されません。",
     ],
-    explanation: "s コマンドのフラグに i を付けると大文字・小文字を無視してパターンにマッチさせられます。g と組み合わせた gi にすると、大文字・小文字を問わず行内の全ての一致箇所を置換できます。"
+    explanation:
+      ":%s/old/new/g は % (全行)を対象に old を new へ置換するexコマンドです。g フラグを付けることで、1行の中に old が複数回出現していても、その行内の全ての一致箇所が置換対象になります。",
   },
   {
     id: "ch07-ex115",
     chapterId: "ch07",
     type: "vim",
-    prompt: "コマンドラインモードで :%s/red/blue/gi を実行し、大文字・小文字を区別せずにすべての red を blue に置換してください。",
-    initialFileText: "Red RED red\n",
-    expectedFileText: "blue blue blue\n",
-    referenceSolution: ":%s/red/blue/gi",
+    prompt:
+      "コマンドラインモードで :%s/red/blue/g を実行し、すべての行の red を blue に置換してください(1行に複数回出現する red もすべて置換されることを確認してください)。",
+    initialFileText: "red red\nred red red\n",
+    expectedFileText: "blue blue\nblue blue blue\n",
+    referenceSolution: ":%s/red/blue/g",
     hints: [
-      "フラグに i を付けると、大文字・小文字を区別せずにパターンを検索できます。",
-      "g と i は組み合わせて使えます(gi)。"
+      ": でコマンドラインモードに入れます。",
+      "% は全行(1,$)を表すアドレスです。g フラグを付けないと、各行で最初の1箇所しか置換されません。",
     ],
-    explanation: "s コマンドのフラグに i を付けると大文字・小文字を無視してパターンにマッチさせられます。g と組み合わせた gi にすると、大文字・小文字を問わず行内の全ての一致箇所を置換できます。"
+    explanation:
+      ":%s/old/new/g は % (全行)を対象に old を new へ置換するexコマンドです。g フラグを付けることで、1行の中に old が複数回出現していても、その行内の全ての一致箇所が置換対象になります。",
   },
   {
     id: "ch07-ex116",
