@@ -11987,6 +11987,1406 @@ export const exercises: Exercise[] = [
   // Ch15-17: シェルスクリプト作成(script型: if/test)
   // ---------------------------------------------------------------------
   {
+    id: "ch15-17-ex73",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "位置パラメータ $1 が文字列 \"yes\" と等しければ「承認されました」、それ以外なら「却下されました」と" +
+      "表示するシェルスクリプトを作成してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution: '#!/bin/bash\nif [ "$1" = "yes" ]; then\n  echo "承認されました"\nelse\n  echo "却下されました"\nfi\n',
+    testCases: [
+      { id: "tc1", description: "引数=yes", args: ["yes"] },
+      { id: "tc2", description: "引数=no", args: ["no"] },
+      { id: "tc3", description: "引数なし", args: [] },
+    ],
+    hints: [
+      "文字列の比較には = を使います。[ \"$1\" = \"yes\" ] のように書きます。",
+      "変数は必ずダブルクォートで囲んでおくと、値が空でもエラーになりません。",
+    ],
+    explanation:
+      "test([ ])コマンドで文字列を比較するときは = (等しい)や != (等しくない)を使います。" +
+      '[ "$1" = "yes" ] は「位置パラメータ$1の値が文字列"yes"と一致するか」を判定する式です。' +
+      "一致すればif、しなければelseの分岐に進みます。",
+  },
+  {
+    id: "ch15-17-ex74",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "位置パラメータ $1 と $2 が異なる文字列であれば「異なります」、同じ文字列であれば「同じです」と" +
+      "表示するシェルスクリプトを作成してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\nif [ "$1" != "$2" ]; then\n  echo "異なります"\nelse\n  echo "同じです"\nfi\n',
+    testCases: [
+      { id: "tc1", description: "apple と banana", args: ["apple", "banana"] },
+      { id: "tc2", description: "cat と cat(同じ)", args: ["cat", "cat"] },
+      { id: "tc3", description: "1 と 2", args: ["1", "2"] },
+    ],
+    hints: ["!= は「等しくない」ことを判定する文字列比較演算子です。"],
+    explanation:
+      '[ "$1" != "$2" ] は$1と$2が文字列として異なっていればtrue(終了ステータス0)になります。' +
+      "= と != はどちらも文字列としての比較であり、数値としての大小比較には -eq や -ne を使う点に注意してください。",
+  },
+  {
+    id: "ch15-17-ex75",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "位置パラメータ $1 で渡された点数(整数)が60以上なら「合格」、60未満なら「不合格」と表示する" +
+      "シェルスクリプトを作成してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\nscore=$1\nif [ "$score" -ge 60 ]; then\n  echo "合格"\nelse\n  echo "不合格"\nfi\n',
+    testCases: [
+      { id: "tc1", description: "60点(境界値、合格)", args: ["60"] },
+      { id: "tc2", description: "59点(境界値、不合格)", args: ["59"] },
+      { id: "tc3", description: "100点", args: ["100"] },
+    ],
+    hints: [
+      "整数の比較には -ge(以上)・-le(以下)・-gt(より大きい)・-lt(より小さい)・-eq(等しい)・-ne(等しくない)を使います。",
+      "文字列としての比較(= !=)と整数としての比較(-eq -ne等)を混同しないようにしましょう。",
+    ],
+    explanation:
+      "整数を比較するときは -eq -ne -lt -le -gt -ge を使います。" +
+      '[ "$score" -ge 60 ] は「scoreが60以上か」を判定し、真であれば「合格」、偽であれば「不合格」を表示します。',
+  },
+  {
+    id: "ch15-17-ex76",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "位置パラメータ $1 で渡された点数(整数)を、90以上なら「A」、70以上90未満なら「B」、それ未満なら" +
+      "「C」と評価するシェルスクリプトを作成してください(elifを使用すること)。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\nscore=$1\nif [ "$score" -ge 90 ]; then\n  echo "A"\nelif [ "$score" -ge 70 ]; then\n  echo "B"\nelse\n  echo "C"\nfi\n',
+    testCases: [
+      { id: "tc1", description: "95点(A)", args: ["95"] },
+      { id: "tc2", description: "75点(B)", args: ["75"] },
+      { id: "tc3", description: "50点(C)", args: ["50"] },
+    ],
+    hints: [
+      "3つ以上の条件に分岐したいときは、elseの代わりに elif [ 条件 ]; then ... を挟みます。",
+      "if ... elif ... elif ... else ... fi のように、elifはいくつでも重ねられます。",
+    ],
+    explanation:
+      "elifを使うと3つ以上の条件を上から順に評価できます。最初に一致した条件のブロックだけが実行され、" +
+      "どれにも一致しなければelseのブロックが実行されます。90以上をまず判定し、次に70以上を判定することで、" +
+      "70〜89の範囲を自然に「B」として扱えます。",
+  },
+  {
+    id: "ch15-17-ex77",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "位置パラメータ $1 で指定されたパスが「ファイル」として存在するかどうかを判定し、存在すれば" +
+      "「ファイルです」、存在しなければ(ディレクトリの場合も含めて)「見つかりません」と表示する" +
+      "シェルスクリプトを作成してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\nif [ -f "$1" ]; then\n  echo "ファイルです"\nelse\n  echo "見つかりません"\nfi\n',
+    testCases: [
+      { id: "tc1", description: "scripts/hello.sh(ファイル)", args: ["scripts/hello.sh"] },
+      { id: "tc2", description: "scripts(ディレクトリ)", args: ["scripts"] },
+      { id: "tc3", description: "存在しないパス", args: ["nofile.txt"] },
+    ],
+    hints: [
+      "-f は「通常のファイルとして存在するか」を判定する単項テスト演算子です。",
+      "ディレクトリは-fでは偽になる点に注意してください(ディレクトリの判定は-dです)。",
+    ],
+    explanation:
+      "-f はパスが通常ファイルとして存在する場合にtrueになる単項の演算子です。ディレクトリの場合や、" +
+      "そもそも存在しない場合はfalseになります。似た演算子に、存在すればtrueになる-eや、ディレクトリで" +
+      "あればtrueになる-dがあります。",
+  },
+  {
+    id: "ch15-17-ex78",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "位置パラメータ $1 で指定されたパスが存在するディレクトリであれば「ディレクトリです」、" +
+      "そうでなければ「ディレクトリではありません」と表示するシェルスクリプトを作成してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\nif [ -d "$1" ]; then\n  echo "ディレクトリです"\nelse\n  echo "ディレクトリではありません"\nfi\n',
+    testCases: [
+      { id: "tc1", description: "scripts(ディレクトリ)", args: ["scripts"] },
+      { id: "tc2", description: "scripts/hello.sh(ファイル)", args: ["scripts/hello.sh"] },
+      { id: "tc3", description: "logs(ディレクトリ)", args: ["logs"] },
+    ],
+    hints: ["-d はパスがディレクトリとして存在する場合にtrueになる単項テスト演算子です。"],
+    explanation:
+      "-d はディレクトリの判定に使う単項演算子です。ファイルの場合や存在しない場合はfalseになります。" +
+      "-e(存在するかどうか)・-f(ファイルかどうか)・-d(ディレクトリかどうか)は、いずれもfindやif文の" +
+      "条件でよく組み合わせて使われます。",
+  },
+  {
+    id: "ch15-17-ex79",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "位置パラメータ $1 で指定されたファイルに実行権限があるかどうかを判定し、あれば「実行可能です」、" +
+      "なければ「実行不可です」と表示するシェルスクリプトを作成してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\nif [ -x "$1" ]; then\n  echo "実行可能です"\nelse\n  echo "実行不可です"\nfi\n',
+    testCases: [
+      { id: "tc1", description: "scripts/greet.sh(755、実行可能)", args: ["scripts/greet.sh"] },
+      { id: "tc2", description: "scripts/hello.sh(644、実行不可)", args: ["scripts/hello.sh"] },
+      { id: "tc3", description: "scripts/backup.sh(750、所有者は実行可能)", args: ["scripts/backup.sh"] },
+    ],
+    hints: ["-x はそのユーザーから見て実行権限があるかどうかを判定する単項テスト演算子です。"],
+    explanation:
+      "-x はファイルに実行権限があるかどうかを判定します。パーミッションは所有者・グループ・その他で" +
+      "異なる場合があるため、実行しているユーザー(この場合はstudy)から見た権限で判定される点に注意してください。",
+  },
+  {
+    id: "ch15-17-ex80",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "位置パラメータ $1 をタイトルとしてまず表示したあと、for文で \"apple\" \"banana\" \"cherry\" という" +
+      "リストを直接列挙し、1つずつ表示するシェルスクリプトを作成してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\necho "$1"\nfor item in apple banana cherry; do\n  echo "$item"\ndone\n',
+    testCases: [
+      { id: "tc1", description: "タイトル=Fruits", args: ["Fruits"] },
+      { id: "tc2", description: "タイトル=List", args: ["List"] },
+      { id: "tc3", description: "タイトルなし", args: [] },
+    ],
+    hints: ["for 変数名 in 単語1 単語2 単語3; do ... done の形式で、リストを直接列挙できます。"],
+    explanation:
+      "for item in apple banana cherry; do ... done のように、in の後にスペース区切りで単語を並べると、" +
+      "その単語を1つずつ変数itemに代入しながらループ本体を実行します。ファイル名の一覧やコマンド置換の" +
+      "結果だけでなく、このように直接書いたリストも列挙できます。",
+  },
+  {
+    id: "ch15-17-ex81",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "位置パラメータ $1 で指定されたディレクトリ配下から拡張子が.shのファイルをfindで検索し、その結果を" +
+      "for文で1つずつ受け取って「script: パス」の形式で表示するシェルスクリプトを作成してください" +
+      "(コマンド置換 $(find ...) をfor文のリストとして使うこと)。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\ndir=$1\nfor f in $(find "$dir" -name "*.sh"); do\n  echo "script: $f"\ndone\n',
+    testCases: [
+      { id: "tc1", description: "scripts配下(複数の.shファイルあり)", args: ["scripts"] },
+      { id: "tc2", description: "logs配下(.shファイルなし)", args: ["logs"] },
+      { id: "tc3", description: "project配下(サブディレクトリを再帰的に検索)", args: ["project"] },
+    ],
+    hints: [
+      "for 変数 in $(コマンド); do ... done とすると、コマンドの出力(1行1項目)をリストとして列挙できます。",
+      "findは指定したディレクトリ以下を再帰的に検索するため、サブディレクトリの中の.shファイルも見つかります。",
+    ],
+    explanation:
+      "$(find \"$dir\" -name \"*.sh\") はfindコマンドの出力(見つかったパスの一覧、改行区切り)を文字列として" +
+      "展開したものです。これをfor文の in の後に置くと、改行(および空白)を区切りとして1つずつ変数fに代入" +
+      "しながら処理できます。ファイル名にワイルドカードを直接書いてもシェルは展開してくれないため、" +
+      "このようにfindとコマンド置換を組み合わせるのが実用的な方法です。",
+  },
+  {
+    id: "ch15-17-ex82",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "スクリプトに渡された引数(いくつでも)を1つずつ処理し、「要素: 引数の値」の形式で表示するfor文を" +
+      "書いてください(forの後に in を書かず、暗黙的に位置パラメータ全体をループする書き方を使うこと)。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution: '#!/bin/bash\nfor arg; do\n  echo "要素: $arg"\ndone\n',
+    testCases: [
+      { id: "tc1", description: "引数 a b c", args: ["a", "b", "c"] },
+      { id: "tc2", description: "引数 x のみ", args: ["x"] },
+      { id: "tc3", description: "引数なし", args: [] },
+    ],
+    hints: [
+      "for 変数名; do ... done のように in 以降を省略すると、位置パラメータ($1 $2 ...)全体を" +
+      "1つずつ処理する省略記法になります。",
+      "for 変数名 in \"$@\"; do ... done と書いても似た効果を狙えますが、この教材のシェル実装では" +
+      "for 変数名; do ... done の省略形の方が確実に1引数ずつ処理できます。",
+    ],
+    explanation:
+      "for 変数名; do ... done は for 変数名 in \"$@\"; do ... done の省略形で、スクリプト(や関数)に" +
+      "渡された引数を先頭から1つずつ変数に代入しながら処理します。引数の個数が可変のスクリプトでよく使う書き方です。",
+  },
+  {
+    id: "ch15-17-ex83",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "位置パラメータ $1 を倍率(multiplier)として受け取り、for文で 1 2 3 4 5 を直接列挙しながら" +
+      "「各値 × 倍率」の合計を算術式展開 $((...)) を使って計算し、最後に合計を表示するシェルスクリプトを" +
+      "作成してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\nmultiplier=$1\ntotal=0\nfor n in 1 2 3 4 5; do\n  total=$((total + n * multiplier))\ndone\necho "$total"\n',
+    testCases: [
+      { id: "tc1", description: "倍率=1", args: ["1"] },
+      { id: "tc2", description: "倍率=2", args: ["2"] },
+      { id: "tc3", description: "倍率=0", args: ["0"] },
+    ],
+    hints: [
+      "位置パラメータ($1など)を算術式展開 $((...)) の中に直接書くとエラーになることがあるため、" +
+      "先に multiplier=$1 のように変数へ代入してから使うと安全です。",
+      "total=$((total + n * multiplier)) のように、既存の変数を使って累積合計を更新できます。",
+    ],
+    explanation:
+      "算術式展開 $((...)) の中では、変数名はそのまま(頭に$を付けずに)書くのが基本です。" +
+      "$1のような位置パラメータをそのまま$((...))の中で使おうとすると構文エラーになる場合があるため、" +
+      "multiplier=$1のように一度変数に代入してから算術式の中で使うのが確実です。",
+  },
+  {
+    id: "ch15-17-ex84",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "位置パラメータ $1 をしきい値として受け取り、for文で 10 25 30 45 60 を1つずつ処理して、" +
+      "しきい値以上なら「OK: 値」、しきい値未満なら「NG: 値」と表示するシェルスクリプトを作成してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\nthreshold=$1\nfor n in 10 25 30 45 60; do\n  if [ "$n" -ge "$threshold" ]; then\n    echo "OK: $n"\n  else\n    echo "NG: $n"\n  fi\ndone\n',
+    testCases: [
+      { id: "tc1", description: "しきい値=30", args: ["30"] },
+      { id: "tc2", description: "しきい値=0(すべてOK)", args: ["0"] },
+      { id: "tc3", description: "しきい値=100(すべてNG)", args: ["100"] },
+    ],
+    hints: ["for文の中にif文を書くことで、リストの各要素を条件によって振り分けられます。"],
+    explanation:
+      "forループの本体には、これまで学んだif文などをそのまま書くことができます。この例ではリストの各要素を" +
+      "しきい値と比較し、条件に応じて異なるメッセージを表示しています。ループと条件分岐の組み合わせは、" +
+      "データの絞り込みや集計でよく使われる基本パターンです。",
+  },
+  {
+    id: "ch15-17-ex85",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "位置パラメータ $1 で渡された数から1になるまで1つずつカウントダウンして表示し、最後に「発射!」と" +
+      "表示するシェルスクリプトを、while文と算術式展開 $((...)) を使って作成してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\nn=$1\nwhile [ "$n" -ge 1 ]; do\n  echo "$n"\n  n=$((n - 1))\ndone\necho "発射!"\n',
+    testCases: [
+      { id: "tc1", description: "3からカウントダウン", args: ["3"] },
+      { id: "tc2", description: "1のみ", args: ["1"] },
+      { id: "tc3", description: "5からカウントダウン", args: ["5"] },
+    ],
+    hints: [
+      "while [ 条件 ]; do ... done は、条件が真の間くり返し処理を実行します。",
+      "n=$((n - 1)) のようにループの中で変数を更新しないと、無限ループになってしまいます。",
+    ],
+    explanation:
+      "while文は条件が真である間、本体を繰り返し実行します。ループのたびに n=$((n - 1)) で変数を" +
+      "更新し、いずれ条件 [ \"$n\" -ge 1 ] が偽になるようにすることで、無限ループを避けています。",
+  },
+  {
+    id: "ch15-17-ex86",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "位置パラメータ $1 で渡された整数Nについて、1からNまでの合計をwhile文と算術式展開を使って計算し、" +
+      "表示するシェルスクリプトを作成してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\nn=$1\ni=1\ntotal=0\nwhile [ "$i" -le "$n" ]; do\n  total=$((total + i))\n  i=$((i + 1))\ndone\necho "$total"\n',
+    testCases: [
+      { id: "tc1", description: "N=5(合計15)", args: ["5"] },
+      { id: "tc2", description: "N=1(合計1)", args: ["1"] },
+      { id: "tc3", description: "N=10(合計55)", args: ["10"] },
+    ],
+    hints: [
+      "カウンタ用の変数(この例ではi)と、合計を貯める変数(total)の2つを使い分けます。",
+      "ループの最後で必ず i=$((i + 1)) のようにカウンタを進めることを忘れないようにしましょう。",
+    ],
+    explanation:
+      "while文で合計を計算する典型的なパターンです。カウンタ変数iを1から始めてNになるまで1ずつ増やしながら、" +
+      "そのたびにtotalへ加算していきます。for文の $(seq 1 N) のような書き方ができない場合でも、" +
+      "while文とカウンタ変数を使えば同じ処理を実現できます。",
+  },
+  {
+    id: "ch15-17-ex87",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "位置パラメータ $1 で渡された正の整数の階乗を、while文と算術式展開を使って計算し表示する" +
+      "シェルスクリプトを作成してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\nn=$1\nresult=1\nwhile [ "$n" -gt 1 ]; do\n  result=$((result * n))\n  n=$((n - 1))\ndone\necho "$result"\n',
+    testCases: [
+      { id: "tc1", description: "5の階乗(120)", args: ["5"] },
+      { id: "tc2", description: "1の階乗(1)", args: ["1"] },
+      { id: "tc3", description: "4の階乗(24)", args: ["4"] },
+    ],
+    hints: ["result=$((result * n)) のように、掛け算の累積にはresultのような変数を初期値1で用意します。"],
+    explanation:
+      "階乗の計算は、合計の計算(加算の繰り返し)と同じ構造で、加算の代わりに乗算を繰り返します。" +
+      "初期値をresult=1にしておくことで、掛け算を繰り返しても値が0になってしまうのを防いでいます。",
+  },
+  {
+    id: "ch15-17-ex88",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "1から始めて、位置パラメータ $1 で指定された回数だけ値を2倍にする処理をwhile文で繰り返し、" +
+      "最終的な値を表示するシェルスクリプトを作成してください(2の位置パラメータ乗を計算することになります)。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\ncount=$1\nvalue=1\nwhile [ "$count" -gt 0 ]; do\n  value=$((value * 2))\n  count=$((count - 1))\ndone\necho "$value"\n',
+    testCases: [
+      { id: "tc1", description: "0回(2の0乗=1)", args: ["0"] },
+      { id: "tc2", description: "3回(2の3乗=8)", args: ["3"] },
+      { id: "tc3", description: "5回(2の5乗=32)", args: ["5"] },
+    ],
+    hints: ["繰り返し回数を数えるcount変数と、値そのものを保持するvalue変数を分けて用意します。"],
+    explanation:
+      "count回だけ value=$((value * 2)) を繰り返すことで、valueは1 → 2 → 4 → 8 ... と倍々に増えていきます。" +
+      "countが0の場合はループが一度も実行されないため、初期値の1がそのまま表示されます。",
+  },
+  {
+    id: "ch15-17-ex89",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "位置パラメータ $1 で指定された数までの整数を1から順にwhile文でたどり、3の倍数なら「Fizz」、" +
+      "5の倍数なら「Buzz」、15の倍数(3と5の両方の倍数)なら「FizzBuzz」、それ以外はその数値そのものを" +
+      "表示するシェルスクリプト(いわゆるFizzBuzz)を作成してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\nn=$1\ni=1\nwhile [ "$i" -le "$n" ]; do\n  if [ $((i % 15)) -eq 0 ]; then\n    echo "FizzBuzz"\n  elif [ $((i % 3)) -eq 0 ]; then\n    echo "Fizz"\n  elif [ $((i % 5)) -eq 0 ]; then\n    echo "Buzz"\n  else\n    echo "$i"\n  fi\n  i=$((i + 1))\ndone\n',
+    testCases: [
+      { id: "tc1", description: "N=15", args: ["15"] },
+      { id: "tc2", description: "N=5", args: ["5"] },
+      { id: "tc3", description: "N=3", args: ["3"] },
+    ],
+    hints: [
+      "15の倍数かどうかを最初に判定しておくと、3の倍数・5の倍数の判定より先に処理できて条件が単純になります。",
+      "% は算術式展開 $((...)) の中で使える剰余(割り算のあまり)演算子です。",
+    ],
+    explanation:
+      "3と5の両方の倍数である15の倍数の判定を、elifより先(最初のif)に置くのがポイントです。" +
+      "先に3の倍数だけを判定してしまうと、15はFizzと表示されてしまい、FizzBuzzになりません。" +
+      "算術式展開の中の % (剰余)演算子を使うことで、割り切れるかどうかを判定できます。",
+  },
+  {
+    id: "ch15-17-ex90",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "位置パラメータ $1 で渡された数字(1〜7)を、case文を使って曜日名(1=月曜日 2=火曜日 ... 7=日曜日)に" +
+      "変換して表示し、範囲外の値であれば「不明な曜日番号です」と表示するシェルスクリプトを作成してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\ncase "$1" in\n  1) echo "月曜日" ;;\n  2) echo "火曜日" ;;\n  3) echo "水曜日" ;;\n  4) echo "木曜日" ;;\n  5) echo "金曜日" ;;\n  6) echo "土曜日" ;;\n  7) echo "日曜日" ;;\n  *) echo "不明な曜日番号です" ;;\nesac\n',
+    testCases: [
+      { id: "tc1", description: "1(月曜日)", args: ["1"] },
+      { id: "tc2", description: "7(日曜日)", args: ["7"] },
+      { id: "tc3", description: "9(範囲外)", args: ["9"] },
+    ],
+    hints: [
+      "case 対象 in パターン1) 処理1 ;; パターン2) 処理2 ;; *) デフォルト処理 ;; esac の形式で書きます。",
+      "* はどのパターンにも一致しなかった場合のデフォルト(catch-all)として使います。",
+    ],
+    explanation:
+      "case文は対象の値を上から順にパターンと照合し、最初に一致したブロックだけを実行します。" +
+      "各ブロックの末尾には ;; を書いて区切ります。どのパターンにも一致しない場合に備えて、" +
+      "最後に * (デフォルト)のブロックを用意しておくのが基本形です。",
+  },
+  {
+    id: "ch15-17-ex91",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "位置パラメータ $1 で渡されたファイル名の拡張子を、case文のパターンマッチ(*.sh, *.txt, *.md)で" +
+      "判定し、それぞれ「シェルスクリプトです」「テキストファイルです」「Markdownファイルです」、" +
+      "どれにも一致しなければ「不明な形式です」と表示するシェルスクリプトを作成してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\ncase "$1" in\n  *.sh) echo "シェルスクリプトです" ;;\n  *.txt) echo "テキストファイルです" ;;\n  *.md) echo "Markdownファイルです" ;;\n  *) echo "不明な形式です" ;;\nesac\n',
+    testCases: [
+      { id: "tc1", description: "deploy.sh", args: ["deploy.sh"] },
+      { id: "tc2", description: "notes.txt", args: ["notes.txt"] },
+      { id: "tc3", description: "image.png(未対応)", args: ["image.png"] },
+    ],
+    hints: ["case文のパターンには * や ? のようなワイルドカード(グロブ)を使うことができます。"],
+    explanation:
+      "case文のパターンは正規表現ではなく、シェルのグロブ(* や ?)で書きます。*.sh は「.shで終わる任意の" +
+      "文字列」に一致するパターンです。for文のファイル名展開とは異なり、case文のパターンマッチは" +
+      "この教材のシェル実装でもサポートされています。",
+  },
+  {
+    id: "ch15-17-ex92",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "位置パラメータ $1 が \"y\" \"yes\" \"Y\" \"Yes\" のいずれかであれば「はい」、" +
+      "\"n\" \"no\" \"N\" \"No\" のいずれかであれば「いいえ」、それ以外であれば「わかりません」と表示する" +
+      "シェルスクリプトを、case文の | (複数パターンの結合)を使って作成してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\ncase "$1" in\n  y|yes|Y|Yes) echo "はい" ;;\n  n|no|N|No) echo "いいえ" ;;\n  *) echo "わかりません" ;;\nesac\n',
+    testCases: [
+      { id: "tc1", description: "yes", args: ["yes"] },
+      { id: "tc2", description: "No", args: ["No"] },
+      { id: "tc3", description: "maybe(未対応)", args: ["maybe"] },
+    ],
+    hints: ["パターンを | で区切ると、そのうちどれか1つにでも一致すればそのブロックが実行されます。"],
+    explanation:
+      "case文のパターンは | (パイプ)で複数並べることができ、そのいずれかに一致すれば対応するブロックが" +
+      "実行されます。y|yes|Y|Yes) のように書くことで、表記ゆれのある入力をまとめて1つの分岐で処理できます。",
+  },
+  {
+    id: "ch15-17-ex93",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "位置パラメータ $1 に \"start\" \"stop\" \"status\" のいずれかを受け取り、それぞれ「起動します」" +
+      "「停止します」「状態確認します」と表示し、それ以外の値であれば使い方を標準エラー出力に表示した上で" +
+      "exit 1 で終了するシェルスクリプトを作成してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\ncase "$1" in\n  start) echo "起動します" ;;\n  stop) echo "停止します" ;;\n  status) echo "状態確認します" ;;\n  *)\n    echo "Usage: service.sh {start|stop|status}" 1>&2\n    exit 1\n    ;;\nesac\n',
+    testCases: [
+      { id: "tc1", description: "start", args: ["start"] },
+      { id: "tc2", description: "stop", args: ["stop"] },
+      { id: "tc3", description: "restart(未対応、exit 1)", args: ["restart"] },
+    ],
+    hints: [
+      "エラーメッセージは 1>&2 を付けて標準エラー出力に送るのが慣習です。",
+      "case文の1つのブロックの中には、echoやexitのような複数行の処理を書くこともできます。",
+    ],
+    explanation:
+      "サブコマンド形式のスクリプトでは、case文で$1(サブコマンド名)を分岐させるのが定番です。" +
+      "対応していないサブコマンドが渡された場合は、使い方(usage)を1>&2で標準エラー出力に表示した上で、" +
+      "exit 1のように0以外のコードで終了するのが慣習です。",
+  },
+  {
+    id: "ch15-17-ex94",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "2つの引数を受け取り、大きい方を表示するmax関数を定義してください。スクリプトの位置パラメータ" +
+      "$1 と $2 をこのmax関数に渡して呼び出すシェルスクリプトを作成してください(localを使うこと)。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\nmax() {\n  local a=$1\n  local b=$2\n  if [ "$a" -ge "$b" ]; then\n    echo "$a"\n  else\n    echo "$b"\n  fi\n}\nmax "$1" "$2"\n',
+    testCases: [
+      { id: "tc1", description: "3と7", args: ["3", "7"] },
+      { id: "tc2", description: "10と2", args: ["10", "2"] },
+      { id: "tc3", description: "5と5(同じ)", args: ["5", "5"] },
+    ],
+    hints: [
+      "関数名() { ... } の形式で関数を定義し、呼び出すときは 関数名 引数1 引数2 のように書きます。",
+      "関数の中では、渡された引数を $1 $2 として参照できます(スクリプト全体の位置パラメータとは別物です)。",
+    ],
+    explanation:
+      "関数を呼び出すと、関数の中では$1 $2 ...が「関数に渡された引数」を指すようになります" +
+      "(スクリプト全体の位置パラメータは一時的に隠れます)。local a=$1 のようにlocalを付けて受け取ることで、" +
+      "他の関数やスクリプト本体の同名の変数と衝突しないようにできます。",
+  },
+  {
+    id: "ch15-17-ex95",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "再帰を使ってNの階乗を計算するfact関数を定義してください。nが1以下の場合はreturn 1、" +
+      "そうでなければfact $((n - 1))を呼び出してその結果(終了ステータス)を使ってn倍したものをreturnで" +
+      "返すようにしてください。スクリプトの位置パラメータ$1をfact関数に渡し、最後に結果($?)を表示する" +
+      "シェルスクリプトを作成してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\nfact() {\n  local n=$1\n  if [ "$n" -le 1 ]; then\n    return 1\n  fi\n  fact $((n - 1))\n  local prev=$?\n  return $((n * prev))\n}\nfact "$1"\necho $?\n',
+    testCases: [
+      { id: "tc1", description: "1の階乗", args: ["1"] },
+      { id: "tc2", description: "4の階乗", args: ["4"] },
+      { id: "tc3", description: "5の階乗", args: ["5"] },
+    ],
+    hints: [
+      "関数の中から自分自身を呼び出すことを再帰と呼びます。",
+      "returnで返せる終了ステータスは0〜255の範囲です。大きな階乗を計算すると値が壊れてしまうので注意しましょう。",
+      "直前に実行したコマンド(この場合はfactの再帰呼び出し)の終了ステータスは $? で取得できます。",
+    ],
+    explanation:
+      "returnは0〜255の範囲の終了ステータスしか返せないという制約がある点に注意しつつ、この演習では" +
+      "小さな数の階乗をreturnの戻り値として表現しています。fact $((n - 1)) を実行した直後の $? には、" +
+      "再帰呼び出しの結果(n-1の階乗)が入っているので、それを n 倍してreturnすることで階乗を組み立てています。",
+  },
+  {
+    id: "ch15-17-ex96",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "再帰を使って、位置パラメータ$1で渡された数から0になるまでカウントダウンして表示するcountdown関数を" +
+      "定義してください。nが0未満になったら何も表示せずreturnで抜けるようにし、それ以外はnを表示してから" +
+      "countdown $((n - 1))を呼び出すようにしてください。スクリプトの$1をcountdown関数に渡して呼び出す" +
+      "シェルスクリプトを作成してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\ncountdown() {\n  local n=$1\n  if [ "$n" -lt 0 ]; then\n    return 0\n  fi\n  echo "$n"\n  countdown $((n - 1))\n}\ncountdown "$1"\n',
+    testCases: [
+      { id: "tc1", description: "3からカウントダウン", args: ["3"] },
+      { id: "tc2", description: "0のみ", args: ["0"] },
+      { id: "tc3", description: "5からカウントダウン", args: ["5"] },
+    ],
+    hints: ["再帰関数には必ず「それ以上再帰しない条件(base case)」を用意し、無限に呼び出し続けないようにします。"],
+    explanation:
+      "再帰関数を書くときは、必ず終了条件(base case)を用意することが重要です。この例では n が0未満に" +
+      "なったら再帰を止めるようにしており、これがない場合は関数呼び出しが無限に続いてしまいます" +
+      "(この教材のシェル実装では、再帰が深くなりすぎるとエラーで停止する安全装置も用意されています)。",
+  },
+  {
+    id: "ch15-17-ex97",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "変数msgに\"global\"を代入したあと、show関数の中でlocal msg=\"local\"として別の値を設定して表示し、" +
+      "show関数を呼び出した後にもう一度スクリプト本体でmsgを表示することで、localが関数の外の変数に" +
+      "影響しないことを確認できるシェルスクリプトを作成してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\nmsg="global"\nshow() {\n  local msg="local"\n  echo "$msg"\n}\nshow\necho "$msg"\n',
+    testCases: [
+      { id: "tc1", description: "実行1", args: [] },
+      { id: "tc2", description: "実行2", args: ["unused"] },
+      { id: "tc3", description: "実行3", args: ["a", "b"] },
+    ],
+    hints: ["localを付けて宣言した変数は、その関数の中でだけ有効で、関数を抜けると元の値に戻ります。"],
+    explanation:
+      "local msg=\"local\" は、show関数の中だけで有効な新しいmsgを作ります。関数の中で表示すると" +
+      '"local"になりますが、show関数を抜けた後にスクリプト本体でmsgを表示すると、元の"global"に戻っています。' +
+      "このように、localは関数の外の同名の変数を書き換えてしまわないようにするための仕組みです。",
+  },
+  {
+    id: "ch15-17-ex98",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "引数が正の整数かどうかを判定するis_positive関数を定義してください(正であればreturn 0、" +
+      "そうでなければreturn 1とし、echoでは何も出力しないこと)。スクリプトの位置パラメータ$1をこの関数に" +
+      "渡し、if文で判定結果に応じて「正の数です」または「正の数ではありません」と表示するシェルスクリプトを" +
+      "作成してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\nis_positive() {\n  if [ "$1" -gt 0 ]; then\n    return 0\n  else\n    return 1\n  fi\n}\nif is_positive "$1"; then\n  echo "正の数です"\nelse\n  echo "正の数ではありません"\nfi\n',
+    testCases: [
+      { id: "tc1", description: "5(正の数)", args: ["5"] },
+      { id: "tc2", description: "-3(負の数)", args: ["-3"] },
+      { id: "tc3", description: "0(正の数ではない)", args: ["0"] },
+    ],
+    hints: [
+      "if文の条件には、testコマンドだけでなく、関数呼び出しをそのまま置くこともできます" +
+      "(関数の終了ステータスが条件として使われます)。",
+      "0は正の数ではないため、-gt 0(0より大きい)で判定すると正しく除外できます。",
+    ],
+    explanation:
+      "if コマンド; then ... の「コマンド」の部分には、関数呼び出しをそのまま書くことができ、" +
+      "その関数のreturn値(終了ステータス)が0であれば真、それ以外であれば偽として扱われます。" +
+      "is_positive関数はechoで何も表示せず、returnの値だけで結果を伝えている点がポイントです。",
+  },
+  {
+    id: "ch15-17-ex99",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "渡された数値を2乗して表示するsquare関数を定義してください。スクリプトに渡された引数それぞれに" +
+      "対して、for文(inを省略した暗黙のループ)でsquare関数を呼び出すシェルスクリプトを作成してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\nsquare() {\n  local n=$1\n  echo $((n * n))\n}\nfor n; do\n  square "$n"\ndone\n',
+    testCases: [
+      { id: "tc1", description: "引数 2 3 4", args: ["2", "3", "4"] },
+      { id: "tc2", description: "引数 5 のみ", args: ["5"] },
+      { id: "tc3", description: "引数 0 1", args: ["0", "1"] },
+    ],
+    hints: [
+      "関数の引数($1)を算術式展開の中でそのまま使わず、local n=$1のように一度変数に代入してから使うと安全です。",
+      "for 変数; do ... done は位置パラメータを1つずつ処理する省略記法です。",
+    ],
+    explanation:
+      "for文とシェル関数を組み合わせることで、複数の引数それぞれに同じ処理を適用できます。" +
+      "square関数では、受け取った引数をlocal n=$1として変数に代入してから算術式展開 $((n * n)) で" +
+      "2乗を計算しています。",
+  },
+  {
+    id: "ch15-17-ex100",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "位置パラメータ $1 の文字列の長さを、コマンド置換($(...))と wc -c を使って計算し、" +
+      "「文字数: N」の形式で表示するシェルスクリプトを作成してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\nlen=$(echo -n "$1" | wc -c)\nlen=$((len))\necho "文字数: $len"\n',
+    testCases: [
+      { id: "tc1", description: "hello(5文字)", args: ["hello"] },
+      { id: "tc2", description: "空文字列(0文字)", args: [""] },
+      { id: "tc3", description: "test(4文字)", args: ["test"] },
+    ],
+    hints: [
+      "echo -n は末尾に改行を付けずに出力するオプションです。改行を数に含めたくないときに使います。",
+      "wc -cの出力には桁揃え用の余分な空白が含まれることがあるため、一度 len=$((len)) のように" +
+      "算術式展開へ通すと数値として扱いやすくなります。",
+    ],
+    explanation:
+      "$(echo -n \"$1\" | wc -c) は、$1をパイプでwc -cに渡してバイト数(この場合は文字数)を数え、" +
+      "その結果をコマンド置換で変数に取り込んでいます。wc -cの出力には表示用の余分な空白が含まれるため、" +
+      "len=$((len)) のように算術式展開に通すことで、余分な空白を取り除いた整数値に整えています。",
+  },
+  {
+    id: "ch15-17-ex101",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "コマンド置換を使って現在の作業ディレクトリのパスを取得し、「現在の作業ディレクトリは ○○ です」の" +
+      "ように、pwdコマンドの出力をメッセージの中に埋め込んで表示するシェルスクリプトを作成してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution: '#!/bin/bash\necho "現在の作業ディレクトリは $(pwd) です"\n',
+    testCases: [
+      { id: "tc1", description: "実行1", args: [] },
+      { id: "tc2", description: "実行2", args: ["unused"] },
+      { id: "tc3", description: "実行3", args: ["a", "b"] },
+    ],
+    hints: ["ダブルクォートで囲んだ文字列の中でも、$(コマンド) の形式のコマンド置換は展開されます。"],
+    explanation:
+      "コマンド置換 $(コマンド) は、そのコマンドの実行結果(標準出力)に置き換わります。" +
+      'echo "現在の作業ディレクトリは $(pwd) です" のように、他の文字列の中に埋め込んで使うことができます。',
+  },
+  {
+    id: "ch15-17-ex102",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "標準入力から渡された行数を wc -l で数え、コマンド置換でその結果を取得したうえで2倍にした値を" +
+      "表示するシェルスクリプトを作成してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution: '#!/bin/bash\nlines=$(wc -l)\nlines=$((lines))\ndouble=$((lines * 2))\necho "$double"\n',
+    testCases: [
+      { id: "tc1", description: "標準入力2行", stdin: "a\nb\n" },
+      { id: "tc2", description: "標準入力3行", stdin: "a\nb\nc\n" },
+      { id: "tc3", description: "標準入力なし", stdin: "" },
+    ],
+    hints: ["ファイル名を指定せずにwc -lを実行すると、標準入力の行数を数えます。"],
+    explanation:
+      "$(wc -l) はファイル名を指定していないため、標準入力から読み込んだデータの行数を数えます。" +
+      "その結果をlinesという変数に取り込み、さらに算術式展開 $((lines * 2)) で2倍にした値を計算しています。",
+  },
+  {
+    id: "ch15-17-ex103",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "コマンド置換とfind、wcを組み合わせて、practice配下のlogsディレクトリにあるファイルの数を数え、" +
+      "「ログファイル数: N」の形式で表示するシェルスクリプトを作成してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\ncount=$(find logs -type f | wc -l)\ncount=$((count))\necho "ログファイル数: $count"\n',
+    testCases: [
+      { id: "tc1", description: "実行1", args: [] },
+      { id: "tc2", description: "実行2", args: ["unused"] },
+      { id: "tc3", description: "実行3", args: ["a"] },
+    ],
+    hints: ["find logs -type f | wc -l のように、findとwcをパイプでつないでファイル数を数えられます。"],
+    explanation:
+      "find logs -type f はlogsディレクトリ以下のファイル(ディレクトリを除く)を列挙し、" +
+      "それをパイプでwc -lに渡すことで件数を数えられます。この結果をコマンド置換で変数に取り込み、" +
+      "メッセージの中に埋め込んで表示しています。",
+  },
+  {
+    id: "ch15-17-ex104",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "スクリプトに渡された引数の個数($#)と、すべての引数を並べたもの($@)、そして最初の引数($1)を、" +
+      "それぞれ「引数の個数: N」「すべての引数: ...」「最初の引数: ...」の形式で表示するシェルスクリプトを" +
+      "作成してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\necho "引数の個数: $#"\necho "すべての引数: $@"\necho "最初の引数: $1"\n',
+    testCases: [
+      { id: "tc1", description: "引数 a b c", args: ["a", "b", "c"] },
+      { id: "tc2", description: "引数 x のみ", args: ["x"] },
+      { id: "tc3", description: "引数なし", args: [] },
+    ],
+    hints: [
+      "$# は渡された引数の個数、$@ はすべての引数、$1は最初の引数を表す特殊な変数です。",
+    ],
+    explanation:
+      "$# ・$@ ・$1 は、いずれもスクリプトに渡された引数(位置パラメータ)に関する特殊な変数です。" +
+      "$#は個数、$@はすべての引数を並べたもの、$1は1番目の引数を表します。これらはよく" +
+      "使い方(usage)の表示や、引数の検証で使われます。",
+  },
+  {
+    id: "ch15-17-ex105",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "スクリプトに渡された引数の個数($#)が偶数か奇数かを判定し、「引数の数は偶数です」または" +
+      "「引数の数は奇数です」と表示するシェルスクリプトを作成してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\ncount=$#\nif [ $((count % 2)) -eq 0 ]; then\n  echo "引数の数は偶数です"\nelse\n  echo "引数の数は奇数です"\nfi\n',
+    testCases: [
+      { id: "tc1", description: "引数2個", args: ["a", "b"] },
+      { id: "tc2", description: "引数1個", args: ["a"] },
+      { id: "tc3", description: "引数0個", args: [] },
+    ],
+    hints: [
+      "$#のような特殊な位置パラメータも、算術式展開の中で直接使う前に count=$# のように変数へ代入しておくと安全です。",
+    ],
+    explanation:
+      "$#は引数の個数を表す特殊な変数です。$((...))の中で直接$#やその他の位置パラメータを使うと" +
+      "うまく展開されない場合があるため、count=$#のように一度変数へ代入してから算術式の中で使うのが安全です。",
+  },
+  {
+    id: "ch15-17-ex106",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "スクリプトに渡された引数をすべて、for文と文字列連結を使って「-」で区切りながら1つの文字列に" +
+      "まとめて表示するシェルスクリプトを作成してください(先頭に余計な「-」が付かないように工夫すること)。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\nresult=""\nfor arg; do\n  if [ -z "$result" ]; then\n    result="$arg"\n  else\n    result="$result-$arg"\n  fi\ndone\necho "$result"\n',
+    testCases: [
+      { id: "tc1", description: "引数 a b c", args: ["a", "b", "c"] },
+      { id: "tc2", description: "引数 x のみ", args: ["x"] },
+      { id: "tc3", description: "引数なし", args: [] },
+    ],
+    hints: [
+      "resultがまだ空(-zで判定)であれば最初の要素をそのまま代入し、そうでなければ「-」を挟んで連結します。",
+      "変数 = \"$変数値$別の文字\" のように書くことで、文字列を連結できます。",
+    ],
+    explanation:
+      '[ -z "$result" ] を使って「resultがまだ空かどうか」を判定することで、最初の要素の前にだけ' +
+      "「-」を付けないようにしています。2つ目以降の要素では result=\"$result-$arg\" のように、" +
+      "既存のresultの末尾に「-引数」を連結しています。",
+  },
+  {
+    id: "ch15-17-ex107",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "位置パラメータ$1が指定されていない(または空の)場合は「ゲスト」を、指定されていればその値を使って" +
+      "「こんにちは、○○さん」と表示するシェルスクリプトを、パラメータ展開のデフォルト値構文" +
+      "${1:-ゲスト} を使って作成してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution: '#!/bin/bash\nname=${1:-ゲスト}\necho "こんにちは、${name}さん"\n',
+    testCases: [
+      { id: "tc1", description: "引数=Alice", args: ["Alice"] },
+      { id: "tc2", description: "引数なし", args: [] },
+      { id: "tc3", description: "引数=空文字列", args: [""] },
+    ],
+    hints: ["${変数:-デフォルト値} は、変数が未設定または空のときにデフォルト値を使う書き方です。"],
+    explanation:
+      "${1:-ゲスト} は、$1が未設定または空文字列のときに「ゲスト」という値を返し、それ以外の場合は" +
+      "$1の値をそのまま返すパラメータ展開です。この構文自体が変数への代入は行わない(:-と:=の違い)点にも" +
+      "注意しましょう。",
+  },
+  {
+    id: "ch15-17-ex108",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "位置パラメータ$1をそのまま表示したあと、$2が指定されていれば「オプション: 有効」と表示し、" +
+      "指定されていなければ何も表示しない、という処理を、パラメータ展開 ${2:+...} を使って書く" +
+      "シェルスクリプトを作成してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\necho "$1"\nopt=${2:+オプション: 有効}\nif [ -n "$opt" ]; then\n  echo "$opt"\nfi\n',
+    testCases: [
+      { id: "tc1", description: "task, verbose(両方指定)", args: ["task", "verbose"] },
+      { id: "tc2", description: "taskのみ($2省略)", args: ["task"] },
+      { id: "tc3", description: "task, 空文字列", args: ["task", ""] },
+    ],
+    hints: [
+      "${変数:+値} は :- とは逆で、変数が空でない(値がある)ときだけ指定した値を返す書き方です。",
+    ],
+    explanation:
+      "${2:+オプション: 有効} は、$2が空でなければ「オプション: 有効」という文字列を返し、" +
+      "$2が未設定または空文字列であれば何も返しません(空文字列になります)。:- がデフォルト値を" +
+      "補うのに対し、:+ は「値があるときだけ別の値に差し替える」という逆の使い方をします。",
+  },
+  {
+    id: "ch15-17-ex109",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "位置パラメータ$1をMODEという変数に代入したあと、MODEが未設定または空の場合はパラメータ展開" +
+      "${MODE:=normal} を使ってデフォルト値\"normal\"をMODE自身に代入しつつ取得し、「モード: MODEの値」を" +
+      "表示してください。さらにもう一度「確認: MODEの値」を表示し、2回目もパラメータ展開によって実際に" +
+      "代入された値が使われることを確認できるシェルスクリプトを作成してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\nMODE=$1\necho "モード: ${MODE:=normal}"\necho "確認: $MODE"\n',
+    testCases: [
+      { id: "tc1", description: "引数=fast", args: ["fast"] },
+      { id: "tc2", description: "引数なし(デフォルト値が実際に代入される)", args: [] },
+      { id: "tc3", description: "引数=slow", args: ["slow"] },
+    ],
+    hints: [
+      "${変数:=デフォルト値} は :- と似ていますが、変数が空のときにデフォルト値をその変数自身に" +
+      "代入するところが異なります。",
+    ],
+    explanation:
+      "${MODE:=normal} は、MODEが未設定または空の場合にデフォルト値\"normal\"をMODEという変数自体に" +
+      '代入した上で、その値を返します。:-との違いはここにあり、:-は展開結果を返すだけで変数への代入は' +
+      "行いませんが、:=は実際に代入も行うため、次の行でMODEをそのまま参照しても同じ値が得られます。",
+  },
+  {
+    id: "ch15-17-ex110",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "位置パラメータ$2が省略された場合は test -z \"$2\" で判定して言語を\"ja\"とみなし、指定されていれば" +
+      "その値を使う処理を実装してください。言語が\"ja\"なら「こんにちは、$1さん」、\"en\"なら" +
+      "「Hello, $1!」、それ以外なら「対応していない言語です」と表示するシェルスクリプトを作成してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\nname="$1"\nlang="$2"\nif [ -z "$lang" ]; then\n  lang="ja"\nfi\ncase "$lang" in\n  ja) echo "こんにちは、${name}さん" ;;\n  en) echo "Hello, $name!" ;;\n  *) echo "対応していない言語です" ;;\nesac\n',
+    testCases: [
+      { id: "tc1", description: "太郎(言語省略)", args: ["太郎"] },
+      { id: "tc2", description: "Taro, en", args: ["Taro", "en"] },
+      { id: "tc3", description: "Bob, fr(未対応)", args: ["Bob", "fr"] },
+    ],
+    hints: [
+      'test -z "$変数" は、変数が空文字列(または未設定)であればtrueになる判定です。',
+      "第2引数が省略された場合のデフォルト処理は、パラメータ展開の${2:-ja}でも同様に実現できます。",
+    ],
+    explanation:
+      '[ -z "$lang" ] を使うことで、$2(lang)が省略された、または空文字列で渡された場合を検出し、' +
+      "デフォルト値\"ja\"を補っています。このように「省略時のデフォルト値」は、if文とtest -zで明示的に" +
+      "書く方法と、パラメータ展開${変数:-デフォルト}で簡潔に書く方法の両方があります。",
+  },
+  {
+    id: "ch15-17-ex111",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "位置パラメータ$1をメッセージ、$2を繰り返し回数として受け取り、$2が省略されている場合は" +
+      "test -z \"$2\" で判定してデフォルト値1を使い、メッセージをその回数だけwhile文で繰り返し表示する" +
+      "シェルスクリプトを作成してください(回数に0が指定された場合は何も表示しません)。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\nmsg="$1"\ncount="$2"\nif [ -z "$count" ]; then\n  count=1\nfi\ni=1\nwhile [ "$i" -le "$count" ]; do\n  echo "$msg"\n  i=$((i + 1))\ndone\n',
+    testCases: [
+      { id: "tc1", description: "hi(回数省略、1回)", args: ["hi"] },
+      { id: "tc2", description: "hi, 3(3回)", args: ["hi", "3"] },
+      { id: "tc3", description: "yo, 0(0回、何も表示しない)", args: ["yo", "0"] },
+    ],
+    hints: [
+      "countが0の場合、while [ \"$i\" -le \"$count\" ] は最初から偽になるため、ループは一度も実行されません。",
+    ],
+    explanation:
+      "第2引数(繰り返し回数)が省略された場合に備えて、test -z \"$2\" でデフォルト値1を補っています。" +
+      "0が明示的に指定された場合はwhileの条件がループの最初から満たされないため、意図通り何も表示されません。",
+  },
+  {
+    id: "ch15-17-ex112",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "引数が1つも指定されなかった場合、ヒアドキュメント(<< END ... END)を使って使い方(Usage)を" +
+      "複数行で標準出力に表示したうえで exit 1 で終了するシェルスクリプトを作成してください。" +
+      "引数が指定されていれば「処理対象: $1」と表示して正常終了(exit 0)してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\nif [ -z "$1" ]; then\n  cat << END\nUsage: script.sh <file>\n  <file>  処理対象のファイル名\nEND\n  exit 1\nfi\necho "処理対象: $1"\n',
+    testCases: [
+      { id: "tc1", description: "引数なし(usage表示、exit 1)", args: [] },
+      { id: "tc2", description: "引数=data.txt", args: ["data.txt"] },
+      { id: "tc3", description: "引数=a", args: ["a"] },
+    ],
+    hints: [
+      "cat << END と書くと、次の行から END とだけ書かれた行が現れるまでの内容が、catへの標準入力" +
+      "(ヒアドキュメント)として渡されます。",
+      "複数行にわたる説明文を表示したいときは、echoを何度も書くよりヒアドキュメントの方が見やすくなります。",
+    ],
+    explanation:
+      "cat << END ... END の形式(ヒアドキュメント)を使うと、複数行のテキストをまとめてcatの標準入力として" +
+      "渡し、そのまま表示できます。引数チェックで使い方を表示する場面でよく使われる書き方です。",
+  },
+  {
+    id: "ch15-17-ex113",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "位置パラメータ$1(氏名)と$2(金額)を使って、ヒアドキュメントの中で変数を展開しながら、区切り線・" +
+      "「領収書」・氏名・金額を含む簡単な領収書メッセージを表示するシェルスクリプトを作成してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\nname="$1"\namount="$2"\ncat << END\n----------------\n領収書\nお名前: $name 様\n金額: $amount 円\n----------------\nEND\n',
+    testCases: [
+      { id: "tc1", description: "Alice, 1000円", args: ["Alice", "1000"] },
+      { id: "tc2", description: "Bob, 500円", args: ["Bob", "500"] },
+      { id: "tc3", description: "study, 0円", args: ["study", "0"] },
+    ],
+    hints: [
+      "区切り文字を << END のようにクォートせずに書いた場合、ヒアドキュメントの中でも$変数は通常通り展開されます。",
+    ],
+    explanation:
+      "区切り文字(この例ではEND)をクォートせずに書いた場合、ヒアドキュメントの本文の中でも$name・$amountの" +
+      "ような変数展開やコマンド置換が通常通り行われます。複数行の定型文の中に変数の値を埋め込みたい場合に" +
+      "便利な書き方です。",
+  },
+  {
+    id: "ch15-17-ex114",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "変数priceに100を代入したあと、シングルクォートで囲んだ区切り文字(<< 'END')を使ったヒアドキュメントは" +
+      "中の$記号が変数展開されずそのまま表示されることを確認するため、ヒアドキュメントの中に文字通り" +
+      "「$price」という文字列(展開されない)を含めて表示するシェルスクリプトを作成してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      "#!/bin/bash\nprice=100\ncat << 'END'\n表示価格は$priceドルではなく、テンプレートの$priceという文字列そのままです\nEND\n",
+    testCases: [
+      { id: "tc1", description: "実行1", args: [] },
+      { id: "tc2", description: "実行2", args: ["unused"] },
+      { id: "tc3", description: "実行3", args: ["a", "b"] },
+    ],
+    hints: [
+      "区切り文字をシングルクォートで囲む(<< 'END')と、ヒアドキュメント本文の中の$や`はそのまま文字として扱われます。",
+    ],
+    explanation:
+      "<< 'END' のように区切り文字をシングルクォートで囲むと、ヒアドキュメント本文の中の変数展開や" +
+      "コマンド置換が抑制され、$price はそのまま「$price」という文字列として表示されます。テンプレートの" +
+      "書き方そのものを表示したい場合などに使う書き方です。",
+  },
+  {
+    id: "ch15-17-ex115",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "位置パラメータ$1が指定されていなければ、標準エラー出力にエラーメッセージを表示してexit 1で終了し、" +
+      "指定されていれば$1を2倍にした値を表示して正常終了(exit 0)するシェルスクリプトを作成してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\nif [ -z "$1" ]; then\n  echo "エラー: 引数を指定してください" 1>&2\n  exit 1\nfi\nvalue="$1"\necho $((value * 2))\n',
+    testCases: [
+      { id: "tc1", description: "引数なし(エラー、exit 1)", args: [] },
+      { id: "tc2", description: "引数=5", args: ["5"] },
+      { id: "tc3", description: "引数=0", args: ["0"] },
+    ],
+    hints: [
+      "エラーメッセージは 1>&2 を付けて標準エラー出力に出力するのが慣習です。",
+      "位置パラメータを算術式展開でそのまま使う前に、value=\"$1\"のように変数へ代入しておくと安全です。",
+    ],
+    explanation:
+      "引数が指定されていない場合はエラーメッセージを1>&2で標準エラー出力に送り、exit 1で異常終了します。" +
+      "正常なパスでは、位置パラメータをvalue=\"$1\"として変数に代入してから算術式展開の中で使うことで、" +
+      "2倍の値を安全に計算しています。",
+  },
+  {
+    id: "ch15-17-ex116",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "位置パラメータ$1のパスについて、存在しない場合は標準エラー出力にエラーを表示してexit 2、" +
+      "ディレクトリだった場合は標準エラー出力にエラーを表示してexit 3、ファイルであれば" +
+      "「読み込みます: $1」と表示してexit 0(正常終了)するシェルスクリプトを作成してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution:
+      '#!/bin/bash\ntarget="$1"\nif [ ! -e "$target" ]; then\n  echo "エラー: $target が見つかりません" 1>&2\n  exit 2\nfi\nif [ -d "$target" ]; then\n  echo "エラー: $target はディレクトリです" 1>&2\n  exit 3\nfi\necho "読み込みます: $target"\n',
+    testCases: [
+      { id: "tc1", description: "scripts/hello.sh(ファイル、exit 0)", args: ["scripts/hello.sh"] },
+      { id: "tc2", description: "scripts(ディレクトリ、exit 3)", args: ["scripts"] },
+      { id: "tc3", description: "nofile.txt(存在しない、exit 2)", args: ["nofile.txt"] },
+    ],
+    hints: [
+      "! を先頭に付けると条件を反転できます。[ ! -e \"$target\" ] は「存在しない」場合にtrueになります。",
+      "エラーの種類ごとに異なるexitコードを使い分けると、呼び出し元のスクリプトが原因を区別しやすくなります。",
+    ],
+    explanation:
+      "! -e で存在しないケースをまず弾き、次に -d でディレクトリのケースを弾くことで、最後まで到達した" +
+      "場合は「存在してかつファイルである」ことが保証されます。エラーの種類によって異なる終了コード" +
+      "(2と3)を使い分けることで、スクリプトを呼び出す側が失敗の原因を区別できるようになります。",
+  },
+  {
+    id: "ch15-17-ex117",
+    chapterId: "ch15-17",
+    type: "script",
+    prompt:
+      "位置パラメータ$1で指定したファイルが存在するかどうかを [ -f \"$1\" ] の結果に && と || を使って" +
+      "分岐させ、存在すれば「OK」、存在しなければ「NG」と表示する(if文を使わずに1行で書く)" +
+      "シェルスクリプトを作成してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    initialScript: "#!/bin/bash\n",
+    referenceSolution: '#!/bin/bash\n[ -f "$1" ] && echo "OK" || echo "NG"\n',
+    testCases: [
+      { id: "tc1", description: "scripts/hello.sh(存在するファイル)", args: ["scripts/hello.sh"] },
+      { id: "tc2", description: "nofile.txt(存在しない)", args: ["nofile.txt"] },
+      { id: "tc3", description: "scripts(ディレクトリ、-fはfalse)", args: ["scripts"] },
+    ],
+    hints: [
+      "コマンド1 && コマンド2 || コマンド3 は、コマンド1が成功すればコマンド2を、失敗すればコマンド3を実行する" +
+      "if/elseの簡易な代用として使えます。",
+    ],
+    explanation:
+      "[ -f \"$1\" ] && echo \"OK\" || echo \"NG\" は、if [ -f \"$1\" ]; then echo \"OK\"; else echo \"NG\"; fi と" +
+      "ほぼ同じ意味になります。&&は直前のコマンドが成功(終了ステータス0)したときだけ次を実行し、||は" +
+      "直前のコマンドが失敗したときだけ次を実行するという性質を利用した書き方です。",
+  },
+
+  // ---------------------------------------------------------------------
+  // Ch15-17: シェルスクリプト作成(terminal型: chmod・grep・find・xargsの実践)
+  // ---------------------------------------------------------------------
+  {
+    id: "ch15-17-ex118",
+    chapterId: "ch15-17",
+    prompt: "scripts/hello.sh に、誰でも実行できるように実行権限を付与してください(chmod +xを使用)。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    referenceSolution: "chmod +x scripts/hello.sh",
+    hints: ["chmod +x ファイル名 で、所有者・グループ・その他すべてに実行権限を追加できます。"],
+    explanation:
+      "chmod +x はターゲットを指定しない(u/g/oを書かない)+の書き方で、所有者・グループ・その他すべてに" +
+      "実行権限を追加します。hello.shはもともと644(rw-r--r--)だったため、実行後は755(rwxr-xr-x)になります。",
+  },
+  {
+    id: "ch15-17-ex119",
+    chapterId: "ch15-17",
+    prompt:
+      "scripts/report.sh に、所有者(study)だけに実行権限を付与してください(グループ・その他には" +
+      "実行権限を付けないこと)。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    referenceSolution: "chmod u+x scripts/report.sh",
+    hints: ["u+x のように対象(u/g/o)を指定すると、その範囲だけに権限を追加できます。"],
+    explanation:
+      "chmod u+x はu(所有者)にだけ実行権限を追加する書き方です。report.shはもともと644(rw-r--r--)" +
+      "だったため、実行後は744(rwxr--r--)になり、グループ・その他には実行権限が付きません。",
+  },
+  {
+    id: "ch15-17-ex120",
+    chapterId: "ch15-17",
+    prompt:
+      "scripts/deploy.sh の権限を644(所有者は読み書き、グループ・その他は読み取りのみ、実行権限なし)に" +
+      "変更してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    referenceSolution: "chmod 644 scripts/deploy.sh",
+    hints: ["644のような3桁または4桁の数字を指定すると、権限をその値に一括で設定できます。"],
+    explanation:
+      "chmod 644 は8進数のモード指定で、権限を644(rw-r--r--)に置き換えます。deploy.shはもともと700" +
+      "(rwx------、所有者のみ実行可能)だったため、実行後は所有者の実行権限がなくなり、代わりに" +
+      "グループ・その他に読み取り権限が付きます。",
+  },
+  {
+    id: "ch15-17-ex121",
+    chapterId: "ch15-17",
+    prompt: "scripts/report.sh から、その他(other)の読み取り権限を外してください(chmod o-r)。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    referenceSolution: "chmod o-r scripts/report.sh",
+    hints: ["o-r のように「-」を使うと、指定した対象から権限を取り除けます。"],
+    explanation:
+      "chmod o-r はo(その他)から読み取り権限を取り除きます。report.shはもともと644(rw-r--r--)だったため、" +
+      "実行後は640(rw-r-----)になり、その他のユーザーはこのファイルを読めなくなります。",
+  },
+  {
+    id: "ch15-17-ex122",
+    chapterId: "ch15-17",
+    prompt: "scripts/backup.sh に、グループ(study)にも書き込み権限を追加してください(chmod g+w)。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    referenceSolution: "chmod g+w scripts/backup.sh",
+    hints: ["g+w のように書くと、グループにだけ書き込み権限を追加できます。"],
+    explanation:
+      "chmod g+w はg(グループ)にだけ書き込み権限を追加します。backup.shはもともと750(rwxr-x---)" +
+      "だったため、実行後は770(rwxrwx---)になり、グループのユーザーも書き込みできるようになります。",
+  },
+  {
+    id: "ch15-17-ex123",
+    chapterId: "ch15-17",
+    prompt: "scripts/greet.sh の権限を700(所有者のみ読み書き・実行が可能)に変更してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    referenceSolution: "chmod 700 scripts/greet.sh",
+    hints: ["700は「所有者だけがrwx、グループ・その他は権限なし」を表す数値モードです。"],
+    explanation:
+      "chmod 700 は権限を700(rwx------)に置き換えます。greet.shはもともと755(rwxr-xr-x)だったため、" +
+      "実行後はグループ・その他の読み取り・実行権限がすべてなくなり、所有者だけがアクセスできるようになります。",
+  },
+  {
+    id: "ch15-17-ex124",
+    chapterId: "ch15-17",
+    prompt:
+      "scripts/hello.sh に実行権限を付与したうえで、ls -l でそのファイルの権限を確認してください" +
+      "(1つのコマンドラインで、;で2つのコマンドをつないでもかまいません)。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    referenceSolution: "chmod +x scripts/hello.sh; ls -l scripts/hello.sh",
+    hints: ["; で区切ると、複数のコマンドを1行にまとめて順番に実行できます。"],
+    explanation:
+      "; はコマンドの終了ステータスに関係なく、次のコマンドを順番に実行するための区切り文字です。" +
+      "chmodで権限を変更した直後にls -lを実行することで、変更後のパーミッション文字列" +
+      "(この場合は-rwxr-xr-x)をすぐに確認できます。",
+  },
+  {
+    id: "ch15-17-ex125",
+    chapterId: "ch15-17",
+    prompt: "logs/app.log の中から「ERROR」を含む行を、行番号付きで表示してください(grep -n)。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    referenceSolution: "grep -n ERROR logs/app.log",
+    hints: ["-n オプションを付けると、一致した行の行番号も一緒に表示されます。"],
+    explanation:
+      "grep -n パターン ファイル は、パターンに一致した行を、そのファイル内での行番号付きで表示します。" +
+      "app.logには複数のERROR行があるため、それぞれの行番号(2行目・4行目)とともに表示されます。",
+  },
+  {
+    id: "ch15-17-ex126",
+    chapterId: "ch15-17",
+    prompt:
+      "logsディレクトリのapp.log・db.log・access.logの3つのファイルすべてから「ERROR」を含む行を、" +
+      "ファイル名付きで表示してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    referenceSolution: "grep ERROR logs/app.log logs/db.log logs/access.log",
+    hints: ["grepに複数のファイルを指定すると、一致した行の先頭に自動的にファイル名が付きます。"],
+    explanation:
+      "grepは検索対象のファイルを2つ以上指定すると、一致した行の先頭に「ファイル名:」を自動的に付けて" +
+      "区別できるようにします。1つのファイルだけを指定した場合はファイル名は付きません。",
+  },
+  {
+    id: "ch15-17-ex127",
+    chapterId: "ch15-17",
+    prompt: "logs/app.log から大文字小文字を区別せず「info」を含む行を表示してください(grep -i)。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    referenceSolution: "grep -i info logs/app.log",
+    hints: ["-i オプションを付けると、大文字・小文字の違いを無視して検索できます。"],
+    explanation:
+      "grep -i は大文字・小文字を区別せずにパターンを照合します。app.logの「INFO」は大文字で" +
+      "書かれていますが、検索パターンを小文字の「info」で指定しても一致します。",
+  },
+  {
+    id: "ch15-17-ex128",
+    chapterId: "ch15-17",
+    prompt: "logs/app.log からERRORを含まない行だけを表示してください(grep -v)。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    referenceSolution: "grep -v ERROR logs/app.log",
+    hints: ["-v オプションを付けると、パターンに一致しない行だけを表示できます(反転検索)。"],
+    explanation:
+      "grep -v はパターンに一致した行を除外し、一致しなかった行だけを表示する反転検索のオプションです。" +
+      "app.logからERRORの行を除くと、INFOの行だけが残ります。",
+  },
+  {
+    id: "ch15-17-ex129",
+    chapterId: "ch15-17",
+    prompt: "logs/access.log から、大文字小文字を区別せず「error」を含む行を行番号付きで検索してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    referenceSolution: "grep -ni error logs/access.log",
+    hints: ["-n と -i は -ni のように1つにまとめて指定することもできます。"],
+    explanation:
+      "-n(行番号表示)と-i(大文字小文字を無視)は、-ni のように1つのオプションにまとめて指定できます。" +
+      "access.logの3行目にある「ERROR」が、小文字の検索パターン「error」でも一致します。",
+  },
+  {
+    id: "ch15-17-ex130",
+    chapterId: "ch15-17",
+    prompt: "scripts ディレクトリの中から、拡張子が.shのファイルをfindで検索してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    referenceSolution: "find scripts -name '*.sh'",
+    hints: ["find 検索開始位置 -name 'パターン' の形式で、名前がパターンに一致するファイルを検索できます。"],
+    explanation:
+      "find scripts -name '*.sh' はscriptsディレクトリ以下を再帰的に検索し、名前が「.sh」で終わる" +
+      "ファイルをすべて表示します。シェルにワイルドカードを展開させないよう、パターンをクォートで" +
+      "囲んでいる点にも注目してください。",
+  },
+  {
+    id: "ch15-17-ex131",
+    chapterId: "ch15-17",
+    prompt:
+      "project ディレクトリ以下(サブディレクトリを含む)から、拡張子が.shのファイルをすべてfindで" +
+      "検索してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    referenceSolution: "find project -name '*.sh'",
+    hints: ["findは指定したディレクトリの下にあるサブディレクトリの中身まで、再帰的に検索します。"],
+    explanation:
+      "find project -name '*.sh' はproject以下を再帰的に検索するため、project直下だけでなく" +
+      "project/src配下にあるmain.sh・lib.shも見つかります。",
+  },
+  {
+    id: "ch15-17-ex132",
+    chapterId: "ch15-17",
+    prompt:
+      "practice/ch15_17_shellscript 直下にあるディレクトリだけをfindで一覧表示してください" +
+      "(-type dを使用)。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    referenceSolution: "find . -type d",
+    hints: ["-type d を付けると、ディレクトリだけに絞り込んで検索できます(ファイルは除外されます)。"],
+    explanation:
+      "find . -type d はカレントディレクトリ以下を再帰的に検索し、ディレクトリだけを一覧表示します。" +
+      "logs・mytools・project・project/docs・project/src・scripts・spaceyといったディレクトリが" +
+      "見つかります。",
+  },
+  {
+    id: "ch15-17-ex133",
+    chapterId: "ch15-17",
+    prompt:
+      "project/docs ディレクトリ内のテキストファイル(拡張子.txt)をfindで検索してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    referenceSolution: "find project/docs -name '*.txt'",
+    hints: ["検索を開始するパスは、project/docsのようにサブディレクトリを直接指定できます。"],
+    explanation:
+      "find 検索開始位置 -name 'パターン' の検索開始位置には、project/docsのようにネストした" +
+      "パスも指定できます。この場合はnotes.txtが1件見つかります。",
+  },
+  {
+    id: "ch15-17-ex134",
+    chapterId: "ch15-17",
+    prompt:
+      "project ディレクトリ以下の.shファイルをfindで探し、それぞれの中にある「TODO」という文字列を" +
+      "xargs経由でgrep -nを使って行番号付きで検索してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    referenceSolution: "find project -name '*.sh' | xargs grep -n TODO",
+    hints: [
+      "find ... | xargs コマンド の形式で、findが見つけたパスの一覧をコマンドの引数として渡せます。",
+      "grepに複数のファイルパスが渡されるため、一致した行にはファイル名も自動的に付きます。",
+    ],
+    explanation:
+      "find project -name '*.sh' はmain.shとlib.shのパスを出力し、それをパイプでxargsに渡すことで" +
+      "grep -n TODO main.shのパス lib.shのパス のように展開して実行します。複数ファイルを一度に検索し、" +
+      "TODOコメントの場所を行番号付きで洗い出す実用的な組み合わせです。",
+  },
+  {
+    id: "ch15-17-ex135",
+    chapterId: "ch15-17",
+    prompt:
+      "logs ディレクトリ内のすべての.logファイルをfindで探し、xargs経由でgrep -nを使って「ERROR」を" +
+      "含む行を検索してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    referenceSolution: "find logs -name '*.log' | xargs grep -n ERROR",
+    hints: ["find logs -name '*.log' は、logsディレクトリ内の.logファイルのパスを改行区切りで出力します。"],
+    explanation:
+      "find logs -name '*.log' が出力したapp.log・db.log・access.logの3つのパスを、xargsが" +
+      "grep -n ERROR の引数として展開して実行します。findとgrepを個別に3回実行しなくても、" +
+      "1つのコマンドラインで複数ファイルを横断検索できます。",
+  },
+  {
+    id: "ch15-17-ex136",
+    chapterId: "ch15-17",
+    prompt:
+      "ハイフンで始まる名前のファイル -oldfile.txt を、オプションと誤認識されないように -- を使って" +
+      "一覧表示してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    referenceSolution: "ls -- -oldfile.txt",
+    hints: ["-- を挟むと、それ以降の引数はオプションとしてではなく、そのままファイル名として扱われます。"],
+    explanation:
+      "-oldfile.txt のようにハイフンで始まるファイル名は、そのままls -oldfile.txtと書くと" +
+      "オプションの指定だと誤認識されてしまいます。lsコマンドに -- を渡すことで、それ以降の引数を" +
+      "オプションではなくファイル名として扱わせることができます。",
+  },
+  {
+    id: "ch15-17-ex137",
+    chapterId: "ch15-17",
+    prompt: "-oldfile.txt の中身を、-- を使ってオプションと誤認識されないようにcatで表示してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    referenceSolution: "cat -- -oldfile.txt",
+    hints: ["catコマンドでも同様に、-- の直後からはファイル名として解釈されます。"],
+    explanation:
+      "cat -- -oldfile.txt のように -- を挟むことで、-oldfile.txtがオプションではなく" +
+      "ファイル名であることを明示できます。ls・cat・rmなど、多くのコマンドが -- の慣習に対応しています。",
+  },
+  {
+    id: "ch15-17-ex138",
+    chapterId: "ch15-17",
+    prompt: "-oldfile.txt というファイルを、-- を使って安全に削除してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript",
+    referenceSolution: "rm -- -oldfile.txt",
+    hints: ["削除のような取り消しの効かない操作でこそ、-- によるオプションの誤認識対策が重要です。"],
+    explanation:
+      "rm -- -oldfile.txt と書くことで、-oldfile.txtをrmのオプションと誤解させることなく、" +
+      "意図したファイルだけを削除できます。ハイフンで始まるファイル名を扱うときの定番の書き方です。",
+  },
+  {
+    id: "ch15-17-ex139",
+    chapterId: "ch15-17",
+    prompt:
+      "spacey ディレクトリ内の daily notes.txt というスペースを含む名前のファイルの中身を、" +
+      "ダブルクォートで囲んで正しく表示してください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript/spacey",
+    referenceSolution: 'cat "daily notes.txt"',
+    hints: [
+      "ファイル名にスペースが含まれる場合、クォートで囲まないとシェルが2つの別々の引数として解釈してしまいます。",
+    ],
+    explanation:
+      '"daily notes.txt" のようにダブルクォートで囲むことで、内部のスペースを含めて1つのファイル名として' +
+      "シェルに渡せます。クォートを付けずに daily notes.txt と書くと、catに \"daily\" と \"notes.txt\" と" +
+      "いう2つの引数が渡されてしまい、意図通りに動作しません。",
+  },
+  {
+    id: "ch15-17-ex140",
+    chapterId: "ch15-17",
+    prompt:
+      "spacey ディレクトリ内の daily notes.txt と todo list.txt の行数を、それぞれクォートで正しく" +
+      "指定してwcで数えてください。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript/spacey",
+    referenceSolution: 'wc -l "daily notes.txt" "todo list.txt"',
+    hints: ["複数のスペースを含むファイル名を指定する場合、それぞれを個別にクォートで囲む必要があります。"],
+    explanation:
+      "スペースを含む複数のファイル名を同時に指定する場合、それぞれを \"daily notes.txt\" \"todo list.txt\" の" +
+      "ようにクォートで囲む必要があります。2つ以上のファイルを指定するとwcは各ファイルの行数に加えて" +
+      "合計(total)も表示します。",
+  },
+  {
+    id: "ch15-17-ex141",
+    chapterId: "ch15-17",
+    prompt:
+      "spacey ディレクトリ内の todo list.txt というファイルから「buy」を含む行を検索してください" +
+      "(ファイル名をクォートすること)。",
+    initialCwd: "/home/study/practice/ch15_17_shellscript/spacey",
+    referenceSolution: 'grep buy "todo list.txt"',
+    hints: ["grepでも、スペースを含むファイル名を指定するときは同様にクォートが必要です。"],
+    explanation:
+      'grep buy "todo list.txt" のように、スペースを含むファイル名をダブルクォートで囲むことで、' +
+      "1つのファイル名として正しく認識させています。クォートを忘れると「list.txt」というファイルを" +
+      "探しにいってしまい、見つからずエラーになります。",
+  },
+
+  // ---------------------------------------------------------------------
+  // Ch18: アーカイブとバックアップ(tar)
+  // ---------------------------------------------------------------------
+  {
     id: "ch18-ex01",
     chapterId: "ch18",
     prompt: "project ディレクトリを project.tar という名前のtarアーカイブにまとめてください(まとめたファイルの一覧が表示されるようにしてください)。",
