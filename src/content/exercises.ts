@@ -13531,6 +13531,198 @@ export const exercises: Exercise[] = [
   },
 
   // ---------------------------------------------------------------------
+  // Ch18: アーカイブとバックアップ(tar 追加分, 書籍p345-349)
+  // ---------------------------------------------------------------------
+  {
+    id: "ch18-ex11",
+    chapterId: "ch18",
+    prompt:
+      "dir1 ディレクトリを dir1.tar という名前でtarアーカイブにまとめてください(このとき一覧表示は不要です)。" +
+      "作成後、tar tvf でアーカイブの中身をパーミッション等の詳細情報付きで確認してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "tar cf dir1.tar dir1; tar tvf dir1.tar",
+    hints: [
+      "作成時にv(verbose)を付けなくても、後からtar tvfで中身を確認できます。",
+      "tar tvf アーカイブ名 で、詳細情報付きの一覧を確認します。",
+    ],
+    explanation:
+      "tar cfでアーカイブを作成する際にvを付けて一覧を表示させることもできますが、作成と同時に一覧を" +
+      "流し見しても中身の正しさは確認しづらいものです。作成後にあらためて tar tvf で一覧を確認する方が、" +
+      "アーカイブの内容を落ち着いて検証できます。",
+  },
+  {
+    id: "ch18-ex12",
+    chapterId: "ch18",
+    prompt: "dir1 ディレクトリを dir1.tar としてアーカイブしたうえで、その中から file-3.txt だけを取り出してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "tar cf dir1.tar dir1; tar xf dir1.tar dir1/file-3.txt",
+    hints: [
+      "tar xf アーカイブ名 のあとにパスを指定すると、そのファイルだけを展開できます。",
+      "アーカイブ内でのパスは dir1/file-3.txt のように、アーカイブ化したディレクトリ名から始まります。",
+    ],
+    explanation:
+      "tar xf アーカイブ名 対象パス のように対象パスを指定すると、アーカイブ全体を展開せずに指定した" +
+      "ファイル・ディレクトリだけを取り出せます。対象パスはアーカイブ内での格納パス(dir1/file-3.txtのような形)" +
+      "で指定します。",
+  },
+  {
+    id: "ch18-ex13",
+    chapterId: "ch18",
+    prompt: "dir1 ディレクトリを dir1.tar としてアーカイブしたうえで、tar tvf を使って file-2.txt の詳細情報だけを確認してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "tar cf dir1.tar dir1; tar tvf dir1.tar dir1/file-2.txt",
+    hints: ["tar tvf アーカイブ名 のあとにパスを指定すると、そのエントリだけを一覧表示できます。"],
+    explanation:
+      "tar t(list)にも対象パスを指定でき、アーカイブ全体ではなく特定のファイル・ディレクトリの情報だけを" +
+      "確認できます。展開(x)と同様に、アーカイブ内での格納パスで指定します。",
+  },
+  {
+    id: "ch18-ex14",
+    chapterId: "ch18",
+    prompt:
+      "dir1 ディレクトリを dir1.tar としてアーカイブしてから元の dir1 ディレクトリを削除し、アーカイブから" +
+      "復元してください(展開したファイル名の一覧が表示されるようにしてください)。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "tar cf dir1.tar dir1; rm -r dir1; tar xvf dir1.tar",
+    hints: ["rm -r で dir1 ディレクトリごと削除してから、tar xvf で復元します。"],
+    explanation:
+      "tar c(まとめる)とtar x(展開する)を組み合わせることで、tarアーカイブがディレクトリのバックアップ・" +
+      "復元手段として使えることを確認できます。dir1のような複数ファイルからなるディレクトリでも、" +
+      "1つのアーカイブファイルにまとめてしまえば安全に持ち運べます。",
+  },
+  {
+    id: "ch18-ex15",
+    chapterId: "ch18",
+    prompt:
+      "reports ディレクトリ(notes.txt と 2024/summary.txt を含む)を reports.tar としてアーカイブしてから" +
+      "元の reports ディレクトリを削除し、アーカイブから復元してください(展開したファイル名の一覧が" +
+      "表示されるようにしてください)。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "tar cf reports.tar reports; rm -r reports; tar xvf reports.tar",
+    hints: ["ディレクトリを指定すると、その中のサブディレクトリ(2024)も再帰的にアーカイブへ含まれます。"],
+    explanation:
+      "tarでディレクトリをまとめると、reports/2024/summary.txtのようなネストしたサブディレクトリ構造も" +
+      "そのままアーカイブに含まれ、展開時に元の階層構造ごと復元されます。",
+  },
+  {
+    id: "ch18-ex16",
+    chapterId: "ch18",
+    prompt: "logs ディレクトリ(access.log と error.log を含む)を logs.tar としてアーカイブし、その中身を確認してください(一覧表示は不要です)。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "tar cf logs.tar logs; tar tvf logs.tar",
+    hints: ["tar cf では一覧を表示しません。中身の確認には別途 tar tvf を使います。"],
+    explanation:
+      "ログファイルのようにサイズが増え続けるファイル群も、tarでまとめておけばバックアップとして扱いやすく" +
+      "なります。作成後にtar tvfで内容を確認する、という一連の流れを練習する演習です。",
+  },
+  {
+    id: "ch18-ex17",
+    chapterId: "ch18",
+    prompt: "logs ディレクトリを、tarでまとめると同時にbzip2圧縮も行い、logs.tar.bz2 として作成してください(まとめたファイルの一覧が表示されるようにしてください)。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "tar cjvf logs.tar.bz2 logs",
+    hints: [
+      "z の代わりに j オプションを使うと、gzipではなくbzip2で同時圧縮できます。",
+      "拡張子は慣習的に .tar.bz2 を使います。",
+    ],
+    explanation:
+      "tar に j オプションを追加すると、アーカイブの作成と同時にbzip2による圧縮が行われます。zオプション" +
+      "(gzip)をjに変えるだけで使い方は同じで、拡張子には慣習的に .tar.bz2 を使います。",
+  },
+  {
+    id: "ch18-ex18",
+    chapterId: "ch18",
+    prompt:
+      "logs ディレクトリを logs.tar.bz2 としてtar+bzip2でアーカイブしてから元の logs ディレクトリを削除し、" +
+      "そのアーカイブから復元してください(展開したファイル名の一覧が表示されるようにしてください)。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "tar cjf logs.tar.bz2 logs; rm -r logs; tar xjvf logs.tar.bz2",
+    hints: ["作成時に j を付けたアーカイブは、展開するときにも j を付ける必要があります。"],
+    explanation:
+      "tar xjvf アーカイブ名 は、j(bzip2伸長)・v(詳細表示)・f(ファイル名指定)を組み合わせて、" +
+      "tar+bzip2でまとめられたアーカイブを一度に伸長・展開します。",
+  },
+  {
+    id: "ch18-ex19",
+    chapterId: "ch18",
+    prompt: "reports ディレクトリを、tarでまとめると同時にgzip圧縮も行い、reports.tar.gz として作成してください(まとめたファイルの一覧が表示されるようにしてください)。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "tar czvf reports.tar.gz reports",
+    hints: ["z オプションを追加すると、tarでのアーカイブ作成と同時にgzip圧縮も行われます。"],
+    explanation:
+      "tar czvf reports.tar.gz reports は、reportsディレクトリ(サブディレクトリ2024を含む)をまとめながら" +
+      "gzip圧縮し、1つの reports.tar.gz ファイルを作成します。",
+  },
+  {
+    id: "ch18-ex20",
+    chapterId: "ch18",
+    prompt: "reports ディレクトリを reports.tar.gz としてtar+gzipでアーカイブしたうえで、そのアーカイブの中身をパーミッション等の詳細情報付きで確認してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "tar czf reports.tar.gz reports; tar tvf reports.tar.gz",
+    hints: ["tar tvf は、対象がgzip圧縮されたアーカイブであっても中身を確認できます。"],
+    explanation:
+      "tar t(list)はgzip/bzip2で圧縮されたアーカイブに対してもそのまま使え、展開せずに中身の一覧を確認" +
+      "できます。バックアップの中身を実際に展開せずに検証したいときに便利です。",
+  },
+  {
+    id: "ch18-ex21",
+    chapterId: "ch18",
+    prompt: "dir1 ディレクトリを dir1.tar.bz2 としてtar+bzip2でアーカイブしたうえで、そのアーカイブから file-1.txt だけを取り出してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "tar cjf dir1.tar.bz2 dir1; tar xjf dir1.tar.bz2 dir1/file-1.txt",
+    hints: ["展開時にも j を付け、そのあとに取り出したいファイルのパスを指定します。"],
+    explanation:
+      "圧縮されたアーカイブに対しても、tar x j f アーカイブ名 対象パス のように対象パスを指定することで、" +
+      "特定のファイルだけを選んで展開できます。",
+  },
+  {
+    id: "ch18-ex22",
+    chapterId: "ch18",
+    prompt: "project ディレクトリを、tarでまとめると同時にbzip2圧縮も行い、project.tar.bz2 として作成してください(まとめたファイルの一覧が表示されるようにしてください)。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "tar cjvf project.tar.bz2 project",
+    hints: ["czvfのzをjに変えるだけで、bzip2圧縮のアーカイブが作成できます。"],
+    explanation:
+      "gzip(z)・bzip2(j)のどちらを使うかはオプション1文字を変えるだけで切り替えられ、tarコマンドの" +
+      "使い方自体は共通しています。",
+  },
+  {
+    id: "ch18-ex23",
+    chapterId: "ch18",
+    prompt: "logs ディレクトリを logs.tar としてアーカイブし、詳細情報なしでファイル名の一覧だけを表示して確認してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "tar cf logs.tar logs; tar tf logs.tar",
+    hints: ["tar tf(vなし)は、パーミッション等の詳細情報を付けずにファイル名の一覧だけを表示します。"],
+    explanation:
+      "tar tf はファイル名の一覧だけを簡潔に表示します。詳細情報(パーミッション・所有者・サイズ)まで" +
+      "必要な場合はvを付けてtar tvfとしますが、名前の一覧だけで十分なときはtar tfで済ませられます。",
+  },
+  {
+    id: "ch18-ex24",
+    chapterId: "ch18",
+    prompt: "project ディレクトリと dir1 ディレクトリの両方を combined.tar という1つのアーカイブにまとめ、その中身を詳細情報付きで確認してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "tar cf combined.tar project dir1; tar tvf combined.tar",
+    hints: ["tar cf アーカイブ名 のあとに複数のディレクトリを並べると、まとめて1つのアーカイブに含められます。"],
+    explanation:
+      "tarはアーカイブ対象として複数のファイル・ディレクトリを同時に指定できます。project と dir1 の" +
+      "両方をまとめて1つのcombined.tarにできることを確認する演習です。",
+  },
+  {
+    id: "ch18-ex25",
+    chapterId: "ch18",
+    prompt:
+      "project ディレクトリと dir1 ディレクトリの両方を combined.tar としてアーカイブしてから元の両方の" +
+      "ディレクトリを削除し、アーカイブから復元してください(展開したファイル名の一覧が表示されるようにしてください)。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "tar cf combined.tar project dir1; rm -r project dir1; tar xvf combined.tar",
+    hints: ["rm -r には複数のディレクトリ名を並べて指定でき、まとめて削除できます。"],
+    explanation:
+      "複数のディレクトリを1つのアーカイブにまとめておけば、rm -rで両方削除してしまっても、" +
+      "tar xvfひとつで元の構成をまとめて復元できます。これがアーカイブをバックアップとして使う利点です。",
+  },
+
+  // ---------------------------------------------------------------------
   // Ch7: Vimエディタ
   // ---------------------------------------------------------------------
   {
