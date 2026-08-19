@@ -48,7 +48,13 @@ export type Exercise = {
   explanation?: string;
 };
 
-export const exercises: Exercise[] = [
+/**
+ * TypeScriptが単一の配列リテラルとして型チェックできる要素数には実務上の上限があり(TS2590:
+ * "Expression produces a union type that is too complex to represent")、この演習配列は既に
+ * その上限を超える規模になっている。そのため複数の`Exercise[]`型定数に分割してからspreadで
+ * 結合している(内容上の意味はなく、あくまで型チェッカーの複雑度を下げるための機械的な分割)。
+ */
+const exercisesPart1: Exercise[] = [
   // ---------------------------------------------------------------------
   // Ch1: Linux学習環境の構築(VirtualBox)
   // ---------------------------------------------------------------------
@@ -8618,7 +8624,9 @@ export const exercises: Exercise[] = [
     explanation:
       "ps -ef(UNIX形式のオプション)と ps aux(BSD形式のオプション)は、書式は異なりますが、どちらも全プロセスの詳細な一覧を表示するという点でほぼ同様の情報を得られます。",
   },
+];
 
+const exercisesPart2: Exercise[] = [
   // ---------------------------------------------------------------------
   // Ch11-14: パイプラインとテキスト処理・正規表現
   // ---------------------------------------------------------------------
@@ -17122,3 +17130,5 @@ export const exercises: Exercise[] = [
       "わかります。",
   },
 ];
+
+export const exercises: Exercise[] = [...exercisesPart1, ...exercisesPart2];
