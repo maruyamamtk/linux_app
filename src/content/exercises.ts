@@ -13723,6 +13723,191 @@ export const exercises: Exercise[] = [
   },
 
   // ---------------------------------------------------------------------
+  // Ch18: アーカイブとバックアップ(gzip/gunzip 追加分, 書籍p350-353)
+  // ---------------------------------------------------------------------
+  {
+    id: "ch18-ex26",
+    chapterId: "ch18",
+    prompt: "ps.txt を gzip で圧縮してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "gzip ps.txt",
+    hints: ["gzip ファイル名 で、そのファイルを圧縮できます。"],
+    explanation:
+      "書籍(p350)では ps aux > ps.txt のようにコマンドの出力をファイルに保存したうえでgzip圧縮する例が" +
+      "紹介されています。gzip ps.txt を実行すると ps.txt.gz が作られ、元の ps.txt は削除されます。",
+  },
+  {
+    id: "ch18-ex27",
+    chapterId: "ch18",
+    prompt: "ps.txt を gzip で圧縮したうえで、gzip -d を使って元のファイルに戻してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "gzip ps.txt; gzip -d ps.txt.gz",
+    hints: [
+      "gunzipの代わりに gzip -d ファイル名.gz でも同様に伸長できます。",
+      "-d(decompress)オプションが伸長を意味します。",
+    ],
+    explanation:
+      "gunzip は実は gzip -d を呼び出す薄いラッパーで、書籍(p351)でも「gunzipの正体は gzip -d を実行する" +
+      "シェルスクリプトである」と紹介されています。どちらのコマンドを使っても結果は同じです。",
+  },
+  {
+    id: "ch18-ex28",
+    chapterId: "ch18",
+    prompt: "logs ディレクトリ内の access.log を gzip で圧縮してください。ただし元の access.log は削除せずに残してください。",
+    initialCwd: "/home/study/practice/ch18_archive/logs",
+    referenceSolution: "gzip -k access.log",
+    hints: ["-k(keep)オプションを付けると、圧縮後も元のファイルを残せます。"],
+    explanation:
+      "gzip はデフォルトで圧縮後に元のファイルを削除しますが、-k(keep)オプションを付けることで元のファイルを" +
+      "残したまま圧縮ファイルだけを追加で作成できます。ログファイルのように元データも残しておきたい場合に便利です。",
+  },
+  {
+    id: "ch18-ex29",
+    chapterId: "ch18",
+    prompt: "logs ディレクトリ内の error.log を gzip で圧縮したうえで、gunzip を使って元のファイルに戻してください。",
+    initialCwd: "/home/study/practice/ch18_archive/logs",
+    referenceSolution: "gzip error.log; gunzip error.log.gz",
+    hints: ["gunzip ファイル名.gz で、gzip圧縮されたファイルを元に戻せます。"],
+    explanation:
+      "gunzip はgzipで圧縮されたファイル(.gz拡張子)を元の内容に伸長する専用コマンドです。伸長後は" +
+      "error.log という元のファイル名に戻り、error.log.gz は削除されます。",
+  },
+  {
+    id: "ch18-ex30",
+    chapterId: "ch18",
+    prompt: "reports ディレクトリ内の notes.txt を gzip で圧縮してください。",
+    initialCwd: "/home/study/practice/ch18_archive/reports",
+    referenceSolution: "gzip notes.txt",
+    hints: ["カレントディレクトリを reports に移してあるので、ファイル名だけを指定すれば圧縮できます。"],
+    explanation:
+      "gzip ファイル名 は、指定した単一のファイルを圧縮します。tarと違い、gzip単体では複数ファイルや" +
+      "ディレクトリをまとめて圧縮することはできません。",
+  },
+  {
+    id: "ch18-ex31",
+    chapterId: "ch18",
+    prompt: "reports/2024 ディレクトリ内の summary.txt を gzip で圧縮してください。ただし元の summary.txt は削除せずに残してください。",
+    initialCwd: "/home/study/practice/ch18_archive/reports/2024",
+    referenceSolution: "gzip -k summary.txt",
+    hints: ["-k(keep)オプションを付けると、圧縮後も元のファイルを残せます。"],
+    explanation:
+      "-k(keep)オプションはgzip/gunzipのどちらでも使え、圧縮・伸長のどちらの場合も元のファイルを削除せずに" +
+      "残したいときに指定します。",
+  },
+  {
+    id: "ch18-ex32",
+    chapterId: "ch18",
+    prompt: "project ディレクトリ内の README.md を gzip で圧縮してください。",
+    initialCwd: "/home/study/practice/ch18_archive/project",
+    referenceSolution: "gzip README.md",
+    hints: ["gzip ファイル名 で、そのファイル単体を圧縮できます。"],
+    explanation:
+      "gzip はディレクトリ全体ではなく単一のファイルを対象とする圧縮コマンドです。ディレクトリごと" +
+      "バックアップしたい場合は、先にtarでまとめてから圧縮するか、tarのz/jオプションで同時に行います。",
+  },
+
+  // ---------------------------------------------------------------------
+  // Ch18: アーカイブとバックアップ(bzip2/bunzip2 追加分, 書籍p354-355)
+  // ---------------------------------------------------------------------
+  {
+    id: "ch18-ex33",
+    chapterId: "ch18",
+    prompt: "ps.txt を bzip2 で圧縮してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "bzip2 ps.txt",
+    hints: ["bzip2 はgzipと同様の使い方で、拡張子は .bz2 になります。"],
+    explanation:
+      "bzip2 ファイル名 は、gzipと同じ感覚で使える圧縮コマンドです。デフォルトでは圧縮後に元のファイルを" +
+      "削除し、.bz2拡張子の圧縮ファイルだけが残ります。",
+  },
+  {
+    id: "ch18-ex34",
+    chapterId: "ch18",
+    prompt: "ps.txt を bzip2 で圧縮したうえで、bunzip2 を使って元のファイルに戻してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "bzip2 ps.txt; bunzip2 ps.txt.bz2",
+    hints: ["bunzip2 ファイル名.bz2 で、bzip2圧縮されたファイルを元に戻せます。"],
+    explanation:
+      "bunzip2 はbzip2で圧縮されたファイル(.bz2拡張子)を元の内容に伸長するコマンドです。gunzipとgzipの" +
+      "関係と同様、bunzip2はbzip2の伸長操作を行う専用コマンドです。",
+  },
+  {
+    id: "ch18-ex35",
+    chapterId: "ch18",
+    prompt: "logs ディレクトリ内の access.log を bzip2 で圧縮してください。ただし元の access.log は削除せずに残してください。",
+    initialCwd: "/home/study/practice/ch18_archive/logs",
+    referenceSolution: "bzip2 -k access.log",
+    hints: ["-k(keep)オプションを付けると、圧縮後も元のファイルを残せます。"],
+    explanation:
+      "-k(keep)オプションはbzip2/bunzip2でも同様に使え、圧縮後も元のファイルを削除せずに残せます。",
+  },
+  {
+    id: "ch18-ex36",
+    chapterId: "ch18",
+    prompt: "logs ディレクトリ内の error.log を bzip2 で圧縮したうえで、bzip2 -d を使って元のファイルに戻してください。",
+    initialCwd: "/home/study/practice/ch18_archive/logs",
+    referenceSolution: "bzip2 error.log; bzip2 -d error.log.bz2",
+    hints: ["bunzip2の代わりに bzip2 -d ファイル名.bz2 でも同様に伸長できます。"],
+    explanation:
+      "gzip/gunzipの関係と同じく、bzip2 -d はbunzip2と同じ結果になります。-d(decompress)オプションで" +
+      "圧縮/伸長のどちらの動作にするかを切り替えられます。",
+  },
+  {
+    id: "ch18-ex37",
+    chapterId: "ch18",
+    prompt: "reports ディレクトリ内の notes.txt を bzip2 で圧縮してください。ただし元の notes.txt は削除せずに残してください。",
+    initialCwd: "/home/study/practice/ch18_archive/reports",
+    referenceSolution: "bzip2 -k notes.txt",
+    hints: ["-k(keep)オプションを付けると、圧縮後も元のファイルを残せます。"],
+    explanation:
+      "bzip2はgzipよりも圧縮率が高くなることが多い一方、圧縮に時間がかかる傾向があります(書籍p354)。" +
+      "使い方自体はgzipとほぼ同じです。",
+  },
+  {
+    id: "ch18-ex38",
+    chapterId: "ch18",
+    prompt: "reports/2024 ディレクトリ内の summary.txt を bzip2 で圧縮したうえで、bunzip2 を使って元のファイルに戻してください。",
+    initialCwd: "/home/study/practice/ch18_archive/reports/2024",
+    referenceSolution: "bzip2 summary.txt; bunzip2 summary.txt.bz2",
+    hints: ["bunzip2 ファイル名.bz2 で、元のファイルに戻せます。"],
+    explanation:
+      "bzip2で圧縮したファイルは、対になるbunzip2コマンドで伸長して元に戻します。tar/gzipと同じく、" +
+      "圧縮コマンドと伸長コマンドが対になっている点を確認できる演習です。",
+  },
+  {
+    id: "ch18-ex39",
+    chapterId: "ch18",
+    prompt: "project ディレクトリ内の README.md を bzip2 で圧縮してください。ただし元の README.md は削除せずに残してください。",
+    initialCwd: "/home/study/practice/ch18_archive/project",
+    referenceSolution: "bzip2 -k README.md",
+    hints: ["-k(keep)オプションを付けると、圧縮後も元のファイルを残せます。"],
+    explanation:
+      "-kオプションを付けることで、圧縮の効果(.bz2ファイルのサイズ)を確認しつつ、元のファイルも" +
+      "手元に残しておくことができます。",
+  },
+  {
+    id: "ch18-ex40",
+    chapterId: "ch18",
+    prompt: "dir1 ディレクトリ内の file-4.txt を gzip で圧縮してください。",
+    initialCwd: "/home/study/practice/ch18_archive/dir1",
+    referenceSolution: "gzip file-4.txt",
+    hints: ["gzip はディレクトリ全体ではなく、指定した単一のファイルだけを圧縮します。"],
+    explanation:
+      "dir1のように複数ファイルを含むディレクトリであっても、gzipは指定した1つのファイルだけを圧縮対象と" +
+      "します。ディレクトリ全体を圧縮したい場合はtarのz/jオプションと組み合わせる必要があります。",
+  },
+  {
+    id: "ch18-ex41",
+    chapterId: "ch18",
+    prompt: "dir1 ディレクトリ内の file-5.txt を bzip2 で圧縮してください。",
+    initialCwd: "/home/study/practice/ch18_archive/dir1",
+    referenceSolution: "bzip2 file-5.txt",
+    hints: ["bzip2 も gzip と同様、指定した単一のファイルだけを圧縮します。"],
+    explanation:
+      "gzip・bzip2はいずれも単一ファイル向けの圧縮コマンドである、という共通点をあらためて確認する演習です。",
+  },
+
+  // ---------------------------------------------------------------------
   // Ch7: Vimエディタ
   // ---------------------------------------------------------------------
   {
