@@ -950,11 +950,190 @@ function createCh1114PracticeChildren(): Record<string, VfsNode> {
   };
 }
 
+// chmod演習用。実行権限の有無・付与範囲が異なる複数のスクリプトを用意し、
+// ls -l で表示されるパーミッション文字列の違いを確認できるようにする(いずれも
+// 本シミュレータではスクリプトの実際の実行はサポートしないため、中身はダミー)。
+const CH1517_HELLO_SH = `#!/bin/bash
+echo "Hello, World!"
+`;
+
+const CH1517_GREET_SH = `#!/bin/bash
+echo "Hi there!"
+`;
+
+const CH1517_BACKUP_SH = `#!/bin/bash
+# TODO: 圧縮してからコピーする
+echo "starting backup..."
+echo "backup complete"
+`;
+
+const CH1517_DEPLOY_SH = `#!/bin/bash
+echo "deploying application"
+`;
+
+const CH1517_REPORT_SH = `#!/bin/bash
+# TODO: エラー処理を追加する
+echo "generating report"
+echo "done"
+`;
+
+// find/xargs/grep演習用のログファイル群。ERROR/INFO/WARNの行を混在させ、
+// パターン検索や複数ファイルにまたがるgrepの練習に使う。
+const CH1517_APP_LOG = `INFO  server started
+ERROR failed to connect to database
+INFO  retrying connection
+ERROR timeout while retrying
+INFO  connection established
+`;
+
+const CH1517_DB_LOG = `INFO  migration started
+ERROR duplicate key value
+INFO  migration finished
+`;
+
+const CH1517_ACCESS_LOG = `INFO  GET /index.html 200
+INFO  GET /about.html 200
+ERROR GET /missing.html 404
+`;
+
+// find/xargs/grepをネストしたディレクトリに対して再帰的に使う演習用。
+const CH1517_PROJECT_README_MD = `# Sample Project
+
+TODO: write documentation
+`;
+
+const CH1517_PROJECT_MAIN_SH = `#!/bin/bash
+# TODO: 引数を検証する
+echo "main script"
+`;
+
+const CH1517_PROJECT_LIB_SH = `#!/bin/bash
+# TODO: ヘルパー関数を追加する
+echo "lib script"
+`;
+
+const CH1517_PROJECT_NOTES_TXT = `meeting notes
+TODO: schedule follow-up
+`;
+
+// IFS演習用。ファイル名にスペースを含むものを混在させ、for f in $(find ...) が
+// デフォルトIFSでは単語分割によって崩れることを確認できるようにする。
+const CH1517_SPACEY_DAILY_NOTES_TXT = `memo
+`;
+
+const CH1517_SPACEY_TODO_LIST_TXT = `buy milk
+`;
+
+const CH1517_SPACEY_PLAIN_TXT = `no spaces here
+`;
+
+// PATH追加演習用。~/binではなくpractice配下に置き、PATHに追加するまでは
+// コマンド名だけでは見つからない状態を再現する(Ch8のmytoolsと同様のパターン)。
+const CH1517_MYTOOLS_HELLO = `#!/bin/bash
+echo "Hello from hello tool!"
+`;
+
+// -- によるハイフン引数対策演習用。ハイフンで始まる名前のファイルを用意しておく。
+const CH1517_DASH_FILE_TXT = `this file name starts with a hyphen
+`;
+
 function createCh1517PracticeChildren(): Record<string, VfsNode> {
   return {
     ch15_17_shellscript: createDirectory(
       "ch15_17_shellscript",
-      {},
+      {
+        scripts: createDirectory(
+          "scripts",
+          {
+            "hello.sh": createFile("hello.sh", CH1517_HELLO_SH, { owner: "study", group: "study", mode: 0o644 }),
+            "greet.sh": createFile("greet.sh", CH1517_GREET_SH, { owner: "study", group: "study", mode: 0o755 }),
+            "backup.sh": createFile("backup.sh", CH1517_BACKUP_SH, { owner: "study", group: "study", mode: 0o750 }),
+            "deploy.sh": createFile("deploy.sh", CH1517_DEPLOY_SH, { owner: "study", group: "study", mode: 0o700 }),
+            "report.sh": createFile("report.sh", CH1517_REPORT_SH, { owner: "study", group: "study", mode: 0o644 }),
+          },
+          STUDY_DIR_OPTIONS,
+        ),
+        logs: createDirectory(
+          "logs",
+          {
+            "app.log": createFile("app.log", CH1517_APP_LOG, { owner: "study", group: "study", mode: 0o644 }),
+            "db.log": createFile("db.log", CH1517_DB_LOG, { owner: "study", group: "study", mode: 0o644 }),
+            "access.log": createFile("access.log", CH1517_ACCESS_LOG, { owner: "study", group: "study", mode: 0o644 }),
+          },
+          STUDY_DIR_OPTIONS,
+        ),
+        project: createDirectory(
+          "project",
+          {
+            "README.md": createFile("README.md", CH1517_PROJECT_README_MD, {
+              owner: "study",
+              group: "study",
+              mode: 0o644,
+            }),
+            src: createDirectory(
+              "src",
+              {
+                "main.sh": createFile("main.sh", CH1517_PROJECT_MAIN_SH, {
+                  owner: "study",
+                  group: "study",
+                  mode: 0o755,
+                }),
+                "lib.sh": createFile("lib.sh", CH1517_PROJECT_LIB_SH, {
+                  owner: "study",
+                  group: "study",
+                  mode: 0o755,
+                }),
+              },
+              STUDY_DIR_OPTIONS,
+            ),
+            docs: createDirectory(
+              "docs",
+              {
+                "notes.txt": createFile("notes.txt", CH1517_PROJECT_NOTES_TXT, {
+                  owner: "study",
+                  group: "study",
+                  mode: 0o644,
+                }),
+              },
+              STUDY_DIR_OPTIONS,
+            ),
+          },
+          STUDY_DIR_OPTIONS,
+        ),
+        spacey: createDirectory(
+          "spacey",
+          {
+            "daily notes.txt": createFile("daily notes.txt", CH1517_SPACEY_DAILY_NOTES_TXT, {
+              owner: "study",
+              group: "study",
+              mode: 0o644,
+            }),
+            "todo list.txt": createFile("todo list.txt", CH1517_SPACEY_TODO_LIST_TXT, {
+              owner: "study",
+              group: "study",
+              mode: 0o644,
+            }),
+            "plain.txt": createFile("plain.txt", CH1517_SPACEY_PLAIN_TXT, {
+              owner: "study",
+              group: "study",
+              mode: 0o644,
+            }),
+          },
+          STUDY_DIR_OPTIONS,
+        ),
+        mytools: createDirectory(
+          "mytools",
+          {
+            hello: createFile("hello", CH1517_MYTOOLS_HELLO, { owner: "study", group: "study", mode: 0o755 }),
+          },
+          STUDY_DIR_OPTIONS,
+        ),
+        "-oldfile.txt": createFile("-oldfile.txt", CH1517_DASH_FILE_TXT, {
+          owner: "study",
+          group: "study",
+          mode: 0o644,
+        }),
+      },
       STUDY_DIR_OPTIONS,
     ),
   };
