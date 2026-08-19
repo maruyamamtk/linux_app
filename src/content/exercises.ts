@@ -13908,6 +13908,174 @@ export const exercises: Exercise[] = [
   },
 
   // ---------------------------------------------------------------------
+  // Ch18: アーカイブとバックアップ(zip/unzip 追加分, 書籍p356-359)
+  // ---------------------------------------------------------------------
+  {
+    id: "ch18-ex42",
+    chapterId: "ch18",
+    prompt: "dir1 ディレクトリを再帰的に dir1.zip としてzip圧縮したうえで、そのアーカイブの中身を一覧表示してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "zip -r dir1.zip dir1; unzip -l dir1.zip",
+    hints: ["zip はデフォルトではディレクトリの中身をたどらないため、-r(recursive)オプションが必要です。"],
+    explanation:
+      "zip -r アーカイブ名 対象ディレクトリ は、-r(recursive)を付けることでディレクトリ以下のファイルを" +
+      "再帰的にzipアーカイブへまとめます。unzip -l アーカイブ名 は展開を行わず、中身の一覧とサイズだけを" +
+      "表示します。",
+  },
+  {
+    id: "ch18-ex43",
+    chapterId: "ch18",
+    prompt: "dir1 ディレクトリを dir1.zip として圧縮してから元の dir1 ディレクトリを削除し、そのzipアーカイブを展開して復元してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "zip -r dir1.zip dir1; rm -r dir1; unzip dir1.zip",
+    hints: ["unzip アーカイブ名 で、オプションなしで実行するとアーカイブの中身がすべて展開されます。"],
+    explanation:
+      "tar/gzip/bzip2と同じく、zip(まとめる)とunzip(元に戻す)は対になるコマンドです。zip -rでバックアップを" +
+      "作っておけば、元のディレクトリを削除してしまってもunzipで復元できます。",
+  },
+  {
+    id: "ch18-ex44",
+    chapterId: "ch18",
+    prompt: "logs ディレクトリを再帰的に logs.zip としてzip圧縮したうえで、そのアーカイブの中身を一覧表示してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "zip -r logs.zip logs; unzip -l logs.zip",
+    hints: ["-r を忘れると、logsディレクトリの中身(access.log/error.log)が含まれません。"],
+    explanation:
+      "-rを付けずに zip logs.zip logs だけを実行すると、logsディレクトリの中身が空としてしか扱われず、" +
+      "中のファイルはアーカイブに含まれません。ディレクトリを対象にするときは必ず-rを付ける習慣が重要です。",
+  },
+  {
+    id: "ch18-ex45",
+    chapterId: "ch18",
+    prompt: "logs ディレクトリを logs.zip として圧縮してから元の logs ディレクトリを削除し、そのzipアーカイブを展開して復元してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "zip -r logs.zip logs; rm -r logs; unzip logs.zip",
+    hints: ["zip -r でまとめてから rm -r で削除し、unzip で復元するという一連の流れです。"],
+    explanation:
+      "ログファイルのようなディレクトリも、zip -rでまとめておけばバックアップとして持ち運びやすくなります。",
+  },
+  {
+    id: "ch18-ex46",
+    chapterId: "ch18",
+    prompt: "reports ディレクトリ(notes.txt と 2024/summary.txt を含む)を再帰的に reports.zip としてzip圧縮したうえで、そのアーカイブの中身を一覧表示してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "zip -r reports.zip reports; unzip -l reports.zip",
+    hints: ["-r を付けることで、reports/2024 のようなサブディレクトリの中身もまとめてアーカイブに含まれます。"],
+    explanation:
+      "zip -r は、reports/2024/summary.txtのようにネストしたサブディレクトリ構造もそのままアーカイブに" +
+      "含めます。",
+  },
+  {
+    id: "ch18-ex47",
+    chapterId: "ch18",
+    prompt: "reports ディレクトリを reports.zip として圧縮してから元の reports ディレクトリを削除し、そのzipアーカイブを展開して復元してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "zip -r reports.zip reports; rm -r reports; unzip reports.zip",
+    hints: ["unzip アーカイブ名 で、ネストしたサブディレクトリ構造もそのまま復元されます。"],
+    explanation:
+      "unzip で展開すると、reports/2024/summary.txt のような階層構造も含めて元通りに復元されます。",
+  },
+  {
+    id: "ch18-ex48",
+    chapterId: "ch18",
+    prompt: "project ディレクトリを再帰的に project.zip としてzip圧縮したうえで、そのアーカイブの中身を一覧表示してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "zip -r project.zip project; unzip -l project.zip",
+    hints: ["-r(recursive)オプションを忘れずに付けます。"],
+    explanation:
+      "srcサブディレクトリを含むprojectディレクトリでも、-rを付けることでapp.shまで含めて再帰的に" +
+      "アーカイブへまとめられます。",
+  },
+  {
+    id: "ch18-ex49",
+    chapterId: "ch18",
+    prompt: "project ディレクトリを project.zip として圧縮してから元の project ディレクトリを削除し、そのzipアーカイブを展開して復元してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "zip -r project.zip project; rm -r project; unzip project.zip",
+    hints: ["zip -r → rm -r → unzip、という順序で操作します。"],
+    explanation:
+      "zip/unzipもtarと同じく、バックアップ・復元の手段として使えることを確認する演習です。",
+  },
+  {
+    id: "ch18-ex50",
+    chapterId: "ch18",
+    prompt: "ps.txt を ps.zip として圧縮してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "zip ps.zip ps.txt",
+    hints: ["対象が単一のファイルの場合、ディレクトリではないので-r(recursive)は不要です。"],
+    explanation:
+      "-r(recursive)オプションはディレクトリの中身をたどるためのものなので、単一ファイルを圧縮する場合は" +
+      "付けなくても問題ありません。",
+  },
+  {
+    id: "ch18-ex51",
+    chapterId: "ch18",
+    prompt: "ps.txt を ps.zip として圧縮したうえで、そのアーカイブの中身を一覧表示してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "zip ps.zip ps.txt; unzip -l ps.zip",
+    hints: ["unzip -l アーカイブ名 で、展開せずに中身の一覧を確認できます。"],
+    explanation:
+      "単一ファイルを圧縮した場合でも、unzip -lで中身(ファイル名・サイズ)を確認できます。",
+  },
+  {
+    id: "ch18-ex52",
+    chapterId: "ch18",
+    prompt: "project ディレクトリと dir1 ディレクトリの両方を、再帰的に combined.zip という1つのzipアーカイブにまとめ、その中身を一覧表示してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "zip -r combined.zip project dir1; unzip -l combined.zip",
+    hints: ["zip -r アーカイブ名 のあとに複数のディレクトリを並べると、まとめて1つのアーカイブに含められます。"],
+    explanation:
+      "zipもtarと同様、アーカイブ対象として複数のディレクトリを同時に指定できます。",
+  },
+  {
+    id: "ch18-ex53",
+    chapterId: "ch18",
+    prompt: "dir1 ディレクトリを archive.zip として圧縮したあと、同じ archive.zip に project ディレクトリも追加してください(結果としてarchive.zipにdir1とprojectの両方が含まれるようにしてください)。中身を一覧表示して確認してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "zip -r archive.zip dir1; zip -r archive.zip project; unzip -l archive.zip",
+    hints: [
+      "既に存在するzipアーカイブに対してzipコマンドを再度実行すると、新しいファイルが追加されます。",
+      "1回目のzipでdir1を、2回目のzipでprojectを、同じarchive.zipに対して指定します。",
+    ],
+    explanation:
+      "tarと違い、zipは既存のアーカイブに対してさらにzipコマンドを実行することで、中身を追記していける" +
+      "点が特徴です。1つのアーカイブに複数回に分けてファイルを追加していく、という使い方ができます。",
+  },
+  {
+    id: "ch18-ex54",
+    chapterId: "ch18",
+    prompt: "dir1 ディレクトリを再帰的に dir1.zip としてzip圧縮したうえで、そのアーカイブから file-2.txt だけを展開してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "zip -r dir1.zip dir1; unzip dir1.zip dir1/file-2.txt",
+    hints: ["unzip アーカイブ名 のあとに対象パスを指定すると、そのファイルだけを展開できます。"],
+    explanation:
+      "unzip はtarのxコマンドと同様、対象パスを指定することでアーカイブ全体ではなく特定のファイルだけを" +
+      "選んで展開できます。",
+  },
+  {
+    id: "ch18-ex55",
+    chapterId: "ch18",
+    prompt: "logs ディレクトリと reports ディレクトリの両方を、再帰的に backup.zip としてまとめ、その中身を一覧表示してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "zip -r backup.zip logs reports; unzip -l backup.zip",
+    hints: ["zip -r アーカイブ名 のあとに複数のディレクトリを並べて指定します。"],
+    explanation:
+      "性質の異なる複数のディレクトリ(ログファイル群とレポート群)を1つのバックアップアーカイブに" +
+      "まとめる、という実務でもよくある操作です。",
+  },
+  {
+    id: "ch18-ex56",
+    chapterId: "ch18",
+    prompt: "dir1 ディレクトリと project ディレクトリを backup.zip としてまとめてから元の両方のディレクトリを削除し、そのzipアーカイブを展開して復元してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "zip -r backup.zip dir1 project; rm -r dir1 project; unzip backup.zip",
+    hints: ["zip -r でまとめる際に対象ディレクトリを複数指定できます。"],
+    explanation:
+      "複数のディレクトリを1つのzipアーカイブにまとめておけば、rm -rで両方削除してしまっても、" +
+      "unzipひとつで元の構成をまとめて復元できます。",
+  },
+
+  // ---------------------------------------------------------------------
   // Ch7: Vimエディタ
   // ---------------------------------------------------------------------
   {
