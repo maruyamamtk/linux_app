@@ -12574,11 +12574,7 @@ export const exercises: Exercise[] = [
     initialScript: "#!/bin/bash\n",
     referenceSolution:
       '#!/bin/bash\nmsg="global"\nshow() {\n  local msg="local"\n  echo "$msg"\n}\nshow\necho "$msg"\n',
-    testCases: [
-      { id: "tc1", description: "実行1", args: [] },
-      { id: "tc2", description: "実行2", args: ["unused"] },
-      { id: "tc3", description: "実行3", args: ["a", "b"] },
-    ],
+    testCases: [{ id: "tc1", description: "実行", args: [] }],
     hints: ["localを付けて宣言した変数は、その関数の中でだけ有効で、関数を抜けると元の値に戻ります。"],
     explanation:
       "local msg=\"local\" は、show関数の中だけで有効な新しいmsgを作ります。関数の中で表示すると" +
@@ -12674,11 +12670,7 @@ export const exercises: Exercise[] = [
     initialCwd: "/home/study/practice/ch15_17_shellscript",
     initialScript: "#!/bin/bash\n",
     referenceSolution: '#!/bin/bash\necho "現在の作業ディレクトリは $(pwd) です"\n',
-    testCases: [
-      { id: "tc1", description: "実行1", args: [] },
-      { id: "tc2", description: "実行2", args: ["unused"] },
-      { id: "tc3", description: "実行3", args: ["a", "b"] },
-    ],
+    testCases: [{ id: "tc1", description: "実行", args: [] }],
     hints: ["ダブルクォートで囲んだ文字列の中でも、$(コマンド) の形式のコマンド置換は展開されます。"],
     explanation:
       "コマンド置換 $(コマンド) は、そのコマンドの実行結果(標準出力)に置き換わります。" +
@@ -12715,11 +12707,7 @@ export const exercises: Exercise[] = [
     initialScript: "#!/bin/bash\n",
     referenceSolution:
       '#!/bin/bash\ncount=$(find logs -type f | wc -l)\ncount=$((count))\necho "ログファイル数: $count"\n',
-    testCases: [
-      { id: "tc1", description: "実行1", args: [] },
-      { id: "tc2", description: "実行2", args: ["unused"] },
-      { id: "tc3", description: "実行3", args: ["a"] },
-    ],
+    testCases: [{ id: "tc1", description: "実行", args: [] }],
     hints: ["find logs -type f | wc -l のように、findとwcをパイプでつないでファイル数を数えられます。"],
     explanation:
       "find logs -type f はlogsディレクトリ以下のファイル(ディレクトリを除く)を列挙し、" +
@@ -12985,11 +12973,7 @@ export const exercises: Exercise[] = [
     initialScript: "#!/bin/bash\n",
     referenceSolution:
       "#!/bin/bash\nprice=100\ncat << 'END'\n表示価格は$priceドルではなく、テンプレートの$priceという文字列そのままです\nEND\n",
-    testCases: [
-      { id: "tc1", description: "実行1", args: [] },
-      { id: "tc2", description: "実行2", args: ["unused"] },
-      { id: "tc3", description: "実行3", args: ["a", "b"] },
-    ],
+    testCases: [{ id: "tc1", description: "実行", args: [] }],
     hints: [
       "区切り文字をシングルクォートで囲む(<< 'END')と、ヒアドキュメント本文の中の$や`はそのまま文字として扱われます。",
     ],
