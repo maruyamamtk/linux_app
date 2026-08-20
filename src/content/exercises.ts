@@ -6,6 +6,12 @@ export type Exercise = {
   chapterId: string;
   prompt: string;
   /**
+   * 問題文が複数の手順から成る場合の、手順ごとの文言(2件以上で番号付き箇条書き表示に切り替わる)。
+   * 省略時や1件のみの場合は、従来通り`prompt`を単一の文として表示する(`ExercisePrompt`参照)。
+   * 一覧画面(MyPage/UnitDetail)の演習プレビューでは、この項目の有無に関わらず`prompt`を使う。
+   */
+  promptSteps?: string[];
+  /**
    * "terminal"(通常のターミナル演習, デフォルト)・"script"(スクリプト作成モード、Ch15-17向け)・
    * "quiz"(選択式クイズ、Ch2-3向け。仮想ターミナルを使わずchoices/correctChoiceIndexで正誤判定する)・
    * "vim"(Vim演習画面、Ch7向け。仮想ターミナルを使わずinitialFileText/expectedFileTextで正誤判定する)・
@@ -2319,6 +2325,10 @@ export const exercises: Exercise[] = [
     id: "ch04-06-ex08",
     chapterId: "ch04-06",
     prompt: "documents ディレクトリに移動してから、現在のパスを表示してください。",
+    promptSteps: [
+      "documents ディレクトリに移動してください。",
+      "現在のパスを表示してください。",
+    ],
     initialCwd: "/home/study/practice/ch04_fs",
     referenceSolution: "cd documents\npwd",
     hints: [
@@ -2333,6 +2343,10 @@ export const exercises: Exercise[] = [
     id: "ch04-06-ex09",
     chapterId: "ch04-06",
     prompt: "絶対パス /home/study/practice/ch05_fileops を指定してディレクトリを移動し、現在のパスを表示してください。",
+    promptSteps: [
+      "絶対パス /home/study/practice/ch05_fileops を指定してディレクトリを移動してください。",
+      "現在のパスを表示してください。",
+    ],
     initialCwd: "/home/study/practice/ch04_fs",
     referenceSolution: "cd /home/study/practice/ch05_fileops\npwd",
     hints: ["cd に「/」から始まるパスを渡すと、現在地に関係なく絶対位置で移動できます。"],
@@ -2344,6 +2358,10 @@ export const exercises: Exercise[] = [
     id: "ch04-06-ex10",
     chapterId: "ch04-06",
     prompt: "1つ上の階層のディレクトリに移動してから、現在のパスを表示してください。",
+    promptSteps: [
+      "1つ上の階層のディレクトリに移動してください。",
+      "現在のパスを表示してください。",
+    ],
     initialCwd: "/home/study/practice/ch04_fs/documents",
     referenceSolution: "cd ..\npwd",
     hints: ["「..」は1つ上の階層(親ディレクトリ)を表す特殊な相対パスです。"],
@@ -2354,6 +2372,10 @@ export const exercises: Exercise[] = [
     id: "ch04-06-ex11",
     chapterId: "ch04-06",
     prompt: "2つ上の階層のディレクトリに移動してから、現在のパスを表示してください。",
+    promptSteps: [
+      "2つ上の階層のディレクトリに移動してください。",
+      "現在のパスを表示してください。",
+    ],
     initialCwd: "/home/study/practice/ch04_fs/photos/2024/summer",
     referenceSolution: "cd ../..\npwd",
     hints: ["「..」を「/」でつなげると、複数階層分まとめて上に移動できます。"],
@@ -2364,6 +2386,10 @@ export const exercises: Exercise[] = [
     id: "ch04-06-ex12",
     chapterId: "ch04-06",
     prompt: "引数を付けずに cd を実行してホームディレクトリへ戻り、現在のパスを表示してください。",
+    promptSteps: [
+      "引数を付けずに cd を実行してホームディレクトリへ戻ってください。",
+      "現在のパスを表示してください。",
+    ],
     initialCwd: "/home/study/practice/ch04_fs/documents",
     referenceSolution: "cd\npwd",
     hints: ["cd は引数を省略すると、環境変数HOMEが指すホームディレクトリに移動します。"],
@@ -2375,6 +2401,10 @@ export const exercises: Exercise[] = [
     id: "ch04-06-ex13",
     chapterId: "ch04-06",
     prompt: "環境変数 $HOME を使ってホームディレクトリに移動し、現在のパスを表示してください。",
+    promptSteps: [
+      "環境変数 $HOME を使ってホームディレクトリに移動してください。",
+      "現在のパスを表示してください。",
+    ],
     initialCwd: "/home/study/practice/ch05_fileops",
     referenceSolution: "cd $HOME\npwd",
     hints: ["$HOME は環境変数展開により、ホームディレクトリの絶対パスに置き換わります。"],
@@ -2386,6 +2416,10 @@ export const exercises: Exercise[] = [
     id: "ch04-06-ex14",
     chapterId: "ch04-06",
     prompt: "photos ディレクトリの下の 2024/winter へ、相対パスで1回のコマンドで移動し、現在のパスを表示してください。",
+    promptSteps: [
+      "photos ディレクトリの下の 2024/winter へ、相対パスで1回のコマンドで移動してください。",
+      "現在のパスを表示してください。",
+    ],
     initialCwd: "/home/study/practice/ch04_fs",
     referenceSolution: "cd photos/2024/winter\npwd",
     hints: ["cd には「ディレクトリ名/ディレクトリ名」のように複数階層をまとめて指定できます。"],
@@ -2397,6 +2431,10 @@ export const exercises: Exercise[] = [
     id: "ch04-06-ex15",
     chapterId: "ch04-06",
     prompt: "project ディレクトリの下の src へ移動し、現在のパスを表示してください。",
+    promptSteps: [
+      "project ディレクトリの下の src へ移動してください。",
+      "現在のパスを表示してください。",
+    ],
     initialCwd: "/home/study/practice/ch05_fileops",
     referenceSolution: "cd project/src\npwd",
     hints: ["project/src のように「/」でつなげると、project の中の src に直接移動できます。"],
@@ -2406,6 +2444,10 @@ export const exercises: Exercise[] = [
     id: "ch04-06-ex16",
     chapterId: "ch04-06",
     prompt: "ホームディレクトリにいる状態から、practice/ch06_search/deep/a/b/c へ移動し、現在のパスを表示してください。",
+    promptSteps: [
+      "ホームディレクトリにいる状態から、practice/ch06_search/deep/a/b/c へ移動してください。",
+      "現在のパスを表示してください。",
+    ],
     initialCwd: "/home/study",
     referenceSolution: "cd practice/ch06_search/deep/a/b/c\npwd",
     hints: ["ホームディレクトリからの相対パスとして、practice 以下のパスをそのまま指定できます。"],
@@ -2416,6 +2458,10 @@ export const exercises: Exercise[] = [
     id: "ch04-06-ex17",
     chapterId: "ch04-06",
     prompt: "cd .. を2回実行して2階層上に移動し、現在のパスを表示してください。",
+    promptSteps: [
+      "cd .. を2回実行して2階層上に移動してください。",
+      "現在のパスを表示してください。",
+    ],
     initialCwd: "/home/study/practice/ch06_search/deep/a/b",
     referenceSolution: "cd ..\ncd ..\npwd",
     hints: ["cd .. を複数回実行すると、そのたびに1階層ずつ上へ移動します。"],
@@ -2427,6 +2473,10 @@ export const exercises: Exercise[] = [
     id: "ch04-06-ex18",
     chapterId: "ch04-06",
     prompt: "深い階層にいる状態から、絶対パスで /home/study/practice/ch04_fs に一気に移動し、現在のパスを表示してください。",
+    promptSteps: [
+      "深い階層にいる状態から、絶対パスで /home/study/practice/ch04_fs に一気に移動してください。",
+      "現在のパスを表示してください。",
+    ],
     initialCwd: "/home/study/practice/ch06_search/deep/a/b/c",
     referenceSolution: "cd /home/study/practice/ch04_fs\npwd",
     hints: ["絶対パスを使えば、現在どれだけ深い階層にいても目的のディレクトリへ直接移動できます。"],
@@ -2438,6 +2488,10 @@ export const exercises: Exercise[] = [
     id: "ch04-06-ex19",
     chapterId: "ch04-06",
     prompt: "「.」を使って documents ディレクトリへ移動し(現在のディレクトリを起点に明示する)、現在のパスを表示してください。",
+    promptSteps: [
+      "「.」を使って documents ディレクトリへ移動してください(現在のディレクトリを起点に明示します)。",
+      "現在のパスを表示してください。",
+    ],
     initialCwd: "/home/study/practice/ch04_fs",
     referenceSolution: "cd ./documents\npwd",
     hints: ["「.」は現在のディレクトリ自身を表す特殊なパス表記です。"],
@@ -2449,6 +2503,10 @@ export const exercises: Exercise[] = [
     id: "ch04-06-ex20",
     chapterId: "ch04-06",
     prompt: "summer ディレクトリから、documents ディレクトリへ相対パス(「..」を使用)で移動し、現在のパスを表示してください。",
+    promptSteps: [
+      "summer ディレクトリから、documents ディレクトリへ相対パス(「..」を使用)で移動してください。",
+      "現在のパスを表示してください。",
+    ],
     initialCwd: "/home/study/practice/ch04_fs/photos/2024/summer",
     referenceSolution: "cd ../../../documents\npwd",
     hints: [
@@ -2693,6 +2751,10 @@ export const exercises: Exercise[] = [
     id: "ch04-06-ex44",
     chapterId: "ch04-06",
     prompt: "ch05_fileops ディレクトリの中に logs ディレクトリを作成し、その中に app.log という空ファイルを作成してください。",
+    promptSteps: [
+      "ch05_fileops ディレクトリの中に logs ディレクトリを作成してください。",
+      "その中に app.log という空ファイルを作成してください。",
+    ],
     initialCwd: "/home/study/practice/ch05_fileops",
     referenceSolution: "mkdir logs\ntouch logs/app.log",
     hints: [
@@ -3071,6 +3133,10 @@ export const exercises: Exercise[] = [
     id: "ch04-06-ex82",
     chapterId: "ch04-06",
     prompt: "archive ディレクトリの名前を old_archive に変更してから、カレントディレクトリの中身を一覧表示してください。",
+    promptSteps: [
+      "archive ディレクトリの名前を old_archive に変更してください。",
+      "カレントディレクトリの中身を一覧表示してください。",
+    ],
     initialCwd: "/home/study/practice/ch05_fileops",
     referenceSolution: "mv archive old_archive\nls",
     hints: [
@@ -3842,6 +3908,10 @@ export const exercises: Exercise[] = [
     id: "ch08-ex22",
     chapterId: "ch08",
     prompt: "未設定の変数 WORKDIR に対して ${WORKDIR:=/home/study/work} と展開して表示し、続けてもう一度 $WORKDIR を表示して値が保持されていることを確認してください。",
+    promptSteps: [
+      "未設定の変数 WORKDIR に対して ${WORKDIR:=/home/study/work} と展開して表示してください。",
+      "続けてもう一度 $WORKDIR を表示して値が保持されていることを確認してください。",
+    ],
     referenceSolution: 'echo "${WORKDIR:=/home/study/work}"; echo "$WORKDIR"',
     hints: [":-とは異なり、:=はデフォルト値をその変数自身に代入します。"],
     explanation:
@@ -3920,6 +3990,11 @@ export const exercises: Exercise[] = [
     id: "ch08-ex31",
     chapterId: "ch08",
     prompt: "PATHを変更する前に、変数 ORIGINAL_PATH に現在のPATHの値をコピーしてください。そのあとPATHの先頭に $HOME/bin を追加し、最後にORIGINAL_PATHの値(変更前の値)を表示してください。",
+    promptSteps: [
+      "PATHを変更する前に、変数 ORIGINAL_PATH に現在のPATHの値をコピーしてください。",
+      "そのあとPATHの先頭に $HOME/bin を追加してください。",
+      "最後にORIGINAL_PATHの値(変更前の値)を表示してください。",
+    ],
     referenceSolution: 'ORIGINAL_PATH="$PATH"; PATH="$HOME/bin:$PATH"; echo "$ORIGINAL_PATH"',
     hints: ["変更する前に別の変数へ退避しておくと、後で元の値を確認・復元できます。"],
     explanation: "PATHを変更する前にORIGINAL_PATHという別の変数へ値をコピーしておくことで、変更後も元のPATHの内容を確認できます。",
@@ -3936,6 +4011,11 @@ export const exercises: Exercise[] = [
     id: "ch08-ex33",
     chapterId: "ch08",
     prompt: "変更前のPATHを \"変更前: $PATH\" として表示したあと、PATHの末尾に $HOME/bin を追加し、\"変更後: $PATH\" として表示してください。",
+    promptSteps: [
+      "変更前のPATHを \"変更前: $PATH\" として表示してください。",
+      "PATHの末尾に $HOME/bin を追加してください。",
+      "\"変更後: $PATH\" として表示してください。",
+    ],
     referenceSolution: 'echo "変更前: $PATH"; PATH="$PATH:$HOME/bin"; echo "変更後: $PATH"',
     hints: ["変更前後の値を並べて表示すると、追加された部分がわかりやすくなります。"],
     explanation: "PATHを変更する前後でそれぞれ表示することで、末尾に$HOME/binが追加されたことを確認できます。",
@@ -3962,6 +4042,11 @@ export const exercises: Exercise[] = [
     id: "ch08-ex36",
     chapterId: "ch08",
     prompt: "現在のPATHの文字数をwc -cで数えて表示したあと、PATHの末尾に $HOME/bin を追加してから、再びPATHの文字数を表示して比較してください。",
+    promptSteps: [
+      "現在のPATHの文字数をwc -cで数えて表示してください。",
+      "PATHの末尾に $HOME/bin を追加してください。",
+      "再びPATHの文字数を表示して比較してください。",
+    ],
     referenceSolution: 'echo -n "$PATH" | wc -c; PATH="$PATH:$HOME/bin"; echo -n "$PATH" | wc -c',
     hints: ["echo -n は末尾の改行を付けずに出力します。", "wc -c で文字数(バイト数)を数えられます。"],
     explanation:
@@ -4034,6 +4119,10 @@ export const exercises: Exercise[] = [
     id: "ch08-ex44",
     chapterId: "ch08",
     prompt: "PATHを誤って /no/such/dir に設定してしまったあと、/bin:/usr/bin という正しい値で設定し直し、whichでlsが再び見つかることを確認してください。",
+    promptSteps: [
+      "PATHを誤って /no/such/dir に設定してください。",
+      "/bin:/usr/bin という正しい値で設定し直し、whichでlsが再び見つかることを確認してください。",
+    ],
     referenceSolution: 'PATH="/no/such/dir"; PATH="/bin:/usr/bin"; which ls',
     hints: ["誤った値を設定してしまっても、正しい値で再設定すれば元通りに使えるようになります。"],
     explanation: "誤ってPATHを壊してしまっても、正しいディレクトリを含む値で再設定すれば、再びlsなどのコマンドが見つかるようになります。",
@@ -4297,6 +4386,10 @@ export const exercises: Exercise[] = [
     id: "ch08-ex75",
     chapterId: "ch08",
     prompt: "$HOME/.bashrc をバックアップしたあと、ll='ls -l' というエイリアスを追記し、diffでバックアップとの差分を確認してください。",
+    promptSteps: [
+      "$HOME/.bashrc をバックアップしてください。",
+      "ll='ls -l' というエイリアスを追記し、diffでバックアップとの差分を確認してください。",
+    ],
     referenceSolution: "cp $HOME/.bashrc $HOME/.bashrc.bak; echo \"alias ll='ls -l'\" >> $HOME/.bashrc; diff $HOME/.bashrc.bak $HOME/.bashrc",
     hints: ["バックアップを取った後に変更を加えると、diffでその差分が確認できます。"],
     explanation:
@@ -4307,6 +4400,11 @@ export const exercises: Exercise[] = [
     id: "ch08-ex76",
     chapterId: "ch08",
     prompt: "$HOME/.bashrc をバックアップしたあと、誤ったエイリアス(alias mistake='rm -r /')を追記してしまったので、バックアップから復元し、diffで差分がないことを確認してください。",
+    promptSteps: [
+      "$HOME/.bashrc をバックアップしてください。",
+      "誤ったエイリアス(alias mistake='rm -r /')を追記してください。",
+      "バックアップから復元し、diffで差分がないことを確認してください。",
+    ],
     referenceSolution:
       "cp $HOME/.bashrc $HOME/.bashrc.bak; echo \"alias mistake='rm -r /'\" >> $HOME/.bashrc; " +
       "cp $HOME/.bashrc.bak $HOME/.bashrc; diff $HOME/.bashrc $HOME/.bashrc.bak",
@@ -4319,6 +4417,10 @@ export const exercises: Exercise[] = [
     id: "ch08-ex77",
     chapterId: "ch08",
     prompt: "$HOME/.bashrc に誤ったエイリアス(alias mistake='rm -r /')を追記してしまったので、grep -vでその行だけを取り除いた内容に置き換えてください。",
+    promptSteps: [
+      "$HOME/.bashrc に誤ったエイリアス(alias mistake='rm -r /')を追記してください。",
+      "grep -vでその行だけを取り除いた内容に置き換えてください。",
+    ],
     referenceSolution:
       "echo \"alias mistake='rm -r /'\" >> $HOME/.bashrc; grep -v mistake $HOME/.bashrc > $HOME/.bashrc.new; " +
       "mv $HOME/.bashrc.new $HOME/.bashrc; grep mistake $HOME/.bashrc",
@@ -4331,6 +4433,10 @@ export const exercises: Exercise[] = [
     id: "ch08-ex78",
     chapterId: "ch08",
     prompt: "$HOME/.bashrc に alias oldtool='ls -l' を追記したあと、sedを使ってoldtoolを含む行を削除してください。",
+    promptSteps: [
+      "$HOME/.bashrc に alias oldtool='ls -l' を追記してください。",
+      "sedを使ってoldtoolを含む行を削除してください。",
+    ],
     referenceSolution:
       "echo \"alias oldtool='ls -l'\" >> $HOME/.bashrc; sed '/oldtool/d' $HOME/.bashrc > $HOME/.bashrc.tmp; " +
       "mv $HOME/.bashrc.tmp $HOME/.bashrc; grep oldtool $HOME/.bashrc",
@@ -4343,6 +4449,10 @@ export const exercises: Exercise[] = [
     id: "ch08-ex79",
     chapterId: "ch08",
     prompt: "$HOME/.bashrc に alias ll='ls -l' を追記したあと、sedでls -lをls -laに置換してエイリアスの中身を書き換えてください。",
+    promptSteps: [
+      "$HOME/.bashrc に alias ll='ls -l' を追記してください。",
+      "sedでls -lをls -laに置換してエイリアスの中身を書き換えてください。",
+    ],
     referenceSolution:
       "echo \"alias ll='ls -l'\" >> $HOME/.bashrc; sed 's/ls -l/ls -la/' $HOME/.bashrc > $HOME/.bashrc.tmp; " +
       "mv $HOME/.bashrc.tmp $HOME/.bashrc; grep ll $HOME/.bashrc",
@@ -4355,6 +4465,10 @@ export const exercises: Exercise[] = [
     id: "ch08-ex80",
     chapterId: "ch08",
     prompt: "$HOME/.bashrc をバックアップしたあと、z='ls -la' というエイリアスを追記し、diffの結果をwc -lに渡して差分の行数を数えてください。",
+    promptSteps: [
+      "$HOME/.bashrc をバックアップしてください。",
+      "z='ls -la' というエイリアスを追記し、diffの結果をwc -lに渡して差分の行数を数えてください。",
+    ],
     referenceSolution: "cp $HOME/.bashrc $HOME/.bashrc.bak; echo \"alias z='ls -la'\" >> $HOME/.bashrc; diff $HOME/.bashrc.bak $HOME/.bashrc | wc -l",
     hints: ["diffの出力をwc -lに渡すと、差分の行数を数えられます。"],
     explanation:
@@ -5150,6 +5264,10 @@ export const exercises: Exercise[] = [
     prompt:
       "su コマンドでrootユーザーに切り替えたうえで、/etc/afterSu.txt という空ファイルを作成してください" +
       "(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "su コマンドでrootユーザーに切り替えてください。",
+      "続けて /etc/afterSu.txt という空ファイルを作成してください(1行のコマンドとして ; でつないでください)。",
+    ],
     referenceSolution: "su root; touch /etc/afterSu.txt",
     hints: [
       "su [ユーザー名] で以後のコマンドを実行するユーザーを切り替えられます(省略時はroot)。",
@@ -6537,6 +6655,10 @@ export const exercises: Exercise[] = [
     chapterId: "ch09",
     prompt:
       "su コマンドでrootユーザーに切り替えたうえで、/etc/appdata という空のディレクトリを作成してください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "su コマンドでrootユーザーに切り替えてください。",
+      "続けて /etc/appdata という空のディレクトリを作成してください(1行のコマンドとして ; でつないでください)。",
+    ],
     referenceSolution: "su root; mkdir /etc/appdata",
     hints: [
       "/etc は一般ユーザーに書き込み権限がないため、mkdirの前にsuでrootへ切り替える必要があります。",
@@ -6549,6 +6671,10 @@ export const exercises: Exercise[] = [
     chapterId: "ch09",
     prompt:
       "su コマンドでrootユーザーに切り替えたうえで(ユーザー名は省略して構いません)、/etc/service.conf という空ファイルを作成してください(1行、;でつなぐこと)。",
+    promptSteps: [
+      "su コマンドでrootユーザーに切り替えてください(ユーザー名は省略して構いません)。",
+      "続けて /etc/service.conf という空ファイルを作成してください(1行、;でつなぐこと)。",
+    ],
     referenceSolution: "su; touch /etc/service.conf",
     hints: ["suは引数を省略すると、デフォルトでrootに切り替わります。"],
     explanation:
@@ -6559,6 +6685,10 @@ export const exercises: Exercise[] = [
     chapterId: "ch09",
     prompt:
       "su コマンドでrootユーザーに切り替えたうえで、/etc/network.conf という空ファイルを作成してください(1行、;でつなぐこと)。",
+    promptSteps: [
+      "su コマンドでrootユーザーに切り替えてください。",
+      "続けて /etc/network.conf という空ファイルを作成してください(1行、;でつなぐこと)。",
+    ],
     referenceSolution: "su root; touch /etc/network.conf",
     hints: ["su root は明示的にrootを指定する書き方です。"],
     explanation:
@@ -6569,6 +6699,10 @@ export const exercises: Exercise[] = [
     chapterId: "ch09",
     prompt:
       "su コマンドでrootユーザーに切り替えたうえで、/etc/backups という空のディレクトリを作成してください(1行、;でつなぐこと。ユーザー名は省略して構いません)。",
+    promptSteps: [
+      "su コマンドでrootユーザーに切り替えてください(ユーザー名は省略して構いません)。",
+      "続けて /etc/backups という空のディレクトリを作成してください(1行、;でつなぐこと)。",
+    ],
     referenceSolution: "su; mkdir /etc/backups",
     hints: ["suの引数を省略すると、デフォルトでrootに切り替わります。"],
     explanation:
@@ -6579,6 +6713,10 @@ export const exercises: Exercise[] = [
     chapterId: "ch09",
     prompt:
       "/etc/crontab は study ユーザーの所有ではないため、study自身ではパーミッションを変更できません。su コマンドでrootに切り替えたうえで、/etc/crontab のパーミッションを 600 に変更してください(1行、;でつなぐこと)。",
+    promptSteps: [
+      "/etc/crontab は study ユーザーの所有ではないため、study自身ではパーミッションを変更できません。su コマンドでrootに切り替えてください。",
+      "続けて /etc/crontab のパーミッションを 600 に変更してください(1行、;でつなぐこと)。",
+    ],
     referenceSolution: "su root; chmod 600 /etc/crontab",
     hints: [
       "chmodは、そのファイルのオーナーかスーパーユーザーしか実行できません。",
@@ -6591,6 +6729,10 @@ export const exercises: Exercise[] = [
     chapterId: "ch09",
     prompt:
       "su コマンドでrootに切り替えたうえで(ユーザー名は省略して構いません)、/etc/bashrc のパーミッションを 640 に変更してください(1行、;でつなぐこと)。",
+    promptSteps: [
+      "su コマンドでrootに切り替えてください(ユーザー名は省略して構いません)。",
+      "続けて /etc/bashrc のパーミッションを 640 に変更してください(1行、;でつなぐこと)。",
+    ],
     referenceSolution: "su; chmod 640 /etc/bashrc",
     hints: ["/etc/bashrc のオーナーはrootです。"],
     explanation:
@@ -6601,6 +6743,10 @@ export const exercises: Exercise[] = [
     chapterId: "ch09",
     prompt:
       "su コマンドでrootユーザーに切り替えたうえで、/etc/newapp という空のディレクトリを作成してください(1行、;でつなぐこと)。",
+    promptSteps: [
+      "su コマンドでrootユーザーに切り替えてください。",
+      "続けて /etc/newapp という空のディレクトリを作成してください(1行、;でつなぐこと)。",
+    ],
     referenceSolution: "su root; mkdir /etc/newapp",
     hints: ["su root; mkdir <パス> の形式です。"],
     explanation:
@@ -6611,6 +6757,10 @@ export const exercises: Exercise[] = [
     chapterId: "ch09",
     prompt:
       "su コマンドでrootに切り替えたうえで(ユーザー名は省略して構いません)、/etc/hosts.local という空ファイルを作成してください(1行、;でつなぐこと)。",
+    promptSteps: [
+      "su コマンドでrootに切り替えてください(ユーザー名は省略して構いません)。",
+      "続けて /etc/hosts.local という空ファイルを作成してください(1行、;でつなぐこと)。",
+    ],
     referenceSolution: "su; touch /etc/hosts.local",
     hints: ["suの引数を省略すると、デフォルトでrootに切り替わります。"],
     explanation:
@@ -6621,6 +6771,11 @@ export const exercises: Exercise[] = [
     chapterId: "ch09",
     prompt:
       "su コマンドでrootに切り替えたうえで、/etc/temp.log という空ファイルを作成し、その後すぐに同じファイルを削除してください(すべて1行、;でつなぐこと)。",
+    promptSteps: [
+      "su コマンドでrootに切り替えてください。",
+      "続けて /etc/temp.log という空ファイルを作成してください。",
+      "その後すぐに同じファイルを削除してください(すべて1行、;でつなぐこと)。",
+    ],
     referenceSolution: "su root; touch /etc/temp.log; rm /etc/temp.log",
     hints: [
       "; でつなげば、3つ以上のコマンドも1行にまとめて順番に実行できます。",
@@ -6633,6 +6788,11 @@ export const exercises: Exercise[] = [
     chapterId: "ch09",
     prompt:
       "su コマンドでrootに切り替えたうえで(ユーザー名は省略して構いません)、/etc/app という空のディレクトリを作成し、続けてその中に config.txt という空ファイルを作成してください(すべて1行、;でつなぐこと)。",
+    promptSteps: [
+      "su コマンドでrootに切り替えてください(ユーザー名は省略して構いません)。",
+      "/etc/app という空のディレクトリを作成してください。",
+      "続けてその中に config.txt という空ファイルを作成してください(すべて1行、;でつなぐこと)。",
+    ],
     referenceSolution: "su; mkdir /etc/app; touch /etc/app/config.txt",
     hints: [
       "suで切り替えたrootユーザーの状態は、明示的にexitするまで以降のコマンドすべてに引き継がれます。",
@@ -6711,6 +6871,10 @@ export const exercises: Exercise[] = [
     chapterId: "ch09",
     prompt:
       "sudo コマンドを使って、/etc/opt2 という空のディレクトリを作成し、続けてその中に app.conf という空ファイルを作成してください(2つのsudoコマンドを ; でつないでください)。",
+    promptSteps: [
+      "sudo コマンドを使って、/etc/opt2 という空のディレクトリを作成してください。",
+      "続けてその中に app.conf という空ファイルを作成してください(2つのsudoコマンドを ; でつないでください)。",
+    ],
     referenceSolution: "sudo mkdir /etc/opt2; sudo touch /etc/opt2/app.conf",
     hints: [
       "sudoは1つのコマンドだけをroot権限で実行するので、複数のroot操作にはそれぞれにsudoが必要です。",
@@ -6724,6 +6888,10 @@ export const exercises: Exercise[] = [
     chapterId: "ch09",
     prompt:
       "sudo コマンドを使って、/etc/tmp2.log という空ファイルを作成し、その後すぐに同じファイルを削除してください(2つのsudoコマンドを ; でつないでください)。",
+    promptSteps: [
+      "sudo コマンドを使って、/etc/tmp2.log という空ファイルを作成してください。",
+      "その後すぐに同じファイルを削除してください(2つのsudoコマンドを ; でつないでください)。",
+    ],
     referenceSolution: "sudo touch /etc/tmp2.log; sudo rm /etc/tmp2.log",
     hints: ["touchとrmのそれぞれにsudoを付ける必要があります。"],
     explanation:
@@ -7058,6 +7226,10 @@ export const exercises: Exercise[] = [
     id: "ch10-ex04",
     chapterId: "ch10",
     prompt: "jobsコマンドでジョブ一覧を確認したうえで、停止中のジョブ%1をバックグラウンドで再開してください。",
+    promptSteps: [
+      "jobsコマンドでジョブ一覧を確認してください。",
+      "停止中のジョブ%1をバックグラウンドで再開してください。",
+    ],
     referenceSolution: "bg %1",
     processes: [{ pid: 3001, jobId: 1, command: "sleep 300 &", status: "stopped", owner: "study" }],
     hints: [
@@ -8881,6 +9053,10 @@ export const exercises: Exercise[] = [
   id: "ch11-14-ex20",
   chapterId: "ch11-14",
   prompt: "memo1.txt の内容を merged.txt という新規ファイルに保存し、続けて memo2.txt の内容を merged.txt の末尾に追記してください。",
+  promptSteps: [
+    "memo1.txt の内容を merged.txt という新規ファイルに保存してください。",
+    "続けて memo2.txt の内容を merged.txt の末尾に追記してください。",
+  ],
   initialCwd: "/home/study/practice/ch11_pipeline",
   referenceSolution: "cat memo1.txt > merged.txt\ncat memo2.txt >> merged.txt",
   hints: [
@@ -8910,6 +9086,10 @@ export const exercises: Exercise[] = [
   id: "ch11-14-ex22",
   chapterId: "ch11-14",
   prompt: "output.log からERRORを含む行を抽出して summary.txt という新規ファイルに保存し、続けて access.log から404を含む行も summary.txt の末尾に追記してください。",
+  promptSteps: [
+    "output.log からERRORを含む行を抽出して summary.txt という新規ファイルに保存してください。",
+    "続けて access.log から404を含む行も summary.txt の末尾に追記してください。",
+  ],
   initialCwd: "/home/study/practice/ch11_pipeline",
   referenceSolution: "grep ERROR output.log > summary.txt\ngrep 404 access.log >> summary.txt",
   hints: [
@@ -8925,6 +9105,10 @@ export const exercises: Exercise[] = [
   id: "ch11-14-ex23",
   chapterId: "ch11-14",
   prompt: "access.log の行数を wc -l で数えて count.txt に保存し、続けて output.log の行数も count.txt の末尾に追記してください。",
+  promptSteps: [
+    "access.log の行数を wc -l で数えて count.txt に保存してください。",
+    "続けて output.log の行数も count.txt の末尾に追記してください。",
+  ],
   initialCwd: "/home/study/practice/ch11_pipeline",
   referenceSolution: "wc -l access.log > count.txt\nwc -l output.log >> count.txt",
   hints: [
@@ -8970,6 +9154,10 @@ export const exercises: Exercise[] = [
   id: "ch11-14-ex26",
   chapterId: "ch11-14",
   prompt: "no_such_file.txt と no_such_file2.txt という2つの存在しないファイルをそれぞれcatし、両方のエラーメッセージを errors.txt という1つのファイルにまとめて保存してください(1つ目は新規作成、2つ目は追記で構いません)。",
+  promptSteps: [
+    "存在しない no_such_file.txt を cat し、そのエラーメッセージを errors.txt という新規ファイルに保存してください。",
+    "続けて、存在しない no_such_file2.txt を cat し、そのエラーメッセージを errors.txt の末尾に追記してください。",
+  ],
   initialCwd: "/home/study/practice/ch11_pipeline",
   referenceSolution: "cat no_such_file.txt 2> errors.txt\ncat no_such_file2.txt 2>> errors.txt",
   hints: [
@@ -9050,6 +9238,10 @@ export const exercises: Exercise[] = [
   id: "ch11-14-ex31",
   chapterId: "ch11-14",
   prompt: "存在しない no_such_file.txt を cat し、標準エラー出力を標準出力に統合して combined.log というファイルに保存したうえで、そのファイルの行数を wc -l で数えてください。",
+  promptSteps: [
+    "存在しない no_such_file.txt を cat し、標準エラー出力を標準出力に統合して combined.log というファイルに保存してください。",
+    "そのファイルの行数を wc -l で数えてください。",
+  ],
   initialCwd: "/home/study/practice/ch11_pipeline",
   referenceSolution: "cat no_such_file.txt > combined.log 2>&1\nwc -l combined.log",
   hints: [
@@ -9871,6 +10063,10 @@ export const exercises: Exercise[] = [
   id: "ch11-14-ex94",
   chapterId: "ch11-14",
   prompt: "file1.txt と file2.txt をそれぞれソートした結果を別のファイルに保存し、その2つのファイルを diff で比較してください。",
+  promptSteps: [
+    "file1.txt と file2.txt をそれぞれソートした結果を別のファイルに保存してください。",
+    "その2つのファイルを diff で比較してください。",
+  ],
   initialCwd: "/home/study/practice/ch12_textproc",
   referenceSolution: "sort file1.txt > sorted1.txt\nsort file2.txt > sorted2.txt\ndiff sorted1.txt sorted2.txt",
   hints: [
@@ -10793,6 +10989,11 @@ export const exercises: Exercise[] = [
     prompt:
       "1行目にshebang(#!/bin/bash)を書き、位置パラメータ $1 で渡された名前を使って" +
       "「Hello, 名前!」と挨拶したあと、標準入力から渡された行数を表示するシェルスクリプトを作成してください。",
+    promptSteps: [
+      "1行目にshebang(#!/bin/bash)を書いてください。",
+      "位置パラメータ $1 で渡された名前を使って「Hello, 名前!」と挨拶してください。",
+      "続けて、標準入力から渡された行数を表示してください。",
+    ],
     initialCwd: "/home/study/practice/ch15_17_shellscript",
     initialScript: "#!/bin/bash\n",
     referenceSolution: '#!/bin/bash\necho "Hello, $1!"\nwc -l\n',
@@ -12156,6 +12357,10 @@ export const exercises: Exercise[] = [
     prompt:
       "位置パラメータ $1 をタイトルとしてまず表示したあと、for文で \"apple\" \"banana\" \"cherry\" という" +
       "リストを直接列挙し、1つずつ表示するシェルスクリプトを作成してください。",
+    promptSteps: [
+      "位置パラメータ $1 をタイトルとしてまず表示してください。",
+      "続けて、for文で \"apple\" \"banana\" \"cherry\" というリストを直接列挙し、1つずつ表示してください。",
+    ],
     initialCwd: "/home/study/practice/ch15_17_shellscript",
     initialScript: "#!/bin/bash\n",
     referenceSolution:
@@ -12570,6 +12775,11 @@ export const exercises: Exercise[] = [
       "変数msgに\"global\"を代入したあと、show関数の中でlocal msg=\"local\"として別の値を設定して表示し、" +
       "show関数を呼び出した後にもう一度スクリプト本体でmsgを表示することで、localが関数の外の変数に" +
       "影響しないことを確認できるシェルスクリプトを作成してください。",
+    promptSteps: [
+      "変数msgに\"global\"を代入してください。",
+      "show関数を定義し、その中でlocal msg=\"local\"として別の値を設定して表示するようにしてください。",
+      "show関数を呼び出したあと、もう一度スクリプト本体でmsgを表示してください(localが関数の外の変数に影響しないことを確認できます)。",
+    ],
     initialCwd: "/home/study/practice/ch15_17_shellscript",
     initialScript: "#!/bin/bash\n",
     referenceSolution:
@@ -12817,6 +13027,10 @@ export const exercises: Exercise[] = [
       "位置パラメータ$1をそのまま表示したあと、$2が指定されていれば「オプション: 有効」と表示し、" +
       "指定されていなければ何も表示しない、という処理を、パラメータ展開 ${2:+...} を使って書く" +
       "シェルスクリプトを作成してください。",
+    promptSteps: [
+      "位置パラメータ$1をそのまま表示してください。",
+      "続けて、パラメータ展開 ${2:+...} を使って、$2が指定されていれば「オプション: 有効」と表示し、指定されていなければ何も表示しないようにしてください。",
+    ],
     initialCwd: "/home/study/practice/ch15_17_shellscript",
     initialScript: "#!/bin/bash\n",
     referenceSolution:
@@ -12843,6 +13057,11 @@ export const exercises: Exercise[] = [
       "${MODE:=normal} を使ってデフォルト値\"normal\"をMODE自身に代入しつつ取得し、「モード: MODEの値」を" +
       "表示してください。さらにもう一度「確認: MODEの値」を表示し、2回目もパラメータ展開によって実際に" +
       "代入された値が使われることを確認できるシェルスクリプトを作成してください。",
+    promptSteps: [
+      "位置パラメータ$1をMODEという変数に代入してください。",
+      "MODEが未設定または空の場合はパラメータ展開 ${MODE:=normal} を使ってデフォルト値\"normal\"をMODE自身に代入しつつ取得し、「モード: MODEの値」を表示してください。",
+      "さらにもう一度「確認: MODEの値」を表示してください(2回目もパラメータ展開によって実際に代入された値が使われることを確認できます)。",
+    ],
     initialCwd: "/home/study/practice/ch15_17_shellscript",
     initialScript: "#!/bin/bash\n",
     referenceSolution:
@@ -12969,6 +13188,10 @@ export const exercises: Exercise[] = [
       "変数priceに100を代入したあと、シングルクォートで囲んだ区切り文字(<< 'END')を使ったヒアドキュメントは" +
       "中の$記号が変数展開されずそのまま表示されることを確認するため、ヒアドキュメントの中に文字通り" +
       "「$price」という文字列(展開されない)を含めて表示するシェルスクリプトを作成してください。",
+    promptSteps: [
+      "変数priceに100を代入してください。",
+      "シングルクォートで囲んだ区切り文字(<< 'END')を使ったヒアドキュメントの中に、文字通り「$price」という文字列(展開されない)を含めて表示してください(中の$記号が変数展開されずそのまま表示されることを確認できます)。",
+    ],
     initialCwd: "/home/study/practice/ch15_17_shellscript",
     initialScript: "#!/bin/bash\n",
     referenceSolution:
@@ -13139,6 +13362,10 @@ export const exercises: Exercise[] = [
     prompt:
       "scripts/hello.sh に実行権限を付与したうえで、ls -l でそのファイルの権限を確認してください" +
       "(1つのコマンドラインで、;で2つのコマンドをつないでもかまいません)。",
+    promptSteps: [
+      "scripts/hello.sh に実行権限を付与してください。",
+      "ls -l でそのファイルの権限を確認してください(1つのコマンドラインで、;で2つのコマンドをつないでもかまいません)。",
+    ],
     initialCwd: "/home/study/practice/ch15_17_shellscript",
     referenceSolution: "chmod +x scripts/hello.sh; ls -l scripts/hello.sh",
     hints: ["; で区切ると、複数のコマンドを1行にまとめて順番に実行できます。"],
@@ -13374,6 +13601,10 @@ export const exercises: Exercise[] = [
     id: "ch18-ex01",
     chapterId: "ch18",
     prompt: "project ディレクトリを project.tar という名前のtarアーカイブにまとめてください(まとめたファイルの一覧が表示されるようにしてください)。",
+    promptSteps: [
+      "project ディレクトリを project.tar という名前のtarアーカイブにまとめてください。",
+      "まとめたファイルの一覧が表示されるようにしてください。",
+    ],
     initialCwd: "/home/study/practice/ch18_archive",
     referenceSolution: "tar cvf project.tar project",
     hints: [
@@ -13391,6 +13622,10 @@ export const exercises: Exercise[] = [
     prompt:
       "project ディレクトリを project.tar としてアーカイブしたうえで、そのアーカイブの中身をパーミッション等の" +
       "詳細情報付きで一覧表示してください。",
+    promptSteps: [
+      "project ディレクトリを project.tar としてアーカイブしてください。",
+      "そのアーカイブの中身をパーミッション等の詳細情報付きで一覧表示してください。",
+    ],
     initialCwd: "/home/study/practice/ch18_archive",
     referenceSolution: "tar cf project.tar project; tar tvf project.tar",
     hints: [
@@ -13407,6 +13642,11 @@ export const exercises: Exercise[] = [
     prompt:
       "project ディレクトリを project.tar としてアーカイブしてから元の project ディレクトリを削除し、" +
       "アーカイブから元の内容を展開して復元してください(展開したファイル名の一覧が表示されるようにしてください)。",
+    promptSteps: [
+      "project ディレクトリを project.tar としてアーカイブしてください。",
+      "元の project ディレクトリを削除してください。",
+      "アーカイブから元の内容を展開して復元してください(展開したファイル名の一覧が表示されるようにしてください)。",
+    ],
     initialCwd: "/home/study/practice/ch18_archive",
     referenceSolution: "tar cf project.tar project; rm -r project; tar xvf project.tar",
     hints: [
@@ -13424,6 +13664,10 @@ export const exercises: Exercise[] = [
     prompt:
       "project ディレクトリを、tarでまとめると同時にgzip圧縮も行い、project.tar.gz として作成してください" +
       "(まとめたファイルの一覧が表示されるようにしてください)。",
+    promptSteps: [
+      "project ディレクトリを、tarでまとめると同時にgzip圧縮も行い、project.tar.gz として作成してください。",
+      "まとめたファイルの一覧が表示されるようにしてください。",
+    ],
     initialCwd: "/home/study/practice/ch18_archive",
     referenceSolution: "tar czvf project.tar.gz project",
     hints: [
@@ -13441,6 +13685,11 @@ export const exercises: Exercise[] = [
     prompt:
       "project ディレクトリを project.tar.gz としてtar+gzipでアーカイブしてから元の project ディレクトリを" +
       "削除し、そのアーカイブから元の内容を展開して復元してください(展開したファイル名の一覧が表示されるようにしてください)。",
+    promptSteps: [
+      "project ディレクトリを project.tar.gz としてtar+gzipでアーカイブしてください。",
+      "元の project ディレクトリを削除してください。",
+      "そのアーカイブから元の内容を展開して復元してください(展開したファイル名の一覧が表示されるようにしてください)。",
+    ],
     initialCwd: "/home/study/practice/ch18_archive",
     referenceSolution: "tar czf project.tar.gz project; rm -r project; tar xzvf project.tar.gz",
     hints: [
@@ -13471,6 +13720,10 @@ export const exercises: Exercise[] = [
     id: "ch18-ex07",
     chapterId: "ch18",
     prompt: "data.csv を gzip で圧縮したうえで、gunzip を使って元のファイルに戻してください。",
+    promptSteps: [
+      "data.csv を gzip で圧縮してください。",
+      "gunzip を使って元のファイルに戻してください。",
+    ],
     initialCwd: "/home/study/practice/ch18_archive/project",
     referenceSolution: "gzip data.csv; gunzip data.csv.gz",
     hints: [
@@ -13501,6 +13754,10 @@ export const exercises: Exercise[] = [
     chapterId: "ch18",
     prompt:
       "project ディレクトリを再帰的に project.zip としてzip圧縮したうえで、そのアーカイブの中身を一覧表示してください。",
+    promptSteps: [
+      "project ディレクトリを再帰的に project.zip としてzip圧縮してください。",
+      "そのアーカイブの中身を一覧表示してください。",
+    ],
     initialCwd: "/home/study/practice/ch18_archive",
     referenceSolution: "zip -r project.zip project; unzip -l project.zip",
     hints: [
@@ -13518,6 +13775,11 @@ export const exercises: Exercise[] = [
     prompt:
       "project ディレクトリを project.zip として圧縮してから元の project ディレクトリを削除し、そのzipアーカイブを" +
       "展開して復元してください。",
+    promptSteps: [
+      "project ディレクトリを project.zip として圧縮してください。",
+      "元の project ディレクトリを削除してください。",
+      "そのzipアーカイブを展開して復元してください。",
+    ],
     initialCwd: "/home/study/practice/ch18_archive",
     referenceSolution: "zip -r project.zip project; rm -r project; unzip project.zip",
     hints: [
@@ -15229,6 +15491,10 @@ export const exercises: Exercise[] = [
     type: "git",
     prompt:
       "notes ディレクトリでリポジトリを初期化したうえで、git status を実行し、まだ何も追跡されていない状態を確認してください。",
+    promptSteps: [
+      "notes ディレクトリでリポジトリを初期化してください。",
+      "git status を実行し、まだ何も追跡されていない状態を確認してください。",
+    ],
     initialCwd: "/home/study/practice/ch19_git/notes",
     referenceSolution: "git init; git status",
     hints: [
@@ -15248,6 +15514,11 @@ export const exercises: Exercise[] = [
     prompt:
       "notes ディレクトリでリポジトリを初期化し、memo.txt だけをステージングしたうえで、git status を実行して" +
       "ステージ済みの変更として表示されることを確認してください(todo.txt はまだ追跡しないでください)。",
+    promptSteps: [
+      "notes ディレクトリでリポジトリを初期化してください。",
+      "memo.txt だけをステージングしてください(todo.txt はまだ追跡しないでください)。",
+      "git status を実行してステージ済みの変更として表示されることを確認してください。",
+    ],
     initialCwd: "/home/study/practice/ch19_git/notes",
     referenceSolution: "git init; git add memo.txt; git status",
     hints: [
@@ -15267,6 +15538,11 @@ export const exercises: Exercise[] = [
     prompt:
       "notes ディレクトリでリポジトリを初期化し、すべてのファイルをステージングしたうえで、" +
       "「Initial commit」というメッセージでコミットしてください。",
+    promptSteps: [
+      "notes ディレクトリでリポジトリを初期化してください。",
+      "すべてのファイルをステージングしてください。",
+      "「Initial commit」というメッセージでコミットしてください。",
+    ],
     initialCwd: "/home/study/practice/ch19_git/notes",
     referenceSolution: 'git init; git add .; git commit -m "Initial commit"',
     hints: [
@@ -15286,6 +15562,12 @@ export const exercises: Exercise[] = [
     prompt:
       "notes ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」、todo.txt を「Add todo」というメッセージで" +
       "それぞれ別のコミットとして記録したうえで、git log --oneline でコミット履歴を確認してください。",
+    promptSteps: [
+      "notes ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "todo.txt を「Add todo」というメッセージでコミットしてください。",
+      "git log --oneline でコミット履歴を確認してください。",
+    ],
     initialCwd: "/home/study/practice/ch19_git/notes",
     referenceSolution:
       'git init; git add memo.txt; git commit -m "Add memo"; git add todo.txt; git commit -m "Add todo"; git log --oneline',
@@ -15305,6 +15587,11 @@ export const exercises: Exercise[] = [
     prompt:
       "branch-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージでコミットした" +
       "うえで、feature という名前の新しいブランチを作成してください(切り替えはまだ不要です)。",
+    promptSteps: [
+      "branch-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "feature という名前の新しいブランチを作成してください(切り替えはまだ不要です)。",
+    ],
     initialCwd: "/home/study/practice/ch19_git/branch-practice",
     referenceSolution: 'git init; git add memo.txt; git commit -m "Add memo"; git branch feature',
     hints: [
@@ -15324,6 +15611,13 @@ export const exercises: Exercise[] = [
       "branch-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージでコミットして" +
       "ください。続けて git checkout -b で feature ブランチを作成・切り替えし、feature.txt というファイルに" +
       "「feature update」という内容を書き込んでから「Add feature file」というメッセージでコミットしてください。",
+    promptSteps: [
+      "branch-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "git checkout -b で feature ブランチを作成・切り替えしてください。",
+      "feature.txt というファイルに「feature update」という内容を書き込んでください。",
+      "「Add feature file」というメッセージでコミットしてください。",
+    ],
     initialCwd: "/home/study/practice/ch19_git/branch-practice",
     referenceSolution:
       'git init; git add memo.txt; git commit -m "Add memo"; git checkout -b feature; echo "feature update" > feature.txt; git add feature.txt; git commit -m "Add feature file"',
@@ -15344,6 +15638,15 @@ export const exercises: Exercise[] = [
       "branch-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージでコミットして" +
       "ください。続けて feature ブランチを作成・切り替えし、feature.txt を追加して「Add feature file」という" +
       "メッセージでコミットします。最後に main ブランチへ戻り、feature ブランチをmergeして変更を取り込んでください。",
+    promptSteps: [
+      "branch-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "feature ブランチを作成・切り替えしてください。",
+      "feature.txt を追加してください。",
+      "「Add feature file」というメッセージでコミットしてください。",
+      "main ブランチへ戻ってください。",
+      "feature ブランチをmergeして変更を取り込んでください。",
+    ],
     initialCwd: "/home/study/practice/ch19_git/branch-practice",
     referenceSolution:
       'git init; git add memo.txt; git commit -m "Add memo"; git checkout -b feature; echo "feature update" > feature.txt; git add feature.txt; git commit -m "Add feature file"; git checkout main; git merge feature',
@@ -15368,6 +15671,16 @@ export const exercises: Exercise[] = [
       "コミットし、main ブランチへ戻って main.txt を「Add main note」というメッセージでコミットしてください" +
       "(それぞれ別のファイルを追加するため、両ブランチの変更は衝突しません)。最後に main で feature をmergeして、" +
       "両方の変更を取り込んでください。",
+    promptSteps: [
+      "branch-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "feature ブランチを作成・切り替えしてください。",
+      "feature.txt を「Add feature note」というメッセージでコミットしてください。",
+      "main ブランチへ戻ってください。",
+      "main.txt を「Add main note」というメッセージでコミットしてください" +
+        "(それぞれ別のファイルを追加するため、両ブランチの変更は衝突しません)。",
+      "最後に main で feature をmergeして、両方の変更を取り込んでください。",
+    ],
     initialCwd: "/home/study/practice/ch19_git/branch-practice",
     referenceSolution:
       'git init; git add memo.txt; git commit -m "Add memo"; git checkout -b feature; echo "feature note" > feature.txt; git add feature.txt; git commit -m "Add feature note"; git checkout main; echo "main note" > main.txt; git add main.txt; git commit -m "Add main note"; git merge feature',
@@ -15391,6 +15704,13 @@ export const exercises: Exercise[] = [
       "sync-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージでコミットして" +
       "ください。続けて、1つ上の階層に sync-practice-remote という名前の別のリポジトリを疑似リモートとして用意し、" +
       "origin という名前で登録したうえで、git push でコミットを送ってください。",
+    promptSteps: [
+      "sync-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "1つ上の階層に sync-practice-remote という名前の別のリポジトリを疑似リモートとして用意してください。",
+      "origin という名前で登録してください。",
+      "git push でコミットを送ってください。",
+    ],
     initialCwd: "/home/study/practice/ch19_git/sync-practice",
     referenceSolution:
       'git init; git add memo.txt; git commit -m "Add memo"; git init ../sync-practice-remote; git remote add origin ../sync-practice-remote; git push',
@@ -15414,6 +15734,15 @@ export const exercises: Exercise[] = [
       "ください。1つ上の階層に sync-practice-remote を疑似リモート(origin)として用意してpushしたあと、" +
       "sync-practice-remote 側へ移動して release.txt というファイルを「Add release notes」というメッセージで" +
       "直接コミットしてください。最後に sync-practice へ戻り、git pull でその変更を取り込んでください。",
+    promptSteps: [
+      "sync-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "1つ上の階層に sync-practice-remote を疑似リモート(origin)として用意してpushしてください。",
+      "sync-practice-remote 側へ移動してください。",
+      "release.txt というファイルを「Add release notes」というメッセージで直接コミットしてください。",
+      "sync-practice へ戻ってください。",
+      "git pull でその変更を取り込んでください。",
+    ],
     initialCwd: "/home/study/practice/ch19_git/sync-practice",
     referenceSolution:
       'git init; git add memo.txt; git commit -m "Add memo"; git init ../sync-practice-remote; git remote add origin ../sync-practice-remote; git push; cd ../sync-practice-remote; echo "release notes" > release.txt; git add release.txt; git commit -m "Add release notes"; cd ../sync-practice; git pull',
@@ -15498,6 +15827,10 @@ export const exercises: Exercise[] = [
     prompt:
       "sudo を使って tree パッケージを dnf コマンドでインストールしたうえで、dnf info でインストール済みに" +
       "なったことを確認してください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "sudo を使って tree パッケージを dnf コマンドでインストールしてください。",
+      "dnf info でインストール済みになったことを確認してください(1行のコマンドとして ; でつないでください)。",
+    ],
     referenceSolution: "sudo dnf install tree; dnf info tree",
     hints: [
       "インストール後は sudo なしの dnf info でも、そのパッケージの情報を確認できます。",
@@ -15514,6 +15847,10 @@ export const exercises: Exercise[] = [
     prompt:
       "su コマンドでrootユーザーに切り替えたうえで、mysql-server パッケージを dnf コマンドでインストールして" +
       "ください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "su コマンドでrootユーザーに切り替えてください。",
+      "mysql-server パッケージを dnf コマンドでインストールしてください(1行のコマンドとして ; でつないでください)。",
+    ],
     referenceSolution: "su root; dnf install mysql-server",
     hints: [
       "sudo は1つのコマンドだけをroot権限で実行しますが、su root は以後すべてのコマンドの実行ユーザーを" +
@@ -15578,6 +15915,11 @@ export const exercises: Exercise[] = [
       "sudo を使って redis-server パッケージを apt コマンドでインストールしたうえで、同じコマンドをもう一度" +
       "実行し、2回目は「既に最新バージョンがインストール済み」という趣旨のメッセージになることを確認して" +
       "ください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "sudo を使って redis-server パッケージを apt コマンドでインストールしてください。",
+      "同じコマンドをもう一度実行し、2回目は「既に最新バージョンがインストール済み」という趣旨のメッセージに" +
+        "なることを確認してください(1行のコマンドとして ; でつないでください)。",
+    ],
     referenceSolution: "sudo apt install redis-server; sudo apt install redis-server",
     hints: [
       "同じパッケージを重ねてインストールしようとしても、apt/dnfはエラーにはなりません。",
@@ -15745,6 +16087,10 @@ export const exercises: Exercise[] = [
     prompt:
       "study@webserver にSSH接続したうえで、接続先ホストのホスト名を /etc/hostname から確認してください" +
       "(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "study@webserver にSSH接続してください。",
+      "接続先ホストのホスト名を /etc/hostname から確認してください(1行のコマンドとして ; でつないでください)。",
+    ],
     referenceSolution: "ssh study@webserver; cat /etc/hostname",
     hints: [
       "ssh study@webserver; の後に続けてコマンドを書くと、接続後のリモートホスト上でそのコマンドが実行されます。",
@@ -15761,6 +16107,11 @@ export const exercises: Exercise[] = [
     prompt:
       "study@webserver にSSH接続したうえで、ホームディレクトリ直下の deploy/README.md の内容を確認して" +
       "ください(1行のコマンドとして ; でつないでください)。このファイルはローカル環境には存在しません。",
+    promptSteps: [
+      "study@webserver にSSH接続してください。",
+      "ホームディレクトリ直下の deploy/README.md の内容を確認してください" +
+        "(1行のコマンドとして ; でつないでください)。このファイルはローカル環境には存在しません。",
+    ],
     referenceSolution: "ssh study@webserver; cat deploy/README.md",
     hints: [
       "接続直後のカレントディレクトリは、webserver上のホームディレクトリ(/home/study)です。",
@@ -15776,6 +16127,10 @@ export const exercises: Exercise[] = [
     prompt:
       "study@webserver にSSH接続したうえで、Webサーバーのアクセスログ(/var/log/nginx/access.log)を表示" +
       "してください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "study@webserver にSSH接続してください。",
+      "Webサーバーのアクセスログ(/var/log/nginx/access.log)を表示してください(1行のコマンドとして ; でつないでください)。",
+    ],
     referenceSolution: "ssh study@webserver; cat /var/log/nginx/access.log",
     hints: ["絶対パス /var/log/nginx/access.log を指定して cat コマンドで表示します。"],
     explanation:
@@ -15789,6 +16144,11 @@ export const exercises: Exercise[] = [
     prompt:
       "study@webserver にSSH接続したあと、exit コマンドでローカル環境に戻り、pwd で元のホームディレクトリ" +
       "に戻っていることを確認してください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "study@webserver にSSH接続してください。",
+      "exit コマンドでローカル環境に戻ってください。",
+      "pwd で元のホームディレクトリに戻っていることを確認してください(1行のコマンドとして ; でつないでください)。",
+    ],
     referenceSolution: "ssh study@webserver; exit; pwd",
     hints: [
       "実際のsshセッションと同様、exit コマンドでリモートホストからログアウトし、ローカルの状態に復帰します。",
