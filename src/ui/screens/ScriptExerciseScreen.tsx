@@ -13,6 +13,7 @@ import { useProgress } from "../../state/ProgressContext";
 import { useSettings } from "../../state/SettingsContext";
 import type { ThemeColors } from "../../theme/colors";
 import { CodeEditor } from "../components/CodeEditor";
+import { ExercisePrompt } from "../components/ExercisePrompt";
 import { ExplanationPanel } from "../components/ExplanationPanel";
 import { TestCaseResultPanel } from "../components/TestCaseResultPanel";
 
@@ -81,7 +82,7 @@ export function ScriptExerciseScreen({ route }: Props) {
   return (
     <View style={styles.container}>
       <ScrollView style={styles.header} contentContainerStyle={styles.headerContent}>
-        <Text style={styles.prompt}>{exercise.prompt}</Text>
+        <ExercisePrompt prompt={exercise.prompt} promptSteps={exercise.promptSteps} />
         {hints.slice(0, visibleHintCount).map((hint, index) => (
           <Text key={hint} style={styles.hint}>
             ヒント{index + 1}: {hint}

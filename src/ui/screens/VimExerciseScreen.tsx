@@ -9,6 +9,7 @@ import type { RootStackParamList } from "../../navigation/types";
 import { useProgress } from "../../state/ProgressContext";
 import { useSettings } from "../../state/SettingsContext";
 import type { ThemeColors } from "../../theme/colors";
+import { ExercisePrompt } from "../components/ExercisePrompt";
 import { ExplanationPanel } from "../components/ExplanationPanel";
 import { VimEditor } from "../components/VimEditor";
 import type { VimEditorHandle } from "../components/VimEditor";
@@ -61,7 +62,7 @@ export function VimExerciseScreen({ route }: Props) {
   return (
     <View style={styles.container}>
       <ScrollView style={styles.header} contentContainerStyle={styles.headerContent}>
-        <Text style={styles.prompt}>{exercise.prompt}</Text>
+        <ExercisePrompt prompt={exercise.prompt} promptSteps={exercise.promptSteps} />
         {hints.slice(0, visibleHintCount).map((hint, index) => (
           <Text key={hint} style={styles.hint}>
             ヒント{index + 1}: {hint}

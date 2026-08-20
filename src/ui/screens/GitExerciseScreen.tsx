@@ -16,6 +16,7 @@ import { useProgress } from "../../state/ProgressContext";
 import { useSettings } from "../../state/SettingsContext";
 import type { ThemeColors } from "../../theme/colors";
 import { CommitGraphView } from "../components/CommitGraphView";
+import { ExercisePrompt } from "../components/ExercisePrompt";
 import { ExplanationPanel } from "../components/ExplanationPanel";
 import { Terminal } from "../components/Terminal";
 import type { TerminalHandle } from "../components/Terminal";
@@ -89,7 +90,7 @@ export function GitExerciseScreen({ route }: Props) {
   return (
     <View style={styles.container}>
       <ScrollView style={styles.header} contentContainerStyle={styles.headerContent}>
-        <Text style={styles.prompt}>{exercise.prompt}</Text>
+        <ExercisePrompt prompt={exercise.prompt} promptSteps={exercise.promptSteps} />
         {hints.slice(0, visibleHintCount).map((hint, index) => (
           <Text key={hint} style={styles.hint}>
             ヒント{index + 1}: {hint}

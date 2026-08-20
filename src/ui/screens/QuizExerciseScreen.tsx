@@ -8,6 +8,7 @@ import type { RootStackParamList } from "../../navigation/types";
 import { useProgress } from "../../state/ProgressContext";
 import { useSettings } from "../../state/SettingsContext";
 import type { ThemeColors } from "../../theme/colors";
+import { ExercisePrompt } from "../components/ExercisePrompt";
 
 type Props = NativeStackScreenProps<RootStackParamList, "QuizExercise">;
 
@@ -52,7 +53,7 @@ export function QuizExerciseScreen({ route }: Props) {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <Text style={styles.prompt}>{exercise.prompt}</Text>
+      <ExercisePrompt prompt={exercise.prompt} promptSteps={exercise.promptSteps} />
 
       {hints.slice(0, visibleHintCount).map((hint, index) => (
         <Text key={hint} style={styles.hint}>
