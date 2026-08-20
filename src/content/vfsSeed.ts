@@ -514,6 +514,40 @@ const CH18_APP_SH = `#!/bin/bash
 echo "Hello from app.sh"
 `;
 
+const CH18_FILE_1_TXT = `file-1
+`;
+const CH18_FILE_2_TXT = `file-2
+`;
+const CH18_FILE_3_TXT = `file-3
+`;
+const CH18_FILE_4_TXT = `file-4
+`;
+const CH18_FILE_5_TXT = `file-5
+`;
+
+const CH18_PS_TXT = `  PID TTY          TIME CMD
+ 1000 pts/0    00:00:00 bash
+ 1042 pts/0    00:00:00 vim
+ 1088 pts/0    00:00:00 ps
+`;
+
+const CH18_ACCESS_LOG = `192.168.1.10 - - "GET /index.html HTTP/1.1" 200
+192.168.1.11 - - "GET /about.html HTTP/1.1" 200
+192.168.1.12 - - "GET /missing.html HTTP/1.1" 404
+`;
+
+const CH18_ERROR_LOG = `[error] file not found: missing.html
+[error] connection timeout: 192.168.1.20
+`;
+
+const CH18_REPORTS_NOTES_TXT = `四半期レポートの下書き置き場です。
+`;
+
+const CH18_SUMMARY_TXT = `2024年のまとめ:
+- 売上は前年比110%
+- 主要な課題は在庫管理
+`;
+
 const CH19_MEMO_TXT = `会議メモ
 - 次回の日程を決める
 `;
@@ -1158,6 +1192,68 @@ function createCh18PracticeChildren(): Record<string, VfsNode> {
             owner: "study",
             group: "study",
             mode: 0o755,
+          }),
+        }, STUDY_DIR_OPTIONS),
+      }, STUDY_DIR_OPTIONS),
+      // 書籍p345のtar解説で使われる典型例(mkdir dir1; touch dir1/file-{1..5}.txt)に準拠した
+      // フィクスチャ。本アプリのシェルはブレース展開`{1..5}`に対応していないため、あらかじめ
+      // 5つのファイルを用意しておく。
+      dir1: createDirectory("dir1", {
+        "file-1.txt": createFile("file-1.txt", CH18_FILE_1_TXT, {
+          owner: "study",
+          group: "study",
+          mode: 0o644,
+        }),
+        "file-2.txt": createFile("file-2.txt", CH18_FILE_2_TXT, {
+          owner: "study",
+          group: "study",
+          mode: 0o644,
+        }),
+        "file-3.txt": createFile("file-3.txt", CH18_FILE_3_TXT, {
+          owner: "study",
+          group: "study",
+          mode: 0o644,
+        }),
+        "file-4.txt": createFile("file-4.txt", CH18_FILE_4_TXT, {
+          owner: "study",
+          group: "study",
+          mode: 0o644,
+        }),
+        "file-5.txt": createFile("file-5.txt", CH18_FILE_5_TXT, {
+          owner: "study",
+          group: "study",
+          mode: 0o644,
+        }),
+      }, STUDY_DIR_OPTIONS),
+      // 書籍p350のgzip解説で使われる典型例(ps aux > ps.txt)に準拠した単体ファイル。
+      "ps.txt": createFile("ps.txt", CH18_PS_TXT, {
+        owner: "study",
+        group: "study",
+        mode: 0o644,
+      }),
+      logs: createDirectory("logs", {
+        "access.log": createFile("access.log", CH18_ACCESS_LOG, {
+          owner: "study",
+          group: "study",
+          mode: 0o644,
+        }),
+        "error.log": createFile("error.log", CH18_ERROR_LOG, {
+          owner: "study",
+          group: "study",
+          mode: 0o644,
+        }),
+      }, STUDY_DIR_OPTIONS),
+      reports: createDirectory("reports", {
+        "notes.txt": createFile("notes.txt", CH18_REPORTS_NOTES_TXT, {
+          owner: "study",
+          group: "study",
+          mode: 0o644,
+        }),
+        "2024": createDirectory("2024", {
+          "summary.txt": createFile("summary.txt", CH18_SUMMARY_TXT, {
+            owner: "study",
+            group: "study",
+            mode: 0o644,
           }),
         }, STUDY_DIR_OPTIONS),
       }, STUDY_DIR_OPTIONS),

@@ -54,7 +54,13 @@ export type Exercise = {
   explanation?: string;
 };
 
-export const exercises: Exercise[] = [
+/**
+ * TypeScriptが単一の配列リテラルとして型チェックできる要素数には実務上の上限があり(TS2590:
+ * "Expression produces a union type that is too complex to represent")、この演習配列は既に
+ * その上限を超える規模になっている。そのため複数の`Exercise[]`型定数に分割してからspreadで
+ * 結合している(内容上の意味はなく、あくまで型チェッカーの複雑度を下げるための機械的な分割)。
+ */
+const exercisesPart1: Exercise[] = [
   // ---------------------------------------------------------------------
   // Ch1: Linux学習環境の構築(VirtualBox)
   // ---------------------------------------------------------------------
@@ -8790,7 +8796,9 @@ export const exercises: Exercise[] = [
     explanation:
       "ps -ef(UNIX形式のオプション)と ps aux(BSD形式のオプション)は、書式は異なりますが、どちらも全プロセスの詳細な一覧を表示するという点でほぼ同様の情報を得られます。",
   },
+];
 
+const exercisesPart2: Exercise[] = [
   // ---------------------------------------------------------------------
   // Ch11-14: パイプラインとテキスト処理・正規表現
   // ---------------------------------------------------------------------
@@ -13793,6 +13801,1326 @@ export const exercises: Exercise[] = [
   },
 
   // ---------------------------------------------------------------------
+  // Ch18: アーカイブとバックアップ(tar 追加分, 書籍p345-349)
+  // ---------------------------------------------------------------------
+  {
+    id: "ch18-ex11",
+    chapterId: "ch18",
+    prompt:
+      "dir1 ディレクトリを dir1.tar という名前でtarアーカイブにまとめてください(このとき一覧表示は不要です)。" +
+      "作成後、tar tvf でアーカイブの中身をパーミッション等の詳細情報付きで確認してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "tar cf dir1.tar dir1; tar tvf dir1.tar",
+    hints: [
+      "作成時にv(verbose)を付けなくても、後からtar tvfで中身を確認できます。",
+      "tar tvf アーカイブ名 で、詳細情報付きの一覧を確認します。",
+    ],
+    explanation:
+      "tar cfでアーカイブを作成する際にvを付けて一覧を表示させることもできますが、作成と同時に一覧を" +
+      "流し見しても中身の正しさは確認しづらいものです。作成後にあらためて tar tvf で一覧を確認する方が、" +
+      "アーカイブの内容を落ち着いて検証できます。",
+  },
+  {
+    id: "ch18-ex12",
+    chapterId: "ch18",
+    prompt: "dir1 ディレクトリを dir1.tar としてアーカイブしたうえで、その中から file-3.txt だけを取り出してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "tar cf dir1.tar dir1; tar xf dir1.tar dir1/file-3.txt",
+    hints: [
+      "tar xf アーカイブ名 のあとにパスを指定すると、そのファイルだけを展開できます。",
+      "アーカイブ内でのパスは dir1/file-3.txt のように、アーカイブ化したディレクトリ名から始まります。",
+    ],
+    explanation:
+      "tar xf アーカイブ名 対象パス のように対象パスを指定すると、アーカイブ全体を展開せずに指定した" +
+      "ファイル・ディレクトリだけを取り出せます。対象パスはアーカイブ内での格納パス(dir1/file-3.txtのような形)" +
+      "で指定します。",
+  },
+  {
+    id: "ch18-ex13",
+    chapterId: "ch18",
+    prompt: "dir1 ディレクトリを dir1.tar としてアーカイブしたうえで、tar tvf を使って file-2.txt の詳細情報だけを確認してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "tar cf dir1.tar dir1; tar tvf dir1.tar dir1/file-2.txt",
+    hints: ["tar tvf アーカイブ名 のあとにパスを指定すると、そのエントリだけを一覧表示できます。"],
+    explanation:
+      "tar t(list)にも対象パスを指定でき、アーカイブ全体ではなく特定のファイル・ディレクトリの情報だけを" +
+      "確認できます。展開(x)と同様に、アーカイブ内での格納パスで指定します。",
+  },
+  {
+    id: "ch18-ex14",
+    chapterId: "ch18",
+    prompt:
+      "dir1 ディレクトリを dir1.tar としてアーカイブしてから元の dir1 ディレクトリを削除し、アーカイブから" +
+      "復元してください(展開したファイル名の一覧が表示されるようにしてください)。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "tar cf dir1.tar dir1; rm -r dir1; tar xvf dir1.tar",
+    hints: ["rm -r で dir1 ディレクトリごと削除してから、tar xvf で復元します。"],
+    explanation:
+      "tar c(まとめる)とtar x(展開する)を組み合わせることで、tarアーカイブがディレクトリのバックアップ・" +
+      "復元手段として使えることを確認できます。dir1のような複数ファイルからなるディレクトリでも、" +
+      "1つのアーカイブファイルにまとめてしまえば安全に持ち運べます。",
+  },
+  {
+    id: "ch18-ex15",
+    chapterId: "ch18",
+    prompt:
+      "reports ディレクトリ(notes.txt と 2024/summary.txt を含む)を reports.tar としてアーカイブしてから" +
+      "元の reports ディレクトリを削除し、アーカイブから復元してください(展開したファイル名の一覧が" +
+      "表示されるようにしてください)。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "tar cf reports.tar reports; rm -r reports; tar xvf reports.tar",
+    hints: ["ディレクトリを指定すると、その中のサブディレクトリ(2024)も再帰的にアーカイブへ含まれます。"],
+    explanation:
+      "tarでディレクトリをまとめると、reports/2024/summary.txtのようなネストしたサブディレクトリ構造も" +
+      "そのままアーカイブに含まれ、展開時に元の階層構造ごと復元されます。",
+  },
+  {
+    id: "ch18-ex16",
+    chapterId: "ch18",
+    prompt: "logs ディレクトリ(access.log と error.log を含む)を logs.tar としてアーカイブし、その中身を確認してください(一覧表示は不要です)。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "tar cf logs.tar logs; tar tvf logs.tar",
+    hints: ["tar cf では一覧を表示しません。中身の確認には別途 tar tvf を使います。"],
+    explanation:
+      "ログファイルのようにサイズが増え続けるファイル群も、tarでまとめておけばバックアップとして扱いやすく" +
+      "なります。作成後にtar tvfで内容を確認する、という一連の流れを練習する演習です。",
+  },
+  {
+    id: "ch18-ex17",
+    chapterId: "ch18",
+    prompt: "logs ディレクトリを、tarでまとめると同時にbzip2圧縮も行い、logs.tar.bz2 として作成してください(まとめたファイルの一覧が表示されるようにしてください)。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "tar cjvf logs.tar.bz2 logs",
+    hints: [
+      "z の代わりに j オプションを使うと、gzipではなくbzip2で同時圧縮できます。",
+      "拡張子は慣習的に .tar.bz2 を使います。",
+    ],
+    explanation:
+      "tar に j オプションを追加すると、アーカイブの作成と同時にbzip2による圧縮が行われます。zオプション" +
+      "(gzip)をjに変えるだけで使い方は同じで、拡張子には慣習的に .tar.bz2 を使います。",
+  },
+  {
+    id: "ch18-ex18",
+    chapterId: "ch18",
+    prompt:
+      "logs ディレクトリを logs.tar.bz2 としてtar+bzip2でアーカイブしてから元の logs ディレクトリを削除し、" +
+      "そのアーカイブから復元してください(展開したファイル名の一覧が表示されるようにしてください)。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "tar cjf logs.tar.bz2 logs; rm -r logs; tar xjvf logs.tar.bz2",
+    hints: ["作成時に j を付けたアーカイブは、展開するときにも j を付ける必要があります。"],
+    explanation:
+      "tar xjvf アーカイブ名 は、j(bzip2伸長)・v(詳細表示)・f(ファイル名指定)を組み合わせて、" +
+      "tar+bzip2でまとめられたアーカイブを一度に伸長・展開します。",
+  },
+  {
+    id: "ch18-ex19",
+    chapterId: "ch18",
+    prompt: "reports ディレクトリを、tarでまとめると同時にgzip圧縮も行い、reports.tar.gz として作成してください(まとめたファイルの一覧が表示されるようにしてください)。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "tar czvf reports.tar.gz reports",
+    hints: ["z オプションを追加すると、tarでのアーカイブ作成と同時にgzip圧縮も行われます。"],
+    explanation:
+      "tar czvf reports.tar.gz reports は、reportsディレクトリ(サブディレクトリ2024を含む)をまとめながら" +
+      "gzip圧縮し、1つの reports.tar.gz ファイルを作成します。",
+  },
+  {
+    id: "ch18-ex20",
+    chapterId: "ch18",
+    prompt: "reports ディレクトリを reports.tar.gz としてtar+gzipでアーカイブしたうえで、そのアーカイブの中身をパーミッション等の詳細情報付きで確認してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "tar czf reports.tar.gz reports; tar tvf reports.tar.gz",
+    hints: ["tar tvf は、対象がgzip圧縮されたアーカイブであっても中身を確認できます。"],
+    explanation:
+      "tar t(list)はgzip/bzip2で圧縮されたアーカイブに対してもそのまま使え、展開せずに中身の一覧を確認" +
+      "できます。バックアップの中身を実際に展開せずに検証したいときに便利です。",
+  },
+  {
+    id: "ch18-ex21",
+    chapterId: "ch18",
+    prompt: "dir1 ディレクトリを dir1.tar.bz2 としてtar+bzip2でアーカイブしたうえで、そのアーカイブから file-1.txt だけを取り出してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "tar cjf dir1.tar.bz2 dir1; tar xjf dir1.tar.bz2 dir1/file-1.txt",
+    hints: ["展開時にも j を付け、そのあとに取り出したいファイルのパスを指定します。"],
+    explanation:
+      "圧縮されたアーカイブに対しても、tar x j f アーカイブ名 対象パス のように対象パスを指定することで、" +
+      "特定のファイルだけを選んで展開できます。",
+  },
+  {
+    id: "ch18-ex22",
+    chapterId: "ch18",
+    prompt: "project ディレクトリを、tarでまとめると同時にbzip2圧縮も行い、project.tar.bz2 として作成してください(まとめたファイルの一覧が表示されるようにしてください)。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "tar cjvf project.tar.bz2 project",
+    hints: ["czvfのzをjに変えるだけで、bzip2圧縮のアーカイブが作成できます。"],
+    explanation:
+      "gzip(z)・bzip2(j)のどちらを使うかはオプション1文字を変えるだけで切り替えられ、tarコマンドの" +
+      "使い方自体は共通しています。",
+  },
+  {
+    id: "ch18-ex23",
+    chapterId: "ch18",
+    prompt: "logs ディレクトリを logs.tar としてアーカイブし、詳細情報なしでファイル名の一覧だけを表示して確認してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "tar cf logs.tar logs; tar tf logs.tar",
+    hints: ["tar tf(vなし)は、パーミッション等の詳細情報を付けずにファイル名の一覧だけを表示します。"],
+    explanation:
+      "tar tf はファイル名の一覧だけを簡潔に表示します。詳細情報(パーミッション・所有者・サイズ)まで" +
+      "必要な場合はvを付けてtar tvfとしますが、名前の一覧だけで十分なときはtar tfで済ませられます。",
+  },
+  {
+    id: "ch18-ex24",
+    chapterId: "ch18",
+    prompt: "project ディレクトリ、dir1 ディレクトリの順で、両方を combined.tar という1つのアーカイブにまとめ、その中身を詳細情報付きで確認してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "tar cf combined.tar project dir1; tar tvf combined.tar",
+    hints: ["tar cf アーカイブ名 のあとに複数のディレクトリを並べると、まとめて1つのアーカイブに含められます。"],
+    explanation:
+      "tarはアーカイブ対象として複数のファイル・ディレクトリを同時に指定できます。project と dir1 の" +
+      "両方をまとめて1つのcombined.tarにできることを確認する演習です。",
+  },
+  {
+    id: "ch18-ex25",
+    chapterId: "ch18",
+    prompt:
+      "project ディレクトリ、dir1 ディレクトリの順で、両方を combined.tar としてアーカイブしてから元の両方の" +
+      "ディレクトリを削除し、アーカイブから復元してください(展開したファイル名の一覧が表示されるようにしてください)。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "tar cf combined.tar project dir1; rm -r project dir1; tar xvf combined.tar",
+    hints: ["rm -r には複数のディレクトリ名を並べて指定でき、まとめて削除できます。"],
+    explanation:
+      "複数のディレクトリを1つのアーカイブにまとめておけば、rm -rで両方削除してしまっても、" +
+      "tar xvfひとつで元の構成をまとめて復元できます。これがアーカイブをバックアップとして使う利点です。",
+  },
+
+  // ---------------------------------------------------------------------
+  // Ch18: アーカイブとバックアップ(gzip/gunzip 追加分, 書籍p350-353)
+  // ---------------------------------------------------------------------
+  {
+    id: "ch18-ex26",
+    chapterId: "ch18",
+    prompt: "ps.txt を gzip で圧縮してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "gzip ps.txt",
+    hints: ["gzip ファイル名 で、そのファイルを圧縮できます。"],
+    explanation:
+      "書籍(p350)では ps aux > ps.txt のようにコマンドの出力をファイルに保存したうえでgzip圧縮する例が" +
+      "紹介されています。gzip ps.txt を実行すると ps.txt.gz が作られ、元の ps.txt は削除されます。",
+  },
+  {
+    id: "ch18-ex27",
+    chapterId: "ch18",
+    prompt: "ps.txt を gzip で圧縮したうえで、gzip -d を使って元のファイルに戻してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "gzip ps.txt; gzip -d ps.txt.gz",
+    hints: [
+      "gunzipの代わりに gzip -d ファイル名.gz でも同様に伸長できます。",
+      "-d(decompress)オプションが伸長を意味します。",
+    ],
+    explanation:
+      "gunzip は実は gzip -d を呼び出す薄いラッパーで、書籍(p351)でも「gunzipの正体は gzip -d を実行する" +
+      "シェルスクリプトである」と紹介されています。どちらのコマンドを使っても結果は同じです。",
+  },
+  {
+    id: "ch18-ex28",
+    chapterId: "ch18",
+    prompt: "logs ディレクトリ内の access.log を gzip で圧縮してください。ただし元の access.log は削除せずに残してください。",
+    initialCwd: "/home/study/practice/ch18_archive/logs",
+    referenceSolution: "gzip -k access.log",
+    hints: ["-k(keep)オプションを付けると、圧縮後も元のファイルを残せます。"],
+    explanation:
+      "gzip はデフォルトで圧縮後に元のファイルを削除しますが、-k(keep)オプションを付けることで元のファイルを" +
+      "残したまま圧縮ファイルだけを追加で作成できます。ログファイルのように元データも残しておきたい場合に便利です。",
+  },
+  {
+    id: "ch18-ex29",
+    chapterId: "ch18",
+    prompt: "logs ディレクトリ内の error.log を gzip で圧縮したうえで、gunzip を使って元のファイルに戻してください。",
+    initialCwd: "/home/study/practice/ch18_archive/logs",
+    referenceSolution: "gzip error.log; gunzip error.log.gz",
+    hints: ["gunzip ファイル名.gz で、gzip圧縮されたファイルを元に戻せます。"],
+    explanation:
+      "gunzip はgzipで圧縮されたファイル(.gz拡張子)を元の内容に伸長する専用コマンドです。伸長後は" +
+      "error.log という元のファイル名に戻り、error.log.gz は削除されます。",
+  },
+  {
+    id: "ch18-ex30",
+    chapterId: "ch18",
+    prompt: "reports ディレクトリ内の notes.txt を gzip で圧縮してください。",
+    initialCwd: "/home/study/practice/ch18_archive/reports",
+    referenceSolution: "gzip notes.txt",
+    hints: ["カレントディレクトリを reports に移してあるので、ファイル名だけを指定すれば圧縮できます。"],
+    explanation:
+      "gzip ファイル名 は、指定した単一のファイルを圧縮します。tarと違い、gzip単体では複数ファイルや" +
+      "ディレクトリをまとめて圧縮することはできません。",
+  },
+  {
+    id: "ch18-ex31",
+    chapterId: "ch18",
+    prompt: "reports/2024 ディレクトリ内の summary.txt を gzip で圧縮してください。ただし元の summary.txt は削除せずに残してください。",
+    initialCwd: "/home/study/practice/ch18_archive/reports/2024",
+    referenceSolution: "gzip -k summary.txt",
+    hints: ["-k(keep)オプションを付けると、圧縮後も元のファイルを残せます。"],
+    explanation:
+      "-k(keep)オプションはgzip/gunzipのどちらでも使え、圧縮・伸長のどちらの場合も元のファイルを削除せずに" +
+      "残したいときに指定します。",
+  },
+  {
+    id: "ch18-ex32",
+    chapterId: "ch18",
+    prompt: "project ディレクトリ内の README.md を gzip で圧縮してください。",
+    initialCwd: "/home/study/practice/ch18_archive/project",
+    referenceSolution: "gzip README.md",
+    hints: ["gzip ファイル名 で、そのファイル単体を圧縮できます。"],
+    explanation:
+      "gzip はディレクトリ全体ではなく単一のファイルを対象とする圧縮コマンドです。ディレクトリごと" +
+      "バックアップしたい場合は、先にtarでまとめてから圧縮するか、tarのz/jオプションで同時に行います。",
+  },
+
+  // ---------------------------------------------------------------------
+  // Ch18: アーカイブとバックアップ(bzip2/bunzip2 追加分, 書籍p354-355)
+  // ---------------------------------------------------------------------
+  {
+    id: "ch18-ex33",
+    chapterId: "ch18",
+    prompt: "ps.txt を bzip2 で圧縮してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "bzip2 ps.txt",
+    hints: ["bzip2 はgzipと同様の使い方で、拡張子は .bz2 になります。"],
+    explanation:
+      "bzip2 ファイル名 は、gzipと同じ感覚で使える圧縮コマンドです。デフォルトでは圧縮後に元のファイルを" +
+      "削除し、.bz2拡張子の圧縮ファイルだけが残ります。",
+  },
+  {
+    id: "ch18-ex34",
+    chapterId: "ch18",
+    prompt: "ps.txt を bzip2 で圧縮したうえで、bunzip2 を使って元のファイルに戻してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "bzip2 ps.txt; bunzip2 ps.txt.bz2",
+    hints: ["bunzip2 ファイル名.bz2 で、bzip2圧縮されたファイルを元に戻せます。"],
+    explanation:
+      "bunzip2 はbzip2で圧縮されたファイル(.bz2拡張子)を元の内容に伸長するコマンドです。gunzipとgzipの" +
+      "関係と同様、bunzip2はbzip2の伸長操作を行う専用コマンドです。",
+  },
+  {
+    id: "ch18-ex35",
+    chapterId: "ch18",
+    prompt: "logs ディレクトリ内の access.log を bzip2 で圧縮してください。ただし元の access.log は削除せずに残してください。",
+    initialCwd: "/home/study/practice/ch18_archive/logs",
+    referenceSolution: "bzip2 -k access.log",
+    hints: ["-k(keep)オプションを付けると、圧縮後も元のファイルを残せます。"],
+    explanation:
+      "-k(keep)オプションはbzip2/bunzip2でも同様に使え、圧縮後も元のファイルを削除せずに残せます。",
+  },
+  {
+    id: "ch18-ex36",
+    chapterId: "ch18",
+    prompt: "logs ディレクトリ内の error.log を bzip2 で圧縮したうえで、bzip2 -d を使って元のファイルに戻してください。",
+    initialCwd: "/home/study/practice/ch18_archive/logs",
+    referenceSolution: "bzip2 error.log; bzip2 -d error.log.bz2",
+    hints: ["bunzip2の代わりに bzip2 -d ファイル名.bz2 でも同様に伸長できます。"],
+    explanation:
+      "gzip/gunzipの関係と同じく、bzip2 -d はbunzip2と同じ結果になります。-d(decompress)オプションで" +
+      "圧縮/伸長のどちらの動作にするかを切り替えられます。",
+  },
+  {
+    id: "ch18-ex37",
+    chapterId: "ch18",
+    prompt: "reports ディレクトリ内の notes.txt を bzip2 で圧縮してください。ただし元の notes.txt は削除せずに残してください。",
+    initialCwd: "/home/study/practice/ch18_archive/reports",
+    referenceSolution: "bzip2 -k notes.txt",
+    hints: ["-k(keep)オプションを付けると、圧縮後も元のファイルを残せます。"],
+    explanation:
+      "bzip2はgzipよりも圧縮率が高くなることが多い一方、圧縮に時間がかかる傾向があります(書籍p354)。" +
+      "使い方自体はgzipとほぼ同じです。",
+  },
+  {
+    id: "ch18-ex38",
+    chapterId: "ch18",
+    prompt: "reports/2024 ディレクトリ内の summary.txt を bzip2 で圧縮したうえで、bunzip2 を使って元のファイルに戻してください。",
+    initialCwd: "/home/study/practice/ch18_archive/reports/2024",
+    referenceSolution: "bzip2 summary.txt; bunzip2 summary.txt.bz2",
+    hints: ["bunzip2 ファイル名.bz2 で、元のファイルに戻せます。"],
+    explanation:
+      "bzip2で圧縮したファイルは、対になるbunzip2コマンドで伸長して元に戻します。tar/gzipと同じく、" +
+      "圧縮コマンドと伸長コマンドが対になっている点を確認できる演習です。",
+  },
+  {
+    id: "ch18-ex39",
+    chapterId: "ch18",
+    prompt: "project ディレクトリ内の README.md を bzip2 で圧縮してください。ただし元の README.md は削除せずに残してください。",
+    initialCwd: "/home/study/practice/ch18_archive/project",
+    referenceSolution: "bzip2 -k README.md",
+    hints: ["-k(keep)オプションを付けると、圧縮後も元のファイルを残せます。"],
+    explanation:
+      "-kオプションを付けることで、圧縮の効果(.bz2ファイルのサイズ)を確認しつつ、元のファイルも" +
+      "手元に残しておくことができます。",
+  },
+  {
+    id: "ch18-ex40",
+    chapterId: "ch18",
+    prompt: "dir1 ディレクトリ内の file-4.txt を gzip で圧縮してください。",
+    initialCwd: "/home/study/practice/ch18_archive/dir1",
+    referenceSolution: "gzip file-4.txt",
+    hints: ["gzip はディレクトリ全体ではなく、指定した単一のファイルだけを圧縮します。"],
+    explanation:
+      "dir1のように複数ファイルを含むディレクトリであっても、gzipは指定した1つのファイルだけを圧縮対象と" +
+      "します。ディレクトリ全体を圧縮したい場合はtarのz/jオプションと組み合わせる必要があります。",
+  },
+  {
+    id: "ch18-ex41",
+    chapterId: "ch18",
+    prompt: "dir1 ディレクトリ内の file-5.txt を bzip2 で圧縮してください。",
+    initialCwd: "/home/study/practice/ch18_archive/dir1",
+    referenceSolution: "bzip2 file-5.txt",
+    hints: ["bzip2 も gzip と同様、指定した単一のファイルだけを圧縮します。"],
+    explanation:
+      "gzip・bzip2はいずれも単一ファイル向けの圧縮コマンドである、という共通点をあらためて確認する演習です。",
+  },
+
+  // ---------------------------------------------------------------------
+  // Ch18: アーカイブとバックアップ(zip/unzip 追加分, 書籍p356-359)
+  // ---------------------------------------------------------------------
+  {
+    id: "ch18-ex42",
+    chapterId: "ch18",
+    prompt: "dir1 ディレクトリを再帰的に dir1.zip としてzip圧縮したうえで、そのアーカイブの中身を一覧表示してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "zip -r dir1.zip dir1; unzip -l dir1.zip",
+    hints: ["zip はデフォルトではディレクトリの中身をたどらないため、-r(recursive)オプションが必要です。"],
+    explanation:
+      "zip -r アーカイブ名 対象ディレクトリ は、-r(recursive)を付けることでディレクトリ以下のファイルを" +
+      "再帰的にzipアーカイブへまとめます。unzip -l アーカイブ名 は展開を行わず、中身の一覧とサイズだけを" +
+      "表示します。",
+  },
+  {
+    id: "ch18-ex43",
+    chapterId: "ch18",
+    prompt: "dir1 ディレクトリを dir1.zip として圧縮してから元の dir1 ディレクトリを削除し、そのzipアーカイブを展開して復元してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "zip -r dir1.zip dir1; rm -r dir1; unzip dir1.zip",
+    hints: ["unzip アーカイブ名 で、オプションなしで実行するとアーカイブの中身がすべて展開されます。"],
+    explanation:
+      "tar/gzip/bzip2と同じく、zip(まとめる)とunzip(元に戻す)は対になるコマンドです。zip -rでバックアップを" +
+      "作っておけば、元のディレクトリを削除してしまってもunzipで復元できます。",
+  },
+  {
+    id: "ch18-ex44",
+    chapterId: "ch18",
+    prompt: "logs ディレクトリを再帰的に logs.zip としてzip圧縮したうえで、そのアーカイブの中身を一覧表示してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "zip -r logs.zip logs; unzip -l logs.zip",
+    hints: ["-r を忘れると、logsディレクトリの中身(access.log/error.log)が含まれません。"],
+    explanation:
+      "-rを付けずに zip logs.zip logs だけを実行すると、logsディレクトリの中身が空としてしか扱われず、" +
+      "中のファイルはアーカイブに含まれません。ディレクトリを対象にするときは必ず-rを付ける習慣が重要です。",
+  },
+  {
+    id: "ch18-ex45",
+    chapterId: "ch18",
+    prompt: "logs ディレクトリを logs.zip として圧縮してから元の logs ディレクトリを削除し、そのzipアーカイブを展開して復元してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "zip -r logs.zip logs; rm -r logs; unzip logs.zip",
+    hints: ["zip -r でまとめてから rm -r で削除し、unzip で復元するという一連の流れです。"],
+    explanation:
+      "ログファイルのようなディレクトリも、zip -rでまとめておけばバックアップとして持ち運びやすくなります。",
+  },
+  {
+    id: "ch18-ex46",
+    chapterId: "ch18",
+    prompt: "reports ディレクトリ(notes.txt と 2024/summary.txt を含む)を再帰的に reports.zip としてzip圧縮したうえで、そのアーカイブの中身を一覧表示してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "zip -r reports.zip reports; unzip -l reports.zip",
+    hints: ["-r を付けることで、reports/2024 のようなサブディレクトリの中身もまとめてアーカイブに含まれます。"],
+    explanation:
+      "zip -r は、reports/2024/summary.txtのようにネストしたサブディレクトリ構造もそのままアーカイブに" +
+      "含めます。",
+  },
+  {
+    id: "ch18-ex47",
+    chapterId: "ch18",
+    prompt: "reports ディレクトリを reports.zip として圧縮してから元の reports ディレクトリを削除し、そのzipアーカイブを展開して復元してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "zip -r reports.zip reports; rm -r reports; unzip reports.zip",
+    hints: ["unzip アーカイブ名 で、ネストしたサブディレクトリ構造もそのまま復元されます。"],
+    explanation:
+      "unzip で展開すると、reports/2024/summary.txt のような階層構造も含めて元通りに復元されます。",
+  },
+  {
+    id: "ch18-ex48",
+    chapterId: "ch18",
+    prompt: "project ディレクトリを再帰的に project.zip としてzip圧縮したうえで、そのアーカイブの中身を一覧表示してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "zip -r project.zip project; unzip -l project.zip",
+    hints: ["-r(recursive)オプションを忘れずに付けます。"],
+    explanation:
+      "srcサブディレクトリを含むprojectディレクトリでも、-rを付けることでapp.shまで含めて再帰的に" +
+      "アーカイブへまとめられます。",
+  },
+  {
+    id: "ch18-ex49",
+    chapterId: "ch18",
+    prompt: "project ディレクトリを project.zip として圧縮してから元の project ディレクトリを削除し、そのzipアーカイブを展開して復元してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "zip -r project.zip project; rm -r project; unzip project.zip",
+    hints: ["zip -r → rm -r → unzip、という順序で操作します。"],
+    explanation:
+      "zip/unzipもtarと同じく、バックアップ・復元の手段として使えることを確認する演習です。",
+  },
+  {
+    id: "ch18-ex50",
+    chapterId: "ch18",
+    prompt: "ps.txt を ps.zip として圧縮してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "zip ps.zip ps.txt",
+    hints: ["対象が単一のファイルの場合、ディレクトリではないので-r(recursive)は不要です。"],
+    explanation:
+      "-r(recursive)オプションはディレクトリの中身をたどるためのものなので、単一ファイルを圧縮する場合は" +
+      "付けなくても問題ありません。",
+  },
+  {
+    id: "ch18-ex51",
+    chapterId: "ch18",
+    prompt: "ps.txt を ps.zip として圧縮したうえで、そのアーカイブの中身を一覧表示してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "zip ps.zip ps.txt; unzip -l ps.zip",
+    hints: ["unzip -l アーカイブ名 で、展開せずに中身の一覧を確認できます。"],
+    explanation:
+      "単一ファイルを圧縮した場合でも、unzip -lで中身(ファイル名・サイズ)を確認できます。",
+  },
+  {
+    id: "ch18-ex52",
+    chapterId: "ch18",
+    prompt: "project ディレクトリ、dir1 ディレクトリの順で、両方を再帰的に combined.zip という1つのzipアーカイブにまとめ、その中身を一覧表示してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "zip -r combined.zip project dir1; unzip -l combined.zip",
+    hints: ["zip -r アーカイブ名 のあとに複数のディレクトリを並べると、まとめて1つのアーカイブに含められます。"],
+    explanation:
+      "zipもtarと同様、アーカイブ対象として複数のディレクトリを同時に指定できます。",
+  },
+  {
+    id: "ch18-ex53",
+    chapterId: "ch18",
+    prompt: "dir1 ディレクトリを archive.zip として圧縮したあと、同じ archive.zip に project ディレクトリも追加してください(結果としてarchive.zipにdir1とprojectの両方が含まれるようにしてください)。中身を一覧表示して確認してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "zip -r archive.zip dir1; zip -r archive.zip project; unzip -l archive.zip",
+    hints: [
+      "既に存在するzipアーカイブに対してzipコマンドを再度実行すると、新しいファイルが追加されます。",
+      "1回目のzipでdir1を、2回目のzipでprojectを、同じarchive.zipに対して指定します。",
+    ],
+    explanation:
+      "tarと違い、zipは既存のアーカイブに対してさらにzipコマンドを実行することで、中身を追記していける" +
+      "点が特徴です。1つのアーカイブに複数回に分けてファイルを追加していく、という使い方ができます。",
+  },
+  {
+    id: "ch18-ex54",
+    chapterId: "ch18",
+    prompt: "dir1 ディレクトリを再帰的に dir1.zip としてzip圧縮したうえで、そのアーカイブから file-2.txt だけを展開してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "zip -r dir1.zip dir1; unzip dir1.zip dir1/file-2.txt",
+    hints: ["unzip アーカイブ名 のあとに対象パスを指定すると、そのファイルだけを展開できます。"],
+    explanation:
+      "unzip はtarのxコマンドと同様、対象パスを指定することでアーカイブ全体ではなく特定のファイルだけを" +
+      "選んで展開できます。",
+  },
+  {
+    id: "ch18-ex55",
+    chapterId: "ch18",
+    prompt: "logs ディレクトリ、reports ディレクトリの順で、両方を再帰的に backup.zip としてまとめ、その中身を一覧表示してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "zip -r backup.zip logs reports; unzip -l backup.zip",
+    hints: ["zip -r アーカイブ名 のあとに複数のディレクトリを並べて指定します。"],
+    explanation:
+      "性質の異なる複数のディレクトリ(ログファイル群とレポート群)を1つのバックアップアーカイブに" +
+      "まとめる、という実務でもよくある操作です。",
+  },
+  {
+    id: "ch18-ex56",
+    chapterId: "ch18",
+    prompt: "dir1 ディレクトリ、project ディレクトリの順で、両方を backup.zip としてまとめてから元の両方のディレクトリを削除し、そのzipアーカイブを展開して復元してください。",
+    initialCwd: "/home/study/practice/ch18_archive",
+    referenceSolution: "zip -r backup.zip dir1 project; rm -r dir1 project; unzip backup.zip",
+    hints: ["zip -r でまとめる際に対象ディレクトリを複数指定できます。"],
+    explanation:
+      "複数のディレクトリを1つのzipアーカイブにまとめておけば、rm -rで両方削除してしまっても、" +
+      "unzipひとつで元の構成をまとめて復元できます。",
+  },
+
+  // ---------------------------------------------------------------------
+  // Ch18: アーカイブとバックアップ(概念クイズ 1/2, tar/gzip/bzip2, 書籍p345-355)
+  // ---------------------------------------------------------------------
+  {
+    id: "ch18-ex57",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "tarというコマンド名の由来として最も適切なものはどれですか?",
+    choices: [
+      "Tape Archive(テープアーカイブ)の略",
+      "Text Archive Resource(テキストアーカイブリソース)の略",
+      "Total Archive Recovery(トータルアーカイブリカバリ)の略",
+      "特に略語ではなく、任意に付けられた名前",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["古いUNIXでは、磁気テープにファイルをまとめて保存するために使われていたコマンドです。"],
+    explanation:
+      "tarはTape Archiveの略で、もともとは磁気テープ装置にファイルをまとめて書き出すためのコマンドでした。" +
+      "今日ではテープ装置を使わずとも、複数ファイルを1つのアーカイブファイルにまとめる目的で広く使われています。",
+  },
+  {
+    id: "ch18-ex58",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "tarコマンドの c・x・t オプションの組み合わせとして正しいものはどれですか?",
+    choices: [
+      "c=作成(create)、x=展開(extract)、t=一覧表示(list)",
+      "c=一覧表示、x=作成、t=展開",
+      "c=展開、x=一覧表示、t=作成",
+      "c・x・tはすべて同じ意味で、どれを使っても動作は変わらない",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["c/x/tはそれぞれ英単語の頭文字に対応しています。"],
+    explanation:
+      "tarのc(create)は新規アーカイブの作成、x(extract)はアーカイブからの展開、t(list)はアーカイブの中身の" +
+      "一覧表示を意味し、この3つのうちいずれか1つを必ず指定します。",
+  },
+  {
+    id: "ch18-ex59",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "tar cvf archive.tar dir1 というコマンドのオプション c・v・f の意味として正しいものはどれですか?",
+    choices: [
+      "c=作成、v=詳細表示、f=アーカイブファイル名の指定",
+      "c=圧縮、v=検証、f=強制実行",
+      "c=コピー、v=バージョン確認、f=フォーマット",
+      "c=確認、v=バージョン、f=フォルダ指定",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["fの直後には必ずアーカイブのファイル名が続きます。"],
+    explanation: "c(create)で新規作成、v(verbose)で詳細な一覧表示、f(file)の直後にアーカイブ名を指定します。",
+  },
+  {
+    id: "ch18-ex60",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt:
+      "書籍の解説によれば、tarでアーカイブを作成(c)・展開(x)する際にv(verbose)オプションを付けることについて、" +
+      "どのようなアドバイスがされていますか?",
+    choices: [
+      "作成・展開時にvを付けるより、作成後にtar tvfで中身を確認する方がよいとされている",
+      "vオプションは必ず付けなければならず、付けないとアーカイブが壊れる",
+      "vオプションはtar展開時にしか使えない",
+      "vオプションを付けると、アーカイブの圧縮率が上がる",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["作成・展開中の一覧表示よりも、後から落ち着いて確認する方が確実だという趣旨です。"],
+    explanation:
+      "書籍(p347付近)では、cやxと一緒にvを使うよりも、作成後にtar tvfでアーカイブの中身を確認する方法が" +
+      "勧められています。作成・展開の最中に流れる大量の一覧表示は見落としやすいためです。",
+  },
+  {
+    id: "ch18-ex61",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "tar cf archive.tar mydir のように、対象としてディレクトリを指定した場合の動作として正しいものはどれですか?",
+    choices: [
+      "mydir配下のファイル・サブディレクトリが再帰的にすべてアーカイブに含まれる",
+      "mydir自体の情報だけが記録され、中身のファイルは含まれない",
+      "mydir直下のファイルのみが含まれ、サブディレクトリは無視される",
+      "ディレクトリを指定するとエラーになる",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["zip -rのように明示的なオプションを付けなくても、tarはディレクトリを再帰的に扱います。"],
+    explanation: "tarはディレクトリを指定すると、その中のファイル・サブディレクトリを再帰的にすべてアーカイブへ含めます。",
+  },
+  {
+    id: "ch18-ex62",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "tar xf archive.tar を実行したとき、展開先に同名のファイルが既に存在する場合の挙動として正しいものはどれですか?",
+    choices: [
+      "確認なしに上書きされる",
+      "エラーになり展開が中断される",
+      "自動的に別名(ファイル名(1)など)で保存される",
+      "既存のファイルが優先され、アーカイブ側の内容は無視される",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["cp/mvと違い、tarの展開はデフォルトで上書き確認を行いません。"],
+    explanation:
+      "tar xfはデフォルトで確認なしに既存ファイルを上書きします。誤って別の場所へ展開すると、意図せず" +
+      "既存ファイルを失う可能性があるため注意が必要です。",
+  },
+  {
+    id: "ch18-ex63",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt:
+      "z/jなどのオプションを付けずに tar cf archive.tar dir1 を実行した場合、アーカイブファイルのサイズについて" +
+      "正しい説明はどれですか?",
+    choices: [
+      "ファイルをまとめるだけで圧縮は行われないため、元のファイル合計サイズとほぼ同じになる",
+      "自動的にgzip相当の圧縮が行われ、サイズは小さくなる",
+      "アーカイブ化すると常にサイズが2倍になる",
+      "空のファイルとして作成される",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["tar単体の役割は「まとめる」ことであり、「小さくする(圧縮)」ことではありません。"],
+    explanation:
+      "tarは複数のファイルを1つにまとめる(アーカイブ化する)コマンドで、それ自体には圧縮機能はありません。" +
+      "小さくしたい場合はz(gzip)やj(bzip2)オプションを追加する必要があります。",
+  },
+  {
+    id: "ch18-ex64",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "tarでアーカイブを展開する際、root権限が必要になることがあるのはどのような場合ですか?",
+    choices: [
+      "アーカイブに記録されている所有者情報を厳密に復元しようとする場合など",
+      "tar展開はいかなる場合も一般ユーザーの権限で完結し、root権限が必要になることはない",
+      "アーカイブのサイズが1MBを超える場合",
+      "アーカイブ名にドットが含まれる場合",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["ファイルの所有者(owner)を変更するのはroot権限が必要な操作の1つでしたね(Ch9)。"],
+    explanation:
+      "tarアーカイブにはファイルの所有者・グループ情報も記録されます。これを厳密に復元しようとすると" +
+      "所有者の変更が必要になり、root権限を要求される場合があります(Ch9のパーミッションの知識と関連します)。",
+  },
+  {
+    id: "ch18-ex65",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "tarで作成したアーカイブファイルに付ける拡張子として、慣習的に使われるものはどれですか?",
+    choices: [".tar", ".tr", ".tarball", ".arc"],
+    correctChoiceIndex: 0,
+    hints: ["拡張子自体に技術的な強制力はありませんが、慣習として広く使われているものがあります。"],
+    explanation: "拡張子は必須ではありませんが、tarで作成した(圧縮なしの)アーカイブには慣習的に.tar拡張子が付けられます。",
+  },
+  {
+    id: "ch18-ex66",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "tar tf archive.tar と tar tvf archive.tar の違いとして正しいものはどれですか?",
+    choices: [
+      "tvfはパーミッション・所有者・サイズなどの詳細情報付きで一覧表示するが、tfはファイル名の一覧のみ",
+      "tfはアーカイブを展開するが、tvfは一覧表示のみ",
+      "tvfは圧縮されたアーカイブにしか使えない",
+      "tfとtvfに違いはなく、常に同じ結果になる",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["v(verbose)の有無で表示される情報量が変わります。"],
+    explanation: "tar tfはファイル名の一覧のみを簡潔に表示するのに対し、tar tvfはls -lに似た詳細情報付きで表示します。",
+  },
+  {
+    id: "ch18-ex67",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "gzipコマンドが圧縮できる対象として正しいものはどれですか?",
+    choices: [
+      "単一のファイルのみで、ディレクトリを直接圧縮することはできない",
+      "ディレクトリを指定すると再帰的に圧縮できる",
+      "複数のファイルを1つの.gzファイルにまとめて圧縮できる",
+      "実行可能ファイルは圧縮できない",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["ディレクトリをまとめて圧縮したい場合は、先にtarでまとめる必要があります。"],
+    explanation:
+      "gzipは単一ファイルを対象とする圧縮コマンドです。複数ファイルやディレクトリをまとめて圧縮したい" +
+      "場合は、先にtarで1つのアーカイブにまとめてからgzipで圧縮するか、tarのzオプションを使います。",
+  },
+  {
+    id: "ch18-ex68",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "gzip file.txt を実行した直後の状態として正しいものはどれですか?",
+    choices: [
+      "file.txt.gzが作成され、元のfile.txtは削除される",
+      "file.txt.gzが作成されるが、元のfile.txtはそのまま残る",
+      "file.txtの内容が直接書き換えられ、拡張子は変わらない",
+      "何も変化しない(明示的に-cを付けないと圧縮されない)",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["元のファイルも残したい場合は-k(keep)オプションが必要でしたね。"],
+    explanation:
+      "gzipはデフォルトで圧縮後に元のファイルを削除します。元のファイルも残したい場合は-k(keep)オプションを" +
+      "付ける必要があります。",
+  },
+  {
+    id: "ch18-ex69",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: ".gz拡張子が付いたファイルについて正しい説明はどれですか?",
+    choices: [
+      "gzipコマンドで圧縮されたファイルであることを示す",
+      "GNU Zipのソースコードファイルであることを示す",
+      "Gitで管理されているファイルであることを示す",
+      "常に画像ファイルであることを示す",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["拡張子はコマンド名(gzip)の頭2文字に由来します。"],
+    explanation: ".gzはgzipによる圧縮ファイルであることを示す慣習的な拡張子です。",
+  },
+  {
+    id: "ch18-ex70",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "gunzipコマンドの実体について、書籍で説明されている内容として正しいものはどれですか?",
+    choices: [
+      "実質的に gzip -d を実行するのと同じ結果になる、伸長専用のコマンド",
+      "gzipとは全く異なる独自の圧縮アルゴリズムを使うコマンド",
+      "gzipより新しい圧縮形式(.gz2)を扱うコマンド",
+      "gzipで圧縮されたファイルを暗号化するコマンド",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["gunzipは中身を見ると、gzip -dを呼び出すだけのスクリプトになっています。"],
+    explanation: "gunzipはgzip -dと同じ効果を持つ伸長専用のコマンドです(書籍p351)。",
+  },
+  {
+    id: "ch18-ex71",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "gzip -c file.txt > file.txt.gz のように使われる -c オプションの意味として正しいものはどれですか?",
+    choices: [
+      "圧縮結果をファイルに保存せず標準出力に書き出す(リダイレクトと組み合わせて使う)",
+      "圧縮率を最大にする(compress強)",
+      "確認プロンプトを表示する(confirm)",
+      "コピーを作成してから圧縮する",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["cはconsole(標準出力)への出力を意味し、リダイレクト(>)と組み合わせて使うのが前提です。"],
+    explanation:
+      "-c(stdout)は圧縮・伸長結果をファイルに直接保存せず、標準出力に書き出すオプションです。" +
+      "本アプリの仮想ターミナルではこの標準出力への直接出力機能は再現していませんが、概念として押さえておきましょう。",
+  },
+  {
+    id: "ch18-ex72",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "gzipで圧縮したファイルをcatコマンドでそのまま表示しようとすると、どうなりますか?",
+    choices: [
+      "テキストとして解釈できないバイナリデータが並び、意味のある文字列としては読めない",
+      "圧縮前の内容がそのまま表示される",
+      "エラーになり何も表示されない",
+      "常に「(gzip圧縮済み)」という固定の文字列が表示される",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["圧縮ファイルはテキストファイルではなく、バイナリデータです。"],
+    explanation:
+      "gzipで圧縮されたファイルはバイナリデータであり、catでそのまま表示しても意味のある文字列としては" +
+      "読めません。中身を確認したい場合は、まずgunzip(またはgzip -d)で伸長する必要があります。",
+  },
+  {
+    id: "ch18-ex73",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "tarでまとめたうえでgzip圧縮したアーカイブに、慣習的に使われる拡張子として正しいものはどれですか?",
+    choices: [".tar.gz(または.tgz)", ".gz.tar", ".targz", ".tar.zip"],
+    correctChoiceIndex: 0,
+    hints: [".tarと.gzを単純に組み合わせた形が正式な拡張子で、短縮形として.tgzも使われます。"],
+    explanation: "tar+gzipで作成したアーカイブには.tar.gzという拡張子が使われ、短縮形として.tgzもよく使われます。",
+  },
+  {
+    id: "ch18-ex74",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "tarでアーカイブ作成と同時にgzip圧縮を行うために指定するオプションはどれですか?",
+    choices: ["z", "j", "J", "g"],
+    correctChoiceIndex: 0,
+    hints: ["gZipの頭文字を連想すると覚えやすいです。"],
+    explanation: "zオプションを指定すると、アーカイブ作成(または展開)と同時にgzipによる圧縮(または伸長)が行われます。",
+  },
+  {
+    id: "ch18-ex75",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "tarでアーカイブ作成と同時にbzip2圧縮を行う場合に指定するオプションと、慣習的な拡張子の組み合わせとして正しいものはどれですか?",
+    choices: [
+      "jオプション、拡張子は.tar.bz2",
+      "zオプション、拡張子は.tar.bz2",
+      "jオプション、拡張子は.tar.gz",
+      "bオプション、拡張子は.tar.b2",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["zをjに変えるだけでgzipからbzip2に切り替わる、という説明を思い出しましょう。"],
+    explanation: "jオプションでbzip2による同時圧縮を行い、拡張子は慣習的に.tar.bz2を使います。",
+  },
+  {
+    id: "ch18-ex76",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt:
+      "tarでアーカイブ作成と同時にxz形式で圧縮を行う場合に指定するオプションはどれですか?" +
+      "(本アプリの仮想ターミナルではxz圧縮はシミュレートされていません)",
+    choices: ["J", "x", "X", "z"],
+    correctChoiceIndex: 0,
+    hints: ["gzip=z、bzip2=jに続く、xz用の大文字オプションです。"],
+    explanation:
+      "xz形式で同時圧縮する場合はJオプションを使い、拡張子は.tar.xzが慣習的に使われます" +
+      "(本アプリの仮想ターミナルではxz圧縮はサポートされていないため、この演習は知識確認のみです)。",
+  },
+  {
+    id: "ch18-ex77",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "xz圧縮形式の特徴として、書籍で説明されている内容に最も近いものはどれですか?",
+    choices: [
+      "bzip2よりもさらに高い圧縮率を持つが、圧縮に時間がかかる",
+      "gzipより圧縮率は劣るが、圧縮速度が非常に高速",
+      "テキストファイル専用の圧縮形式で、バイナリファイルには使えない",
+      "Windows専用の圧縮形式で、Linuxでは扱えない",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["Linuxカーネルのソースコード配布(kernel.org)でも使われている形式です。"],
+    explanation:
+      "xzはbzip2よりもさらに高い圧縮率を実現できる一方、圧縮処理には比較的時間がかかります。" +
+      "高い圧縮率が求められるLinuxカーネルのソースコード配布(kernel.org)などでも使われています。",
+  },
+  {
+    id: "ch18-ex78",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "gzip・bzip2・xzの一般的な傾向として正しい組み合わせはどれですか?",
+    choices: [
+      "圧縮率: xz > bzip2 > gzip、圧縮速度: gzip > bzip2 > xz",
+      "圧縮率: gzip > bzip2 > xz、圧縮速度: xz > bzip2 > gzip",
+      "3つとも圧縮率・速度に差はなく、どれを使っても同じ",
+      "圧縮率: bzip2 > xz > gzip、圧縮速度: bzip2 > gzip > xz",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["高い圧縮率を追求するほど、処理に時間がかかる傾向があります。"],
+    explanation:
+      "一般に圧縮率はxz > bzip2 > gzipの順に高くなりますが、圧縮速度はその逆でgzip > bzip2 > xzの" +
+      "順に高速です。用途に応じてどちらを優先するか選ぶ必要があります。",
+  },
+  {
+    id: "ch18-ex79",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "bzip2とgzipを比較したときの一般的な特徴として正しいものはどれですか?",
+    choices: [
+      "bzip2の方が圧縮率が高くなることが多いが、圧縮に時間がかかる傾向がある",
+      "bzip2はgzipよりも常に高速に圧縮できる",
+      "bzip2はテキストファイルしか圧縮できない",
+      "bzip2とgzipの圧縮アルゴリズムは全く同じで、コマンド名が違うだけ",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["「圧縮率が高い代わりに時間がかかる」というトレードオフです。"],
+    explanation: "bzip2はgzipよりも高い圧縮率を実現できることが多い一方、圧縮処理に時間がかかる傾向があります。",
+  },
+  {
+    id: "ch18-ex80",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: ".bz2拡張子が付いたファイルについて正しい説明はどれですか?",
+    choices: [
+      "bzip2コマンドで圧縮されたファイルであることを示す",
+      "bzip2のバージョン2で作られたバックアップファイル",
+      "常に画像ファイルであることを示す拡張子",
+      "Zipアーカイブの一種",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["gzipの.gzと同様、コマンド名に由来する拡張子です。"],
+    explanation: ".bz2はbzip2による圧縮ファイルであることを示す拡張子です。",
+  },
+  {
+    id: "ch18-ex81",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "bunzip2コマンドの役割として正しいものはどれですか?",
+    choices: [
+      "bzip2で圧縮されたファイル(.bz2)を元の内容に伸長する",
+      "bzip2で圧縮する前のファイルを検証する",
+      "bzip2圧縮ファイルをzip形式に変換する",
+      "bzip2の圧縮率を計算して表示するだけで、ファイルは変更しない",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["gunzipとgzipの関係と同じように考えると分かりやすいです。"],
+    explanation: "bunzip2はbzip2で圧縮されたファイルを元の内容に伸長するコマンドで、bzip2 -dと同じ効果を持ちます。",
+  },
+
+  // ---------------------------------------------------------------------
+  // Ch18: アーカイブとバックアップ(概念クイズ 2/2, パイプ/zip/総合比較, 書籍p350-359)
+  // ---------------------------------------------------------------------
+  {
+    id: "ch18-ex82",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "tar cf - dir1 | gzip -c > dir1.tar.gz というコマンドで使われている「-」の意味として正しいものはどれですか?",
+    choices: [
+      "アーカイブ先をファイルではなく標準出力にする、という意味",
+      "ディレクトリ全体を意味する特殊な記号",
+      "コマンドを無視する(コメントアウト)の意味",
+      "隠しファイルだけを対象にするという意味",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["tar cf の f オプションの引数として「-」を渡すと、ファイル名の代わりに標準出力を指す特別な意味になります。"],
+    explanation:
+      "tar cf - dir1 のように「-」をアーカイブ名として指定すると、結果をファイルに保存せず標準出力に" +
+      "書き出します。これをパイプでgzipに渡すことで、中間ファイルを作らずに圧縮できます" +
+      "(本アプリの仮想ターミナルではこのパイプ経由の書き方はサポートされていません)。",
+  },
+  {
+    id: "ch18-ex83",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "gzip -d -c dir1.tar.gz | tar xf - というコマンドで使われている、tar側の「-」の意味として正しいものはどれですか?",
+    choices: [
+      "アーカイブの入力元をファイルではなく標準入力にする、という意味",
+      "展開先のディレクトリを削除してから展開する、という意味",
+      "全てのファイルではなく最初の1件だけを展開する、という意味",
+      "エラーを無視して強制的に展開する、という意味",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["gzip -dの出力をパイプでtarに渡し、tar側はそれを標準入力として受け取ります。"],
+    explanation:
+      "tar xf - の「-」は、標準入力からアーカイブデータを読み込むことを意味します。gzip -d -cで伸長した" +
+      "結果をパイプで直接tarに渡すことで、中間ファイルを作らずに展開できます。",
+  },
+  {
+    id: "ch18-ex84",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "tar cf - dir1 | gzip -c > dir1.tar.gz のように、パイプを使ってtarとgzipを組み合わせる利点として最も適切なものはどれですか?",
+    choices: [
+      "中間ファイル(未圧縮の.tarファイル)を作らずに済む",
+      "圧縮率が通常より必ず高くなる",
+      "パーミッションの制約を回避できる",
+      "処理速度が必ず2倍になる",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["tar czfとほぼ同じ結果を得られますが、途中経過の考え方が異なります。"],
+    explanation:
+      "パイプを使うと、tarでまとめた結果を一度ディスク上のファイルに書き出すことなく、直接gzipへ渡して" +
+      "圧縮できます。中間ファイルの分のディスク容量やI/Oを節約できるのが利点です。",
+  },
+  {
+    id: "ch18-ex85",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "ssh osumi@serverB 'tar czf - dir1' | tar xzf - というコマンドの動作として最も適切な説明はどれですか?",
+    choices: [
+      "リモートホスト(serverB)上のdir1をアーカイブ・圧縮しつつ、その内容をパイプ経由で手元に転送し、手元で直接展開する",
+      "手元のdir1をリモートホストへ丸ごとコピーするだけで、圧縮は行われない",
+      "リモートホストと手元のホストで同時にdir1を削除する",
+      "リモートホストへSSH接続するかどうかを確認するだけで、実際のファイル転送は行わない",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["sshコマンドの引数として渡されたコマンドは、リモートホスト側で実行されます。"],
+    explanation:
+      "ssh host 'コマンド' は指定したコマンドをリモートホスト上で実行し、その標準出力を手元(ローカル)の" +
+      "標準出力として受け取れます。これをパイプでtar xzf -に渡すことで、リモートのディレクトリを圧縮・転送" +
+      "しつつ、手元で直接展開する、という一連の操作が1行で行えます。",
+  },
+  {
+    id: "ch18-ex86",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "zipとtar+gzipの違いとして最も適切な説明はどれですか?",
+    choices: [
+      "zipは1つのコマンドでアーカイブ化と圧縮を同時に行うが、tarとgzipはそれぞれ別の役割(まとめる/圧縮する)を持つ2つのコマンドを組み合わせる",
+      "zipは圧縮を一切行わず、まとめるだけのコマンドである",
+      "tarは常に圧縮を行うが、zipは圧縮を行わない",
+      "zipとtar+gzipは全く同じ内部形式のファイルを生成する",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["tarとgzipは役割が分かれていますが、zipは1つのコマンドで両方を兼ねています。"],
+    explanation:
+      "tarは「まとめる」、gzipは「圧縮する」という役割分担がありますが、zipは1つのコマンドでアーカイブ化と" +
+      "圧縮を同時に行います。",
+  },
+  {
+    id: "ch18-ex87",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "LinuxだけでなくWindowsやmacOSともファイルをやり取りする場面で、zip形式がよく使われる理由として最も適切なものはどれですか?",
+    choices: [
+      "zip形式はWindowsやmacOSでも標準的にサポートされており、相互のやり取りがしやすいため",
+      "zip形式はLinux専用のファイル形式で、他のOSでは開けないため",
+      "zipは圧縮率がtar+gzipより常に高いため",
+      "zipファイルは実行可能ファイルとしてそのまま起動できるため",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["異なるOS間でのファイル共有のしやすさが理由です。"],
+    explanation: "zip形式はWindowsやmacOSでも標準的に扱えるため、異なるOS環境の相手とファイルをやり取りする際によく使われます。",
+  },
+  {
+    id: "ch18-ex88",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "CentOS/Red Hat系のLinuxで、zip/unzipコマンドをインストールするために使うコマンドとして正しいものはどれですか?",
+    choices: ["dnf install zip unzip", "apt install zip unzip", "npm install zip unzip", "tar install zip unzip"],
+    correctChoiceIndex: 0,
+    hints: ["dnf/aptはCh20で扱うパッケージ管理コマンドでした。CentOS/Red Hat系はdnfを使います。"],
+    explanation:
+      "CentOS/Red Hat系ではdnf install zip unzip、Debian/Ubuntu系ではsudo apt install zip unzipで" +
+      "インストールします(Ch20のパッケージ管理の知識と関連します)。",
+  },
+  {
+    id: "ch18-ex89",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "Ubuntu/Debian系のLinuxで、zip/unzipコマンドをインストールするために使うコマンドとして正しいものはどれですか?",
+    choices: ["sudo apt install zip unzip", "sudo dnf install zip unzip", "sudo yum install zip unzip", "sudo brew install zip unzip"],
+    correctChoiceIndex: 0,
+    hints: ["Ubuntu/Debian系はaptを使います。"],
+    explanation: "Ubuntu/Debian系ではsudo apt install zip unzipでzip/unzipコマンドをインストールします。",
+  },
+  {
+    id: "ch18-ex90",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "zip archive.zip mydir のように-rを付けずにディレクトリを指定した場合の動作として正しいものはどれですか?",
+    choices: [
+      "mydirディレクトリ自体は記録されるが、中のファイルは再帰的にたどられず含まれない",
+      "-rを付けなくても常に中身が再帰的にすべて含まれる",
+      "エラーになりzipファイルが作成されない",
+      "空のzipファイルが作成される(mydir自体も記録されない)",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["zipはtarと違い、ディレクトリの中身をデフォルトではたどりません。"],
+    explanation:
+      "zipはデフォルトではディレクトリの中身を再帰的にたどりません。ディレクトリの中身までまとめて" +
+      "圧縮したい場合は必ず-r(recursive)オプションを付ける必要があります。",
+  },
+  {
+    id: "ch18-ex91",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "zipinfo archive.zip というコマンドの役割として最も適切なものはどれですか?",
+    choices: [
+      "アーカイブを展開せずに、中身のファイル一覧やサイズなどの情報を表示する",
+      "archive.zipを削除する",
+      "archive.zipをtar形式に変換する",
+      "archive.zipのパスワードを解除する",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["unzip -l と似た役割を持つ専用コマンドです。"],
+    explanation:
+      "zipinfoはzipアーカイブを展開せずに中身の情報を確認できる専用コマンドで、unzip -lと似た役割を" +
+      "持ちます(本アプリの仮想ターミナルではzipinfo自体は実装されていないため、同様の確認にはunzip -lを使います)。",
+  },
+  {
+    id: "ch18-ex92",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "unzip -l archive.zip というコマンドの役割として正しいものはどれですか?",
+    choices: [
+      "アーカイブを展開せずに、中身のファイル名やサイズの一覧だけを表示する",
+      "アーカイブの中身をすべて展開したうえで、一覧も表示する",
+      "アーカイブをロック(lock)して編集できないようにする",
+      "アーカイブを最新の圧縮形式に変換する",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["-l は list の頭文字です。"],
+    explanation: "unzip -lはアーカイブを実際に展開することなく、中に含まれるファイルの一覧とサイズを確認できるオプションです。",
+  },
+  {
+    id: "ch18-ex93",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "zip -q -r archive.zip mydir のように使われる -q オプションの意味として正しいものはどれですか?",
+    choices: [
+      "処理中に追加されるファイル名の表示を省略し、静かに(quiet)実行する",
+      "圧縮率を最大にする",
+      "パスワードによる保護を行う",
+      "既存のアーカイブを完全に上書きする",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["quietの頭文字です。"],
+    explanation:
+      "-q(quiet)オプションを付けると、zip実行中に表示される「adding: ...」のようなファイル名の一覧表示を" +
+      "省略し、余計な出力を減らせます。",
+  },
+  {
+    id: "ch18-ex94",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "zip -er archive.zip mydir のように使われる -e オプションの意味として正しいものはどれですか?",
+    choices: [
+      "パスワードを設定して暗号化されたアーカイブを作成する(encrypt)",
+      "既存のアーカイブに追記する(extend)",
+      "圧縮を行わずアーカイブ化だけを行う",
+      "エラーを無視する(error ignore)",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["encryptの頭文字です。実行するとパスワード入力を求められます。"],
+    explanation:
+      "-e(encrypt)オプションを付けると、パスワードを設定した暗号化zipアーカイブを作成できます。" +
+      "実行するとパスワードの入力と確認を求められます。",
+  },
+  {
+    id: "ch18-ex95",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "zipの-e(パスワード保護)オプションについて、セキュリティ上注意すべき点として最も適切なものはどれですか?",
+    choices: [
+      "zipの標準的な暗号化方式は強固とは言えず、機密性の高い情報の保護には十分でない場合がある",
+      "パスワードを設定すると、二度とファイルを展開できなくなる",
+      "パスワードは英数字のみで、記号は一切使えない",
+      "パスワードを設定すると圧縮率が必ず0%になる(圧縮されない)",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["「ないよりはマシ」程度の保護であることが一般に知られています。"],
+    explanation:
+      "zipの標準的なパスワード保護(暗号化)は、現代の基準では強固な暗号化方式とは言えず、本当に機密性の" +
+      "高い情報を守りたい場合には別の暗号化手段(gpg等)を検討する必要があります。",
+  },
+  {
+    id: "ch18-ex96",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "「アーカイブ化」と「圧縮」の違いを説明したものとして最も適切なものはどれですか?",
+    choices: [
+      "アーカイブ化は複数のファイルを1つにまとめること、圧縮はデータサイズを小さくすること(異なる目的の操作)",
+      "アーカイブ化と圧縮は全く同じ意味で、常にセットで行われる",
+      "アーカイブ化はファイルを削除すること、圧縮はファイルをコピーすること",
+      "圧縮を行うと自動的にアーカイブ化も行われる(逆は成り立たない)",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["tarは「まとめる」、gzip/bzip2は「小さくする」、それぞれ別の目的を持つ操作でした。"],
+    explanation:
+      "アーカイブ化(まとめる)と圧縮(小さくする)は別の目的を持つ操作です。tarはアーカイブ化のみ、" +
+      "gzip/bzip2は圧縮のみを行い、両方を組み合わせて使うことも(tar czf等)、zipのように1つのコマンドで" +
+      "同時に行うこともできます。",
+  },
+  {
+    id: "ch18-ex97",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "定期的にファイルをアーカイブ・圧縮してバックアップを取っておく主な意義として最も適切なものはどれですか?",
+    choices: [
+      "誤ってファイルを削除したり、破損させたりした場合に、以前の状態へ復旧できるようにするため",
+      "ディスクの空き容量を必ず増やすため(バックアップを取ると元ファイルは自動的に削除される)",
+      "ファイルの実行速度を高速化するため",
+      "他のユーザーがファイルを閲覧できないようにするため",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["「もしものときに戻せる状態を用意しておく」ことがバックアップの本質です。"],
+    explanation:
+      "バックアップの主な目的は、誤削除やファイル破損、システム障害などが起きた際に、以前の状態へ" +
+      "復旧できるようにしておくことです。tar/zipによるアーカイブ化はその代表的な手段の1つです。",
+  },
+  {
+    id: "ch18-ex98",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "Linuxサーバー同士でバックアップファイルをやり取りする場合に、一般的によく使われる組み合わせはどれですか?",
+    choices: [
+      "tar + gzip(またはbzip2)による.tar.gz/.tar.bz2形式",
+      "zipのみ(Linux同士では常にzipが推奨される)",
+      "圧縮せず生のディレクトリのままにしておくことが必須で、アーカイブ化は一切行わない",
+      "常にxzのみを使い、gzip/bzip2/zipは一切使われない",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["Linux環境同士では、ファイル属性(パーミッション等)を保持しやすいtar系の形式が好まれます。"],
+    explanation:
+      "Linux環境同士でのバックアップ・転送では、パーミッションや所有者などのファイル属性を保持しやすい" +
+      "tar+gzip(.tar.gz)やtar+bzip2(.tar.bz2)の組み合わせがよく使われます。",
+  },
+  {
+    id: "ch18-ex99",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "Windowsユーザーにファイル一式を送る必要がある場合に、より適した形式はどれですか?",
+    choices: [
+      "zip形式(Windows標準のエクスプローラーで直接展開できるため)",
+      "tar形式のみ(圧縮なし)",
+      ".tar.bz2形式",
+      "どの形式を使っても違いはない",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["Windowsのエクスプローラーは標準でzipの展開に対応しています。"],
+    explanation:
+      "Windowsのエクスプローラーは標準でzip形式の展開に対応しているため、Windowsユーザーへファイルを" +
+      "送る場合はzip形式が扱いやすい選択肢になります。",
+  },
+  {
+    id: "ch18-ex100",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "tar czvf archive.tar.gz dir1 と tar zcvf archive.tar.gz dir1 の関係について正しい説明はどれですか?",
+    choices: [
+      "オプションの並び順(c/z/v/fの順序)は自由で、どちらも同じ結果になる",
+      "czvfとzcvfでは全く異なる動作になる",
+      "zcvfという書き方はエラーになる",
+      "czvfは作成、zcvfは展開という別の意味になる",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["f以外のオプションの並び順に、基本的に決まりはありません。"],
+    explanation: "c/z/vのようなオプションは、基本的にどの順序で並べても(fが最後に来る限り)同じ意味になります。",
+  },
+  {
+    id: "ch18-ex101",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "tar/zipのどちらも、アーカイブ全体ではなく特定の1ファイルだけを取り出すことができます。この操作を行うために共通して必要なものは何ですか?",
+    choices: [
+      "アーカイブ内でのそのファイルの格納パス(例: dir1/file-2.txt)を指定すること",
+      "そのファイルのパーミッションを事前に777に変更しておくこと",
+      "アーカイブを一度完全に削除してから再作成すること",
+      "特に何も指定しなくても、常に最初の1ファイルだけが自動的に選ばれる",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["展開先ではなく、アーカイブ「内」でのパスを指定する点がポイントです。"],
+    explanation:
+      "tar xf archive.tar path や unzip archive.zip path のように、アーカイブ内での格納パスを展開/" +
+      "一覧表示コマンドの引数として追加することで、特定のファイルだけを対象にできます。",
+  },
+  {
+    id: "ch18-ex102",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "tar+gzip(.tar.gz)とzipで、複数ファイルを圧縮する際の内部的な違いとして知られている点はどれですか?",
+    choices: [
+      "tar+gzipはアーカイブ全体をまとめて1つのストリームとして圧縮するのに対し、zipは各ファイルを個別に圧縮する",
+      "tar+gzipは各ファイルを個別に暗号化するが、zipは暗号化を一切行わない",
+      "tar+gzipは常にzipより圧縮率が低くなる",
+      "zipは複数ファイルを同時に扱えず、常に1ファイルずつしか圧縮できない",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["tar+gzipは「まとめてから圧縮」、zipは「ファイルごとに圧縮」という内部構造の違いがあります。"],
+    explanation:
+      "tar+gzipは複数ファイルをtarで1つにまとめたうえで、そのストリーム全体をgzipで圧縮します。" +
+      "一方zipは、アーカイブ内の各ファイルを個別に圧縮する形式になっています。この違いにより、ファイルの" +
+      "追加・部分的な取り出しのしやすさなどに差が出ます。",
+  },
+  {
+    id: "ch18-ex103",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt:
+      "バックアップ(アーカイブ)を作成したあと、tar tvfやunzip -lのようなコマンドで中身を確認することが" +
+      "推奨される理由として最も適切なものはどれですか?",
+    choices: [
+      "アーカイブが意図した内容(必要なファイルすべて)を正しく含んでいるかを、実際に展開せずに検証できるため",
+      "確認しないとアーカイブファイルが自動的に削除されてしまうため",
+      "確認することでアーカイブの圧縮率が向上するため",
+      "確認は義務ではなく、通常は省略すべき手順とされているため",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["「-rを付け忘れて中身が空だった」のような失敗に、後から気づけることが重要です。"],
+    explanation:
+      "zip -rの-r忘れのように、意図した通りにアーカイブが作成されていない場合があります。tar tvfや" +
+      "unzip -lで中身を確認する習慣を付けることで、いざ復元が必要になったときに「実は必要なファイルが" +
+      "含まれていなかった」という事態を防げます。",
+  },
+  {
+    id: "ch18-ex104",
+    chapterId: "ch18",
+    type: "quiz",
+    prompt: "tar・gzip・bzip2・zipの一般的な使い分けについて、最も適切な説明はどれですか?",
+    choices: [
+      "Linux環境間でのバックアップにはtar+gzip(または+bzip2)、Windows等とのやり取りにはzipが向いていることが多い",
+      "常にzipだけを使えばよく、tar/gzip/bzip2を使う必要は一切ない",
+      "常にtar単体(圧縮なし)を使うべきで、gzip/bzip2/zipは非推奨とされている",
+      "4つのコマンドはすべて同じ機能を持つため、どれを使っても違いはない",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["それぞれのコマンドの特性(属性保持のしやすさ、他OSとの互換性)を踏まえて考えます。"],
+    explanation:
+      "Linux環境同士でファイル属性を保ったままバックアップしたい場合はtar+gzip/bzip2、Windows等" +
+      "異なるOSとやり取りする場合はzipが向いている、というように用途に応じた使い分けが一般的です。",
+  },
+
+  // ---------------------------------------------------------------------
   // Ch7: Vimエディタ
   // ---------------------------------------------------------------------
   {
@@ -16162,3 +17490,5 @@ export const exercises: Exercise[] = [
       "わかります。",
   },
 ];
+
+export const exercises: Exercise[] = [...exercisesPart1, ...exercisesPart2];
