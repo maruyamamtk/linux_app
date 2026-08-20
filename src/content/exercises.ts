@@ -13708,7 +13708,7 @@ const exercisesPart2: Exercise[] = [
   {
     id: "ch18-ex24",
     chapterId: "ch18",
-    prompt: "project ディレクトリと dir1 ディレクトリの両方を combined.tar という1つのアーカイブにまとめ、その中身を詳細情報付きで確認してください。",
+    prompt: "project ディレクトリ、dir1 ディレクトリの順で、両方を combined.tar という1つのアーカイブにまとめ、その中身を詳細情報付きで確認してください。",
     initialCwd: "/home/study/practice/ch18_archive",
     referenceSolution: "tar cf combined.tar project dir1; tar tvf combined.tar",
     hints: ["tar cf アーカイブ名 のあとに複数のディレクトリを並べると、まとめて1つのアーカイブに含められます。"],
@@ -13720,7 +13720,7 @@ const exercisesPart2: Exercise[] = [
     id: "ch18-ex25",
     chapterId: "ch18",
     prompt:
-      "project ディレクトリと dir1 ディレクトリの両方を combined.tar としてアーカイブしてから元の両方の" +
+      "project ディレクトリ、dir1 ディレクトリの順で、両方を combined.tar としてアーカイブしてから元の両方の" +
       "ディレクトリを削除し、アーカイブから復元してください(展開したファイル名の一覧が表示されるようにしてください)。",
     initialCwd: "/home/study/practice/ch18_archive",
     referenceSolution: "tar cf combined.tar project dir1; rm -r project dir1; tar xvf combined.tar",
@@ -14028,7 +14028,7 @@ const exercisesPart2: Exercise[] = [
   {
     id: "ch18-ex52",
     chapterId: "ch18",
-    prompt: "project ディレクトリと dir1 ディレクトリの両方を、再帰的に combined.zip という1つのzipアーカイブにまとめ、その中身を一覧表示してください。",
+    prompt: "project ディレクトリ、dir1 ディレクトリの順で、両方を再帰的に combined.zip という1つのzipアーカイブにまとめ、その中身を一覧表示してください。",
     initialCwd: "/home/study/practice/ch18_archive",
     referenceSolution: "zip -r combined.zip project dir1; unzip -l combined.zip",
     hints: ["zip -r アーカイブ名 のあとに複数のディレクトリを並べると、まとめて1つのアーカイブに含められます。"],
@@ -14063,7 +14063,7 @@ const exercisesPart2: Exercise[] = [
   {
     id: "ch18-ex55",
     chapterId: "ch18",
-    prompt: "logs ディレクトリと reports ディレクトリの両方を、再帰的に backup.zip としてまとめ、その中身を一覧表示してください。",
+    prompt: "logs ディレクトリ、reports ディレクトリの順で、両方を再帰的に backup.zip としてまとめ、その中身を一覧表示してください。",
     initialCwd: "/home/study/practice/ch18_archive",
     referenceSolution: "zip -r backup.zip logs reports; unzip -l backup.zip",
     hints: ["zip -r アーカイブ名 のあとに複数のディレクトリを並べて指定します。"],
@@ -14074,7 +14074,7 @@ const exercisesPart2: Exercise[] = [
   {
     id: "ch18-ex56",
     chapterId: "ch18",
-    prompt: "dir1 ディレクトリと project ディレクトリを backup.zip としてまとめてから元の両方のディレクトリを削除し、そのzipアーカイブを展開して復元してください。",
+    prompt: "dir1 ディレクトリ、project ディレクトリの順で、両方を backup.zip としてまとめてから元の両方のディレクトリを削除し、そのzipアーカイブを展開して復元してください。",
     initialCwd: "/home/study/practice/ch18_archive",
     referenceSolution: "zip -r backup.zip dir1 project; rm -r dir1 project; unzip backup.zip",
     hints: ["zip -r でまとめる際に対象ディレクトリを複数指定できます。"],
