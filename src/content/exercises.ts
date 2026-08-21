@@ -19850,6 +19850,745 @@ const exercisesPart3: Exercise[] = [
       "存在しないchangelogブランチへcheckoutしようとして「error: pathspec 'changelog' did not match any " +
       "file(s) known to git」という、これまでの演習でも見てきた失敗パターンを再確認します。",
   },
+// ---------------------------------------------------------------------
+  // Ch19: Gitによるバージョン管理(追加分、ch19-ex116〜) — merge/remote/push/pull編
+  // ---------------------------------------------------------------------
+  {
+    id: "ch19-ex116",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "branch-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。feature ブランチを作成した直後(切り替えはまだ)、main のまま memo.txt を" +
+      "書き換えて「Update memo」というメッセージでコミットしてください。最後に main のまま feature を" +
+      "mergeし、「Already up to date.」と表示されることを確認してください。",
+    promptSteps: [
+      "branch-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "feature ブランチを作成してください(切り替えはまだ不要です)。",
+      "main のまま memo.txt を書き換え、「Update memo」というメッセージでコミットしてください。",
+      "main のまま feature を merge し、「Already up to date.」と表示されることを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/branch-practice",
+    referenceSolution:
+      'git init; git add memo.txt; git commit -m "Add memo"; git branch feature; echo "v2" > memo.txt; ' +
+      'git add memo.txt; git commit -m "Update memo"; git merge feature',
+    hints: [
+      "featureはAdd memoの時点で作られたまま、その後1度もコミットされていません。",
+      "現在のブランチ(main)がmerge対象(feature)よりも先に進んでいる場合、mergeするものが無いという扱いになります。",
+    ],
+    explanation:
+      "git merge <branch> は、まず<branch>が現在のブランチの祖先(=既に取り込み済み)かどうかを確認します。" +
+      "featureはAdd memoの時点のまま進んでおらず、main側は既にそれ以降のUpdate memoコミットを含んでいるため、" +
+      "featureの内容はmain側に完全に含まれています。この場合、新しいコミットは作られず「Already up to date.」" +
+      "とだけ表示されます。",
+  },
+  {
+    id: "ch19-ex117",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "sync-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。feature ブランチを作成・切り替えし、step1.txt を「Add step1」、" +
+      "step2.txt を「Add step2」という2つのコミットを積んでください。main へ戻って feature を merge し、" +
+      "2つのコミットがまとめてfast-forwardされることを確認してください。",
+    promptSteps: [
+      "sync-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "feature ブランチを作成・切り替えしてください。",
+      "step1.txt を「Add step1」というメッセージでコミットしてください。",
+      "step2.txt を「Add step2」というメッセージでコミットしてください。",
+      "main へ戻り、feature を merge して2つのコミットがまとめてfast-forwardされることを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/sync-practice",
+    referenceSolution:
+      'git init; git add memo.txt; git commit -m "Add memo"; git checkout -b feature; echo "step1" > step1.txt; ' +
+      'git add step1.txt; git commit -m "Add step1"; echo "step2" > step2.txt; git add step2.txt; ' +
+      'git commit -m "Add step2"; git checkout main; git merge feature',
+    hints: [
+      "fast-forwardは、featureに積まれたコミットが1つでも複数でも同じように起こります。",
+      "mainが指すハッシュがfeatureの最新コミットのハッシュまで一気に進みます。",
+    ],
+    explanation:
+      "fast-forwardマージは、mainがfeatureの祖先である限り、featureに積まれたコミットの数に関わらず成立します。" +
+      "この演習ではfeature側に2つのコミット(Add step1・Add step2)が積まれていますが、mainのポインタは" +
+      "そのままfeatureの最新コミット(Add step2)まで一気に進み、「Updating <元のハッシュ>..<最新のハッシュ>」" +
+      "に続けてFast-forwardと表示されます。",
+  },
+  {
+    id: "ch19-ex118",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "notes ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージでコミットしてください。" +
+      "feature ブランチを作成・切り替えし、featureNote1.txt を「Add feature note1」、featureNote2.txt を" +
+      "「Add feature note2」という2つのコミットを積んでください。main へ戻り、mainNote.txt を" +
+      "「Add main note」というメッセージでコミットしたうえで、feature を merge してください" +
+      "(ファイルがすべて異なるため衝突しません)。",
+    promptSteps: [
+      "notes ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "feature ブランチを作成・切り替えしてください。",
+      "featureNote1.txt を「Add feature note1」というメッセージでコミットしてください。",
+      "featureNote2.txt を「Add feature note2」というメッセージでコミットしてください。",
+      "main へ戻り、mainNote.txt を「Add main note」というメッセージでコミットしてください。",
+      "feature を merge してください(ファイルがすべて異なるため衝突しません)。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/notes",
+    referenceSolution:
+      'git init; git add memo.txt; git commit -m "Add memo"; git checkout -b feature; ' +
+      'echo "note1" > featureNote1.txt; git add featureNote1.txt; git commit -m "Add feature note1"; ' +
+      'echo "note2" > featureNote2.txt; git add featureNote2.txt; git commit -m "Add feature note2"; ' +
+      'git checkout main; echo "main note" > mainNote.txt; git add mainNote.txt; git commit -m "Add main note"; ' +
+      "git merge feature",
+    hints: [
+      "mainとfeatureはどちらもAdd memoの時点から分岐し、その後互いに異なるファイルへのコミットを積んでいます。",
+      "featureが複数コミットを積んでいても、3-wayマージの判定は最終的なtreeの内容(ファイル単位の差分)で行われます。",
+    ],
+    explanation:
+      "featureには2つのコミット(featureNote1.txt・featureNote2.txt)が積まれていますが、3-wayマージは" +
+      "共通の祖先(Add memo)のtreeを基準に、mainとfeatureそれぞれの最終的なtreeを比較して行われるため、" +
+      "featureのコミット数は結果に影響しません。mainNote.txt・featureNote1.txt・featureNote2.txtはすべて" +
+      "異なるファイルなので衝突は起きず、「Merge made by the 'recursive' strategy.」という新しいマージコミットが" +
+      "作られ、3つのファイルすべてがワークツリーに揃います。",
+  },
+  {
+    id: "ch19-ex119",
+    chapterId: "ch19",
+    type: "git",
+    prompt: "branch-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージでコミットしてください。ブランチ名を指定せずに git merge を実行して失敗することを確認してください。",
+    promptSteps: [
+      "branch-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "ブランチ名を指定せずに git merge を実行して失敗することを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/branch-practice",
+    referenceSolution: 'git init; git add memo.txt; git commit -m "Add memo"; git merge',
+    hints: ["git mergeには、取り込みたいブランチの名前を必ず指定する必要があります。"],
+    explanation:
+      "git merge は引数として、取り込みたいブランチの名前を必要とします。何も指定せずに実行すると" +
+      "「git merge: missing branch name」というエラーになり、何も行われません。",
+  },
+  {
+    id: "ch19-ex120",
+    chapterId: "ch19",
+    type: "git",
+    prompt: "branch-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージでコミットしてください。存在しない ghost という名前のブランチを merge しようとして失敗することを確認してください。",
+    promptSteps: [
+      "branch-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "存在しない ghost という名前のブランチを merge しようとして失敗することを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/branch-practice",
+    referenceSolution: 'git init; git add memo.txt; git commit -m "Add memo"; git merge ghost',
+    hints: ["存在しないブランチ名を指定した場合、mergeの対象自体が見つからずエラーになります。"],
+    explanation:
+      "指定したブランチ名が存在しない場合、git merge は「merge: ghost - not something we can merge」という" +
+      "エラーで失敗します。checkoutやswitchのpathspecエラーとは文言が異なる点に注意してください。",
+  },
+  {
+    id: "ch19-ex121",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "branch-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。feature ブランチを作成・切り替えして memo.txt を書き換え、" +
+      "「Update on feature」というメッセージでコミットしてください。main へ戻ったあと、main側の memo.txt も" +
+      "書き換えてステージングし、その状態のまま git merge feature を実行して失敗することを確認してください。",
+    promptSteps: [
+      "branch-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "feature ブランチを作成・切り替えし、memo.txt を書き換えて「Update on feature」というメッセージで" +
+        "コミットしてください。",
+      "main へ戻ってください。",
+      "main側の memo.txt も書き換えてステージングしてください。",
+      "その状態のまま git merge feature を実行して失敗することを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/branch-practice",
+    referenceSolution:
+      'git init; git add memo.txt; git commit -m "Add memo"; git checkout -b feature; echo "feature version" > memo.txt; ' +
+      'git add memo.txt; git commit -m "Update on feature"; git checkout main; echo "wip" > memo.txt; ' +
+      "git add memo.txt; git merge feature",
+    hints: [
+      "mergeもcheckout/switchと同様、ワークツリーの内容を書き換える操作なので、未コミットの変更があると拒否されます。",
+      "エラーメッセージはcheckout/switchのときとは少し異なり、「overwritten by merge」という文言になります。",
+    ],
+    explanation:
+      "git merge は、マージ結果に応じてワークツリーの内容を書き換える可能性があるため、実行前に未コミットの" +
+      "変更が無いことを確認します。この演習ではmain側でmemo.txtをステージングまで済ませた状態でmergeを" +
+      "実行しているため、「error: your local changes would be overwritten by merge; commit your changes before " +
+      "merging.」というエラーになり、featureの内容は取り込まれません。",
+  },
+  {
+    id: "ch19-ex122",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "sync-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。1つ上の階層に sync-practice-remote・sync-practice-backup という2つの" +
+      "疑似リモートを用意し、それぞれ origin・backup という名前で登録したうえで、git remote を実行して" +
+      "2つの登録名がアルファベット順に表示されることを確認してください。",
+    promptSteps: [
+      "sync-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "1つ上の階層に sync-practice-remote・sync-practice-backup という2つの疑似リモートを用意してください。",
+      "それぞれ origin・backup という名前で登録してください。",
+      "git remote を実行し、2つの登録名がアルファベット順に表示されることを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/sync-practice",
+    referenceSolution:
+      'git init; git add memo.txt; git commit -m "Add memo"; git init ../sync-practice-remote; ' +
+      'git remote add origin ../sync-practice-remote; git init ../sync-practice-backup; ' +
+      "git remote add backup ../sync-practice-backup; git remote",
+    hints: [
+      "1つのリポジトリに複数のリモートを登録できます(origin以外の名前も自由に付けられます)。",
+      "git remoteの一覧はgit branchと同様、登録した順ではなくアルファベット順に表示されます。",
+    ],
+    explanation:
+      "git remote add <名前> <パス> は、名前を変えれば複数回実行でき、1つのリポジトリに複数のリモートを" +
+      "登録できます。この演習ではorigin・backupという2つのリモートを登録していますが、引数無しのgit remoteは" +
+      "登録した順(origin→backup)ではなく、アルファベット順(backup→origin)で名前を一覧表示します。",
+  },
+  {
+    id: "ch19-ex123",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "sync-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。1つ上の階層に sync-practice-remote を疑似リモートとして用意して origin という" +
+      "名前で登録したうえで、git remote -v を実行し、fetch用・push用の2行がそれぞれ表示されることを" +
+      "確認してください。",
+    promptSteps: [
+      "sync-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "1つ上の階層に sync-practice-remote を疑似リモートとして用意し、origin という名前で登録してください。",
+      "git remote -v を実行し、fetch用・push用の2行がそれぞれ表示されることを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/sync-practice",
+    referenceSolution:
+      "git init; git add memo.txt; " +
+      'git commit -m "Add memo"; git init ../sync-practice-remote; git remote add origin ../sync-practice-remote; ' +
+      "git remote -v",
+    hints: [
+      "-v(--verbose)オプションを付けると、登録名だけでなく登録先のパスと用途(fetch/push)まで表示されます。",
+      "本シミュレータでは取得用と送信用が同じパスを指すため、fetch行とpush行は同じパスを表示します。",
+    ],
+    explanation:
+      "git remote -v(または --verbose)は、登録されている各リモートについて「名前 パス (fetch)」と" +
+      "「名前 パス (push)」の2行をそれぞれ表示します。実際のGitでは取得用URLと送信用URLを別々に設定できますが、" +
+      "本シミュレータでは同じ登録パスがそのまま両方に使われます。",
+  },
+  {
+    id: "ch19-ex124",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "sync-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。1つ上の階層に sync-practice-remote を疑似リモート(origin)として用意して" +
+      "push したうえで、新しいコミットを何も作らずにもう一度 git push を実行し、" +
+      "「Everything up-to-date」と表示されることを確認してください。",
+    promptSteps: [
+      "sync-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "1つ上の階層に sync-practice-remote を疑似リモート(origin)として用意し、push してください。",
+      "新しいコミットを何も作らずにもう一度 git push を実行し、Everything up-to-dateと表示されることを" +
+        "確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/sync-practice",
+    referenceSolution:
+      'git init; git add memo.txt; git commit -m "Add memo"; git init ../sync-practice-remote; ' +
+      "git remote add origin ../sync-practice-remote; git push; git push",
+    hints: [
+      "1回目のpushでリモート側のブランチが既にローカルと同じコミットを指すようになります。",
+      "送るべき新しいコミットが無い場合、2回目のpushは何もせず「Everything up-to-date」とだけ表示します。",
+    ],
+    explanation:
+      "1回目のgit pushでリモート側のmainブランチはローカルと全く同じコミットを指すようになります。" +
+      "その後、新しいコミットを作らずにもう一度git pushを実行すると、ローカルとリモートの参照が既に一致して" +
+      "いるため、コピーすべきオブジェクトも更新すべき参照も無く、「Everything up-to-date」とだけ表示されます。",
+  },
+  {
+    id: "ch19-ex125",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "sync-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。1つ上の階層に sync-practice-remote を疑似リモート(origin)として用意して push した" +
+      "あと、sync-practice-remote 側で remote.txt を「Remote change」というメッセージで直接コミットして" +
+      "リモートを先に進めてください。sync-practice に戻って local.txt を「Local change」というメッセージで" +
+      "コミットし(履歴が分岐します)、その状態で git push を実行して non-fast-forward で拒否されることを" +
+      "確認してください。",
+    promptSteps: [
+      "sync-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "1つ上の階層に sync-practice-remote を疑似リモート(origin)として用意し、push してください。",
+      "sync-practice-remote 側へ移動し、remote.txt を「Remote change」というメッセージで直接コミットして" +
+        "ください。",
+      "sync-practice へ戻り、local.txt を「Local change」というメッセージでコミットしてください" +
+        "(履歴が分岐します)。",
+      "その状態で git push を実行し、non-fast-forwardで拒否されることを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/sync-practice",
+    referenceSolution:
+      'git init; git add memo.txt; git commit -m "Add memo"; git init ../sync-practice-remote; ' +
+      "git remote add origin ../sync-practice-remote; git push; cd ../sync-practice-remote; " +
+      'echo "remote change" > remote.txt; git add remote.txt; git commit -m "Remote change"; cd ../sync-practice; ' +
+      'echo "local change" > local.txt; git add local.txt; git commit -m "Local change"; git push',
+    hints: [
+      "リモート側にもローカル側にも、それぞれ独自のコミットが積まれ、共通の祖先から履歴が分岐しています。",
+      "自分のローカルに無いコミットへリモートを直接進める形になるpushは、安全のため拒否されます。",
+    ],
+    explanation:
+      "リモート・ローカルの双方が「Add memo」から独立にコミットを積んだため、リモートの現在のコミットは" +
+      "ローカルの祖先ではなくなっています。この状態でpushすると、リモート側の変更(Remote change)を" +
+      "無視して上書きしてしまうことになるため、Gitは「! [rejected]  main -> main (non-fast-forward)」" +
+      "というメッセージとともにpushを拒否します(実際のGitでこの状況を解消するにはpull等でリモートの変更を" +
+      "取り込む必要がありますが、その結果生じうるコンフリクトは本シミュレータの対象外です)。",
+  },
+  {
+    id: "ch19-ex126",
+    chapterId: "ch19",
+    type: "git",
+    prompt: "sync-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージでコミットしてください。リモートを1つも登録しないまま git push を実行して失敗することを確認してください。",
+    promptSteps: [
+      "sync-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "リモートを1つも登録しないまま git push を実行して失敗することを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/sync-practice",
+    referenceSolution: 'git init; git add memo.txt; git commit -m "Add memo"; git push',
+    hints: [
+      "git pushは引数を省略するとorigimnという名前のリモートを対象にします。",
+      "origin という名前のリモートを1度も登録していない場合、その名前自体が見つからずエラーになります。",
+    ],
+    explanation:
+      "git push は引数を省略すると、origin という名前で登録されたリモートを対象にします。この演習では" +
+      "git remote addを1度も実行していないため、「fatal: 'origin' does not appear to be a git repository」" +
+      "というエラーになります。",
+  },
+  {
+    id: "ch19-ex127",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "sync-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。1つ上の階層に sync-practice-remote を疑似リモート(origin)として登録したうえで、" +
+      "一度も作成していない ghost というブランチ名を指定して git push origin ghost を実行し、失敗することを" +
+      "確認してください。",
+    promptSteps: [
+      "sync-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "1つ上の階層に sync-practice-remote を疑似リモート(origin)として登録してください。",
+      "一度も作成していない ghost というブランチ名を指定して git push origin ghost を実行し、失敗することを" +
+        "確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/sync-practice",
+    referenceSolution:
+      'git init; git add memo.txt; git commit -m "Add memo"; git init ../sync-practice-remote; ' +
+      "git remote add origin ../sync-practice-remote; git push origin ghost",
+    hints: [
+      "git push <remote> <branch> のbranchには、ローカルに実在するブランチ名を指定する必要があります。",
+      "リモートの登録自体は正しくても、指定したローカルブランチが存在しなければ送りようがありません。",
+    ],
+    explanation:
+      "git push origin ghost は「ローカルのghostブランチをリモートのghostブランチへ送る」という意味になります。" +
+      "リモートの登録(origin)自体は正しくても、ローカルにghostという名前のブランチが1度も作られていないため、" +
+      "「git: src refspec ghost does not match any」というエラーになります。fatal: 'origin' does not appear to " +
+      "be a git repository というリモート未登録のエラーとは原因が異なる点に注意してください。",
+  },
+  {
+    id: "ch19-ex128",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "sync-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。1つ上の階層に sync-practice-remote を疑似リモート(origin)として用意して push した" +
+      "あと、sync-practice-remote 側で release.txt を「Add release」というメッセージで直接コミットして" +
+      "ください。sync-practice へ戻って git pull を実行し fast-forward で取り込まれることを確認したうえで、" +
+      "続けてもう一度 git pull を実行し、今度は「Already up to date.」になることを確認してください。",
+    promptSteps: [
+      "sync-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "1つ上の階層に sync-practice-remote を疑似リモート(origin)として用意し、push してください。",
+      "sync-practice-remote 側へ移動し、release.txt を「Add release」というメッセージで直接コミットしてください。",
+      "sync-practice へ戻り、git pull を実行して fast-forward で取り込まれることを確認してください。",
+      "続けてもう一度 git pull を実行し、Already up to date.になることを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/sync-practice",
+    referenceSolution:
+      'git init; git add memo.txt; git commit -m "Add memo"; git init ../sync-practice-remote; ' +
+      "git remote add origin ../sync-practice-remote; git push; cd ../sync-practice-remote; " +
+      'echo "release" > release.txt; git add release.txt; git commit -m "Add release"; cd ../sync-practice; ' +
+      "git pull; git pull",
+    hints: [
+      "ローカル側に既にコミットがある状態のpullは、fetch結果を現在のブランチへmergeする処理として行われます。",
+      "1回目でリモートの新しいコミットを取り込みきると、2回目は取り込むものが無くAlready up to date.になります。",
+    ],
+    explanation:
+      "ローカル側に既に「Add memo」コミットがある状態でgit pullを実行すると、内部的にはfetchしたコミットを" +
+      "現在のブランチへmergeする処理が行われます。1回目のpullではローカルがリモートの祖先にあたるため" +
+      "fast-forwardとなり、release.txtが取り込まれます。取り込みが完了した状態でもう一度pullすると、" +
+      "リモートに新しいコミットが無いため「Already up to date.」とだけ表示されます。",
+  },
+  {
+    id: "ch19-ex129",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "sync-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。1つ上の階層に sync-practice-remote を疑似リモート(origin)として用意して push した" +
+      "あと、sync-practice-remote 側で remote-note.txt を「Add remote note」というメッセージで直接コミットして" +
+      "ください。sync-practice に戻って local-note.txt を「Add local note」というメッセージでコミットし" +
+      "(履歴が分岐します)、git pull を実行して両方の変更が非衝突の3-wayマージで取り込まれることを" +
+      "確認してください。",
+    promptSteps: [
+      "sync-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "1つ上の階層に sync-practice-remote を疑似リモート(origin)として用意し、push してください。",
+      "sync-practice-remote 側へ移動し、remote-note.txt を「Add remote note」というメッセージで直接コミット" +
+        "してください。",
+      "sync-practice へ戻り、local-note.txt を「Add local note」というメッセージでコミットしてください" +
+        "(履歴が分岐します)。",
+      "git pull を実行し、両方の変更が非衝突の3-wayマージで取り込まれることを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/sync-practice",
+    referenceSolution:
+      'git init; git add memo.txt; git commit -m "Add memo"; git init ../sync-practice-remote; ' +
+      "git remote add origin ../sync-practice-remote; git push; cd ../sync-practice-remote; " +
+      'echo "remote note" > remote-note.txt; git add remote-note.txt; git commit -m "Add remote note"; ' +
+      "cd ../sync-practice; " +
+      'echo "local note" > local-note.txt; git add local-note.txt; git commit -m "Add local note"; git pull',
+    hints: [
+      "リモート・ローカルの双方が「Add memo」の後で独自にコミットを積んでいるため、履歴が分岐しています。",
+      "pushのときと違い、pullは取得した変更を自動的にmergeしようとするため、異なるファイルへの変更であれば" +
+        "そのまま取り込めます。",
+    ],
+    explanation:
+      "git pull はfetchしたコミットを現在のブランチへmergeする処理を含みます。この演習ではリモート側の" +
+      "remote-note.txtとローカル側のlocal-note.txtという異なるファイルへの変更が分岐しているため、" +
+      "3-wayマージが衝突なく行われ、「Merge made by the 'recursive' strategy.」というメッセージとともに" +
+      "両方のファイルがローカルのワークツリーに揃います。",
+  },
+  {
+    id: "ch19-ex130",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "sync-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。1つ上の階層に sync-practice-remote を疑似リモート(origin)として用意して push した" +
+      "あと、memo.txt を書き換えてステージングし、その状態のまま git pull を実行して失敗することを" +
+      "確認してください。",
+    promptSteps: [
+      "sync-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "1つ上の階層に sync-practice-remote を疑似リモート(origin)として用意し、push してください。",
+      "memo.txt を書き換えてステージングしてください。",
+      "その状態のまま git pull を実行して失敗することを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/sync-practice",
+    referenceSolution:
+      'git init; git add memo.txt; git commit -m "Add memo"; git init ../sync-practice-remote; ' +
+      'git remote add origin ../sync-practice-remote; git push; echo "dirty" > memo.txt; git add memo.txt; ' +
+      "git pull",
+    hints: [
+      "pullはfetch後に自動でmergeを行うため、mergeと同じ理由で未コミットの変更があると拒否されます。",
+      "この判定はリモートへの接続確認より後、実際にfetchを行う前に行われます。",
+    ],
+    explanation:
+      "git pull はfetch+mergeの合成であり、mergeを安全に行うためにローカルの未コミットの変更の有無を" +
+      "確認します。この演習ではmemo.txtをステージングまで済ませた状態でpullを実行しているため、" +
+      "「error: your local changes would be overwritten by merge; commit your changes before merging.」という" +
+      "エラーになり、リモートの取得すら行われません。",
+  },
+  {
+    id: "ch19-ex131",
+    chapterId: "ch19",
+    type: "git",
+    prompt: "sync-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージでコミットしてください。リモートを1つも登録しないまま git pull を実行して失敗することを確認してください。",
+    promptSteps: [
+      "sync-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "リモートを1つも登録しないまま git pull を実行して失敗することを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/sync-practice",
+    referenceSolution: 'git init; git add memo.txt; git commit -m "Add memo"; git pull',
+    hints: ["git pullも引数を省略するとoriginという名前のリモートを対象にします。"],
+    explanation:
+      "git push と同様、git pull も引数を省略すると origin という名前のリモートを対象にします。" +
+      "リモートを1度も登録していない場合、「fatal: 'origin' does not appear to be a git repository」という" +
+      "エラーになり、fetch・mergeのいずれも行われません。",
+  },
+  {
+    id: "ch19-ex132",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "sync-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。1つ上の階層に sync-practice-remote を疑似リモート(origin)として用意して push した" +
+      "あと、リモートには存在しない ghost というブランチ名を指定して git pull origin ghost を実行し、" +
+      "失敗することを確認してください。",
+    promptSteps: [
+      "sync-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "1つ上の階層に sync-practice-remote を疑似リモート(origin)として用意し、push してください。",
+      "リモートには存在しない ghost というブランチ名を指定して git pull origin ghost を実行し、失敗することを" +
+        "確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/sync-practice",
+    referenceSolution:
+      'git init; git add memo.txt; git commit -m "Add memo"; git init ../sync-practice-remote; ' +
+      "git remote add origin ../sync-practice-remote; git push; git pull origin ghost",
+    hints: [
+      "リモート自体は正しく登録・接続できていても、指定したブランチ名がリモート側に存在しなければ取得できません。",
+      "エラーメッセージには「couldn't find remote ref」という文言が含まれます。",
+    ],
+    explanation:
+      "リモート(origin)の登録自体は正しくても、そのリモート上に ghost という名前のブランチが存在しなければ" +
+      "取得のしようがありません。この場合は「fatal: couldn't find remote ref ghost」というエラーになり、" +
+      "ローカルの状態は一切変わりません。",
+  },
+  {
+    id: "ch19-ex133",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "notes ディレクトリでリポジトリを初期化し、すべてのファイルを「Initial commit」というメッセージで" +
+      "コミットしてください。featureA ブランチを作成・切り替えて a.txt を「Add a」というメッセージで" +
+      "コミットし、main に戻って featureA を merge してください。続けて featureB ブランチを作成・切り替えて" +
+      "b.txt を「Add b」というメッセージでコミットし、main に戻って featureB も merge してください。最後に" +
+      "git log --oneline で4件のコミットが記録されていることを確認してください。",
+    promptSteps: [
+      "notes ディレクトリでリポジトリを初期化してください。",
+      "すべてのファイルを「Initial commit」というメッセージでコミットしてください。",
+      "featureA ブランチを作成・切り替えし、a.txt を「Add a」というメッセージでコミットしてください。",
+      "main に戻り、featureA を merge してください。",
+      "featureB ブランチを作成・切り替えし、b.txt を「Add b」というメッセージでコミットしてください。",
+      "main に戻り、featureB も merge してください。",
+      "git log --oneline で4件のコミットが記録されていることを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/notes",
+    referenceSolution:
+      'git init; git add .; git commit -m "Initial commit"; git checkout -b featureA; echo "a" > a.txt; ' +
+      'git add a.txt; git commit -m "Add a"; git checkout main; git merge featureA; git checkout -b featureB; ' +
+      'echo "b" > b.txt; git add b.txt; git commit -m "Add b"; git checkout main; git merge featureB; ' +
+      "git log --oneline",
+    hints: [
+      "featureAをmergeした直後のmainを起点にfeatureBを作成しているため、2回とも履歴が分岐しないfast-forward" +
+        "マージになります。",
+      "featureブランチを作って→mergeする、という流れを2回繰り返すのは実務でもよくあるパターンです。",
+    ],
+    explanation:
+      "この演習では「ブランチを作る→作業してコミットする→mainに戻してmergeする」というサイクルを2回" +
+      "繰り返しています。featureA・featureBのどちらも、作成した時点のmainの最新コミットから分岐し、" +
+      "その後main側は独自のコミットを積んでいないため、2回のmergeはどちらもfast-forwardになります。" +
+      "最終的にmainのgit log --onelineには、Add b・Add a・Initial commitの3件に加えて、notesディレクトリの" +
+      "初期状態を作ったコミットを合わせて記録が積み重なっていることが確認できます。",
+  },
+  {
+    id: "ch19-ex134",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "branch-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。feature ブランチを作成・切り替えて feature.txt を「Add feature note」という" +
+      "メッセージでコミットし、main へ戻って main.txt を「Add main note」というメッセージでコミットしたうえで" +
+      "feature を merge してください(異なるファイルなので衝突しません)。1つ上の階層に" +
+      "branch-practice-remote を疑似リモート(origin)として用意し、マージコミットを含む履歴を push してください。",
+    promptSteps: [
+      "branch-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "feature ブランチを作成・切り替えし、feature.txt を「Add feature note」というメッセージでコミットして" +
+        "ください。",
+      "main へ戻り、main.txt を「Add main note」というメッセージでコミットしてください。",
+      "feature を merge してください(異なるファイルなので衝突しません)。",
+      "1つ上の階層に branch-practice-remote を疑似リモート(origin)として用意し、マージコミットを含む履歴を" +
+        "push してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/branch-practice",
+    referenceSolution:
+      'git init; git add memo.txt; git commit -m "Add memo"; git checkout -b feature; ' +
+      'echo "feature note" > feature.txt; git add feature.txt; git commit -m "Add feature note"; ' +
+      'git checkout main; echo "main note" > main.txt; git add main.txt; git commit -m "Add main note"; ' +
+      "git merge feature; git init ../branch-practice-remote; git remote add origin ../branch-practice-remote; " +
+      "git push",
+    hints: [
+      "マージコミットは2つの親を持ちますが、pushの対象としては通常のコミットと同じように扱われます。",
+      "pushはマージコミットからたどれるすべての祖先コミット(両方の親の系列)をリモートへコピーします。",
+    ],
+    explanation:
+      "3-wayマージで作られたマージコミットは2つの親(main側・feature側それぞれの最新コミット)を持ちますが、" +
+      "push処理はそのコミットから到達可能なオブジェクトをすべてリモートへコピーするため、両方の系列の" +
+      "コミット・tree・blobがまとめてリモート側にも記録されます。マージという特別な操作を経た履歴でも、" +
+      "pushの手順自体はこれまでの演習と変わりません。",
+  },
+  {
+    id: "ch19-ex135",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "sync-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。1つ上の階層に not-a-repo という、git init していない普通のディレクトリを作成し、" +
+      "それを origin という名前でリモート登録したうえで git push を実行し、失敗することを確認してください。",
+    promptSteps: [
+      "sync-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "1つ上の階層に not-a-repo という、git init していない普通のディレクトリを作成してください。",
+      "not-a-repo を origin という名前でリモート登録してください。",
+      "git push を実行し、失敗することを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/sync-practice",
+    referenceSolution: "git init; git add memo.txt; git commit -m \"Add memo\"; mkdir ../not-a-repo; git remote add origin ../not-a-repo; git push",
+    hints: [
+      "git remote add はパスの中身を検証しないため、Gitリポジトリではない普通のディレクトリでも登録できてしまいます。",
+      "実際にpush/pullしようとした時点で、登録先に.gitディレクトリが無いことが検出されエラーになります。",
+    ],
+    explanation:
+      "git remote add origin <パス> の時点では、指定したパスが実際にGitリポジトリかどうかは確認されません。" +
+      "not-a-repoはmkdirで作っただけの普通のディレクトリで、.gitディレクトリを持たないため、実際にpushしようと" +
+      "した段階で「fatal: 'origin' does not appear to be a git repository」というエラーになります。ex126の" +
+      "「そもそもorigin登録が無い」場合と同じメッセージですが、原因は「登録名は存在するが登録先が" +
+      "リポジトリではない」という別のものです。",
+  },
+  {
+    id: "ch19-ex136",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "sync-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。1つ上の階層に not-a-repo という、git init していない普通のディレクトリを作成し、" +
+      "それを origin という名前でリモート登録したうえで git pull を実行し、失敗することを確認してください。",
+    promptSteps: [
+      "sync-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "1つ上の階層に not-a-repo という、git init していない普通のディレクトリを作成してください。",
+      "not-a-repo を origin という名前でリモート登録してください。",
+      "git pull を実行し、失敗することを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/sync-practice",
+    referenceSolution: "git init; git add memo.txt; git commit -m \"Add memo\"; mkdir ../not-a-repo; git remote add origin ../not-a-repo; git pull",
+    hints: [
+      "git pullも内部でリモートの登録先を検証する処理はpushと共通です。",
+      "登録先がGitリポジトリでなければ、fetchすら行われずエラーになります。",
+    ],
+    explanation:
+      "git pull もpushと同様、リモートの登録先が実際にGitリポジトリかどうかを最初に確認します。not-a-repoは" +
+      ".gitディレクトリを持たない普通のディレクトリなので、「fatal: 'origin' does not appear to be a git " +
+      "repository」というエラーになり、fetch・mergeのいずれも行われません。",
+  },
+  {
+    id: "ch19-ex137",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "branch-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。リモートを1つも登録していない状態で git remote と git remote -v を実行し、" +
+      "どちらも何も表示されないことを確認してください。",
+    promptSteps: [
+      "branch-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "リモートを1つも登録していない状態で git remote を実行し、何も表示されないことを確認してください。",
+      "続けて git remote -v を実行し、こちらも何も表示されないことを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/branch-practice",
+    referenceSolution: 'git init; git add memo.txt; git commit -m "Add memo"; git remote; git remote -v',
+    hints: ["git remoteはエラーにはならず、登録されているリモートが無ければ単に何も出力しません。"],
+    explanation:
+      "git remote(および git remote -v)は、リモートが1つも登録されていなくてもエラーにはならず、" +
+      "単に何も出力しません(git branchがコミット前に何も表示しないのと似た挙動です)。エラーになるのは、" +
+      "push/pullのように実際にそのリモートへアクセスしようとしたときだけです。",
+  },
+  {
+    id: "ch19-ex138",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "notes ディレクトリでリポジトリを初期化し、すべてのファイルを「Initial commit」というメッセージで" +
+      "コミットしてください。featureA ブランチを作成・切り替えて a.txt を「Add a」というメッセージで" +
+      "コミットし、main に戻って featureA を merge してください。続けてもう一度 main のまま featureA を" +
+      "merge しようとし、「Already up to date.」になることを確認してください。",
+    promptSteps: [
+      "notes ディレクトリでリポジトリを初期化してください。",
+      "すべてのファイルを「Initial commit」というメッセージでコミットしてください。",
+      "featureA ブランチを作成・切り替えし、a.txt を「Add a」というメッセージでコミットしてください。",
+      "main に戻り、featureA を merge してください。",
+      "続けてもう一度 main のまま featureA を merge し、Already up to date.になることを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/notes",
+    referenceSolution:
+      'git init; git add .; git commit -m "Initial commit"; git checkout -b featureA; echo "a" > a.txt; ' +
+      'git add a.txt; git commit -m "Add a"; git checkout main; git merge featureA; git merge featureA',
+    hints: [
+      "1回目のmergeでmainはfeatureAに追いつくため、2回目の時点でfeatureAはmainの祖先になっています。",
+      "既に取り込み済みのブランチを重ねてmergeしても、エラーにはならずAlready up to date.になるだけです。",
+    ],
+    explanation:
+      "1回目のgit merge featureAはfast-forwardで完了し、main自身がfeatureAの指すコミットまで進みます。" +
+      "この時点でfeatureAはmainの祖先(というより同一のコミットを指す状態)になっているため、続けて同じ" +
+      "featureAをもう一度mergeしても、取り込むべき新しい変更が無く「Already up to date.」とだけ表示されます。" +
+      "同じブランチを重ねてmergeしてもエラーにはならず安全であることが確認できます。",
+  },
+  {
+    id: "ch19-ex139",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "sync-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。1つ上の階層に sync-practice-remote を疑似リモート(origin)として用意したうえで、" +
+      "git push origin main のようにリモート名・ブランチ名を省略せずに明示して push してください。",
+    promptSteps: [
+      "sync-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "1つ上の階層に sync-practice-remote を疑似リモート(origin)として用意してください。",
+      "リモート名・ブランチ名を省略せずに明示して push してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/sync-practice",
+    referenceSolution:
+      'git init; git add memo.txt; git commit -m "Add memo"; git init ../sync-practice-remote; ' +
+      "git remote add origin ../sync-practice-remote; git push origin main",
+    hints: [
+      "git push <remote> <branch> の形式で、送信先のリモート名と対象のブランチ名を両方明示できます。",
+      "省略した場合(git pushだけ)と同じ結果になりますが、複数のリモートやブランチを使い分ける場面では" +
+        "この明示的な書き方が必要になります。",
+    ],
+    explanation:
+      "これまでの演習の多くはリモート名・ブランチ名を省略したgit push(既定値としてorigin・現在のブランチが" +
+      "使われる)でしたが、git push origin main のように両方を明示的に指定することもできます。結果は" +
+      "省略した場合と同じですが、複数のリモートを使い分けたり、現在のブランチとは別のブランチを送りたい" +
+      "場面では、この明示的な書き方が必要になります。",
+  },
+  {
+    id: "ch19-ex140",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "sync-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。1つ上の階層に sync-practice-remote を疑似リモート(origin)として用意して push した" +
+      "あと、sync-practice-remote 側で release.txt を「Add release」というメッセージで直接コミットして" +
+      "ください。sync-practice に戻り、git pull origin main のようにリモート名・ブランチ名を明示して取り込み、" +
+      "最後に git log --oneline で2件のコミットを確認してください。",
+    promptSteps: [
+      "sync-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "1つ上の階層に sync-practice-remote を疑似リモート(origin)として用意し、push してください。",
+      "sync-practice-remote 側へ移動し、release.txt を「Add release」というメッセージで直接コミットしてください。",
+      "sync-practice へ戻り、リモート名・ブランチ名を明示して git pull origin main を実行してください。",
+      "git log --oneline で2件のコミットを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/sync-practice",
+    referenceSolution:
+      'git init; git add memo.txt; git commit -m "Add memo"; git init ../sync-practice-remote; ' +
+      "git remote add origin ../sync-practice-remote; git push; cd ../sync-practice-remote; " +
+      'echo "release" > release.txt; git add release.txt; git commit -m "Add release"; cd ../sync-practice; ' +
+      "git pull origin main; git log --oneline",
+    hints: [
+      "git pull <remote> <branch> の形式で、取得元のリモート名と対象のブランチ名を両方明示できます。",
+      "取り込みに成功すると、git log --onelineにはAdd release・Add memoの2行が表示されます。",
+    ],
+    explanation:
+      "git pull origin main のように明示的にリモート名・ブランチ名を指定するpullは、省略形のgit pullと" +
+      "同じ結果になります。この演習ではリモート側で直接作られたAdd releaseコミットをfast-forwardで取り込み、" +
+      "最終的にローカルのgit log --onelineにはAdd release・Add memoの2行が新しい順に表示されます。",
+  },
 ];
 
 export const exercises: Exercise[] = [...exercisesPart1, ...exercisesPart2, ...exercisesPart3];
