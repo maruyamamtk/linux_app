@@ -18513,4 +18513,661 @@ const exercisesPart2: Exercise[] = [
   },
 ];
 
-export const exercises: Exercise[] = [...exercisesPart1, ...exercisesPart2];
+/**
+ * TypeScriptの単一配列の型チェック上限(TS2590)を回避するための3つ目の`Exercise[]`定数。
+ * ch19-ex66以降のgit実行型演習(init/status/add/commit〜merge/remote/push/pull〜findgrepシナリオ)を
+ * ここに追加していく。`exercisesPart2`(quiz型54問を含む既存分)には一切手を加えない。
+ */
+const exercisesPart3: Exercise[] = [
+  // ---------------------------------------------------------------------
+  // Ch19: Gitによるバージョン管理(追加分、ch19-ex66〜) — init/status/add/commit編
+  // ---------------------------------------------------------------------
+  {
+    id: "ch19-ex66",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "notes ディレクトリで git init を2回連続で実行し、2回目は「既存のリポジトリを再初期化した」という" +
+      "内容のメッセージに変わることを確認してください。",
+    promptSteps: [
+      "notes ディレクトリで git init を実行してください。",
+      "続けてもう一度 git init を実行し、メッセージが変わることを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/notes",
+    referenceSolution: "git init; git init",
+    hints: [
+      "git init は既存のリポジトリに対して実行してもエラーにはなりません。",
+      "1回目は「Initialized empty ...」、2回目は「Reinitialized existing ...」という文言になります。",
+    ],
+    explanation:
+      "git init は、対象ディレクトリが既にGitリポジトリかどうかを判定し、そうでなければ「Initialized empty Git " +
+      "repository in ...」、既に .git ディレクトリが存在する場合は「Reinitialized existing Git repository in " +
+      "...」と表示します。後者の場合も既存のオブジェクトやブランチが消去されることはなく、安全に再実行できます。",
+  },
+  {
+    id: "ch19-ex67",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "notes ディレクトリでリポジトリを初期化し、まず todo.txt だけをステージングして git status で" +
+      "memo.txt がまだ未追跡のままであることを確認してください。続けて memo.txt もステージングし、" +
+      "再度 git status を実行して両方ともステージ済みになったことを確認してください。",
+    promptSteps: [
+      "notes ディレクトリでリポジトリを初期化してください。",
+      "todo.txt だけをステージングしてください。",
+      "git status を実行し、memo.txt がまだ未追跡のままであることを確認してください。",
+      "memo.txt もステージングしてください。",
+      "再度 git status を実行し、両方ともステージ済みになったことを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/notes",
+    referenceSolution: "git init; git add todo.txt; git status; git add memo.txt; git status",
+    hints: [
+      "git add はファイル単位で指定でき、指定していないファイルには影響しません。",
+      "1回目のgit statusではtodo.txtがChanges to be committed、memo.txtがUntracked filesに分かれて表示されます。",
+    ],
+    explanation:
+      "git add はファイルを1つずつ個別にステージングできます。todo.txtだけをaddした直後は、todo.txtが" +
+      "「Changes to be committed」、まだaddしていないmemo.txtが「Untracked files」に分かれて表示されます。" +
+      "続けてmemo.txtもaddすると、Untracked filesの区分が消え、両方のファイルがChanges to be committedに" +
+      "まとまります。",
+  },
+  {
+    id: "ch19-ex68",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "notes ディレクトリでリポジトリを初期化し、すべてのファイルを「Initial commit」というメッセージで" +
+      "コミットしてください。その後 memo.txt の内容を書き換え、git status を実行して" +
+      "「まだステージされていない変更」として表示されることを確認してください。",
+    promptSteps: [
+      "notes ディレクトリでリポジトリを初期化してください。",
+      "すべてのファイルを「Initial commit」というメッセージでコミットしてください。",
+      "memo.txt の内容を書き換えてください(echo でよい)。",
+      "git status を実行し、まだステージされていない変更として表示されることを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/notes",
+    referenceSolution: 'git init; git add .; git commit -m "Initial commit"; echo "new content" > memo.txt; git status',
+    hints: [
+      "コミット済みのファイルの内容をワークツリー上で書き換えただけでは、インデックスは更新されません。",
+      "git status では、この状態が「Changes not staged for commit」のmodifiedとして表示されます。",
+    ],
+    explanation:
+      "コミット済みのファイルをワークツリー上で書き換えると、インデックス(直前にaddした内容)とワークツリーの" +
+      "内容が食い違います。git status はこの食い違いを「Changes not staged for commit」のmodified: memo.txt として" +
+      "報告します。git addで改めてステージングするまでは、この変更は次のコミットには含まれません。",
+  },
+  {
+    id: "ch19-ex69",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "notes ディレクトリでリポジトリを初期化し、すべてのファイルを「Initial commit」というメッセージで" +
+      "コミットしてください。その後 memo.txt の内容を書き換えて改めてステージングし、git status を実行して" +
+      "「ステージ済みの変更」として表示されることを確認してください。",
+    promptSteps: [
+      "notes ディレクトリでリポジトリを初期化してください。",
+      "すべてのファイルを「Initial commit」というメッセージでコミットしてください。",
+      "memo.txt の内容を書き換えてください(echo でよい)。",
+      "memo.txt を改めてステージングしてください。",
+      "git status を実行し、ステージ済みの変更として表示されることを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/notes",
+    referenceSolution:
+      'git init; git add .; git commit -m "Initial commit"; echo "new content" > memo.txt; git add memo.txt; git status',
+    hints: [
+      "変更後に git add を実行すると、書き換えた内容がインデックスに反映されます。",
+      "この状態のgit statusは「Changes to be committed」のmodifiedとして表示され、not stagedの区分は出ません。",
+    ],
+    explanation:
+      "ワークツリー上で書き換えた内容を git add でインデックスに反映すると、直前のコミット(HEAD)のtreeとの差分が" +
+      "「Changes to be committed」のmodifiedへ移ります。前の演習(notストaged)と比較すると、addを挟むだけで" +
+      "同じ変更内容が別のセクションに表示されることが分かります。",
+  },
+  {
+    id: "ch19-ex70",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "notes ディレクトリでリポジトリを初期化し、すべてのファイルを「Initial commit」というメッセージで" +
+      "コミットしてください。その後 todo.txt を削除し、git status を実行して削除が" +
+      "「まだステージされていない変更」として表示されることを確認してください。",
+    promptSteps: [
+      "notes ディレクトリでリポジトリを初期化してください。",
+      "すべてのファイルを「Initial commit」というメッセージでコミットしてください。",
+      "todo.txt を削除してください。",
+      "git status を実行し、削除がまだステージされていない変更として表示されることを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/notes",
+    referenceSolution: 'git init; git add .; git commit -m "Initial commit"; rm todo.txt; git status',
+    hints: [
+      "rm でファイルを削除しても、それだけではインデックスは変わりません。",
+      "git status は、インデックスにあるがワークツリーに存在しないファイルをdeletedとして報告します。",
+    ],
+    explanation:
+      "コミット済みのファイルをワークツリー上でrmで削除すると、インデックスには依然としてそのファイルの記録が" +
+      "残っているため、git status は「Changes not staged for commit」のdeleted: todo.txt として報告します。" +
+      "このシミュレータには git rm が実装されていないため、削除をコミットに含めるには通常のgit addで" +
+      "同じパスを指定する必要があります。",
+  },
+  {
+    id: "ch19-ex71",
+    chapterId: "ch19",
+    type: "git",
+    prompt: "notes ディレクトリでリポジトリを初期化し、存在しない nofile.txt を git add しようとして失敗することを確認してください。",
+    promptSteps: [
+      "notes ディレクトリでリポジトリを初期化してください。",
+      "存在しない nofile.txt を git add しようとして失敗することを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/notes",
+    referenceSolution: "git init; git add nofile.txt",
+    hints: [
+      "git add に存在しないパスを指定すると、エラーになりインデックスは変化しません。",
+      "エラーメッセージには pathspec という語と、指定したファイル名が含まれます。",
+    ],
+    explanation:
+      "git add に存在しないパスを指定すると、「git add: pathspec 'nofile.txt' did not match any files」という" +
+      "エラーになり、インデックスは一切変更されません。ファイル名のタイプミスに気づく手がかりとして、" +
+      "このエラーメッセージは重要です。",
+  },
+  {
+    id: "ch19-ex72",
+    chapterId: "ch19",
+    type: "git",
+    prompt: "notes ディレクトリでリポジトリを初期化し、引数を何も指定せずに git add を実行して失敗することを確認してください。",
+    promptSteps: [
+      "notes ディレクトリでリポジトリを初期化してください。",
+      "引数を何も指定せずに git add を実行して失敗することを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/notes",
+    referenceSolution: "git init; git add",
+    hints: [
+      "git add は対象のファイル・ディレクトリを最低1つ指定する必要があります。",
+      "git add . のように . を指定すればカレントディレクトリ以下すべてが対象になりますが、無指定とは異なります。",
+    ],
+    explanation:
+      "git add に引数を何も渡さなかった場合、「git add: nothing specified, nothing added.」というメッセージで" +
+      "失敗し、何もステージングされません。カレントディレクトリ以下すべてを対象にしたい場合は、明示的に " +
+      "git add . のように . を指定する必要があります。",
+  },
+  {
+    id: "ch19-ex73",
+    chapterId: "ch19",
+    type: "git",
+    prompt: "notes ディレクトリでリポジトリを初期化した直後に、メッセージを指定せずに git commit を実行して失敗することを確認してください。",
+    promptSteps: [
+      "notes ディレクトリでリポジトリを初期化してください。",
+      "メッセージを指定せずに git commit を実行して失敗することを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/notes",
+    referenceSolution: "git init; git commit",
+    hints: [
+      "本シミュレータはエディタを開く無引数のgit commitに対応していないため、-mオプションが必須です。",
+      "ステージ済みの変更があるかどうかに関わらず、-mが無い時点でエラーになります。",
+    ],
+    explanation:
+      "git commit は -m \"メッセージ\" オプションが必須です。省略すると、通常のGitでは対話式エディタが開きますが、" +
+      "本シミュレータはそれに対応していないため「git commit: option '-m' requires a message (an interactive " +
+      "editor is not supported)」というエラーで失敗します。この判定はステージ済みの変更の有無より先に行われます。",
+  },
+  {
+    id: "ch19-ex74",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "notes ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージでコミットしてください。" +
+      "続けて何も変更しないまま、同じ memo.txt を対象にもう一度コミットしようとして失敗することを確認してください。",
+    promptSteps: [
+      "notes ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "何も変更しないまま、もう一度コミットしようとして失敗することを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/notes",
+    referenceSolution: 'git init; git add memo.txt; git commit -m "Add memo"; git add memo.txt; git commit -m "Add memo again"',
+    hints: [
+      "コミットの前提となるインデックスの内容が直前のコミットと全く同じ場合、コミットは作られません。",
+      "変更が無い状態でのgit commitは「nothing to commit, working tree clean」というメッセージで失敗します。",
+    ],
+    explanation:
+      "git commit は、インデックスから作られるtreeが直前のコミット(親コミット)のtreeと完全に一致する場合、" +
+      "新しいコミットを作らずに「nothing to commit, working tree clean」で失敗します。git addを再実行しても、" +
+      "ファイルの中身が変わっていなければ記録される内容は変わらないため、この判定に引っかかります。",
+  },
+  {
+    id: "ch19-ex75",
+    chapterId: "ch19",
+    type: "git",
+    prompt: "branch-practice ディレクトリでリポジトリを初期化した直後、コミットを1つも作らずに git log を実行して失敗することを確認してください。",
+    promptSteps: [
+      "branch-practice ディレクトリでリポジトリを初期化してください。",
+      "コミットを1つも作らずに git log を実行して失敗することを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/branch-practice",
+    referenceSolution: "git init; git log",
+    hints: [
+      "git log は現在のブランチが指すコミットから履歴をたどるため、コミットが1つも無いと表示するものがありません。",
+      "エラーメッセージには「does not have any commits yet」という文言が含まれます。",
+    ],
+    explanation:
+      "git log は現在のブランチ(HEAD)が指すコミットを起点に履歴をさかのぼって表示します。git init直後は" +
+      "まだコミットが1つも存在しないため、たどる起点自体が無く、「fatal: your current branch 'main' does not " +
+      "have any commits yet」というエラーで失敗します。",
+  },
+  {
+    id: "ch19-ex76",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "sync-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」、note.txt を「Add note」という" +
+      "メッセージでそれぞれコミットしたうえで、--oneline を付けずに git log を実行し、フル形式のログ表示を" +
+      "確認してください。",
+    promptSteps: [
+      "sync-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "note.txt というファイルを作成し、「Add note」というメッセージでコミットしてください。",
+      "--oneline を付けずに git log を実行し、フル形式のログ表示を確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/sync-practice",
+    referenceSolution:
+      'git init; git add memo.txt; git commit -m "Add memo"; echo "release note" > note.txt; git add note.txt; git commit -m "Add note"; git log',
+    hints: [
+      "--onelineを付けない git log は、各コミットについてハッシュ全体・Author・Date・メッセージを複数行で表示します。",
+      "新しい順(Add noteが先)に表示される点は --oneline のときと同じです。",
+    ],
+    explanation:
+      "--oneline を付けない git log は、各コミットを commit <ハッシュ全体> / Author: ... / Date: ... / " +
+      "空行 / 4文字インデントされたメッセージ、という複数行の形式で新しい順に表示します。--oneline が" +
+      "ハッシュの先頭7桁とメッセージ1行目だけに要約するのに対し、こちらは全体像を確認したいときに使います。",
+  },
+  {
+    id: "ch19-ex77",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "notes ディレクトリでリポジトリを初期化し、docs というディレクトリを作成して guide.txt というファイルを" +
+      "その中に置いてください。docs ディレクトリごと「Add docs」というメッセージでコミットしたうえで、" +
+      "git status で memo.txt・todo.txt がまだ未追跡のままであることを確認してください。",
+    promptSteps: [
+      "notes ディレクトリでリポジトリを初期化してください。",
+      "docs というディレクトリを作成し、guide.txt というファイルをその中に置いてください。",
+      "docs ディレクトリごと「Add docs」というメッセージでコミットしてください。",
+      "git status で memo.txt・todo.txt がまだ未追跡のままであることを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/notes",
+    referenceSolution:
+      'git init; mkdir docs; echo "usage guide" > docs/guide.txt; git add docs; git commit -m "Add docs"; git status',
+    hints: [
+      "git add にディレクトリを指定すると、その配下のファイルすべてが再帰的にステージングされます。",
+      "docsディレクトリだけをaddしたので、notesディレクトリ直下のmemo.txt・todo.txtには影響しません。",
+    ],
+    explanation:
+      "git add にディレクトリを指定すると、その配下のファイルを再帰的にたどってすべてステージングします。" +
+      "docsディレクトリだけをaddしてコミットした場合、notesディレクトリ直下に元からあったmemo.txt・todo.txtは" +
+      "対象外のままなので、git statusでは引き続きUntracked filesとして表示されます。",
+  },
+  {
+    id: "ch19-ex78",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "sync-practice ディレクトリでリポジトリを初期化し、sub というディレクトリに a.txt・b.txt という" +
+      "2つのファイルを作成してください。git add . でカレントディレクトリ以下すべてをステージングし、" +
+      "まだコミットせずに git status を実行して、memo.txt と合わせて3つのファイルがステージ済みとして" +
+      "表示されることを確認してください。",
+    promptSteps: [
+      "sync-practice ディレクトリでリポジトリを初期化してください。",
+      "sub というディレクトリに a.txt・b.txt という2つのファイルを作成してください。",
+      "git add . でカレントディレクトリ以下すべてをステージングしてください。",
+      "まだコミットせずに git status を実行し、3つのファイルがステージ済みとして表示されることを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/sync-practice",
+    referenceSolution: 'git init; mkdir sub; echo "a" > sub/a.txt; echo "b" > sub/b.txt; git add .; git status',
+    hints: [
+      "git add . は、カレントディレクトリ以下のすべての未追跡・変更済みファイルを再帰的にステージングします。",
+      "サブディレクトリ内のファイルは sub/a.txt のようにリポジトリルートからの相対パスで表示されます。",
+    ],
+    explanation:
+      "git add . はカレントディレクトリを起点に配下すべてを再帰的にステージングするため、既存のmemo.txtに加えて" +
+      "新しく作ったsub/a.txt・sub/b.txtもまとめてインデックスに載ります。まだコミットしていない段階のgit status" +
+      "では、これら3つのファイルが「Changes to be committed」のnew fileとして、リポジトリルートからの相対パスで" +
+      "一覧表示されます。",
+  },
+  {
+    id: "ch19-ex79",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "notes ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージでコミットしてください。" +
+      "続けて memo.txt を書き換えてステージングしたあと、さらにもう一度書き換えてください(再ステージングは" +
+      "しません)。最後に git status を実行し、同じ memo.txt がステージ済みの変更と未ステージの変更の両方に" +
+      "同時に表示されることを確認してください。",
+    promptSteps: [
+      "notes ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "memo.txt を書き換えてステージングしてください。",
+      "さらにもう一度 memo.txt を書き換えてください(再ステージングはしません)。",
+      "git status を実行し、同じ memo.txt がステージ済みの変更と未ステージの変更の両方に同時に表示されることを" +
+        "確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/notes",
+    referenceSolution:
+      'git init; git add memo.txt; git commit -m "Add memo"; echo "first change" > memo.txt; git add memo.txt; ' +
+      'echo "second change" > memo.txt; git status',
+    hints: [
+      "インデックスの内容(1回目の変更)とワークツリーの内容(2回目の変更)は別々に比較されます。",
+      "HEADとインデックスの差はChanges to be committedに、インデックスとワークツリーの差はChanges not staged " +
+        "for commitに、それぞれ独立して表示されます。",
+    ],
+    explanation:
+      "git status はHEAD・インデックス・ワークツリーという3者を独立に比較します。この演習ではmemo.txtを" +
+      "「1回目の変更→add→2回目の変更」という順で操作しているため、HEADとインデックスの間には1回目の変更分の" +
+      "差(Changes to be committedのmodified)、インデックスとワークツリーの間には2回目の変更分の差" +
+      "(Changes not staged for commitのmodified)がそれぞれ生じ、同じファイルが両方のセクションに同時に" +
+      "表示されます。addしていないtodo.txtは引き続きUntracked filesです。",
+  },
+  {
+    id: "ch19-ex80",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "notes ディレクトリでリポジトリを初期化し、draft1.txt・draft2.txt という空のファイルを2つ作成してください。" +
+      "draft1.txt だけを「Add draft1」というメッセージでコミットしたうえで、git status を実行して" +
+      "残り3つのファイルがまだ未追跡であることを確認してください。",
+    promptSteps: [
+      "notes ディレクトリでリポジトリを初期化してください。",
+      "draft1.txt・draft2.txt という空のファイルを2つ作成してください。",
+      "draft1.txt だけを「Add draft1」というメッセージでコミットしてください。",
+      "git status を実行し、残り3つのファイルがまだ未追跡であることを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/notes",
+    referenceSolution: 'git init; touch draft1.txt draft2.txt; git add draft1.txt; git commit -m "Add draft1"; git status',
+    hints: [
+      "touch は複数のファイル名をまとめて指定でき、新しい空ファイルを一度に作成できます。",
+      "draft1.txtだけをコミットしたので、draft2.txt・memo.txt・todo.txtの3つが未追跡のまま残ります。",
+    ],
+    explanation:
+      "touch で作成した空ファイルも、他のファイルと同様にgit addで個別にステージングできます。draft1.txtだけを" +
+      "addしてコミットすると、それが最初のコミット(root-commit)になります。git statusのUntracked filesには、" +
+      "コミットに含めなかったdraft2.txt・memo.txt・todo.txtがパス名の昇順で列挙されます。",
+  },
+  {
+    id: "ch19-ex81",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "branch-practice ディレクトリでリポジトリを初期化した直後、まだ一度もgit addしていない memo.txt を" +
+      "削除し、git status を実行して「コミットするものが何も無い」という状態になることを確認してください。",
+    promptSteps: [
+      "branch-practice ディレクトリでリポジトリを初期化してください。",
+      "まだ一度もgit addしていない memo.txt を削除してください。",
+      "git status を実行し、コミットするものが何も無い状態になることを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/branch-practice",
+    referenceSolution: "git init; rm memo.txt; git status",
+    hints: [
+      "一度も追跡されていないファイルは、削除してもインデックスにもHEADにも記録が残っていません。",
+      "branch-practiceにはmemo.txtしか無いため、削除するとワークツリーが空になります。",
+    ],
+    explanation:
+      "memo.txtは一度もgit addされていないため、インデックスにもコミットにも記録がありません。この状態で" +
+      "rmで削除すると、Gitから見て「追跡すべき変更もUntrackedなファイルも無い」状態になり、git statusは" +
+      "「nothing to commit, working tree clean」と表示します。一度も追跡していないファイルを消しても、" +
+      "Git側には何の痕跡も残らないことが確認できます。",
+  },
+  {
+    id: "ch19-ex82",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "sync-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」、step2.txt を「Add step2」、" +
+      "step3.txt を「Add step3」というメッセージで順にコミットしたうえで、git log --oneline で" +
+      "3件のコミットが新しい順に表示されることを確認してください。",
+    promptSteps: [
+      "sync-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "step2.txt を作成し、「Add step2」というメッセージでコミットしてください。",
+      "step3.txt を作成し、「Add step3」というメッセージでコミットしてください。",
+      "git log --oneline で3件のコミットが新しい順に表示されることを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/sync-practice",
+    referenceSolution:
+      'git init; git add memo.txt; git commit -m "Add memo"; echo "step2" > step2.txt; git add step2.txt; ' +
+      'git commit -m "Add step2"; echo "step3" > step3.txt; git add step3.txt; git commit -m "Add step3"; ' +
+      "git log --oneline",
+    hints: [
+      "add・commitのペアを3回繰り返すと、独立したコミットが3つ積み重なります。",
+      "git log --onelineは常に最新のコミットを一番上に表示します。",
+    ],
+    explanation:
+      "コミットを3回積み重ねると、git log --oneline はAdd step3・Add step2・Add memoの順(新しい順)で" +
+      "3行を表示します。コミットが増えても、各行は短縮ハッシュとメッセージ1行目だけの簡潔な形式のままです。",
+  },
+  {
+    id: "ch19-ex83",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "notes ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージでコミットしてください。" +
+      "続けて mv で memo.txt を notes.txt という名前に変更し、git status を実行してください。" +
+      "Gitがこのリネームを「削除」と「新規ファイル」の組み合わせとして認識することを確認してください。",
+    promptSteps: [
+      "notes ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "mv で memo.txt を notes.txt という名前に変更してください。",
+      "git status を実行し、削除と新規ファイルの組み合わせとして表示されることを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/notes",
+    referenceSolution: 'git init; git add memo.txt; git commit -m "Add memo"; mv memo.txt notes.txt; git status',
+    hints: [
+      "本シミュレータには git mv は無く、通常のmvコマンドでファイル名を変更します。",
+      "Gitはパス名で追跡するため、mvの結果は「元のパスが消えた」「新しいパスが増えた」と別々に検出されます。",
+    ],
+    explanation:
+      "git mv のようなリネーム専用コマンドを使わずに通常のmvでファイル名を変えると、Gitはそれを" +
+      "「同一ファイルの改名」とは認識しません。git statusでは、元のmemo.txtがインデックスに存在するのに" +
+      "ワークツリーには無いため「Changes not staged for commit」のdeletedとして、新しく現れたnotes.txtは" +
+      "「Untracked files」として、それぞれ独立に報告されます(todo.txtも引き続きUntracked filesです)。",
+  },
+  {
+    id: "ch19-ex84",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "branch-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで、" +
+      "続けて plan.txt を新規作成して「Add plan」というメッセージでコミットしてください。" +
+      "git status でワークツリーがクリーンであることを確認したうえで、git log --oneline で" +
+      "2件のコミットを確認してください。",
+    promptSteps: [
+      "branch-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "plan.txt というファイルを新規作成し、「Add plan」というメッセージでコミットしてください。",
+      "git status でワークツリーがクリーンであることを確認してください。",
+      "git log --oneline で2件のコミットを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/branch-practice",
+    referenceSolution:
+      'git init; git add memo.txt; git commit -m "Add memo"; echo "roadmap" > plan.txt; git add plan.txt; ' +
+      'git commit -m "Add plan"; git status; git log --oneline',
+    hints: [
+      "追跡対象のファイルをすべてコミットし終えると、git statusはnothing to commit, working tree cleanになります。",
+      "git log --oneline はAdd plan・Add memoの順(新しい順)で2行表示されます。",
+    ],
+    explanation:
+      "memo.txt・plan.txtの両方をコミット済みにすると、ワークツリー・インデックス・HEADの3者に差が無くなり、" +
+      "git statusは「nothing to commit, working tree clean」となります。この時点でgit log --onelineを実行すると、" +
+      "積み上げた2件のコミットが新しい順(Add plan→Add memo)で表示され、状態がクリーンであることと履歴が" +
+      "正しく記録されていることの両方を1つの演習で確認できます。",
+  },
+  {
+    id: "ch19-ex85",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "notes ディレクトリでリポジトリを初期化し、すべてのファイルを「Initial commit」というメッセージで" +
+      "コミットしてください。続けて todo.txt を削除し、memo.txt の内容を書き換え、new.txt という" +
+      "新しいファイルを作成したうえで、git status を実行してください。削除・変更・未追跡という" +
+      "3種類の状態が同時に表示されることを確認してください。",
+    promptSteps: [
+      "notes ディレクトリでリポジトリを初期化してください。",
+      "すべてのファイルを「Initial commit」というメッセージでコミットしてください。",
+      "todo.txt を削除してください。",
+      "memo.txt の内容を書き換えてください(echo でよい)。",
+      "new.txt という新しいファイルを作成してください。",
+      "git status を実行し、削除・変更・未追跡という3種類の状態が同時に表示されることを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/notes",
+    referenceSolution:
+      'git init; git add .; git commit -m "Initial commit"; rm todo.txt; echo "updated" > memo.txt; touch new.txt; ' +
+      "git status",
+    hints: [
+      "git statusは、Changes not staged for commit(変更・削除)とUntracked files(新規未追跡)を" +
+        "別々のセクションにまとめて表示します。",
+      "同じnot stagedのセクションの中でも、modifiedとdeletedが混在して表示されます。",
+    ],
+    explanation:
+      "git status はワークツリー・インデックス・HEADの差分をまとめて報告するため、複数の異なる種類の変更が" +
+      "同時に起きていても1回のコマンドですべて確認できます。この演習ではtodo.txtの削除(deleted)、" +
+      "memo.txtの書き換え(modified)がChanges not staged for commitに、新規作成したnew.txtがUntracked files" +
+      "に、それぞれ表示されます。",
+  },
+  {
+    id: "ch19-ex86",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "notes ディレクトリでリポジトリを初期化し、sub というディレクトリに a.txt・b.txt という2つの" +
+      "ファイルを作成してください。sub/a.txt だけを「Add a only」というメッセージでコミットしたうえで、" +
+      "git status を実行し、sub/b.txt を含む残りのファイルが未追跡のままであることを確認してください。",
+    promptSteps: [
+      "notes ディレクトリでリポジトリを初期化してください。",
+      "sub というディレクトリに a.txt・b.txt という2つのファイルを作成してください。",
+      "sub/a.txt だけを「Add a only」というメッセージでコミットしてください。",
+      "git status を実行し、sub/b.txt を含む残りのファイルが未追跡のままであることを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/notes",
+    referenceSolution:
+      'git init; mkdir sub; echo "a" > sub/a.txt; echo "b" > sub/b.txt; git add sub/a.txt; ' +
+      'git commit -m "Add a only"; git status',
+    hints: [
+      "git add にはディレクトリだけでなく、sub/a.txtのようにネストしたファイルへのパスを直接指定することもできます。",
+      "sub/a.txtだけをaddしたので、同じディレクトリ内のsub/b.txtには影響しません。",
+    ],
+    explanation:
+      "git add にはディレクトリ配下のファイルへのパスを直接指定することもでき、その場合は指定した1ファイルだけが" +
+      "対象になります(ディレクトリ全体を再帰的に対象にする挙動とは異なります)。この演習ではsub/a.txtだけを" +
+      "addしてコミットしたため、同じsubディレクトリ内のsub/b.txtや、notesディレクトリ直下のmemo.txt・todo.txtは" +
+      "引き続きUntracked filesとして表示されます。",
+  },
+  {
+    id: "ch19-ex87",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "notes ディレクトリでリポジトリを初期化し、すべてのファイルを「Initial commit」というメッセージで" +
+      "コミットしてください。続けて memo.txt を削除したあと、削除したはずの memo.txt を再び git add しようとして" +
+      "失敗することを確認してください。",
+    promptSteps: [
+      "notes ディレクトリでリポジトリを初期化してください。",
+      "すべてのファイルを「Initial commit」というメッセージでコミットしてください。",
+      "memo.txt を削除してください。",
+      "削除したはずの memo.txt を再び git add しようとして失敗することを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/notes",
+    referenceSolution: 'git init; git add .; git commit -m "Initial commit"; rm memo.txt; git add memo.txt',
+    hints: [
+      "git add はワークツリー上に実際に存在するファイルの内容をインデックスへコピーするコマンドです。",
+      "本シミュレータには git rm が実装されていないため、削除済みのパスをgit addで指定してもエラーになります。",
+    ],
+    explanation:
+      "git add は指定されたパスがワークツリー上に実際に存在することを前提にしています。rmで削除した後の" +
+      "memo.txtに対してgit addを実行しても、対象のファイルが見つからないため「git add: pathspec 'memo.txt' " +
+      "did not match any files」というエラーになります。実際のGitにはgit rmという削除専用のサブコマンドが" +
+      "ありますが、本シミュレータには実装されていないため、削除をコミットに含める操作自体ができない点に" +
+      "注意が必要です。",
+  },
+  {
+    id: "ch19-ex88",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "sync-practice ディレクトリでリポジトリを初期化し、docs・images という2つのディレクトリにそれぞれ" +
+      "ファイルを1つずつ作成してください。git add . でカレントディレクトリ以下すべてを" +
+      "「Add docs and images」というメッセージでまとめてコミットしたうえで、git status で" +
+      "ワークツリーがクリーンであることを確認してください。",
+    promptSteps: [
+      "sync-practice ディレクトリでリポジトリを初期化してください。",
+      "docs・images という2つのディレクトリにそれぞれファイルを1つずつ作成してください。",
+      "git add . でカレントディレクトリ以下すべてをステージングしてください。",
+      "「Add docs and images」というメッセージでまとめてコミットしてください。",
+      "git status でワークツリーがクリーンであることを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/sync-practice",
+    referenceSolution:
+      'git init; mkdir docs; mkdir images; echo "readme" > docs/readme.txt; echo "logo" > images/logo.txt; ' +
+      'git add .; git commit -m "Add docs and images"; git status',
+    hints: [
+      "git add . は、複数のサブディレクトリが新しく増えていても、すべてまとめて再帰的にステージングします。",
+      "元からあったmemo.txtも同じgit add .の対象に含まれます。",
+    ],
+    explanation:
+      "git add . はカレントディレクトリ配下を再帰的に走査するため、docs・imagesという複数の新しい" +
+      "サブディレクトリが同時に増えていても、1回のコマンドですべてステージングできます。元からあったmemo.txtも" +
+      "合わせて1つのコミットにまとめられるため、コミット後のgit statusはnothing to commit, working tree clean" +
+      "になります。",
+  },
+  {
+    id: "ch19-ex89",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "branch-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。続けて memo.txt を削除し、git status を実行して" +
+      "削除だけが未ステージの変更として単独で表示されることを確認してください。",
+    promptSteps: [
+      "branch-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "memo.txt を削除してください。",
+      "git status を実行し、削除だけが未ステージの変更として単独で表示されることを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/branch-practice",
+    referenceSolution: 'git init; git add memo.txt; git commit -m "Add memo"; rm memo.txt; git status',
+    hints: [
+      "branch-practiceにはmemo.txtしか無いため、削除するとワークツリーからファイルが1つも無くなります。",
+      "コミット済みのファイルを削除した場合はUntracked filesではなく、deletedとして扱われます。",
+    ],
+    explanation:
+      "branch-practiceディレクトリにはmemo.txtしかファイルが無いため、コミット後にそれを削除すると" +
+      "ワークツリー上のファイルは0個になります。それでもインデックスにはmemo.txtの記録が残っているため、" +
+      "git statusは「Changes not staged for commit」のdeleted: memo.txtだけを表示し、Untracked filesの" +
+      "セクションは現れません。",
+  },
+  {
+    id: "ch19-ex90",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "sync-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージでコミットして" +
+      "ください。続けて memo.txt の内容を書き換え、「Update memo」というメッセージで2回目のコミットをしたうえで、" +
+      "git log --oneline で同じファイルに対する2件のコミットが記録されていることを確認してください。",
+    promptSteps: [
+      "sync-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "memo.txt の内容を書き換えてください(echo でよい)。",
+      "「Update memo」というメッセージで2回目のコミットをしてください。",
+      "git log --oneline で2件のコミットが記録されていることを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/sync-practice",
+    referenceSolution:
+      'git init; git add memo.txt; git commit -m "Add memo"; echo "v2 content" > memo.txt; git add memo.txt; ' +
+      'git commit -m "Update memo"; git log --oneline',
+    hints: [
+      "新しいファイルを追加するときと同じ手順(変更→add→commit)は、既存ファイルの更新にもそのまま使えます。",
+      "git log --oneline には、対象ファイルの数ではなくコミットの回数だけ行が表示されます。",
+    ],
+    explanation:
+      "これまでの演習の多くは新しいファイルを追加してコミットを重ねる例でしたが、この演習では同じmemo.txtの" +
+      "内容を書き換えて2回目のコミットを作っています。git log --oneline はファイルの種類や数に関わらず、" +
+      "コミットが作られた回数だけ行を表示するため、Update memo・Add memoの2行が新しい順に並びます。",
+  },
+];
+
+export const exercises: Exercise[] = [...exercisesPart1, ...exercisesPart2, ...exercisesPart3];
