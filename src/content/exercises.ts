@@ -19637,6 +19637,230 @@ const exercisesPart2: Exercise[] = [
       "依存していません。そのため containerd だけを dnf install しても、依存パッケージのインストールは" +
       "発生せず、「Installing:」にcontainerd本体のみが表示されます。",
   },
+  {
+    id: "ch20-ex90",
+    chapterId: "ch20",
+    prompt:
+      "sudo を使って tmux パッケージを dnf コマンドで2回連続インストールし、2回目は既にインストール済みで" +
+      "あることを確認してください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "sudo を使って tmux パッケージを dnf コマンドでインストールしてください。",
+      "同じコマンドをもう一度実行し、2回目は「already installed」という趣旨のメッセージになることを" +
+        "確認してください(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "sudo dnf install tmux; sudo dnf install tmux",
+    hints: [
+      "同じパッケージを重ねてインストールしようとしても、dnfはエラーにはなりません。",
+      "2回目の実行結果には「is already installed」「Nothing to do.」という文言が含まれます。",
+    ],
+    explanation:
+      "既にインストール済みのパッケージに対して dnf install を実行すると、再インストールは行われず、" +
+      "「Package tmux-....x86_64 is already installed.」に続けて「Nothing to do.」というメッセージが表示され、" +
+      "最後は通常どおり「Complete!」で終わります。この点はaptの「is already the newest version」と文言は" +
+      "異なりますが、冪等な結果になるという性質は共通しています。",
+  },
+  {
+    id: "ch20-ex91",
+    chapterId: "ch20",
+    prompt:
+      "sudo を使って redis-server パッケージを dnf コマンドで2回連続インストールし、2回目は既にインストール" +
+      "済みであることを確認してください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "sudo を使って redis-server パッケージを dnf コマンドでインストールしてください。",
+      "同じコマンドをもう一度実行し、2回目は「already installed」という趣旨のメッセージになることを" +
+        "確認してください(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "sudo dnf install redis-server; sudo dnf install redis-server",
+    hints: [
+      "ch20-ex10ではaptでredis-serverの冪等性を確認しましたが、今回はdnfで同じ確認を行います。",
+      "2回目の実行結果には「is already installed」という文言が含まれます。",
+    ],
+    explanation:
+      "dnf install も apt install と同様、既にインストール済みのパッケージを指定すると再インストールは" +
+      "行われず「is already installed」という趣旨のメッセージになります。ただし具体的な文言は" +
+      "「Package redis-server-....x86_64 is already installed.」「Nothing to do.」となり、aptの" +
+      "「is already the newest version」とは異なる表現になります。",
+  },
+  {
+    id: "ch20-ex92",
+    chapterId: "ch20",
+    prompt:
+      "sudo を使って vim パッケージを dnf コマンドでインストールしようとし、このパッケージが仮想リポジトリに" +
+      "存在しないことを確認してください。",
+    referenceSolution: "sudo dnf install vim",
+    hints: [
+      "この演習用の仮想リポジトリに登録されているのは16種類のパッケージのみで、vimは含まれていません。",
+      "存在しないパッケージ名を指定すると「Error: Unable to find a match: パッケージ名」という結果になります。",
+    ],
+    explanation:
+      "dnf install パッケージ名 に指定した名前が仮想リポジトリに存在しない場合、root権限があっても" +
+      "「Error: Unable to find a match: vim」というエラーになりインストールは行われません。実在のLinux環境の" +
+      "vimと違い、この演習の仮想リポジトリには登録されていないパッケージだからです。",
+  },
+  {
+    id: "ch20-ex93",
+    chapterId: "ch20",
+    prompt:
+      "sudo を使って emacs パッケージを dnf コマンドでインストールしようとし、このパッケージが仮想リポジトリに" +
+      "存在しないことを確認してください。",
+    referenceSolution: "sudo dnf install emacs",
+    hints: [
+      "vimと同様、emacsもこの演習用の仮想リポジトリには登録されていません。",
+      "存在しないパッケージ名を指定すると「Error: Unable to find a match: パッケージ名」という結果になります。",
+    ],
+    explanation:
+      "emacs も仮想リポジトリの16パッケージには含まれていないため、dnf install emacs は" +
+      "「Error: Unable to find a match: emacs」というエラーになります。実際のパッケージが存在するかどうかは" +
+      "リポジトリのメタデータ次第であり、有効なコマンド構文であっても対象パッケージが無ければ失敗します。",
+  },
+  {
+    id: "ch20-ex94",
+    chapterId: "ch20",
+    prompt:
+      "sudo を使って python3 パッケージを dnf コマンドでインストールしたうえで、依存パッケージとして自動的に" +
+      "インストールされた python3-libs について、dnf info で「Installed Packages」と表示されることを" +
+      "確認してください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "sudo を使って python3 パッケージを dnf コマンドでインストールしてください。",
+      "python3-libs について dnf info を実行し、「Installed Packages」と表示されることを確認してください" +
+        "(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "sudo dnf install python3; dnf info python3-libs",
+    hints: [
+      "python3をインストールすると、依存パッケージのpython3-libsも一緒にインストールされます。",
+      "dnf infoは、明示的にインストールを指定していない依存パッケージについても、インストール済みであれば" +
+        "「Installed Packages」と表示します。",
+    ],
+    explanation:
+      "python3 のインストール時に依存解決によって自動的に追加されたpython3-libsも、仮想ファイルシステム上" +
+      "ではインストール済みとして記録されます。そのため python3-libs 自体をインストールコマンドで直接" +
+      "指定していなくても、dnf info python3-libs の見出しは「Available Packages」ではなく" +
+      "「Installed Packages」になります。",
+  },
+  {
+    id: "ch20-ex95",
+    chapterId: "ch20",
+    prompt:
+      "sudo を使って docker-ce パッケージを dnf コマンドでインストールしたうえで、依存パッケージとして" +
+      "自動的にインストールされた containerd について、dnf info で「Installed Packages」と表示されることを" +
+      "確認してください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "sudo を使って docker-ce パッケージを dnf コマンドでインストールしてください。",
+      "containerd について dnf info を実行し、「Installed Packages」と表示されることを確認してください" +
+        "(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "sudo dnf install docker-ce; dnf info containerd",
+    hints: [
+      "docker-ceをインストールすると、依存パッケージのcontainerdも一緒にインストールされます。",
+      "python3/python3-libsの組み合わせ(ch20-ex94)と同じ考え方が、docker-ce/containerdにも当てはまります。",
+    ],
+    explanation:
+      "docker-ce のインストール時に依存解決によって自動的に追加されたcontainerdも、仮想ファイルシステム上" +
+      "ではインストール済みとして記録されます。そのため containerd 自体をインストールコマンドで直接" +
+      "指定していなくても、dnf info containerd の見出しは「Available Packages」ではなく" +
+      "「Installed Packages」になります。",
+  },
+  {
+    id: "ch20-ex96",
+    chapterId: "ch20",
+    prompt:
+      "sudo を使って nodejs パッケージを dnf コマンドでインストールしたうえで、node というキーワードで" +
+      "dnf search を実行し、検索結果にnodejsが含まれることを確認してください(1行のコマンドとして ; で" +
+      "つないでください)。",
+    promptSteps: [
+      "sudo を使って nodejs パッケージを dnf コマンドでインストールしてください。",
+      "node というキーワードで dnf search を実行し、検索結果にnodejsが含まれることを確認してください" +
+        "(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "sudo dnf install nodejs; dnf search node",
+    hints: [
+      "dnf search はパッケージ名や説明文の一部分にキーワードが一致する場合もヒットします。",
+      "nodejs は node という文字列を含むため、キーワードが完全一致でなくてもヒットします。",
+    ],
+    explanation:
+      "dnf search キーワード は、パッケージ名や説明文にキーワードを部分文字列として含むパッケージすべてを" +
+      "対象とするため、「node」のような部分一致でも nodejs にマッチします。なお dnf search の検索結果は" +
+      "インストール状態に関わらず同じ内容が表示される点に注意してください(インストール済みかどうかを" +
+      "区別したい場合は dnf info を使います)。",
+  },
+  {
+    id: "ch20-ex97",
+    chapterId: "ch20",
+    prompt:
+      "sudo を使って libcurl4 パッケージを単体でインストールしたうえで、続けて curl パッケージをインストール" +
+      "し、依存パッケージ(libcurl4)が既にインストール済みのため「Installing dependencies:」の行が表示" +
+      "されないことを確認してください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "sudo を使って libcurl4 パッケージを単体で dnf コマンドでインストールしてください。",
+      "続けて curl パッケージを dnf コマンドでインストールし、依存パッケージ(libcurl4)が既にインストール" +
+        "済みのため「Installing dependencies:」の行が表示されないことを確認してください" +
+        "(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "sudo dnf install libcurl4; sudo dnf install curl",
+    hints: [
+      "dnf install は、依存パッケージが既にインストール済みであれば、そのパッケージを重ねてインストール" +
+        "しようとはしません。",
+      "このため出力にはcurl本体を示す「Installing:」だけが表示され、「Installing dependencies:」の行自体が" +
+        "現れません。",
+    ],
+    explanation:
+      "通常 curl をインストールすると依存パッケージのlibcurl4も一緒にインストールされ、" +
+      "「Installing dependencies:」の行が表示されます(ch20-ex04参照)。しかし今回のように先にlibcurl4を" +
+      "単体でインストールしておくと、curlインストール時には依存関係が既に満たされているため、" +
+      "「Installing dependencies:」のセクション自体が出力から省かれ、「Installing:」にはcurl本体のみが" +
+      "表示されます。",
+  },
+  {
+    id: "ch20-ex98",
+    chapterId: "ch20",
+    prompt:
+      "sudo を使って mysql-common パッケージを単体でインストールしたうえで、続けて mysql-server パッケージを" +
+      "インストールし、依存パッケージ(mysql-common)が既にインストール済みのため「Installing dependencies:」の" +
+      "行が表示されないことを確認してください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "sudo を使って mysql-common パッケージを単体で dnf コマンドでインストールしてください。",
+      "続けて mysql-server パッケージを dnf コマンドでインストールし、依存パッケージ(mysql-common)が既に" +
+        "インストール済みのため「Installing dependencies:」の行が表示されないことを確認してください" +
+        "(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "sudo dnf install mysql-common; sudo dnf install mysql-server",
+    hints: [
+      "ch20-ex06ではsuで mysql-server をインストールし、mysql-commonが依存パッケージとして一緒に" +
+        "インストールされる様子を確認しました。",
+      "今回は先にmysql-commonだけを単体でインストールしておくため、mysql-serverインストール時には" +
+        "依存関係が既に満たされています。",
+    ],
+    explanation:
+      "ch20-ex06のように何もインストールされていない状態から mysql-server をインストールすると、依存する" +
+      "mysql-commonが「Installing dependencies:」として一緒に表示されます。しかし今回のように先に" +
+      "mysql-commonを単体でインストールしておくと、mysql-serverインストール時には依存関係が既に満たされて" +
+      "いるため、「Installing dependencies:」のセクション自体が出力から省かれ、「Installing:」には" +
+      "mysql-server本体のみが表示されます。",
+  },
+  {
+    id: "ch20-ex99",
+    chapterId: "ch20",
+    prompt:
+      "su コマンドでrootユーザーに切り替えたうえで、wget パッケージを dnf コマンドで2回連続インストールし、" +
+      "2回目は既にインストール済みであることを確認してください(1行のコマンドとして ; でつないでください。" +
+      "su は最初の1回だけで構いません)。",
+    promptSteps: [
+      "su コマンドでrootユーザーに切り替えてください。",
+      "wget パッケージを dnf コマンドでインストールしてください。",
+      "もう一度同じ dnf install コマンドを実行し、2回目は「already installed」という趣旨のメッセージになる" +
+        "ことを確認してください(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "su root; dnf install wget; dnf install wget",
+    hints: [
+      "su で一度rootに切り替えれば、以後のコマンドは sudo や su を付け直す必要はありません。",
+      "2回目のdnf installでは「is already installed」「Nothing to do.」という趣旨のメッセージになります。",
+    ],
+    explanation:
+      "su root はセッション全体の実行ユーザーをrootに切り替えるため、sudoのように1コマンドごとに権限を" +
+      "付け直す必要がありません。su root のあと2回連続で dnf install wget を実行すると、1回目は通常通り" +
+      "インストールが行われ「Complete!」となりますが、2回目は「Package wget-....x86_64 is already " +
+      "installed.」に続き「Nothing to do.」というメッセージになり、コマンド自体は成功で終了します。",
+  },
 
   // ---------------------------------------------------------------------
   // 付録: SSH接続・infoコマンド・日本語入力
