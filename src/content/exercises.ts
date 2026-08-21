@@ -20106,6 +20106,256 @@ const exercisesPart2: Exercise[] = [
       "説明文の行、という2行構成になります。wget パッケージの場合は「wget/stable 1.21.4 amd64」" +
       "「  コマンドラインファイルダウンローダー」という2行が表示されます。",
   },
+
+  // ---------------------------------------------------------------------
+  // Ch20: パッケージ管理 apt info 実行型(ex115〜ex128)
+  // ---------------------------------------------------------------------
+  {
+    id: "ch20-ex115",
+    chapterId: "ch20",
+    prompt:
+      "nginx パッケージの詳細情報を apt コマンドで表示し、依存パッケージを持たないため「Depends:」の行が" +
+      "表示されないことを確認してください。",
+    referenceSolution: "apt info nginx",
+    hints: [
+      "apt info パッケージ名 で詳細情報を表示できます。",
+      "「Depends:」の行は、依存パッケージを持つパッケージのときだけ表示されます。nginx は依存パッケージを" +
+        "持ちません。",
+    ],
+    explanation:
+      "apt info nginx を実行すると、Package/Version/Installed-Size/Description の各項目が表示されますが、" +
+      "nginx は他のパッケージに依存していないため「Depends:」の行自体が出力から省かれます。" +
+      "依存パッケージを持つcurlやpython3などとの違いを確認できます。",
+  },
+  {
+    id: "ch20-ex116",
+    chapterId: "ch20",
+    prompt:
+      "jq パッケージの詳細情報を apt コマンドで表示し、依存パッケージを持たないため「Depends:」の行が" +
+      "表示されないことを確認してください。",
+    referenceSolution: "apt info jq",
+    hints: [
+      "apt info パッケージ名 で詳細情報を表示できます。",
+      "jq はコマンドラインで動作するJSONプロセッサで、他のパッケージに依存していません。",
+    ],
+    explanation:
+      "apt info jq を実行すると、Description欄に「コマンドラインで動作するJSONプロセッサ」と表示されます。" +
+      "jq は依存パッケージを持たないため「Depends:」の行は出力されず、" +
+      "Package/Version/Installed-Size/Description の4項目だけが表示されます。",
+  },
+  {
+    id: "ch20-ex117",
+    chapterId: "ch20",
+    prompt:
+      "redis-server パッケージの詳細情報を apt コマンドで表示し、Installed-Sizeが1000KBを超えるため" +
+      "「2.1 M」のようにM単位で表示されること、また依存パッケージを持たないため「Depends:」の行が" +
+      "表示されないことを確認してください。",
+    referenceSolution: "apt info redis-server",
+    hints: [
+      "Installed-Size欄は、1000KB未満なら「◯◯ k」、1000KB以上なら小数第1位までの「◯.◯ M」という表記になります。",
+      "redis-server のサイズは2100KBで、依存パッケージは持ちません。",
+    ],
+    explanation:
+      "apt info のInstalled-Size欄は、dnf infoのSize欄と同じ計算式で、1000KB未満なら「◯◯ k」、" +
+      "1000KB以上なら1000で割った値を小数第1位までの「◯.◯ M」という表記になります。redis-server は" +
+      "2100KBのため「2.1 M」と表示され、依存パッケージを持たないため「Depends:」の行はありません。",
+  },
+  {
+    id: "ch20-ex118",
+    chapterId: "ch20",
+    prompt:
+      "python3 パッケージの詳細情報を apt コマンドで表示し、依存パッケージ(Depends)として" +
+      "python3-libsが表示されることを確認してください。",
+    referenceSolution: "apt info python3",
+    hints: [
+      "apt info パッケージ名 で詳細情報を表示できます。",
+      "python3 は python3-libs という依存パッケージを持つため、「Depends:」の行が表示されます。",
+    ],
+    explanation:
+      "apt info python3 を実行すると、Package/Version/Installed-Size に続き「Depends: python3-libs」の行が" +
+      "表示され、最後にDescriptionが表示されます。python3のInstalled-Sizeは27500KBのため「27.5 M」と" +
+      "表示されます。",
+  },
+  {
+    id: "ch20-ex119",
+    chapterId: "ch20",
+    prompt:
+      "docker-ce パッケージの詳細情報を apt コマンドで表示し、依存パッケージ(Depends)としてcontainerdが" +
+      "表示されることを確認してください。",
+    referenceSolution: "apt info docker-ce",
+    hints: [
+      "apt info パッケージ名 で詳細情報を表示できます。",
+      "docker-ce は containerd という依存パッケージを持つため、「Depends:」の行が表示されます。",
+    ],
+    explanation:
+      "apt info docker-ce を実行すると「Depends: containerd」の行が表示されます。docker-ceのInstalled-Sizeは" +
+      "76400KBのため「76.4 M」と表示され、この章の仮想リポジトリの中でも特に大きなパッケージであることが" +
+      "わかります。",
+  },
+  {
+    id: "ch20-ex120",
+    chapterId: "ch20",
+    prompt:
+      "mysql-server パッケージの詳細情報を apt コマンドで表示し、依存パッケージ(Depends)として" +
+      "mysql-commonが表示されることを確認してください。",
+    referenceSolution: "apt info mysql-server",
+    hints: [
+      "apt info パッケージ名 で詳細情報を表示できます。",
+      "mysql-server は mysql-common という依存パッケージを持つため、「Depends:」の行が表示されます。",
+    ],
+    explanation:
+      "apt info mysql-server を実行すると「Depends: mysql-common」の行が表示されます。" +
+      "mysql-serverのInstalled-Sizeは40200KBのため「40.2 M」と表示されます。",
+  },
+  {
+    id: "ch20-ex121",
+    chapterId: "ch20",
+    prompt:
+      "curl が依存する libcurl4 パッケージ自体の詳細情報を apt コマンドで単体で確認し、" +
+      "libcurl4自体はさらに他のパッケージに依存していないため「Depends:」の行が表示されないことを" +
+      "確認してください。",
+    referenceSolution: "apt info libcurl4",
+    hints: [
+      "libcurl4はcurlの依存パッケージですが、libcurl4自体はさらに他のパッケージに依存していないため、" +
+        "単体でも検索・確認・インストールが可能です。",
+      "apt info はcurlをインストールしているかどうかに関わらず、指定したパッケージ単体の情報のみを表示します。",
+    ],
+    explanation:
+      "libcurl4はcurlパッケージをインストールする際に自動的に一緒にインストールされる依存パッケージですが、" +
+      "libcurl4自体はさらに別のパッケージに依存していないため、apt info libcurl4 を実行しても「Depends:」の" +
+      "行は表示されません。Installed-Sizeは382KBのため「382 k」と表示されます。",
+  },
+  {
+    id: "ch20-ex122",
+    chapterId: "ch20",
+    prompt:
+      "python3 が依存する python3-libs パッケージ自体の詳細情報を apt コマンドで単体で確認し、" +
+      "python3-libs自体はさらに他のパッケージに依存していないため「Depends:」の行が表示されないことを" +
+      "確認してください。",
+    referenceSolution: "apt info python3-libs",
+    hints: [
+      "python3-libsはpython3の依存パッケージですが、python3-libs自体はさらに他のパッケージに依存していません。",
+      "apt info python3-libs は、python3をインストールしているかどうかに関わらず実行できます。",
+    ],
+    explanation:
+      "python3-libsはpython3をインストールする際に自動的に一緒にインストールされる依存パッケージですが、" +
+      "python3-libs自体はさらに別のパッケージに依存していないため「Depends:」の行は表示されません。" +
+      "Installed-Sizeは21300KBのため「21.3 M」と表示されます。",
+  },
+  {
+    id: "ch20-ex123",
+    chapterId: "ch20",
+    prompt:
+      "docker-ce が依存する containerd パッケージ自体の詳細情報を apt コマンドで単体で確認し、" +
+      "containerd自体はさらに他のパッケージに依存していないため「Depends:」の行が表示されないことを" +
+      "確認してください。",
+    referenceSolution: "apt info containerd",
+    hints: [
+      "containerdはdocker-ceの依存パッケージですが、containerd自体はさらに他のパッケージに依存していません。",
+      "Installed-Sizeは29800KBあります。",
+    ],
+    explanation:
+      "containerdはdocker-ceをインストールする際に自動的に一緒にインストールされる依存パッケージですが、" +
+      "containerd自体はさらに別のパッケージに依存していないため「Depends:」の行は表示されません。" +
+      "Installed-Sizeは29800KBのため「29.8 M」と表示されます。",
+  },
+  {
+    id: "ch20-ex124",
+    chapterId: "ch20",
+    prompt:
+      "mysql-server が依存する mysql-common パッケージ自体の詳細情報を apt コマンドで単体で確認し、" +
+      "mysql-common自体はさらに他のパッケージに依存していないため「Depends:」の行が表示されないことを" +
+      "確認してください。",
+    referenceSolution: "apt info mysql-common",
+    hints: [
+      "mysql-commonはmysql-serverの依存パッケージですが、mysql-common自体はさらに他のパッケージに依存していません。",
+      "Installed-Sizeは620KBです。",
+    ],
+    explanation:
+      "mysql-commonはmysql-serverをインストールする際に自動的に一緒にインストールされる依存パッケージですが、" +
+      "mysql-common自体はさらに別のパッケージに依存していないため「Depends:」の行は表示されません。" +
+      "Installed-Sizeは620KBのため「620 k」と表示されます。",
+  },
+  {
+    id: "ch20-ex125",
+    chapterId: "ch20",
+    prompt:
+      "存在しないパッケージ名(foobar)を指定して apt info コマンドを実行し、「Unable to locate package」" +
+      "というエラーになることを確認してください。",
+    referenceSolution: "apt info foobar",
+    hints: [
+      "この仮想リポジトリに登録されていないパッケージ名を指定すると、apt info はエラーになります。",
+      "エラーメッセージは「Unable to locate package」で始まります(apt installで存在しないパッケージを" +
+        "指定したときと同じ文言です)。",
+    ],
+    explanation:
+      "apt info パッケージ名 に、この仮想リポジトリ(固定の15種類程度のパッケージ)に登録されていない名前を" +
+      "指定すると、「E: Unable to locate package foobar」というエラーメッセージが表示されます。" +
+      "apt search が該当なしでも正常終了(終了コード0、出力は空文字列)するのに対し、apt info は該当" +
+      "パッケージが無いとエラー終了する点が異なります。",
+  },
+  {
+    id: "ch20-ex126",
+    chapterId: "ch20",
+    prompt:
+      "存在しないパッケージ名(gimp)を指定して apt info コマンドを実行し、「Unable to locate package」" +
+      "というエラーになることを確認してください。",
+    referenceSolution: "apt info gimp",
+    hints: [
+      "gimp はこの章の仮想パッケージリポジトリには登録されていません。",
+      "存在しないパッケージ名を指定した場合、apt info は毎回「E: Unable to locate package パッケージ名」という" +
+        "同じ形式のエラーメッセージを返します。",
+    ],
+    explanation:
+      "gimp はこの仮想リポジトリに登録されていないパッケージ名のため、apt info gimp を実行すると" +
+      "「E: Unable to locate package gimp」というエラーメッセージが表示され、終了コードは0以外になります。" +
+      "指定したパッケージ名の部分だけがメッセージ中で置き換わる点を確認できます。",
+  },
+  {
+    id: "ch20-ex127",
+    chapterId: "ch20",
+    prompt:
+      "tree パッケージと python3 パッケージの詳細情報を apt コマンドで続けて表示し、Installed-Size欄の" +
+      "単位がそれぞれ「k」「M」のどちらになるかを見比べてください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "tree パッケージの詳細情報を apt コマンドで表示してください。",
+      "続けて python3 パッケージの詳細情報も apt コマンドで表示してください" +
+        "(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "apt info tree; apt info python3",
+    hints: [
+      "Installed-Size欄は、1000KB未満のパッケージは「◯◯ k」、1000KB以上のパッケージは小数第1位までの" +
+        "「◯.◯ M」という表記になります。",
+      "treeは47KB、python3は27500KBです。",
+    ],
+    explanation:
+      "apt info のInstalled-Size欄は、1000KB未満であれば「◯◯ k」、1000KB以上であれば1000で割った値を" +
+      "小数第1位までの「◯.◯ M」という表記になります。treeは47KBのため「47 k」、python3は27500KBのため" +
+      "27500÷1000=27.5より「27.5 M」と表示され、同じapt infoコマンドでもパッケージによって表示単位が" +
+      "異なることを確認できます。",
+  },
+  {
+    id: "ch20-ex128",
+    chapterId: "ch20",
+    prompt:
+      "wget パッケージと docker-ce パッケージの詳細情報を apt コマンドで続けて表示し、Installed-Size欄の" +
+      "単位がそれぞれ「k」「M」のどちらになるかを見比べてください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "wget パッケージの詳細情報を apt コマンドで表示してください。",
+      "続けて docker-ce パッケージの詳細情報も apt コマンドで表示してください" +
+        "(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "apt info wget; apt info docker-ce",
+    hints: [
+      "Installed-Size欄は、1000KB未満のパッケージは「◯◯ k」、1000KB以上のパッケージは小数第1位までの" +
+        "「◯.◯ M」という表記になります。",
+      "wgetは936KB、docker-ceは76400KBです。",
+    ],
+    explanation:
+      "wgetは936KBのため「936 k」と表示されるのに対し、docker-ceは76400KBのため76400÷1000=76.4より" +
+      "「76.4 M」と表示されます。同じapt infoコマンドでも、パッケージのサイズによって表示単位が" +
+      "「k」から「M」へ切り替わる境界(1000KB)を確認できます。",
+  },
   // ---------------------------------------------------------------------
   // 付録: SSH接続・infoコマンド・日本語入力
   // ---------------------------------------------------------------------
