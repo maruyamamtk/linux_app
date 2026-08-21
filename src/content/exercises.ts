@@ -20589,6 +20589,512 @@ const exercisesPart3: Exercise[] = [
       "同じ結果になります。この演習ではリモート側で直接作られたAdd releaseコミットをfast-forwardで取り込み、" +
       "最終的にローカルのgit log --onelineにはAdd release・Add memoの2行が新しい順に表示されます。",
   },
+// ---------------------------------------------------------------------
+  // Ch19: Gitによるバージョン管理(追加分、ch19-ex141〜) — findgrepシナリオ編
+  // ---------------------------------------------------------------------
+  {
+    id: "ch19-ex141",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "findgrep ディレクトリでリポジトリを初期化し、findgrep.sh を「findgrep.shの新規作成」という" +
+      "メッセージでコミットしてください。git log --oneline で1件のコミットが記録されていることを" +
+      "確認してください。",
+    promptSteps: [
+      "findgrep ディレクトリでリポジトリを初期化してください。",
+      "findgrep.sh を「findgrep.shの新規作成」というメッセージでコミットしてください。",
+      "git log --oneline で1件のコミットが記録されていることを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/findgrep",
+    referenceSolution: 'git init; git add findgrep.sh; git commit -m "findgrep.shの新規作成"; git log --oneline',
+    hints: [
+      "findgrep.shは17章で作成した、パターンを指定してファイルを検索するシェルスクリプトです。",
+      "実行権限が付いたファイルでも、git addやgit commitの手順自体は他のファイルと変わりません。",
+    ],
+    explanation:
+      "findgrep.shはこの章を通してGit管理していく実行可能なシェルスクリプトです。git init・git add・" +
+      "git commitという基本の3ステップはファイルの種類(実行権限の有無)に関わらず共通で、記録された" +
+      "実行権限もそのままコミットの一部として保存されます。git log --onelineで最初のコミットが" +
+      "1件だけ記録されていることを確認できます。",
+  },
+  {
+    id: "ch19-ex142",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "findgrep ディレクトリでリポジトリを初期化し、findgrep.sh を「findgrep.shの新規作成」という" +
+      "メッセージでコミットしてください。続けて findgrep.sh を書き換え、検索対象のディレクトリを" +
+      "第2引数(directory=$2)で指定できるバージョンに更新してください。git status を実行し、" +
+      "まだステージされていない変更として表示されることを確認してください。",
+    promptSteps: [
+      "findgrep ディレクトリでリポジトリを初期化してください。",
+      "findgrep.sh を「findgrep.shの新規作成」というメッセージでコミットしてください。",
+      "findgrep.sh を書き換え、検索対象のディレクトリを第2引数(directory=$2)で指定できるバージョンに" +
+        "更新してください。",
+      "git status を実行し、まだステージされていない変更として表示されることを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/findgrep",
+    referenceSolution:
+      'git init; git add findgrep.sh; git commit -m "findgrep.shの新規作成"; ' +
+      "cat > findgrep.sh << 'SCRIPT'\n#!/bin/bash\n\npattern=$1\ndirectory=$2\nfind \"$directory\" -type f | " +
+      'xargs grep -nH "$pattern"\nSCRIPT\ngit status',
+    hints: [
+      "ヒアドキュメント(cat > ファイル名 << 区切り文字 ... 区切り文字)を使うと、複数行の内容を" +
+        "まとめてファイルへ書き込めます。",
+      "区切り文字をシングルクォートで囲む(<< 'SCRIPT')と、本文中の$1・$2・$directory等がそのまま" +
+        "そのシェルでは展開されず、文字どおりファイルに書き込まれます。",
+    ],
+    explanation:
+      "findgrep.shの中身を書き換えると、コミット済みのファイルの内容とワークツリー上の内容が食い違うため、" +
+      "git statusは「Changes not staged for commit」のmodifiedとしてこの変更を報告します。ヒアドキュメントの" +
+      "区切り文字をクォートしておくと、本文中の$1・$2のようなドル記号付きの文字列がそのシェル自身の変数" +
+      "展開の対象にならず、スクリプトのソースコードとしてそのままファイルに書き込まれます。",
+  },
+  {
+    id: "ch19-ex143",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "findgrep ディレクトリでリポジトリを初期化し、findgrep.sh を「findgrep.shの新規作成」という" +
+      "メッセージでコミットしてください。ディレクトリ引数(directory=$2)に対応したバージョンへ書き換えたあと、" +
+      "改めてステージングし、git status を実行してステージ済みの変更として表示されることを確認してください。",
+    promptSteps: [
+      "findgrep ディレクトリでリポジトリを初期化してください。",
+      "findgrep.sh を「findgrep.shの新規作成」というメッセージでコミットしてください。",
+      "findgrep.sh をディレクトリ引数(directory=$2)に対応したバージョンへ書き換えてください。",
+      "改めてステージングしてください。",
+      "git status を実行し、ステージ済みの変更として表示されることを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/findgrep",
+    referenceSolution:
+      'git init; git add findgrep.sh; git commit -m "findgrep.shの新規作成"; ' +
+      "cat > findgrep.sh << 'SCRIPT'\n#!/bin/bash\n\npattern=$1\ndirectory=$2\nfind \"$directory\" -type f | " +
+      'xargs grep -nH "$pattern"\nSCRIPT\ngit add findgrep.sh; git status',
+    hints: [
+      "書き換えたあとにgit addを実行すると、その時点の内容がインデックスに反映されます。",
+      "この状態のgit statusは「Changes to be committed」のmodifiedとして表示されます。",
+    ],
+    explanation:
+      "書き換えたfindgrep.shを改めてgit addすると、直前のコミット(HEAD)のtreeとインデックスの差分として" +
+      "「Changes to be committed」のmodifiedに表示されます。前の演習(addする前)と比較すると、同じ変更内容が" +
+      "addを挟むだけで別のセクションに表示されることが分かります。",
+  },
+  {
+    id: "ch19-ex144",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "findgrep ディレクトリでリポジトリを初期化し、findgrep.sh を「findgrep.shの新規作成」という" +
+      "メッセージでコミットしてください。ディレクトリ引数(directory=$2)に対応したバージョンへ書き換えて" +
+      "ステージングし、「ファイルを探すディレクトリを指定できるようにする」というメッセージでコミットしたうえで、" +
+      "--oneline を付けずに git log を実行し、フル形式で2件のコミットを確認してください。",
+    promptSteps: [
+      "findgrep ディレクトリでリポジトリを初期化してください。",
+      "findgrep.sh を「findgrep.shの新規作成」というメッセージでコミットしてください。",
+      "findgrep.sh をディレクトリ引数(directory=$2)に対応したバージョンへ書き換え、ステージングしてください。",
+      "「ファイルを探すディレクトリを指定できるようにする」というメッセージでコミットしてください。",
+      "--oneline を付けずに git log を実行し、フル形式で2件のコミットを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/findgrep",
+    referenceSolution:
+      'git init; git add findgrep.sh; git commit -m "findgrep.shの新規作成"; ' +
+      "cat > findgrep.sh << 'SCRIPT'\n#!/bin/bash\n\npattern=$1\ndirectory=$2\nfind \"$directory\" -type f | " +
+      'xargs grep -nH "$pattern"\nSCRIPT\ngit add findgrep.sh; ' +
+      'git commit -m "ファイルを探すディレクトリを指定できるようにする"; git log',
+    hints: [
+      "機能を1つ追加するたびに、その内容が分かるメッセージで独立したコミットを作る、というのが良い運用です。",
+      "--onelineを付けないgit logは、各コミットのハッシュ全体・Author・Date・メッセージ全文を表示します。",
+    ],
+    explanation:
+      "findgrep.shに「検索対象ディレクトリを指定できるようにする」という機能追加を行い、その内容が分かる" +
+      "メッセージで独立したコミットとして記録しました。--oneline を付けない git log を実行すると、" +
+      "「ファイルを探すディレクトリを指定できるようにする」「findgrep.shの新規作成」という2件のコミットが、" +
+      "それぞれハッシュ全体・Author・Date・メッセージ全文というフル形式で新しい順に表示されます。",
+  },
+  {
+    id: "ch19-ex145",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "findgrep ディレクトリでリポジトリを初期化し、findgrep.sh を「findgrep.shの新規作成」という" +
+      "メッセージでコミットしてください。ディレクトリ引数(directory=$2)に対応したバージョンへ書き換えて" +
+      "ステージングし、「ファイルを探すディレクトリを指定できるようにする」というメッセージでコミットしたうえで、" +
+      "git log --oneline で2件のコミットが新しい順に表示されることを確認してください。",
+    promptSteps: [
+      "findgrep ディレクトリでリポジトリを初期化してください。",
+      "findgrep.sh を「findgrep.shの新規作成」というメッセージでコミットしてください。",
+      "findgrep.sh をディレクトリ引数(directory=$2)に対応したバージョンへ書き換え、ステージングしてください。",
+      "「ファイルを探すディレクトリを指定できるようにする」というメッセージでコミットしてください。",
+      "git log --oneline で2件のコミットが新しい順に表示されることを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/findgrep",
+    referenceSolution:
+      'git init; git add findgrep.sh; git commit -m "findgrep.shの新規作成"; ' +
+      "cat > findgrep.sh << 'SCRIPT'\n#!/bin/bash\n\npattern=$1\ndirectory=$2\nfind \"$directory\" -type f | " +
+      'xargs grep -nH "$pattern"\nSCRIPT\ngit add findgrep.sh; ' +
+      'git commit -m "ファイルを探すディレクトリを指定できるようにする"; git log --oneline',
+    hints: [
+      "git log --onelineは、同じ履歴をハッシュの先頭7桁とメッセージ1行目だけに要約して表示します。",
+      "「ファイルを探すディレクトリを指定できるようにする」「findgrep.shの新規作成」の順(新しい順)で" +
+        "2行表示されます。",
+    ],
+    explanation:
+      "前の演習で確認したフル形式のgit logと同じ履歴を、git log --onelineで確認します。各コミットが" +
+      "「短縮ハッシュ メッセージの1行目」という1行に要約されるため、findgrep.shに対して行った2つの変更" +
+      "(新規作成→ディレクトリ引数対応)の流れを一目で見渡せます。",
+  },
+  {
+    id: "ch19-ex146",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "findgrep ディレクトリでリポジトリを初期化し、findgrep.sh を「findgrep.shの新規作成」という" +
+      "メッセージでコミットしてください。ディレクトリ引数(directory=$2)に対応したバージョンへ書き換えて" +
+      "コミットしたあと、add-usage という名前のブランチを作成し(切り替えはまだ不要です)、git branch で" +
+      "2つのブランチが一覧表示されることを確認してください。",
+    promptSteps: [
+      "findgrep ディレクトリでリポジトリを初期化してください。",
+      "findgrep.sh を「findgrep.shの新規作成」というメッセージでコミットしてください。",
+      "findgrep.sh をディレクトリ引数(directory=$2)に対応したバージョンへ書き換え、コミットしてください。",
+      "add-usage という名前のブランチを作成してください(切り替えはまだ不要です)。",
+      "git branch で2つのブランチが一覧表示されることを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/findgrep",
+    referenceSolution:
+      'git init; git add findgrep.sh; git commit -m "findgrep.shの新規作成"; ' +
+      "cat > findgrep.sh << 'SCRIPT'\n#!/bin/bash\n\npattern=$1\ndirectory=$2\nfind \"$directory\" -type f | " +
+      'xargs grep -nH "$pattern"\nSCRIPT\ngit add findgrep.sh; ' +
+      'git commit -m "ファイルを探すディレクトリを指定できるようにする"; git branch add-usage; git branch',
+    hints: [
+      "これから追加する「使い方の表示」機能を、main を汚さずに試すためのトピックブランチを用意します。",
+      "作成しただけではmainのままなので、git branchの一覧では現在のブランチにmainの* が付いたままです。",
+    ],
+    explanation:
+      "次に追加したい「引数が無い場合に使い方を表示する」という機能は、mainに直接コミットするのではなく、" +
+      "add-usageという名前のトピックブランチを用意して作業するのが一般的な流れです。この時点ではまだ" +
+      "ブランチを作成しただけで切り替えていないため、git branchの一覧ではadd-usage・main(現在のブランチ、" +
+      "*付き)の2件が表示されます。",
+  },
+  {
+    id: "ch19-ex147",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "findgrep ディレクトリでリポジトリを初期化し、findgrep.sh を「findgrep.shの新規作成」という" +
+      "メッセージでコミットしてください。ディレクトリ引数(directory=$2)に対応したバージョンへ書き換えて" +
+      "コミットしたあと、git switch -c で add-usage ブランチを作成・切り替えし、findgrep.sh を" +
+      "パターン引数が無い場合に使い方を表示するバージョンへ書き換えてください。「引数が無い場合の使い方を" +
+      "表示するようにする」というメッセージでコミットし、git log --oneline で3件のコミットを確認してください。",
+    promptSteps: [
+      "findgrep ディレクトリでリポジトリを初期化してください。",
+      "findgrep.sh を「findgrep.shの新規作成」というメッセージでコミットしてください。",
+      "findgrep.sh をディレクトリ引数(directory=$2)に対応したバージョンへ書き換え、コミットしてください。",
+      "git switch -c で add-usage ブランチを作成・切り替えしてください。",
+      "findgrep.sh をパターン引数が無い場合に使い方を表示するバージョンへ書き換えてください。",
+      "「引数が無い場合の使い方を表示するようにする」というメッセージでコミットしてください。",
+      "git log --oneline で3件のコミットを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/findgrep",
+    referenceSolution:
+      'git init; git add findgrep.sh; git commit -m "findgrep.shの新規作成"; ' +
+      "cat > findgrep.sh << 'SCRIPT'\n#!/bin/bash\n\npattern=$1\ndirectory=$2\nfind \"$directory\" -type f | " +
+      'xargs grep -nH "$pattern"\nSCRIPT\ngit add findgrep.sh; ' +
+      'git commit -m "ファイルを探すディレクトリを指定できるようにする"; git switch -c add-usage; ' +
+      "cat > findgrep.sh << 'SCRIPT'\n#!/bin/bash\n\npattern=$1\ndirectory=$2\n\nif [ -z \"$pattern\" ]; then\n  " +
+      'echo "使い方: findgrep.sh <検索パターン> [検索対象ディレクトリ]"\n  exit 1\nfi\n\nfind "$directory" ' +
+      '-type f | xargs grep -nH "$pattern"\nSCRIPT\ngit add findgrep.sh; ' +
+      'git commit -m "引数が無い場合の使い方を表示するようにする"; git log --oneline',
+    hints: [
+      "add-usageブランチ上での変更・コミットは、main側の履歴には一切影響しません。",
+      "add-usageのgit log --onelineには、mainで作った2件に加えて新しい1件が積み重なり、合計3件になります。",
+    ],
+    explanation:
+      "add-usageブランチに切り替えてから行った変更・コミットは、そのブランチだけに記録され、main側には" +
+      "影響しません。この演習ではfindgrep.shに「パターンが指定されていなければ使い方を表示して終了する」" +
+      "という機能を追加し、独立したコミットとして記録しました。add-usage上でのgit log --onelineには、" +
+      "新規作成→ディレクトリ引数対応→使い方表示、という3件のコミットが新しい順に並びます。",
+  },
+  {
+    id: "ch19-ex148",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "findgrep ディレクトリでリポジトリを初期化し、findgrep.sh を「findgrep.shの新規作成」という" +
+      "メッセージでコミットしてください。ディレクトリ引数(directory=$2)に対応したバージョンへ書き換えて" +
+      "コミットしたあと、git switch -c で add-usage ブランチを作成・切り替えし、使い方表示機能を追加して" +
+      "コミットしてください。main へ戻り、cat findgrep.sh で main 側にはまだ使い方表示機能が含まれていない" +
+      "(ディレクトリ引数対応バージョンのままである)ことを確認してください。",
+    promptSteps: [
+      "findgrep ディレクトリでリポジトリを初期化してください。",
+      "findgrep.sh を「findgrep.shの新規作成」というメッセージでコミットしてください。",
+      "findgrep.sh をディレクトリ引数(directory=$2)に対応したバージョンへ書き換え、コミットしてください。",
+      "git switch -c で add-usage ブランチを作成・切り替えし、使い方表示機能を追加してコミットしてください。",
+      "main へ戻り、cat findgrep.sh で main 側にはまだ使い方表示機能が含まれていないことを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/findgrep",
+    referenceSolution:
+      'git init; git add findgrep.sh; git commit -m "findgrep.shの新規作成"; ' +
+      "cat > findgrep.sh << 'SCRIPT'\n#!/bin/bash\n\npattern=$1\ndirectory=$2\nfind \"$directory\" -type f | " +
+      'xargs grep -nH "$pattern"\nSCRIPT\ngit add findgrep.sh; ' +
+      'git commit -m "ファイルを探すディレクトリを指定できるようにする"; git switch -c add-usage; ' +
+      "cat > findgrep.sh << 'SCRIPT'\n#!/bin/bash\n\npattern=$1\ndirectory=$2\n\nif [ -z \"$pattern\" ]; then\n  " +
+      'echo "使い方: findgrep.sh <検索パターン> [検索対象ディレクトリ]"\n  exit 1\nfi\n\nfind "$directory" ' +
+      '-type f | xargs grep -nH "$pattern"\nSCRIPT\ngit add findgrep.sh; ' +
+      'git commit -m "引数が無い場合の使い方を表示するようにする"; git switch main; cat findgrep.sh',
+    hints: [
+      "ブランチを切り替えると、ワークツリーは切り替え先のブランチが指すコミットのtreeの内容に置き換わります。",
+      "mainはadd-usage上でのコミットを一切取り込んでいないため、findgrep.shの内容もそのままです。",
+    ],
+    explanation:
+      "add-usage上で行った「使い方表示」機能の追加は、mainブランチにはまだ一切取り込まれていません。" +
+      "main へ git switch すると、ワークツリーはmainが指すコミット(ディレクトリ引数対応バージョンまでの" +
+      "内容)に置き換わるため、catで内容を確認しても「使い方: findgrep.sh ...」という文言は含まれません。" +
+      "ブランチが独立した作業スペースとして機能していることが確認できます。",
+  },
+  {
+    id: "ch19-ex149",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "findgrep ディレクトリでリポジトリを初期化し、findgrep.sh を「findgrep.shの新規作成」という" +
+      "メッセージでコミットしてください。ディレクトリ引数対応版をコミットしたあと、git switch -c で" +
+      "add-usage ブランチを作成・切り替えし、使い方表示機能を追加してコミットしてください。main へ戻り、" +
+      "add-usage を merge して(main側は変更していないためfast-forwardになります)、cat findgrep.sh で" +
+      "main にも使い方表示機能が反映されたことを確認してください。",
+    promptSteps: [
+      "findgrep ディレクトリでリポジトリを初期化してください。",
+      "findgrep.sh を「findgrep.shの新規作成」というメッセージでコミットしてください。",
+      "findgrep.sh をディレクトリ引数(directory=$2)に対応したバージョンへ書き換え、コミットしてください。",
+      "git switch -c で add-usage ブランチを作成・切り替えし、使い方表示機能を追加してコミットしてください。",
+      "main へ戻り、add-usage を merge してください。",
+      "cat findgrep.sh で main にも使い方表示機能が反映されたことを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/findgrep",
+    referenceSolution:
+      'git init; git add findgrep.sh; git commit -m "findgrep.shの新規作成"; ' +
+      "cat > findgrep.sh << 'SCRIPT'\n#!/bin/bash\n\npattern=$1\ndirectory=$2\nfind \"$directory\" -type f | " +
+      'xargs grep -nH "$pattern"\nSCRIPT\ngit add findgrep.sh; ' +
+      'git commit -m "ファイルを探すディレクトリを指定できるようにする"; git switch -c add-usage; ' +
+      "cat > findgrep.sh << 'SCRIPT'\n#!/bin/bash\n\npattern=$1\ndirectory=$2\n\nif [ -z \"$pattern\" ]; then\n  " +
+      'echo "使い方: findgrep.sh <検索パターン> [検索対象ディレクトリ]"\n  exit 1\nfi\n\nfind "$directory" ' +
+      '-type f | xargs grep -nH "$pattern"\nSCRIPT\ngit add findgrep.sh; ' +
+      'git commit -m "引数が無い場合の使い方を表示するようにする"; git switch main; git merge add-usage; ' +
+      "cat findgrep.sh",
+    hints: [
+      "add-usageを作成してからmain側では1度もコミットしていないため、mainはfast-forwardでadd-usageに" +
+        "追いつけます。",
+      "fast-forwardマージ後は、mainのワークツリーもadd-usageで書き換えた内容(使い方表示機能付き)に" +
+        "更新されます。",
+    ],
+    explanation:
+      "add-usageブランチを作成してから、main側では1度もコミットを積んでいないため、main は add-usage の" +
+      "祖先にあたります。この状態でのgit merge add-usageはfast-forwardとなり、mainのポインタが" +
+      "add-usageの最新コミットまで一気に進みます。マージ後にcatでfindgrep.shの内容を確認すると、" +
+      "add-usage上で追加した使い方表示のコードがmain側にもそのまま反映されていることが分かります。",
+  },
+  {
+    id: "ch19-ex150",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "findgrep ディレクトリでリポジトリを初期化し、findgrep.sh を「findgrep.shの新規作成」という" +
+      "メッセージでコミットしてください。ディレクトリ引数対応版をコミットしたあと、main のまま findgrep.sh の" +
+      "先頭にコメント(スクリプトの説明)を1行追加して「スクリプトに説明コメントを追加する」という" +
+      "メッセージでコミットしてください。続けて add-readme という名前のブランチを、ディレクトリ引数対応版の" +
+      "コミット(main が説明コメントを追加する前の時点)から作成・切り替えし、README.md という新しいファイルを" +
+      "「READMEを追加する」というメッセージでコミットしてください。main へ戻って add-readme を merge し、" +
+      "main側とadd-readme側の両方の変更が異なるファイルとして衝突なく取り込まれることを確認してください。",
+    promptSteps: [
+      "findgrep ディレクトリでリポジトリを初期化してください。",
+      "findgrep.sh を「findgrep.shの新規作成」というメッセージでコミットしてください。",
+      "findgrep.sh をディレクトリ引数(directory=$2)に対応したバージョンへ書き換え、コミットしてください。",
+      "この時点で add-readme という名前のブランチを作成してください(切り替えはまだ不要です)。",
+      "main のまま findgrep.sh の先頭にコメントを1行追加し、「スクリプトに説明コメントを追加する」という" +
+        "メッセージでコミットしてください。",
+      "add-readme へ切り替え、README.md というファイルを「READMEを追加する」というメッセージで" +
+        "コミットしてください。",
+      "main へ戻り、add-readme を merge してください(異なるファイルへの変更なので衝突しません)。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/findgrep",
+    referenceSolution:
+      'git init; git add findgrep.sh; git commit -m "findgrep.shの新規作成"; ' +
+      "cat > findgrep.sh << 'SCRIPT'\n#!/bin/bash\n\npattern=$1\ndirectory=$2\nfind \"$directory\" -type f | " +
+      'xargs grep -nH "$pattern"\nSCRIPT\ngit add findgrep.sh; ' +
+      'git commit -m "ファイルを探すディレクトリを指定できるようにする"; git branch add-readme; ' +
+      "cat > findgrep.sh << 'SCRIPT'\n#!/bin/bash\n# ファイル内の文字列を検索するツール\n\npattern=$1\n" +
+      'directory=$2\nfind "$directory" -type f | xargs grep -nH "$pattern"\nSCRIPT\ngit add findgrep.sh; ' +
+      'git commit -m "スクリプトに説明コメントを追加する"; git switch add-readme; ' +
+      'echo "# findgrep.sh の使い方" > README.md; git add README.md; git commit -m "READMEを追加する"; ' +
+      "git switch main; git merge add-readme",
+    hints: [
+      "add-readmeはディレクトリ引数対応版のコミットから枝分かれしているため、mainが後から積んだコメント" +
+        "追加コミットは含まれていません。",
+      "mainとadd-readmeはそれぞれ別のファイル(findgrep.sh・README.md)を変更しているため、3-wayマージは" +
+        "衝突せずに完了します。",
+    ],
+    explanation:
+      "add-readmeはディレクトリ引数対応版の時点から分岐したブランチなので、その後mainに積まれた" +
+      "「スクリプトに説明コメントを追加する」コミットを含みません。main側はfindgrep.shに、add-readme側は" +
+      "新規のREADME.mdに、それぞれ異なるファイルへの変更を加えて分岐しているため、git mergeは" +
+      "「Merge made by the 'recursive' strategy.」という非衝突の3-wayマージとして完了し、マージ後の" +
+      "ワークツリーにはコメント入りのfindgrep.shとREADME.mdの両方が揃います。",
+  },
+  {
+    id: "ch19-ex151",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "findgrep ディレクトリで、findgrep.shの新規作成からディレクトリ引数対応・使い方表示機能の追加・" +
+      "mainへのmergeまで、この章で行ってきた一連の流れを最初から通しで実行してください。" +
+      "最後に main で git log --oneline を実行し、3件のコミットが記録されていることを確認してください。",
+    promptSteps: [
+      "findgrep ディレクトリでリポジトリを初期化し、findgrep.sh を「findgrep.shの新規作成」という" +
+        "メッセージでコミットしてください。",
+      "findgrep.sh をディレクトリ引数(directory=$2)に対応したバージョンへ書き換え、「ファイルを探す" +
+        "ディレクトリを指定できるようにする」というメッセージでコミットしてください。",
+      "git switch -c で add-usage ブランチを作成・切り替えし、使い方表示機能を追加して「引数が無い場合の" +
+        "使い方を表示するようにする」というメッセージでコミットしてください。",
+      "main へ戻り、add-usage を merge してください。",
+      "git log --oneline で3件のコミットを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/findgrep",
+    referenceSolution:
+      'git init; git add findgrep.sh; git commit -m "findgrep.shの新規作成"; ' +
+      "cat > findgrep.sh << 'SCRIPT'\n#!/bin/bash\n\npattern=$1\ndirectory=$2\nfind \"$directory\" -type f | " +
+      'xargs grep -nH "$pattern"\nSCRIPT\ngit add findgrep.sh; ' +
+      'git commit -m "ファイルを探すディレクトリを指定できるようにする"; git switch -c add-usage; ' +
+      "cat > findgrep.sh << 'SCRIPT'\n#!/bin/bash\n\npattern=$1\ndirectory=$2\n\nif [ -z \"$pattern\" ]; then\n  " +
+      'echo "使い方: findgrep.sh <検索パターン> [検索対象ディレクトリ]"\n  exit 1\nfi\n\nfind "$directory" ' +
+      '-type f | xargs grep -nH "$pattern"\nSCRIPT\ngit add findgrep.sh; ' +
+      'git commit -m "引数が無い場合の使い方を表示するようにする"; git switch main; git merge add-usage; ' +
+      "git log --oneline",
+    hints: [
+      "これまでの演習で1つずつ確認してきたinit・add・commit・switch -c・mergeの手順を、通しでつなげます。",
+      "add-usageを作成してからmain側は1度もコミットしていないため、最後のmergeはfast-forwardになります。",
+    ],
+    explanation:
+      "この演習は、findgrep.shに対してこれまで行ってきた「新規作成→ディレクトリ引数対応→トピックブランチで" +
+      "使い方表示機能を追加→mainへ統合」という一連の流れを、最初から通しで実行するものです。add-usageの" +
+      "作成後にmain側で独自のコミットを積んでいないため、最後のmergeはfast-forwardとなり、main の" +
+      "git log --onelineには3件のコミットが新しい順に並びます。",
+  },
+  {
+    id: "ch19-ex152",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "findgrep ディレクトリでリポジトリを初期化し、findgrep.sh を「findgrep.shの新規作成」という" +
+      "メッセージでコミットしてください。1つ上の階層に findgrep-remote という疑似リモートを用意して" +
+      "origin という名前で登録し、git push でコミットを送ってください。続けて新しいコミットを何も作らずに" +
+      "もう一度 git push を実行し、「Everything up-to-date」と表示されることを確認してください。",
+    promptSteps: [
+      "findgrep ディレクトリでリポジトリを初期化してください。",
+      "findgrep.sh を「findgrep.shの新規作成」というメッセージでコミットしてください。",
+      "1つ上の階層に findgrep-remote という疑似リモートを用意し、origin という名前で登録してください。",
+      "git push でコミットを送ってください。",
+      "新しいコミットを何も作らずにもう一度 git push を実行し、Everything up-to-dateと表示されることを" +
+        "確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/findgrep",
+    referenceSolution:
+      'git init; git add findgrep.sh; git commit -m "findgrep.shの新規作成"; git init ../findgrep-remote; ' +
+      "git remote add origin ../findgrep-remote; git push; git push",
+    hints: [
+      "実際にfindgrep.shをGitHub等のリモートリポジトリへ公開する場面を、疑似リモートで再現しています。",
+      "1回目のpushでリモート側もローカルと同じ状態になるため、2回目は送るものが無くなります。",
+    ],
+    explanation:
+      "書籍の流れではfindgrep.shをリモートリポジトリへ公開する場面が想定されますが、本シミュレータには" +
+      "実際のネットワーク通信が無いため、もう1つのローカルリポジトリ(findgrep-remote)を疑似リモートとして" +
+      "扱います。1回目のgit pushでfindgrep.shのコミットがリモート側にコピーされ、2回目のpushは送るべき" +
+      "新しい変更が無いため「Everything up-to-date」とだけ表示されます。",
+  },
+  {
+    id: "ch19-ex153",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "findgrep ディレクトリでリポジトリを初期化し、findgrep.sh を「findgrep.shの新規作成」という" +
+      "メッセージでコミットしてください。1つ上の階層に findgrep-remote を疑似リモート(origin)として" +
+      "用意して push したあと、findgrep-remote 側で LICENSE というファイルを「ライセンスファイルを追加する」" +
+      "というメッセージで直接コミットしてください。findgrep へ戻り、git pull でその変更を取り込んでください。",
+    promptSteps: [
+      "findgrep ディレクトリでリポジトリを初期化してください。",
+      "findgrep.sh を「findgrep.shの新規作成」というメッセージでコミットしてください。",
+      "1つ上の階層に findgrep-remote を疑似リモート(origin)として用意し、push してください。",
+      "findgrep-remote 側へ移動し、LICENSE というファイルを「ライセンスファイルを追加する」というメッセージで" +
+        "直接コミットしてください。",
+      "findgrep へ戻り、git pull でその変更を取り込んでください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/findgrep",
+    referenceSolution:
+      'git init; git add findgrep.sh; git commit -m "findgrep.shの新規作成"; git init ../findgrep-remote; ' +
+      "git remote add origin ../findgrep-remote; git push; cd ../findgrep-remote; " +
+      'echo "MIT License" > LICENSE; git add LICENSE; git commit -m "ライセンスファイルを追加する"; ' +
+      "cd ../findgrep; git pull",
+    hints: [
+      "疑似リモート側にも通常のgit add・git commitでファイルを追加できます(中身は普通のGitリポジトリです)。",
+      "ローカル側は分岐するコミットを作っていないため、pullはfast-forwardで完了します。",
+    ],
+    explanation:
+      "共同作業者がリモートリポジトリへ直接LICENSEファイルを追加した、という状況を疑似リモート側での" +
+      "直接コミットで再現しています。findgrep側は独自のコミットを積んでいないため、git pullで取得した" +
+      "変更はfast-forwardでそのまま取り込まれ、ローカルのワークツリーにもLICENSEファイルが現れます。",
+  },
+  {
+    id: "ch19-ex154",
+    chapterId: "ch19",
+    type: "git",
+    prompt: "findgrep ディレクトリでリポジトリを初期化した直後、ファイル名を打ち間違えて存在しない findgrep を git add しようとして失敗することを確認してください。",
+    promptSteps: [
+      "findgrep ディレクトリでリポジトリを初期化してください。",
+      "ファイル名を打ち間違えて存在しない findgrep(.shを付け忘れた名前)を git add しようとして失敗することを" +
+        "確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/findgrep",
+    referenceSolution: "git init; git add findgrep",
+    hints: [
+      "実際のファイル名はfindgrep.shであり、拡張子を付け忘れるとGitはそのパスを見つけられません。",
+      "エラーメッセージにはpathspecという語と、実際に入力したパス名(findgrep)が含まれます。",
+    ],
+    explanation:
+      "findgrepディレクトリに実際に存在するファイルはfindgrep.shであり、.shを付け忘れたfindgrepという" +
+      "名前のファイルは存在しません。この状態でgit addを実行すると「git add: pathspec 'findgrep' did not " +
+      "match any files」というエラーになります。拡張子の付け忘れは実際の開発でもよくあるタイプミスです。",
+  },
+  {
+    id: "ch19-ex155",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "findgrep ディレクトリでリポジトリを初期化し、findgrep.sh を「findgrep.shの新規作成」という" +
+      "メッセージでコミットしてください。ディレクトリ引数対応版をコミットしたあと、まだコミットしていない" +
+      "メモ用のファイル notes.txt を新規作成し、git status を実行して未追跡ファイルとして表示されることを" +
+      "確認してください。",
+    promptSteps: [
+      "findgrep ディレクトリでリポジトリを初期化してください。",
+      "findgrep.sh を「findgrep.shの新規作成」というメッセージでコミットしてください。",
+      "findgrep.sh をディレクトリ引数(directory=$2)に対応したバージョンへ書き換え、コミットしてください。",
+      "まだコミットしていないメモ用のファイル notes.txt を新規作成してください。",
+      "git status を実行し、未追跡ファイルとして表示されることを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/findgrep",
+    referenceSolution:
+      'git init; git add findgrep.sh; git commit -m "findgrep.shの新規作成"; ' +
+      "cat > findgrep.sh << 'SCRIPT'\n#!/bin/bash\n\npattern=$1\ndirectory=$2\nfind \"$directory\" -type f | " +
+      'xargs grep -nH "$pattern"\nSCRIPT\ngit add findgrep.sh; ' +
+      'git commit -m "ファイルを探すディレクトリを指定できるようにする"; ' +
+      'echo "作業メモ" > notes.txt; git status',
+    hints: [
+      "作業用のメモファイルを作ったからといって、自動的にGitの追跡対象になるわけではありません。",
+      "git addを実行するまでは、notes.txtはUntracked filesとして表示され続けます。",
+    ],
+    explanation:
+      "findgrep.shの開発を進める過程で、コミットするつもりのない作業用メモ(notes.txt)を作ることもあります。" +
+      "Gitはgit addされたファイルだけを追跡するため、notes.txtを作成しただけではインデックスにもコミットにも" +
+      "含まれず、git statusのUntracked filesに表示され続けます。この章で見てきたfindgrep.sh・README.md・" +
+      "LICENSEといった追跡対象のファイルと、追跡対象外のファイルとの違いを最後に振り返る演習です。",
+  },
 ];
 
 export const exercises: Exercise[] = [...exercisesPart1, ...exercisesPart2, ...exercisesPart3];
