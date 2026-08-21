@@ -20757,6 +20757,327 @@ const exercisesPart2: Exercise[] = [
       "正確に指定する必要がある点は同じです。",
   },
   // ---------------------------------------------------------------------
+  // 横断シナリオ: search→install→infoの連結、dnf/apt対比
+  // ---------------------------------------------------------------------
+  {
+    id: "ch20-ex149",
+    chapterId: "ch20",
+    prompt:
+      "htop というキーワードで dnf search を実行してパッケージ名を確認したうえで、sudo を使って htop " +
+      "パッケージをインストールし、最後に dnf info htop を実行してインストール後の状態を確認してください" +
+      "(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "htop というキーワードで dnf search を実行してください。",
+      "sudo を使って htop パッケージを dnf コマンドでインストールしてください。",
+      "dnf info htop を実行し、インストール後の状態を確認してください" +
+        "(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "dnf search htop; sudo dnf install htop; dnf info htop",
+    hints: [
+      "dnf search htop の結果には「htop.x86_64 : 対話型のプロセスビューア」という行が表示されます。",
+      "htop は依存パッケージを持たないため、インストールされるのはhtop単体だけです。",
+      "dnf info はインストール済みのパッケージに対しては「Available Packages」ではなく" +
+        "「Installed Packages」という見出しで詳細を表示します。",
+    ],
+    explanation:
+      "dnf search htop でパッケージの存在を確認し、sudo dnf install htop でインストールしたうえで、" +
+      "dnf info htop を実行すると、htop に依存パッケージがないため単体でインストールされ、見出しが" +
+      "「Installed Packages」に切り替わった詳細情報が表示されます。search→install→infoという一連の流れは、" +
+      "実際にパッケージを導入する際の典型的な手順です。",
+  },
+  {
+    id: "ch20-ex150",
+    chapterId: "ch20",
+    prompt:
+      "jq というキーワードで dnf search を実行してパッケージ名を確認したうえで、sudo を使って jq " +
+      "パッケージをインストールし、最後に dnf info jq を実行してインストール後の状態を確認してください" +
+      "(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "jq というキーワードで dnf search を実行してください。",
+      "sudo を使って jq パッケージを dnf コマンドでインストールしてください。",
+      "dnf info jq を実行し、インストール後の状態を確認してください(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "dnf search jq; sudo dnf install jq; dnf info jq",
+    hints: [
+      "dnf search jq の結果には「jq.x86_64 : コマンドラインで動作するJSONプロセッサ」という行が表示されます。",
+      "jq も依存パッケージを持たないため、インストールされるのはjq単体だけです。",
+      "3つのコマンドは ; でつなぎ、1行のコマンドとして実行します。",
+    ],
+    explanation:
+      "dnf search jq でパッケージの存在と要約を確認し、sudo dnf install jq でインストールしたうえで、" +
+      "dnf info jq を実行すると見出しが「Installed Packages」に切り替わります。ex149のhtopと同様、" +
+      "依存パッケージを持たない単体パッケージのsearch→install→infoの一連の流れです。",
+  },
+  {
+    id: "ch20-ex151",
+    chapterId: "ch20",
+    prompt:
+      "wget というキーワードで apt search を実行してパッケージ名を確認したうえで、sudo を使って wget " +
+      "パッケージをインストールし、最後に apt info wget を実行してインストール後の状態を確認してください" +
+      "(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "wget というキーワードで apt search を実行してください。",
+      "sudo を使って wget パッケージを apt コマンドでインストールしてください。",
+      "apt info wget を実行し、インストール後の状態を確認してください" +
+        "(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "apt search wget; sudo apt install wget; apt info wget",
+    hints: [
+      "apt search wget の結果は「wget/stable 1.21.4 amd64」に続けて要約行が2行1組で表示されます。",
+      "wget は依存パッケージを持たないため、「The following additional packages will be installed:」の" +
+        "行は表示されません。",
+      "apt info の出力にはdnf infoのような「Available/Installed」の見出しがないため、install前後で" +
+        "出力内容自体は変わりません。",
+    ],
+    explanation:
+      "apt search wget でパッケージの存在を確認し、sudo apt install wget でインストールしたうえで、" +
+      "apt info wget を実行します。apt info はdnf infoと異なりインストール済みかどうかを示す見出しを" +
+      "持たないため、Package/Version/Installed-Size/Descriptionの内容は install の前後で変化しません。",
+  },
+  {
+    id: "ch20-ex152",
+    chapterId: "ch20",
+    prompt:
+      "tmux というキーワードで apt search を実行してパッケージ名を確認したうえで、sudo を使って tmux " +
+      "パッケージをインストールし、最後に apt info tmux を実行してインストール後の状態を確認してください" +
+      "(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "tmux というキーワードで apt search を実行してください。",
+      "sudo を使って tmux パッケージを apt コマンドでインストールしてください。",
+      "apt info tmux を実行し、インストール後の状態を確認してください" +
+        "(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "apt search tmux; sudo apt install tmux; apt info tmux",
+    hints: [
+      "apt search tmux の結果は「tmux/stable 3.3a amd64」に続けて要約行が2行1組で表示されます。",
+      "tmux は依存パッケージを持たないため、インストールされるのはtmux単体だけです。",
+      "3つのコマンドは ; でつなぎ、1行のコマンドとして実行します。",
+    ],
+    explanation:
+      "apt search tmux でパッケージの存在を確認し、sudo apt install tmux でインストールしたうえで、" +
+      "apt info tmux を実行すると「Package: tmux」から始まる詳細情報が表示されます。ex151のwgetと同様、" +
+      "依存パッケージを持たない単体パッケージのsearch→install→infoの一連の流れです。",
+  },
+  {
+    id: "ch20-ex153",
+    chapterId: "ch20",
+    prompt:
+      "nginx というキーワードで、まず dnf search、次に apt search を実行し、一致するパッケージがある場合の" +
+      "両者の出力形式の違い(見出し行の有無など)を確認してください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "nginx というキーワードで dnf search を実行してください。",
+      "続けて nginx というキーワードで apt search を実行し、出力形式の違いを確認してください" +
+        "(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "dnf search nginx; apt search nginx",
+    hints: [
+      "dnf search の結果には「======================== Name & Summary Matched: nginx " +
+        "========================」という見出し行が付きますが、apt search にはこのような見出し行は" +
+        "ありません。",
+      "dnf search の結果行は「nginx.x86_64 : 要約」という1行完結の形式ですが、apt search の結果行は" +
+        "「nginx/stable 1.24.0 amd64」とその下の要約行の2行1組の形式です。",
+    ],
+    explanation:
+      "同じ nginx というキーワードで検索しても、dnf search は「Name & Summary Matched」という見出し行に" +
+      "続けて「nginx.x86_64 : 軽量で高性能なWebサーバー/リバースプロキシ」のように1行で結果を表示するのに対し、" +
+      "apt search には見出し行がなく、「nginx/stable 1.24.0 amd64」というパッケージ名・チャンネル・バージョン" +
+      "・アーキテクチャの行と、その下にインデントされた要約行という2行1組の形式で結果を表示します。同じ検索でも" +
+      "コマンドによって出力形式が大きく異なる点を確認できます。",
+  },
+  {
+    id: "ch20-ex154",
+    chapterId: "ch20",
+    prompt:
+      "foobar123 という、どのパッケージにも一致しないキーワードで、まず dnf search、次に apt search を" +
+      "実行し、一致するパッケージがない場合の出力の違いを確認してください" +
+      "(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "foobar123 というキーワードで dnf search を実行してください。",
+      "続けて foobar123 というキーワードで apt search を実行し、一致するパッケージがない場合の出力の違いを" +
+        "確認してください(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "dnf search foobar123; apt search foobar123",
+    hints: [
+      "foobar123 はこの仮想リポジトリのどのパッケージ名・要約にも含まれない文字列です。",
+      "dnf search は一致するパッケージがない場合「No matches found.」という1行を出力します。",
+      "apt search は一致するパッケージがない場合、何も出力しません(標準出力が空文字列になります)。",
+    ],
+    explanation:
+      "一致するパッケージが1件もない場合、dnf search は「No matches found.」というメッセージを明示的に" +
+      "出力しますが、apt search はエラーにもならず何も出力しません(標準出力が空文字列のままです)。どちらも" +
+      "終了コードは0(正常終了)であり、「見つからなかった」ことをエラーとしては扱わない点は共通していますが、" +
+      "その伝え方はコマンドによって異なります。",
+  },
+  {
+    id: "ch20-ex155",
+    chapterId: "ch20",
+    prompt:
+      "curl パッケージについて、まず dnf info curl、次に apt info curl を実行し、依存パッケージ情報の" +
+      "表示有無など出力内容の違いを確認してください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "dnf info curl を実行してください。",
+      "続けて apt info curl を実行し、出力内容の違いを確認してください" +
+        "(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "dnf info curl; apt info curl",
+    hints: [
+      "dnf info の出力はName/Version/Architecture/Size/Source/Repository/Summaryで構成され、" +
+        "依存パッケージを示す項目自体がありません。",
+      "apt info の出力にはPackage/Version/Installed-Sizeに続けて「Depends: libcurl4」という依存パッケージの" +
+        "行が表示されます(依存パッケージを持たないパッケージの場合、この行自体が現れません)。",
+    ],
+    explanation:
+      "curl は libcurl4 に依存するパッケージですが、この依存関係が出力に現れるかどうかはコマンドによって" +
+      "異なります。dnf info curl の出力にはArchitecture/Source/Repositoryといった項目はあっても依存関係を" +
+      "示す項目はありません。一方 apt info curl の出力には「Depends: libcurl4」という行があり、依存パッケージ" +
+      "を直接確認できます。依存関係を調べたい場合は apt info の方が手がかりになる、という違いです。",
+  },
+  {
+    id: "ch20-ex156",
+    chapterId: "ch20",
+    prompt:
+      "sudo を使って docker-ce パッケージを dnf コマンドで、続けて sudo を使って mysql-server パッケージを " +
+      "apt コマンドでインストールし、依存パッケージを含むインストール結果の表示形式の違いを確認してください" +
+      "(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "sudo を使って docker-ce パッケージを dnf コマンドでインストールしてください。",
+      "続けて sudo を使って mysql-server パッケージを apt コマンドでインストールし、依存パッケージを含む" +
+        "インストール結果の表示形式の違いを確認してください(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "sudo dnf install docker-ce; sudo apt install mysql-server",
+    hints: [
+      "docker-ce は containerd に、mysql-server は mysql-common にそれぞれ依存しています。",
+      "dnf install の依存パッケージは「Installing dependencies:」という見出しの下に一覧表示されます。",
+      "apt install の依存パッケージは「The following additional packages will be installed:」という見出しの" +
+        "下に一覧表示されます。",
+    ],
+    explanation:
+      "docker-ce・mysql-server はどちらも依存パッケージを持ちますが、その依存パッケージをインストール結果に" +
+      "どう表示するかはコマンドによって異なります。dnf install docker-ce では「Installing:」に続けて" +
+      "「Installing dependencies:」の下にcontainerdが表示され、最後に「Transaction Summary」で" +
+      "「Install  2 Packages」とまとめられます。apt install mysql-server では「The following additional " +
+      "packages will be installed:」の下にmysql-commonが表示され、「The following NEW packages will be " +
+      "installed:」にmysql-common・mysql-serverの両方が並びます。同じ「依存関係の自動解決」でも、結果の" +
+      "見せ方はコマンドごとに異なります。",
+  },
+  {
+    id: "ch20-ex157",
+    chapterId: "ch20",
+    prompt:
+      "curl というキーワードで dnf search を実行し、dnf info curl でインストール前の状態を確認したうえで、" +
+      "sudo を使って curl パッケージをインストールし、最後にもう一度 dnf info curl を実行してインストール後に" +
+      "見出しが変化することを確認してください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "curl というキーワードで dnf search を実行してください。",
+      "dnf info curl を実行し、インストール前の状態を確認してください。",
+      "sudo を使って curl パッケージを dnf コマンドでインストールしてください。",
+      "もう一度 dnf info curl を実行し、インストール後に見出しが変化することを確認してください" +
+        "(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "dnf search curl; dnf info curl; sudo dnf install curl; dnf info curl",
+    hints: [
+      "インストール前の dnf info curl の見出しは「Available Packages」です。",
+      "curl は libcurl4 に依存するため、sudo dnf install curl を実行すると依存パッケージも一緒に" +
+        "インストールされます。",
+      "インストール後の dnf info curl の見出しは「Installed Packages」に変わります。",
+    ],
+    explanation:
+      "dnf search curl でパッケージの存在を確認し、1回目の dnf info curl では見出しが" +
+      "「Available Packages」と表示されます。sudo dnf install curl を実行すると、依存パッケージの" +
+      "libcurl4も含めてインストールされ、2回目の dnf info curl では見出しが「Installed Packages」に" +
+      "切り替わります。同じ dnf info curl でも、install前後でVFSに記録されたインストール状態を参照して" +
+      "見出しが変化する、という一連の流れを確認できる演習です。",
+  },
+  {
+    id: "ch20-ex158",
+    chapterId: "ch20",
+    prompt:
+      "docker-ce というキーワードで dnf search を実行し、dnf info docker-ce でインストール前の状態を" +
+      "確認したうえで、sudo を使って docker-ce パッケージをインストールし、依存パッケージ containerd も" +
+      "自動的にインストールされたことを最後の dnf info containerd で確認してください" +
+      "(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "docker-ce というキーワードで dnf search を実行してください。",
+      "dnf info docker-ce を実行し、インストール前の状態を確認してください。",
+      "sudo を使って docker-ce パッケージを dnf コマンドでインストールしてください。",
+      "dnf info containerd を実行し、依存パッケージ containerd も自動的にインストールされたことを" +
+        "確認してください(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution:
+      "dnf search docker-ce; dnf info docker-ce; sudo dnf install docker-ce; dnf info containerd",
+    hints: [
+      "containerd はユーザーが名前を指定してインストールしたパッケージではなく、docker-ceの依存関係として" +
+        "自動的にインストールされたパッケージです。",
+      "自動的にインストールされた依存パッケージであっても、インストール済みパッケージの一覧には通常通り" +
+        "記録されます。",
+      "そのため、最後の dnf info containerd の見出しも「Available Packages」ではなく" +
+        "「Installed Packages」になります。",
+    ],
+    explanation:
+      "docker-ce をインストールすると、依存パッケージのcontainerdも自動的にインストールされます。ここで" +
+      "重要なのは、containerdという名前を一度もinstallコマンドの引数として指定していない点です。それでも" +
+      "dnf info containerd を実行すると見出しは「Installed Packages」になり、依存関係の解決によって" +
+      "間接的にインストールされたパッケージも、直接installしたパッケージと同じようにインストール済みとして" +
+      "扱われることが確認できます。",
+  },
+  {
+    id: "ch20-ex159",
+    chapterId: "ch20",
+    prompt:
+      "sudo を使って python3 パッケージを dnf コマンドでインストールしたうえで、続けて sudo を使って同じ " +
+      "python3 パッケージを apt コマンドでもインストールしようとし、apt 側でも既にインストール済みとして" +
+      "扱われることを確認してください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "sudo を使って python3 パッケージを dnf コマンドでインストールしてください。",
+      "続けて sudo を使って同じ python3 パッケージを apt コマンドでもインストールしようとし、apt 側でも" +
+        "既にインストール済みとして扱われることを確認してください(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "sudo dnf install python3; sudo apt install python3",
+    hints: [
+      "インストール済みパッケージの一覧はdnf・aptの間で共有されており、どちらのコマンドでインストールしたかを" +
+        "区別していません。",
+      "そのため sudo apt install python3 を実行しても、python3は既にdnfでインストール済みとして扱われ、" +
+        "「python3 is already the newest version (3.11.6).」と表示されます。",
+      "この場合、新規にインストールされるパッケージは0件のため「0 upgraded, 0 newly installed, 0 to remove " +
+        "and 0 not upgraded.」という結果になります。",
+    ],
+    explanation:
+      "この演習用のシミュレータでは、インストール済みパッケージの情報はdnf・aptのどちらでインストールしたかに" +
+      "関わらず1つの一覧として共有されています。そのため、先に sudo dnf install python3 でインストールした" +
+      "あとに sudo apt install python3 を実行しても、apt側は「python3 is already the newest version " +
+      "(3.11.6).」と応答し、新規のインストール処理は行われません。dnfとaptは別々のコマンドですが、この" +
+      "シミュレータ上ではインストール状態そのものは1つのシステムとして共有されている、という点を確認できる" +
+      "演習です。",
+  },
+  {
+    id: "ch20-ex160",
+    chapterId: "ch20",
+    prompt:
+      "sudo を使って redis-server パッケージを apt コマンドでインストールしたうえで、続けて dnf info " +
+      "redis-server を実行し、apt でインストールしたパッケージであっても dnf info 上は" +
+      "「Installed Packages」という見出しで表示されることを確認してください" +
+      "(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "sudo を使って redis-server パッケージを apt コマンドでインストールしてください。",
+      "続けて dnf info redis-server を実行し、apt でインストールしたパッケージであっても dnf info 上は" +
+        "「Installed Packages」という見出しで表示されることを確認してください" +
+        "(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "sudo apt install redis-server; dnf info redis-server",
+    hints: [
+      "dnf info の見出しは、実際にインストールした際に使ったコマンドがdnfかaptかではなく、インストール済み" +
+        "パッケージの一覧にそのパッケージ名が含まれているかどうかだけを見て決まります。",
+      "redis-server は依存パッケージを持たないため、apt install で追加されるパッケージはredis-server単体" +
+        "だけです。",
+    ],
+    explanation:
+      "ex159とは逆に、今回は apt でインストールしたパッケージを dnf info で確認します。sudo apt install " +
+      "redis-server でインストールしたあとに dnf info redis-server を実行すると、見出しは" +
+      "「Available Packages」ではなく「Installed Packages」になります。dnf info の見出しはインストール済み" +
+      "パッケージの一覧を参照して決まり、その一覧はdnf・apt間で共有されているため、apt側でインストールした" +
+      "結果がdnf infoの表示にもそのまま反映されるのです。",
+  },
+  // ---------------------------------------------------------------------
   // 付録: SSH接続・infoコマンド・日本語入力
   // ---------------------------------------------------------------------
   {
