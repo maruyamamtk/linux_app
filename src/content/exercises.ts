@@ -19477,6 +19477,166 @@ const exercisesPart2: Exercise[] = [
       "「◯.◯ M」という表記になります。treeは47KBのため「47 k」、nodejsは33200KBのため33200÷1000=33.2より" +
       "「33.2 M」と表示され、同じdnf infoコマンドでもパッケージによって表示単位が異なることを確認できます。",
   },
+  {
+    id: "ch20-ex80",
+    chapterId: "ch20",
+    prompt: "sudo を使って、nginx パッケージを dnf コマンドでインストールしてください。",
+    referenceSolution: "sudo dnf install nginx",
+    hints: [
+      "nginx は他のパッケージに依存しないため、依存パッケージのインストールは発生しません。",
+      "sudo dnf install パッケージ名 の形で実行します。",
+    ],
+    explanation:
+      "nginx は依存パッケージを持たないため、dnf install nginx を実行すると出力の「Installing:」には" +
+      "nginx本体のみが表示され、「Installing dependencies:」の行自体は現れません。最後に「Complete!」と" +
+      "表示されればインストール成功です。",
+  },
+  {
+    id: "ch20-ex81",
+    chapterId: "ch20",
+    prompt: "sudo を使って、wget パッケージを dnf コマンドでインストールしてください。",
+    referenceSolution: "sudo dnf install wget",
+    hints: [
+      "wget も nginx と同様、依存パッケージを持たないパッケージです。",
+      "root権限がないと「superuser privileges」というエラーになるため、sudo を忘れずに付けます。",
+    ],
+    explanation:
+      "wget は依存パッケージを持たないため、dnf install wget の出力には依存パッケージの一覧は表示されず、" +
+      "wget本体だけが「Installing:」に表示されて「Complete!」で完了します。",
+  },
+  {
+    id: "ch20-ex82",
+    chapterId: "ch20",
+    prompt: "sudo を使って、tmux パッケージを dnf コマンドでインストールしてください。",
+    referenceSolution: "sudo dnf install tmux",
+    hints: ["tmuxも依存パッケージを持たないパッケージの1つです。", "sudo dnf install パッケージ名 の形で実行します。"],
+    explanation:
+      "tmux も依存パッケージを持たないため、dnf install tmux は他の依存パッケージなしパッケージ" +
+      "(nginx・wgetなど)と同様の出力形式になります。",
+  },
+  {
+    id: "ch20-ex83",
+    chapterId: "ch20",
+    prompt: "sudo を使って、jq パッケージを dnf コマンドでインストールしてください。",
+    referenceSolution: "sudo dnf install jq",
+    hints: ["jqも依存パッケージを持たないパッケージです。", "root権限が必要なため、sudo を先頭に付けます。"],
+    explanation:
+      "jq は依存パッケージを持たないコマンドラインJSONプロセッサです。dnf install jq を実行すると、" +
+      "他の依存パッケージなしパッケージと同様に「Installing:」にjq本体のみが表示されます。",
+  },
+  {
+    id: "ch20-ex84",
+    chapterId: "ch20",
+    prompt: "sudo を使って、redis-server パッケージを dnf コマンドでインストールしてください。",
+    referenceSolution: "sudo dnf install redis-server",
+    hints: [
+      "redis-serverは依存パッケージを持たないパッケージです。",
+      "apt install redis-server とは表示形式が異なる点にも注目してください。",
+    ],
+    explanation:
+      "redis-server は依存パッケージを持たないため、dnf install redis-server は「Installing:」に" +
+      "redis-server本体のみが表示され「Complete!」で完了します。同じredis-serverでも apt install の場合とは" +
+      "出力の書式(見出しの有無や区切り線など)が異なります。",
+  },
+  {
+    id: "ch20-ex85",
+    chapterId: "ch20",
+    prompt:
+      "sudo を使って python3 パッケージを dnf コマンドでインストールしてください。python3 が依存する" +
+      "python3-libs も自動的に一緒にインストールされることを確認してください。",
+    referenceSolution: "sudo dnf install python3",
+    hints: [
+      "dnf install は指定したパッケージが依存する他のパッケージも自動的に解決してインストールします。",
+      "実行結果には「Installing:」でpython3本体、「Installing dependencies:」でpython3-libsが表示されます。",
+    ],
+    explanation:
+      "python3 は python3-libs に依存しているため、dnf install python3 を実行すると、リポジトリの依存情報" +
+      "から python3-libs も自動的に解決され、まだ入っていなければ一緒にインストールされます。出力の" +
+      "「Installing:」には指定したpython3本体が、「Installing dependencies:」には自動的に追加された" +
+      "python3-libsが表示されます。",
+  },
+  {
+    id: "ch20-ex86",
+    chapterId: "ch20",
+    prompt:
+      "sudo を使って docker-ce パッケージを dnf コマンドでインストールしてください。docker-ce が依存する" +
+      "containerd も自動的に一緒にインストールされることを確認してください。",
+    referenceSolution: "sudo dnf install docker-ce",
+    hints: [
+      "docker-ce は containerd に依存しています。",
+      "同じdocker-ceでも、apt install の場合は依存パッケージが「The following additional packages will be " +
+        "installed:」の下に表示されますが、dnf install の場合は「Installing dependencies:」の下に表示されます。",
+    ],
+    explanation:
+      "docker-ce は containerd に依存しているため、dnf install docker-ce を実行すると出力の" +
+      "「Installing dependencies:」にcontainerdが表示されます。同じ依存関係でもapt installとは出力の見出しが" +
+      "異なる点に注意してください。",
+  },
+  {
+    id: "ch20-ex87",
+    chapterId: "ch20",
+    prompt:
+      "su コマンドでrootユーザーに切り替えたうえで、nodejs パッケージを dnf コマンドでインストールして" +
+      "ください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "su コマンドでrootユーザーに切り替えてください。",
+      "nodejs パッケージを dnf コマンドでインストールしてください(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "su root; dnf install nodejs",
+    hints: [
+      "su root で実行ユーザーをrootに切り替えたあとは、sudo を付けずに dnf install を実行できます。",
+      "nodejsは依存パッケージを持たないため、「Installing dependencies:」の行は表示されません。",
+    ],
+    explanation:
+      "su root で実行ユーザーをrootに切り替えたあとは、sudo を付けなくてもroot権限が必要なコマンドを" +
+      "実行できます。nodejs は依存パッケージを持たないため、出力には「Installing:」にnodejs本体のみが" +
+      "表示されます。",
+  },
+  {
+    id: "ch20-ex88",
+    chapterId: "ch20",
+    prompt:
+      "su コマンドでrootユーザーに切り替えたうえで、mysql-common パッケージ単体を dnf コマンドでインストール" +
+      "してください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "su コマンドでrootユーザーに切り替えてください。",
+      "mysql-common パッケージ単体を dnf コマンドでインストールしてください" +
+        "(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "su root; dnf install mysql-common",
+    hints: [
+      "mysql-common は mysql-server が依存するパッケージですが、mysql-common自体は他のパッケージに" +
+        "依存していません。",
+      "依存パッケージを持たないパッケージなので、単体でインストールしても「Installing dependencies:」の行は" +
+        "表示されません。",
+    ],
+    explanation:
+      "mysql-common は mysql-server から依存される側のパッケージですが、mysql-common自体は他のどの" +
+      "パッケージにも依存していません。そのため mysql-common だけを dnf install しても、依存パッケージの" +
+      "インストールは発生せず、「Installing:」にmysql-common本体のみが表示されます。",
+  },
+  {
+    id: "ch20-ex89",
+    chapterId: "ch20",
+    prompt:
+      "su コマンドでrootユーザーに切り替えたうえで、containerd パッケージ単体を dnf コマンドでインストール" +
+      "してください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "su コマンドでrootユーザーに切り替えてください。",
+      "containerd パッケージ単体を dnf コマンドでインストールしてください" +
+        "(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "su root; dnf install containerd",
+    hints: [
+      "containerd は docker-ce が依存するパッケージですが、containerd自体は他のパッケージに依存していません。",
+      "依存パッケージを持たないパッケージなので、単体でインストールしても「Installing dependencies:」の行は" +
+        "表示されません。",
+    ],
+    explanation:
+      "containerd は docker-ce から依存される側のパッケージですが、containerd自体は他のどのパッケージにも" +
+      "依存していません。そのため containerd だけを dnf install しても、依存パッケージのインストールは" +
+      "発生せず、「Installing:」にcontainerd本体のみが表示されます。",
+  },
 
   // ---------------------------------------------------------------------
   // 付録: SSH接続・infoコマンド・日本語入力
