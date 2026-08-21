@@ -562,6 +562,12 @@ const CH19_BRANCH_MEMO_TXT = `プロジェクトの概要をここに書く。
 const CH19_SYNC_MEMO_TXT = `同期演習用のメモ。
 `;
 
+const CH19_FINDGREP_SH = `#!/bin/bash
+
+pattern=$1
+find . -type f | xargs grep -nH "$pattern"
+`;
+
 function createCh0406PracticeChildren(): Record<string, VfsNode> {
   return {
     // pwd/cd/ls演習用。ネストしたディレクトリと隠しファイルを持ち、絶対/相対パスでの移動や
@@ -1293,6 +1299,15 @@ function createCh19PracticeChildren(): Record<string, VfsNode> {
           owner: "study",
           group: "study",
           mode: 0o644,
+        }),
+      }, STUDY_DIR_OPTIONS),
+
+      // 書籍19章の一貫シナリオ(CHAPTER17で作ったfindgrep.shをGitで管理する)用。まだgit initされていない。
+      findgrep: createDirectory("findgrep", {
+        "findgrep.sh": createFile("findgrep.sh", CH19_FINDGREP_SH, {
+          owner: "study",
+          group: "study",
+          mode: 0o755,
         }),
       }, STUDY_DIR_OPTIONS),
     }, STUDY_DIR_OPTIONS),
