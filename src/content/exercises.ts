@@ -20357,6 +20357,176 @@ const exercisesPart2: Exercise[] = [
       "「k」から「M」へ切り替わる境界(1000KB)を確認できます。",
   },
   // ---------------------------------------------------------------------
+  // Ch20: パッケージ管理 apt install 実行型(ex129〜ex148)
+  // ---------------------------------------------------------------------
+  {
+    id: "ch20-ex129",
+    chapterId: "ch20",
+    prompt: "sudo を使って、nginx パッケージを apt コマンドでインストールしてください。",
+    referenceSolution: "sudo apt install nginx",
+    hints: [
+      "nginx は他のパッケージに依存しないため、依存パッケージのインストールは発生しません。",
+      "sudo apt install パッケージ名 の形で実行します。",
+    ],
+    explanation:
+      "nginx は依存パッケージを持たないため、apt install nginx を実行すると「The following additional " +
+      "packages will be installed:」の行は現れず、「The following NEW packages will be installed:」に" +
+      "nginxのみが表示されます。最後に「Setting up nginx (1.24.0) ...」と表示されればインストール成功です。",
+  },
+  {
+    id: "ch20-ex130",
+    chapterId: "ch20",
+    prompt: "sudo を使って、wget パッケージを apt コマンドでインストールしてください。",
+    referenceSolution: "sudo apt install wget",
+    hints: [
+      "wget も nginx と同様、依存パッケージを持たないパッケージです。",
+      "root権限がないと「are you root?」というエラーになるため、sudo を忘れずに付けます。",
+    ],
+    explanation:
+      "wget は依存パッケージを持たないため、apt install wget の出力に「The following additional packages " +
+      "will be installed:」は現れず、「The following NEW packages will be installed:」にwgetのみが表示され、" +
+      "「Setting up wget (1.21.4) ...」で完了します。",
+  },
+  {
+    id: "ch20-ex131",
+    chapterId: "ch20",
+    prompt: "sudo を使って、htop パッケージを apt コマンドでインストールしてください。",
+    referenceSolution: "sudo apt install htop",
+    hints: ["htop も依存パッケージを持たないパッケージの1つです。", "sudo apt install パッケージ名 の形で実行します。"],
+    explanation:
+      "htop は依存パッケージを持たないプロセスビューアです。apt install htop は他の依存パッケージなし" +
+      "パッケージ(nginx・wgetなど)と同様の出力形式になり、「Setting up htop (3.2.2) ...」で完了します。",
+  },
+  {
+    id: "ch20-ex132",
+    chapterId: "ch20",
+    prompt: "sudo を使って、tmux パッケージを apt コマンドでインストールしてください。",
+    referenceSolution: "sudo apt install tmux",
+    hints: ["tmuxも依存パッケージを持たないパッケージです。", "root権限が必要なため、sudo を先頭に付けます。"],
+    explanation:
+      "tmux は依存パッケージを持たないターミナルマルチプレクサです。apt install tmux を実行すると" +
+      "「The following NEW packages will be installed:」にtmuxのみが表示され、「Setting up tmux (3.3a) ...」" +
+      "で完了します。",
+  },
+  {
+    id: "ch20-ex133",
+    chapterId: "ch20",
+    prompt:
+      "sudo を使って curl パッケージを apt コマンドでインストールしてください。curl が依存する libcurl4 も" +
+      "「追加パッケージ」として一緒にインストールされることを確認してください。",
+    referenceSolution: "sudo apt install curl",
+    hints: [
+      "apt install も dnf install と同様、指定したパッケージが依存する他のパッケージを自動的に解決します。",
+      "実行結果には「The following additional packages will be installed:」の下にlibcurl4が表示されます。",
+    ],
+    explanation:
+      "curl は libcurl4 に依存しているため、apt install curl を実行すると「The following additional " +
+      "packages will be installed:」の下にlibcurl4が表示されます。その後の「The following NEW packages will " +
+      "be installed:」にはcurlとlibcurl4の両方が並び、「Setting up」の行も2パッケージ分出力されます。",
+  },
+  {
+    id: "ch20-ex134",
+    chapterId: "ch20",
+    prompt:
+      "sudo を使って python3 パッケージを apt コマンドでインストールしてください。python3 が依存する" +
+      "python3-libs も「追加パッケージ」として一緒にインストールされることを確認してください。",
+    referenceSolution: "sudo apt install python3",
+    hints: [
+      "python3 は python3-libs に依存しています。",
+      "同じ依存関係でも、dnf install の場合は「Installing dependencies:」という見出しになりますが、" +
+        "apt install の場合は「The following additional packages will be installed:」という見出しになります。",
+    ],
+    explanation:
+      "python3 は python3-libs に依存しているため、apt install python3 を実行すると「The following " +
+      "additional packages will be installed:」の下にpython3-libsが表示されます。dnf installと同じ依存関係" +
+      "でも、aptでは見出しの文言が異なる点に注意してください。",
+  },
+  {
+    id: "ch20-ex135",
+    chapterId: "ch20",
+    prompt:
+      "sudo を使って mysql-server パッケージを apt コマンドでインストールしてください。mysql-server が" +
+      "依存する mysql-common も「追加パッケージ」として一緒にインストールされることを確認してください。",
+    referenceSolution: "sudo apt install mysql-server",
+    hints: [
+      "mysql-server は mysql-common に依存しています。",
+      "ch20-ex06ではsuを使ってdnfでmysql-serverをインストールしましたが、今回はaptで同じ依存関係を" +
+        "確認します。",
+    ],
+    explanation:
+      "mysql-server は mysql-common に依存しているため、apt install mysql-server を実行すると" +
+      "「The following additional packages will be installed:」の下にmysql-commonが表示されます。" +
+      "「Setting up」の行もmysql-common・mysql-serverの2パッケージ分出力されます。",
+  },
+  {
+    id: "ch20-ex136",
+    chapterId: "ch20",
+    prompt:
+      "sudo を使って tree パッケージを apt コマンドで2回連続インストールし、2回目は「既に最新バージョンが" +
+      "インストール済み」という趣旨のメッセージになることを確認してください(1行のコマンドとして ; で" +
+      "つないでください)。",
+    promptSteps: [
+      "sudo を使って tree パッケージを apt コマンドでインストールしてください。",
+      "同じコマンドをもう一度実行し、2回目は「既に最新バージョンがインストール済み」という趣旨の" +
+        "メッセージになることを確認してください(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "sudo apt install tree; sudo apt install tree",
+    hints: [
+      "同じパッケージを重ねてインストールしようとしても、apt install はエラーにはなりません。",
+      "2回目の実行結果には「is already the newest version」という文言が含まれます。",
+    ],
+    explanation:
+      "既にインストール済みのパッケージに対して apt install を実行すると、再インストールは行われず、" +
+      "「tree is already the newest version (2.1.1).」に続けて「0 upgraded, 0 newly installed, 0 to remove " +
+      "and 0 not upgraded.」というメッセージが表示され、コマンドは正常終了します。",
+  },
+  {
+    id: "ch20-ex137",
+    chapterId: "ch20",
+    prompt:
+      "sudo を使って jq パッケージを apt コマンドで2回連続インストールし、2回目は「既に最新バージョンが" +
+      "インストール済み」という趣旨のメッセージになることを確認してください(1行のコマンドとして ; で" +
+      "つないでください)。",
+    promptSteps: [
+      "sudo を使って jq パッケージを apt コマンドでインストールしてください。",
+      "同じコマンドをもう一度実行し、2回目は「既に最新バージョンがインストール済み」という趣旨の" +
+        "メッセージになることを確認してください(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "sudo apt install jq; sudo apt install jq",
+    hints: [
+      "ch20-ex10ではdocker-ce・redis-serverでaptの冪等性を確認しましたが、今回はjqで同じ確認を行います。",
+      "2回目の実行結果には「is already the newest version」という文言が含まれます。",
+    ],
+    explanation:
+      "既にインストール済みのjqに対して apt install jq を再実行すると、「jq is already the newest version " +
+      "(1.7).」に続けて「0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.」というメッセージが" +
+      "表示され、何度実行しても安全な(冪等な)操作であることが確認できます。",
+  },
+  {
+    id: "ch20-ex138",
+    chapterId: "ch20",
+    prompt:
+      "sudo を使って containerd パッケージ単体を apt コマンドで2回連続インストールし、2回目は「既に最新" +
+      "バージョンがインストール済み」という趣旨のメッセージになることを確認してください(1行のコマンドとして " +
+      "; でつないでください)。",
+    promptSteps: [
+      "sudo を使って containerd パッケージ単体を apt コマンドでインストールしてください。",
+      "同じコマンドをもう一度実行し、2回目は「既に最新バージョンがインストール済み」という趣旨の" +
+        "メッセージになることを確認してください(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "sudo apt install containerd; sudo apt install containerd",
+    hints: [
+      "containerd は docker-ce から依存される側のパッケージですが、containerd自体は他のパッケージに" +
+        "依存していないため、単体でもインストールできます。",
+      "2回目の実行結果には「is already the newest version」という文言が含まれます。",
+    ],
+    explanation:
+      "containerd は他のどのパッケージにも依存していないため、単体でインストールしても「The following " +
+      "additional packages will be installed:」の行は現れません。2回目の apt install containerd では" +
+      "「containerd is already the newest version (1.6.24).」と表示され、依存パッケージとして扱われることが" +
+      "多いcontainerdでも、単体インストール時の冪等性は他のパッケージと同じであることが確認できます。",
+  },
+  // ---------------------------------------------------------------------
   // 付録: SSH接続・infoコマンド・日本語入力
   // ---------------------------------------------------------------------
   {
