@@ -19168,6 +19168,688 @@ const exercisesPart3: Exercise[] = [
       "内容を書き換えて2回目のコミットを作っています。git log --oneline はファイルの種類や数に関わらず、" +
       "コミットが作られた回数だけ行を表示するため、Update memo・Add memoの2行が新しい順に並びます。",
   },
+// ---------------------------------------------------------------------
+  // Ch19: Gitによるバージョン管理(追加分、ch19-ex91〜) — log/branch/checkout・switch編
+  // ---------------------------------------------------------------------
+  {
+    id: "ch19-ex91",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "branch-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。続けて feature・docs という2つのブランチを作成し、git branch で" +
+      "現在のブランチも含めてアルファベット順に一覧表示されることを確認してください。",
+    promptSteps: [
+      "branch-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "feature・docs という2つのブランチを作成してください。",
+      "git branch を実行し、現在のブランチも含めてアルファベット順に一覧表示されることを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/branch-practice",
+    referenceSolution: 'git init; git add memo.txt; git commit -m "Add memo"; git branch feature; git branch docs; git branch',
+    hints: [
+      "引数無しのgit branchは、既存のすべてのブランチをアルファベット順に一覧表示します。",
+      "現在チェックアウトしているブランチの行だけ、先頭に * が付きます。",
+    ],
+    explanation:
+      "引数無しの git branch は、そのリポジトリに存在するすべてのブランチ名をアルファベット順に一覧表示し、" +
+      "現在HEADが指しているブランチの行だけ先頭に「* 」が付きます。作成した順(feature→docs)ではなく、" +
+      "docs・feature・mainの順(アルファベット順)で表示される点に注意してください。",
+  },
+  {
+    id: "ch19-ex92",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "branch-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。feature という名前のブランチを作成したあと、同じ名前でもう一度 git branch を" +
+      "実行して失敗することを確認してください。",
+    promptSteps: [
+      "branch-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "feature という名前のブランチを作成してください。",
+      "同じ名前でもう一度 git branch を実行して失敗することを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/branch-practice",
+    referenceSolution: 'git init; git add memo.txt; git commit -m "Add memo"; git branch feature; git branch feature',
+    hints: [
+      "ブランチ名はリポジトリ内で一意である必要があります。",
+      "既に存在する名前を指定すると「already exists」というエラーになります。",
+    ],
+    explanation:
+      "同名のブランチが既に存在する状態で git branch <名前> を実行すると、「fatal: a branch named 'feature' " +
+      "already exists」というエラーになり、ブランチは作成されません(既存のfeatureブランチにも影響はありません)。",
+  },
+  {
+    id: "ch19-ex93",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "branch-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。feature という名前のブランチを作成したあと、git checkout -b で同じ名前の" +
+      "ブランチを作成・切り替えしようとして失敗することを確認してください。",
+    promptSteps: [
+      "branch-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "feature という名前のブランチを作成してください。",
+      "git checkout -b で同じ名前のブランチを作成・切り替えしようとして失敗することを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/branch-practice",
+    referenceSolution: 'git init; git add memo.txt; git commit -m "Add memo"; git branch feature; git checkout -b feature',
+    hints: [
+      "git checkout -b も内部的にはgit branchと同じ名前の重複チェックを行います。",
+      "既に存在するブランチ名を -b に指定すると、切り替えは行われずエラーになります。",
+    ],
+    explanation:
+      "git checkout -b <名前> は「ブランチ作成+切り替え」をまとめて行うコマンドですが、指定した名前のブランチが" +
+      "既に存在する場合は git branch <名前> と同様に「fatal: a branch named 'feature' already exists」で失敗し、" +
+      "ブランチの切り替えも行われません(現在のブランチのままです)。",
+  },
+  {
+    id: "ch19-ex94",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "branch-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。存在しない ghost という名前のブランチへ git checkout しようとして失敗することを" +
+      "確認してください。",
+    promptSteps: [
+      "branch-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "存在しない ghost という名前のブランチへ git checkout しようとして失敗することを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/branch-practice",
+    referenceSolution: 'git init; git add memo.txt; git commit -m "Add memo"; git checkout ghost',
+    hints: [
+      "-bを付けずに存在しないブランチ名を指定すると、新規作成はされずエラーになります。",
+      "エラーメッセージにはpathspecという語が含まれ、addの対象違いのエラーと似た形式です。",
+    ],
+    explanation:
+      "-b を付けずに git checkout <名前> を実行した場合、指定した名前は「既存のブランチ」として解釈されます。" +
+      "存在しないブランチ名を指定すると「error: pathspec 'ghost' did not match any file(s) known to git」という" +
+      "エラーになり、ブランチは切り替わりません。新しいブランチを作りたい場合は -b を付ける必要があります。",
+  },
+  {
+    id: "ch19-ex95",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "branch-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。存在しない ghost という名前のブランチへ git switch しようとして失敗することを" +
+      "確認してください。",
+    promptSteps: [
+      "branch-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "存在しない ghost という名前のブランチへ git switch しようとして失敗することを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/branch-practice",
+    referenceSolution: 'git init; git add memo.txt; git commit -m "Add memo"; git switch ghost',
+    hints: [
+      "git switch は git checkout の切り替え専用の書き方で、新規ブランチを作りたい場合は -c を付けます。",
+      "-cを付けずに存在しないブランチ名を指定した場合のエラー内容は、git checkoutと同じです。",
+    ],
+    explanation:
+      "git switch <名前> は -c を付けない限り既存のブランチへの切り替え専用として扱われるため、" +
+      "存在しない名前を指定すると git checkout と同じ「error: pathspec 'ghost' did not match any file(s) known " +
+      "to git」というエラーになります。切り替え用のgit switchと作成+切り替え用のgit checkout -bを混同すると" +
+      "起きやすい失敗です。",
+  },
+  {
+    id: "ch19-ex96",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "branch-practice ディレクトリでリポジトリを初期化した直後、コミットを1つも作らずに feature という" +
+      "名前のブランチを作成しようとして失敗することを確認してください。",
+    promptSteps: [
+      "branch-practice ディレクトリでリポジトリを初期化してください。",
+      "コミットを1つも作らずに feature という名前のブランチを作成しようとして失敗することを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/branch-practice",
+    referenceSolution: "git init; git branch feature",
+    hints: [
+      "ブランチは「特定のコミットを指す参照」なので、指すべきコミットが無いと作成できません。",
+      "エラーメッセージには「not a valid object name」という文言が含まれます。",
+    ],
+    explanation:
+      "git branch <名前> は、現在のブランチ(main)が指しているコミットを新しいブランチにも指させることで" +
+      "作成します。git init直後はmainブランチ自体がまだどのコミットも指していない(unbornな)状態のため、" +
+      "「fatal: not a valid object name: 'main'」というエラーになり、featureブランチは作成されません。",
+  },
+  {
+    id: "ch19-ex97",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "branch-practice ディレクトリでリポジトリを初期化した直後、コミットを1つも作らずに git checkout -b で" +
+      "feature ブランチを作成・切り替えしようとして失敗することを確認してください。",
+    promptSteps: [
+      "branch-practice ディレクトリでリポジトリを初期化してください。",
+      "コミットを1つも作らずに git checkout -b で feature ブランチを作成・切り替えしようとして失敗することを" +
+        "確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/branch-practice",
+    referenceSolution: "git init; git checkout -b feature",
+    hints: [
+      "git checkout -bも、内部的にはgit branchと同じくコミットを指す参照を必要とします。",
+      "コミットが1つも無い状態では、git branchのときと同じ理由で失敗します。",
+    ],
+    explanation:
+      "git checkout -b <名前> による新規ブランチ作成も、現在のブランチが指すコミットを引き継ぐ形で行われます。" +
+      "コミットがまだ1つも無い状態では引き継ぐコミットが存在しないため、git branchのときと同様に" +
+      "「fatal: not a valid object name: 'main'」で失敗し、切り替えも行われません。",
+  },
+  {
+    id: "ch19-ex98",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "branch-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。feature ブランチを作成したあと、memo.txt を書き換えてステージングし、" +
+      "その状態のまま git checkout feature を実行して失敗することを確認してください。",
+    promptSteps: [
+      "branch-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "feature ブランチを作成してください。",
+      "memo.txt を書き換えてステージングしてください。",
+      "その状態のまま git checkout feature を実行して失敗することを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/branch-practice",
+    referenceSolution:
+      'git init; git add memo.txt; git commit -m "Add memo"; git branch feature; echo "wip" > memo.txt; ' +
+      "git add memo.txt; git checkout feature",
+    hints: [
+      "ステージ済みの変更(Changes to be committed)がある状態でブランチを切り替えようとするとエラーになります。",
+      "コミットするかステージングを取り消すまで、切り替えはできません。",
+    ],
+    explanation:
+      "ブランチを切り替えるとワークツリーの内容が切り替え先のブランチのコミット内容に置き換わります。" +
+      "ステージ済みの変更(HEADのtreeとインデックスの差)が残ったまま切り替えると、その変更が失われてしまう" +
+      "おそれがあるため、Gitは「error: your local changes would be overwritten; commit or stage your changes " +
+      "before switching branches.」で切り替えを拒否します。",
+  },
+  {
+    id: "ch19-ex99",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "branch-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。feature ブランチを作成したあと、memo.txt を書き換えるだけでステージングは行わず、" +
+      "その状態のまま git switch feature を実行して失敗することを確認してください。",
+    promptSteps: [
+      "branch-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "feature ブランチを作成してください。",
+      "memo.txt を書き換えてください(ステージングは行いません)。",
+      "その状態のまま git switch feature を実行して失敗することを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/branch-practice",
+    referenceSolution:
+      'git init; git add memo.txt; git commit -m "Add memo"; git branch feature; echo "wip" > memo.txt; ' +
+      "git switch feature",
+    hints: [
+      "ステージングしていない変更(Changes not staged for commit)も、ブランチ切り替えを妨げます。",
+      "ステージ済みかどうかに関わらず、ワークツリーに未コミットの変更が残っていれば切り替えは拒否されます。",
+    ],
+    explanation:
+      "前の演習ではステージ済みの変更が切り替えを妨げましたが、ステージングしていない変更(インデックスと" +
+      "ワークツリーの差)も同様に切り替えを妨げます。git switch feature は「error: your local changes would be " +
+      "overwritten; commit or stage your changes before switching branches.」で拒否され、feature側のmemo.txtの" +
+      "内容が上書きされて変更が失われる事態を防ぎます。",
+  },
+  {
+    id: "ch19-ex100",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "branch-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。feature ブランチを作成した直後(切り替えはまだ)、main のまま plan.txt を" +
+      "「Add plan」というメッセージでコミットしてください。ls で plan.txt があることを確認してから" +
+      "feature へ切り替えて ls を実行し、plan.txt が見えなくなることを確認してください。最後に main へ戻り、" +
+      "ls で plan.txt が再び見えることを確認してください。",
+    promptSteps: [
+      "branch-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "feature ブランチを作成してください(切り替えはまだ不要です)。",
+      "main のまま plan.txt を作成し、「Add plan」というメッセージでコミットしてください。",
+      "ls で plan.txt があることを確認してください。",
+      "feature へ切り替えて ls を実行し、plan.txt が見えなくなることを確認してください。",
+      "main へ戻り、ls で plan.txt が再び見えることを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/branch-practice",
+    referenceSolution:
+      'git init; git add memo.txt; git commit -m "Add memo"; git branch feature; echo "plan" > plan.txt; ' +
+      'git add plan.txt; git commit -m "Add plan"; ls; git checkout feature; ls; git checkout main; ls',
+    hints: [
+      "featureブランチはmemo.txtのコミット時点で作られているため、plan.txtのコミットは含まれていません。",
+      "ブランチを切り替えると、ワークツリーは切り替え先のブランチのコミット内容にそっくり置き換わります。",
+    ],
+    explanation:
+      "featureブランチは「Add memo」の時点で作成されているため、その後mainに積んだ「Add plan」コミットの内容" +
+      "(plan.txt)を含みません。git checkoutでfeatureへ切り替えると、ワークツリーはfeatureが指すコミットの" +
+      "tree(plan.txtを含まない)に置き換わり、plan.txtはワークツリーから消えます。ただしこれはmain側の" +
+      "コミットに記録されたままなので、mainへ戻れば再び現れます。「ブランチを切り替えるとワークツリーの" +
+      "見た目が変わる」ことを実際に確認できる演習です。",
+  },
+  {
+    id: "ch19-ex101",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "sync-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。git switch -c で topic ブランチを作成・切り替えし、topic.txt を" +
+      "「Add topic work」というメッセージでコミットしたうえで、git switch main で main ブランチへ" +
+      "戻ってください。",
+    promptSteps: [
+      "sync-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "git switch -c で topic ブランチを作成・切り替えしてください。",
+      "topic.txt というファイルを作成し、「Add topic work」というメッセージでコミットしてください。",
+      "git switch main で main ブランチへ戻ってください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/sync-practice",
+    referenceSolution:
+      'git init; git add memo.txt; git commit -m "Add memo"; git switch -c topic; echo "topic work" > topic.txt; ' +
+      'git add topic.txt; git commit -m "Add topic work"; git switch main',
+    hints: [
+      "git switch -c <名前> は git checkout -b <名前> と同じ「作成+切り替え」の効果を持つ書き方です。",
+      "作成したブランチ名ではなく既存のブランチ名(main)を指定するときは、-cを付けません。",
+    ],
+    explanation:
+      "git switch は git checkout の切り替え関連の操作を分かりやすく独立させたコマンドで、-c を付けると" +
+      "ブランチの作成+切り替えを、付けなければ既存ブランチへの切り替えのみを行います。この演習ではswitchだけで" +
+      "「作成して移動する」「既存のブランチへ戻る」という一連の流れを完結させています。",
+  },
+  {
+    id: "ch19-ex102",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "notes ディレクトリでリポジトリを初期化し、すべてのファイルを「Initial commit」というメッセージで" +
+      "コミットしてください。git switch -c で feature ブランチを作成・切り替えし、todo.txt を削除した" +
+      "状態のまま git switch main で main へ戻ろうとして失敗することを確認してください。",
+    promptSteps: [
+      "notes ディレクトリでリポジトリを初期化してください。",
+      "すべてのファイルを「Initial commit」というメッセージでコミットしてください。",
+      "git switch -c で feature ブランチを作成・切り替えしてください。",
+      "todo.txt を削除してください。",
+      "その状態のまま git switch main で main へ戻ろうとして失敗することを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/notes",
+    referenceSolution: 'git init; git add .; git commit -m "Initial commit"; git switch -c feature; rm todo.txt; git switch main',
+    hints: [
+      "ファイルの削除も、ステージングしていなくても「未コミットの変更」として切り替えを妨げます。",
+      "本シミュレータにはgit rmが無いため、この削除をコミットに含める手段が無い点にも注意してください。",
+    ],
+    explanation:
+      "todo.txtの削除はコミットされていないため、feature上でmainへ切り替えようとすると" +
+      "「your local changes would be overwritten」で拒否されます。本シミュレータにはgit rmが実装されておらず、" +
+      "rmで削除したファイルをgit addで再ステージングすることもできないため(pathspecエラーになります)、" +
+      "この演習の状態からは削除をコミットに含める手段が無いことも合わせて確認できます。",
+  },
+  {
+    id: "ch19-ex103",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "sync-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。ブランチ名を指定せずに git checkout を実行して失敗することを確認してください。",
+    promptSteps: [
+      "sync-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "ブランチ名を指定せずに git checkout を実行して失敗することを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/sync-practice",
+    referenceSolution: 'git init; git add memo.txt; git commit -m "Add memo"; git checkout',
+    hints: ["git checkout には切り替え先・作成先のブランチ名を必ず指定する必要があります。"],
+    explanation:
+      "git checkout は引数として切り替え先(または-bで作成するブランチ名)を必要とします。何も指定せずに" +
+      "実行すると「git checkout: missing branch name」というエラーになります。",
+  },
+  {
+    id: "ch19-ex104",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "sync-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。ブランチ名を指定せずに git switch を実行して失敗することを確認してください。",
+    promptSteps: [
+      "sync-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "ブランチ名を指定せずに git switch を実行して失敗することを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/sync-practice",
+    referenceSolution: 'git init; git add memo.txt; git commit -m "Add memo"; git switch',
+    hints: ["git switchもcheckoutと同様、切り替え先(または-cで作成するブランチ名)の指定が必須です。"],
+    explanation:
+      "git switch も git checkout と同様、対象のブランチ名を引数として要求します。何も指定せずに実行すると" +
+      "「git switch: missing branch name」というエラーになります。",
+  },
+  {
+    id: "ch19-ex105",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "branch-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。この時点で snapshot ブランチを作成し、その後 main のまま memo.txt を書き換えて" +
+      "「Update memo」というメッセージでコミットしてください。main と snapshot それぞれで git log --oneline を" +
+      "実行し、記録されているコミット数が異なることを確認してください。",
+    promptSteps: [
+      "branch-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "この時点で snapshot ブランチを作成してください。",
+      "main のまま memo.txt を書き換え、「Update memo」というメッセージでコミットしてください。",
+      "git log --oneline を実行してください(mainでの履歴)。",
+      "snapshot ブランチへ切り替え、git log --oneline を実行してください(snapshotでの履歴)。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/branch-practice",
+    referenceSolution:
+      'git init; git add memo.txt; git commit -m "Add memo"; git branch snapshot; echo "v2" > memo.txt; ' +
+      'git add memo.txt; git commit -m "Update memo"; git log --oneline; git checkout snapshot; git log --oneline',
+    hints: [
+      "snapshotブランチはAdd memoの時点で作られているため、その後のUpdate memoコミットを含みません。",
+      "mainのgit log --onelineは2行、snapshotのgit log --onelineは1行になります。",
+    ],
+    explanation:
+      "ブランチは「特定のコミットを指すラベル」にすぎないため、作成した後にラベルの先(main)だけにコミットを" +
+      "積んでも、snapshotが指すコミットは変わりません。mainでのgit log --onelineはUpdate memo・Add memoの" +
+      "2行、snapshotへ切り替えた後のgit log --onelineはAdd memoの1行だけになり、ブランチごとに見える履歴が" +
+      "異なることが確認できます。",
+  },
+  {
+    id: "ch19-ex106",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "sync-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。ここから featureA・featureB という2つのブランチをそれぞれ main から分岐させ、" +
+      "featureA では a.txt を「Add a」、featureB では b.txt を「Add b」というメッセージでコミットしてください" +
+      "(互いに異なるファイルなので衝突しません)。featureB・featureA それぞれで git log --oneline を実行し、" +
+      "共通の祖先コミットは同じでも最新のコミットが異なることを確認してください。",
+    promptSteps: [
+      "sync-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "featureA というブランチを作成・切り替えし、a.txt を「Add a」というメッセージでコミットしてください。",
+      "main へ戻り、featureB というブランチを作成・切り替えし、b.txt を「Add b」というメッセージで" +
+        "コミットしてください。",
+      "featureB で git log --oneline を実行してください。",
+      "featureA へ切り替え、git log --oneline を実行してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/sync-practice",
+    referenceSolution:
+      'git init; git add memo.txt; git commit -m "Add memo"; git checkout -b featureA; echo "a" > a.txt; ' +
+      'git add a.txt; git commit -m "Add a"; git checkout main; git checkout -b featureB; echo "b" > b.txt; ' +
+      'git add b.txt; git commit -m "Add b"; git log --oneline; git checkout featureA; git log --oneline',
+    hints: [
+      "featureA・featureBはどちらもmainの「Add memo」の時点から分岐した、互いに独立したブランチです。",
+      "それぞれ独自のコミットを1つずつ積んでいるため、git log --onelineの最新行だけが異なります。",
+    ],
+    explanation:
+      "featureA・featureBはどちらもmainの「Add memo」コミットを共通の祖先として分岐した、互いに独立した" +
+      "ブランチです。featureBのgit log --onelineはAdd b・Add memoの2行、featureAのgit log --onelineは" +
+      "Add a・Add memoの2行となり、2行目(共通祖先)は同じでも1行目(最新コミット)が異なります。まだmergeを" +
+      "行っていないため、互いのコミット(a.txt・b.txt)はそれぞれのブランチのワークツリーには現れません。",
+  },
+  {
+    id: "ch19-ex107",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "branch-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。git branch で feature ブランチを作成したあと、git checkout(-bなし)で" +
+      "feature へ切り替え、later.txt を「Add later」というメッセージでコミットしてください。最後に" +
+      "git checkout main で main へ戻り、later.txt がワークツリーに存在しないことを確認してください。",
+    promptSteps: [
+      "branch-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "git branch で feature ブランチを作成してください。",
+      "git checkout(-bなし)で feature へ切り替えてください。",
+      "later.txt を作成し、「Add later」というメッセージでコミットしてください。",
+      "git checkout main で main へ戻り、later.txt がワークツリーに存在しないことを確認してください(ls でよい)。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/branch-practice",
+    referenceSolution:
+      'git init; git add memo.txt; git commit -m "Add memo"; git branch feature; git checkout feature; ' +
+      'echo "later" > later.txt; git add later.txt; git commit -m "Add later"; git checkout main; ls',
+    hints: [
+      "git branchでブランチを作るだけでは切り替わらないため、別途git checkoutが必要です。",
+      "-bを付けない場合の切り替えメッセージは「Switched to branch '...'」(a new branchが付きません)。",
+    ],
+    explanation:
+      "git branch feature でブランチを作成しただけではHEADはmainのままなので、続けて git checkout feature " +
+      "(-bなし)を実行して初めて切り替わります。この場合の出力は「Switched to branch 'feature'」となり、" +
+      "作成と切り替えを同時に行うcheckout -bの「Switched to a new branch '...'」とは文言が異なります。" +
+      "featureで作ったlater.txtはmainのtreeには含まれないため、main側に戻るとワークツリーから消えます。",
+  },
+  {
+    id: "ch19-ex108",
+    chapterId: "ch19",
+    type: "git",
+    prompt: "sync-practice ディレクトリでリポジトリを初期化した直後、コミットを1つも作らずに git branch を実行し、何も一覧表示されないことを確認してください。",
+    promptSteps: [
+      "sync-practice ディレクトリでリポジトリを初期化してください。",
+      "コミットを1つも作らずに git branch を実行し、何も一覧表示されないことを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/sync-practice",
+    referenceSolution: "git init; git branch",
+    hints: [
+      "mainという名前はHEADが指す既定のブランチ名として扱われますが、実体の参照は最初のコミット時に" +
+        "初めて作られます。",
+      "コミットが1つも無い状態では、参照が1つも存在しないためgit branchの一覧は空になります。",
+    ],
+    explanation:
+      "git init直後、HEADは「refs/heads/main」を指すよう設定されますが、main自体の参照ファイル" +
+      "(そのブランチが指すコミットの記録)はまだ作られていません。参照ファイルは最初のコミットが作られた" +
+      "タイミングで初めて用意されるため、コミット前に git branch を実行しても、「* main」を含めて何も" +
+      "一覧表示されません。",
+  },
+  {
+    id: "ch19-ex109",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "branch-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。feature ブランチを作成・切り替えしたあと、scratch.txt という" +
+      "コミットしていないファイルを新規作成し、その状態のまま git checkout main を実行してください。" +
+      "切り替え自体は成功しますが、scratch.txt がワークツリーから消えてしまうことを ls で確認してください。",
+    promptSteps: [
+      "branch-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "feature ブランチを作成・切り替えしてください。",
+      "scratch.txt という、まだ一度もgit addしていないファイルを新規作成してください。",
+      "その状態のまま git checkout main を実行してください。",
+      "ls を実行し、scratch.txt がワークツリーから消えてしまうことを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/branch-practice",
+    referenceSolution:
+      'git init; git add memo.txt; git commit -m "Add memo"; git checkout -b feature; touch scratch.txt; ' +
+      "git checkout main; ls",
+    hints: [
+      "hasUncommittedChangesの判定はステージ済み・ステージ前の「追跡済みファイルの変更」だけを見ており、" +
+        "未追跡ファイルの有無は切り替えの可否には影響しません。",
+      "ただし切り替え先のブランチのtreeに存在しないファイルは、切り替え時にワークツリーから取り除かれます" +
+        "(未追跡かどうかは関係ありません)。",
+    ],
+    explanation:
+      "scratch.txtは一度もgit addしていない未追跡ファイルのため、ブランチ切り替えの可否を判定する" +
+      "「未コミットの変更」には数えられず、切り替え自体はエラーになりません。しかし切り替え処理は" +
+      "ワークツリー全体を切り替え先のブランチのtreeの内容に合わせて作り直すため、mainのtreeに存在しない" +
+      "scratch.txtは(未追跡であっても)削除されてしまいます。「切り替えが成功する=ファイルが無事とは" +
+      "限らない」という、見落としやすい挙動を確認する演習です。",
+  },
+  {
+    id: "ch19-ex110",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "sync-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。topic ブランチを作成・切り替えして topic.txt を「Add topic」というメッセージで" +
+      "コミットし、続けて topic からさらに subtopic ブランチを作成・切り替えして sub.txt を「Add sub」という" +
+      "メッセージでコミットしてください。subtopic と main それぞれで git log --oneline を実行し、" +
+      "記録されているコミット数の違いを確認してください。",
+    promptSteps: [
+      "sync-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "topic ブランチを作成・切り替えし、topic.txt を「Add topic」というメッセージでコミットしてください。",
+      "topic からさらに subtopic ブランチを作成・切り替えし、sub.txt を「Add sub」というメッセージで" +
+        "コミットしてください。",
+      "git log --oneline を実行してください(subtopicでの履歴)。",
+      "main へ戻り、git log --oneline を実行してください(mainでの履歴)。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/sync-practice",
+    referenceSolution:
+      'git init; git add memo.txt; git commit -m "Add memo"; git checkout -b topic; echo "topic" > topic.txt; ' +
+      'git add topic.txt; git commit -m "Add topic"; git checkout -b subtopic; echo "sub" > sub.txt; ' +
+      'git add sub.txt; git commit -m "Add sub"; git log --oneline; git checkout main; git log --oneline',
+    hints: [
+      "ブランチはmainからだけでなく、他のブランチ(この場合topic)を起点にも作成できます。",
+      "subtopicの履歴にはAdd sub・Add topic・Add memoの3件、mainの履歴にはAdd memoの1件だけが含まれます。",
+    ],
+    explanation:
+      "git checkout -b はその時点のHEADを起点にブランチを作成するため、topicブランチの上でさらに" +
+      "git checkout -b subtopicを実行すると、subtopicはmainではなくtopicから枝分かれします。subtopicの" +
+      "git log --onelineにはAdd sub・Add topic・Add memoの3件が積み重なって表示されますが、mainには" +
+      "Add memoのコミットしか無いため、git log --onelineは1件だけです。ブランチは必ずしもmainから直接" +
+      "分岐するとは限らないことが確認できます。",
+  },
+  {
+    id: "ch19-ex111",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "branch-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。zeta・alpha・mid という順番でブランチを作成したあと、git branch で" +
+      "作成した順番ではなくアルファベット順(alpha・main・mid・zeta)に一覧表示されることを確認してください。",
+    promptSteps: [
+      "branch-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "zeta・alpha・mid という順番でブランチを作成してください。",
+      "git branch を実行し、作成した順番ではなくアルファベット順に一覧表示されることを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/branch-practice",
+    referenceSolution: 'git init; git add memo.txt; git commit -m "Add memo"; git branch zeta; git branch alpha; git branch mid; git branch',
+    hints: [
+      "git branchの一覧は、ブランチを作成した順序ではなく常に名前のアルファベット順で並びます。",
+      "「main」と「mid」はどちらも m から始まりますが、2文字目の a と i を比較するとmainが先になります。",
+    ],
+    explanation:
+      "git branch の一覧表示は、ブランチの作成順序を記録して並べているわけではなく、常に名前を" +
+      "アルファベット順に並べ替えて表示します。zeta→alpha→midの順に作成しても、一覧はalpha・main(現在の" +
+      "ブランチ)・mid・zetaの順になります。",
+  },
+  {
+    id: "ch19-ex112",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "sync-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。git checkout -b で feature ブランチを作成・切り替えしたあと、" +
+      "コミットを1つも作らずに git log --oneline を実行し、直前まで居た main と全く同じ履歴が" +
+      "表示されることを確認してください。",
+    promptSteps: [
+      "sync-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "git checkout -b で feature ブランチを作成・切り替えしてください。",
+      "コミットを1つも作らずに git log --oneline を実行し、mainと全く同じ履歴が表示されることを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/sync-practice",
+    referenceSolution: 'git init; git add memo.txt; git commit -m "Add memo"; git checkout -b feature; git log --oneline',
+    hints: [
+      "ブランチの作成は新しいコミットを作る操作ではなく、既存のコミットを指す新しいラベルを増やすだけです。",
+      "作成直後は、元のブランチと新しいブランチはまったく同じコミットを指しています。",
+    ],
+    explanation:
+      "git checkout -b でブランチを作成した直後は、新しいブランチ(feature)は分岐元のブランチ(main)と" +
+      "全く同じコミットを指しています。新しいコミットを何も作っていないため、featureでgit log --oneline" +
+      "を実行しても、切り替え前にmainで見えていたのと同じ1件のコミット(Add memo)がそのまま表示されます。" +
+      "ブランチ同士の履歴が食い違うのは、それぞれのブランチで独自のコミットを積み重ねた後からです。",
+  },
+  {
+    id: "ch19-ex113",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "branch-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。git checkout main を実行し、既に居るブランチへあえて切り替えても" +
+      "エラーにならないことと、git status がクリーンなままであることを確認してください。",
+    promptSteps: [
+      "branch-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "git checkout main を実行し、既に居るブランチへあえて切り替えてください。",
+      "git status を実行し、クリーンなままであることを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/branch-practice",
+    referenceSolution: 'git init; git add memo.txt; git commit -m "Add memo"; git checkout main; git status',
+    hints: [
+      "既に居るブランチへの切り替えは「存在するブランチへの切り替え」の一種として、そのまま成功します。",
+      "ワークツリーの内容は元々そのブランチのtreeと一致しているため、切り替えても見た目上は何も変わりません。",
+    ],
+    explanation:
+      "git checkout <名前> は、指定した名前が現在のブランチと同じであってもエラーにはなりません。" +
+      "「Switched to branch 'main'」と表示されたうえで、ワークツリーが同じtreeの内容に作り直されるだけなので、" +
+      "実質的には何も変化しません。続けて実行したgit statusも、コミット直後と同じくnothing to commit, " +
+      "working tree cleanのままです。",
+  },
+  {
+    id: "ch19-ex114",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "notes ディレクトリでリポジトリを初期化し、すべてのファイルを「Initial commit」というメッセージで" +
+      "コミットしてください。git checkout -b で draft ブランチを作成・切り替えし、draft.txt を" +
+      "「Add draft note」というメッセージでコミットしてください。main へ戻って git branch で" +
+      "ブランチの一覧を確認したあと、draft へ戻って git log --oneline で履歴を確認してください。",
+    promptSteps: [
+      "notes ディレクトリでリポジトリを初期化してください。",
+      "すべてのファイルを「Initial commit」というメッセージでコミットしてください。",
+      "git checkout -b で draft ブランチを作成・切り替えしてください。",
+      "draft.txt を作成し、「Add draft note」というメッセージでコミットしてください。",
+      "main へ戻り、git branch でブランチの一覧を確認してください。",
+      "draft へ戻り、git log --oneline で履歴を確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/notes",
+    referenceSolution:
+      'git init; git add .; git commit -m "Initial commit"; git checkout -b draft; echo "draft note" > draft.txt; ' +
+      'git add draft.txt; git commit -m "Add draft note"; git checkout main; git branch; git checkout draft; ' +
+      "git log --oneline",
+    hints: [
+      "これまでの演習で使ったブランチ作成・切り替え・一覧・履歴確認の操作を、一連の流れとして組み合わせます。",
+      "mainでのgit branchはdraft・main(*)の2件、draftでのgit log --onelineはAdd draft note・Initial commitの" +
+        "2行になります。",
+    ],
+    explanation:
+      "この演習は、これまで個別に確認してきたブランチの作成(checkout -b)・切り替え(checkout)・一覧表示" +
+      "(branch)・履歴確認(log --oneline)を一連の流れとして組み合わせたものです。mainに戻った時点の" +
+      "git branchではdraft・main(現在地なので*付き)の2件が、draftに戻った時点のgit log --onelineでは" +
+      "Add draft note・Initial commitの2行が、それぞれ表示されます。",
+  },
+  {
+    id: "ch19-ex115",
+    chapterId: "ch19",
+    type: "git",
+    prompt:
+      "sync-practice ディレクトリでリポジトリを初期化し、memo.txt を「Add memo」というメッセージで" +
+      "コミットしてください。ブランチ名を指定せずに git branch を実行し、名前を指定した場合とは異なり" +
+      "エラーにならず一覧が表示されることを確認してください。続けて存在しない changelog というブランチへ" +
+      "git checkout しようとして失敗することも確認してください。",
+    promptSteps: [
+      "sync-practice ディレクトリでリポジトリを初期化してください。",
+      "memo.txt を「Add memo」というメッセージでコミットしてください。",
+      "ブランチ名を指定せずに git branch を実行し、一覧が表示されることを確認してください。",
+      "存在しない changelog というブランチへ git checkout しようとして失敗することを確認してください。",
+    ],
+    initialCwd: "/home/study/practice/ch19_git/sync-practice",
+    referenceSolution: 'git init; git add memo.txt; git commit -m "Add memo"; git branch; git checkout changelog',
+    hints: [
+      "git branchは引数の有無で「一覧表示」と「新規作成」という全く違う動作になります。",
+      "git checkoutに存在しないブランチ名を指定した場合のエラーは、-bを付けない限りいつでも起こり得ます。",
+    ],
+    explanation:
+      "git branch は引数を渡さなければ一覧表示、ブランチ名を渡せば新規作成という、引数の有無で振る舞いが" +
+      "大きく変わるコマンドです。この演習ではまず引数無しのgit branchで「* main」だけの一覧を確認し、続けて" +
+      "存在しないchangelogブランチへcheckoutしようとして「error: pathspec 'changelog' did not match any " +
+      "file(s) known to git」という、これまでの演習でも見てきた失敗パターンを再確認します。",
+  },
 ];
 
 export const exercises: Exercise[] = [...exercisesPart1, ...exercisesPart2, ...exercisesPart3];
