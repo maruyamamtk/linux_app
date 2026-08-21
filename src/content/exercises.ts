@@ -19020,6 +19020,239 @@ const exercisesPart2: Exercise[] = [
       "同じ「search」でも、dnfとaptではデフォルトの検索範囲の広さが逆になっている点に注意が必要です。",
   },
 
+  {
+    id: "ch20-ex51",
+    chapterId: "ch20",
+    prompt:
+      "pytho というキーワードで dnf コマンドによる検索を行い、python3 と python3-libs の両方が" +
+      "ヒットすることを確認してください。",
+    referenceSolution: "dnf search pytho",
+    hints: [
+      "dnf search はキーワードがパッケージ名の一部分に含まれていれば検索にヒットします。完全一致でなくても構いません。",
+      "python3 と python3-libs はどちらも名前に「pytho」という文字列を含んでいます。",
+    ],
+    explanation:
+      "dnf search キーワード は、パッケージ名の前方一致だけでなく、名前のどこかにキーワードを含んでいれば" +
+      "検索にヒットします。pytho というキーワードは python3・python3-libs のどちらの名前にも部分的に" +
+      "一致するため、この2つのパッケージが検索結果に表示されます。",
+  },
+  {
+    id: "ch20-ex52",
+    chapterId: "ch20",
+    prompt:
+      "コンテナ というキーワードで dnf コマンドによる検索を行い、docker-ce と containerd のどちらも" +
+      "説明文(summary)からヒットすることを確認してください。",
+    referenceSolution: "dnf search コンテナ",
+    hints: [
+      "dnf search はパッケージ名だけでなく、説明文(summary)も検索対象にしています。",
+      "docker-ce の説明は「コンテナ実行エンジン」、containerd の説明は「コンテナランタイム」です。",
+    ],
+    explanation:
+      "dnf search はパッケージ名だけでなく、summary(要約)に含まれる単語も検索対象にします。" +
+      "「コンテナ」というキーワードはdocker-ceの説明文「コンテナ実行エンジン」にもcontainerdの説明文" +
+      "「コンテナランタイム」にも含まれるため、両方のパッケージが検索結果に表示されます。",
+  },
+  {
+    id: "ch20-ex53",
+    chapterId: "ch20",
+    prompt:
+      "mysql というキーワードで dnf コマンドによる検索を行い、mysql-server と mysql-common の両方が" +
+      "ヒットすることを確認してください。",
+    referenceSolution: "dnf search mysql",
+    hints: [
+      "mysql-server・mysql-common はどちらも名前に「mysql」という文字列を含んでいます。",
+      "検索結果はパッケージ名のアルファベット順に並びます。",
+    ],
+    explanation:
+      "mysql というキーワードは、mysql-server・mysql-common のどちらのパッケージ名にも含まれるため、" +
+      "検索結果には両方が表示されます。結果はパッケージ名の辞書順に並ぶため、mysql-common、mysql-server の" +
+      "順に表示されます。",
+  },
+  {
+    id: "ch20-ex54",
+    chapterId: "ch20",
+    prompt:
+      "dnf コマンドで mysql と server という2つのキーワードを同時に指定して検索し、mysql-server だけが" +
+      "ヒットすることを確認してください(mysql-common は結果に含まれません)。",
+    referenceSolution: "dnf search mysql server",
+    hints: [
+      "dnf search に複数のキーワードを渡すと、すべてのキーワードを含むパッケージだけが結果に残ります(AND検索)。",
+      "mysql-common の名前や説明文には「server」という単語が含まれていません。",
+    ],
+    explanation:
+      "dnf search キーワード1 キーワード2 のように複数のキーワードを指定すると、指定した単語すべてを" +
+      "名前または説明文に含むパッケージだけが結果に残ります(AND検索)。mysql-server は名前自体に" +
+      "「server」を含みますが、mysql-common には含まれないため、2つのキーワードを指定すると mysql-server だけに" +
+      "絞り込まれます。",
+  },
+  {
+    id: "ch20-ex55",
+    chapterId: "ch20",
+    prompt:
+      "dnf コマンドで python3 と libs という2つのキーワードを同時に指定して検索し、python3-libs だけが" +
+      "ヒットすることを確認してください。",
+    referenceSolution: "dnf search python3 libs",
+    hints: [
+      "複数キーワードを指定すると、すべてを含むパッケージのみが結果に残ります。",
+      "python3 パッケージの名前や説明文には「libs」という文字列が含まれていません。",
+    ],
+    explanation:
+      "python3 と libs の両方を名前または説明文に含むのは python3-libs だけです。python3 パッケージ自体の" +
+      "名前・説明文には「libs」という文字列が含まれないため、複数キーワードで絞り込むと python3-libs だけに" +
+      "限定できます。",
+  },
+  {
+    id: "ch20-ex56",
+    chapterId: "ch20",
+    prompt:
+      "NGINX とすべて大文字のキーワードで dnf コマンドによる検索を行い、小文字の nginx パッケージが" +
+      "ヒットすることを確認してください(大文字・小文字は区別されません)。",
+    referenceSolution: "dnf search NGINX",
+    hints: [
+      "dnf search は大文字・小文字を区別せずに検索します。",
+      "検索語をどのような大文字・小文字で入力しても、結果は同じになります。",
+    ],
+    explanation:
+      "dnf search は検索語・パッケージ名・説明文をすべて小文字に変換したうえで比較するため、" +
+      "大文字・小文字を区別しません。NGINX とすべて大文字で検索しても、小文字で登録されている nginx パッケージが" +
+      "問題なくヒットします。",
+  },
+  {
+    id: "ch20-ex57",
+    chapterId: "ch20",
+    prompt:
+      "TMUX とすべて大文字のキーワードで dnf コマンドによる検索を行い、tmux パッケージがヒットすることを" +
+      "確認してください。",
+    referenceSolution: "dnf search TMUX",
+    hints: [
+      "大文字・小文字を区別しないのは、パッケージ名だけでなく検索語側にも当てはまります。",
+      "TMUX という検索語は内部的に小文字化されてから比較されます。",
+    ],
+    explanation:
+      "検索語は内部的にすべて小文字に変換されてから、同じく小文字化されたパッケージ名・説明文と比較されます。" +
+      "そのため TMUX とすべて大文字で入力しても、tmux パッケージが正しくヒットします。",
+  },
+  {
+    id: "ch20-ex58",
+    chapterId: "ch20",
+    prompt:
+      "ライブラリ というキーワードで dnf コマンドによる検索を行い、libcurl4 と python3-libs の両方が" +
+      "説明文からヒットすることを確認してください。",
+    referenceSolution: "dnf search ライブラリ",
+    hints: [
+      "libcurl4 の説明は「curlが利用する共有ライブラリ」、python3-libs の説明は「python3が利用する標準ライブラリ」です。",
+      "どちらの説明文にも「ライブラリ」という単語が含まれています。",
+    ],
+    explanation:
+      "libcurl4・python3-libs はいずれも他のパッケージが利用する共有ライブラリ・標準ライブラリであり、" +
+      "説明文にそれぞれ「ライブラリ」という単語を含みます。そのためこのキーワードで検索すると、" +
+      "パッケージ名は似ていない両者がまとめてヒットします。",
+  },
+  {
+    id: "ch20-ex59",
+    chapterId: "ch20",
+    prompt:
+      "ダウンローダー というキーワードで dnf コマンドによる検索を行い、wget パッケージがヒットすることを" +
+      "確認してください。",
+    referenceSolution: "dnf search ダウンローダー",
+    hints: [
+      "wget の説明文には「コマンドラインファイルダウンローダー」という語句が含まれています。",
+      "他のパッケージの説明文には「ダウンローダー」という単語は含まれていません。",
+    ],
+    explanation:
+      "wget の説明文「コマンドラインファイルダウンローダー」に含まれる「ダウンローダー」というキーワードで" +
+      "検索すると、他のパッケージの説明文にはこの単語が含まれないため、wget だけがヒットします。",
+  },
+  {
+    id: "ch20-ex60",
+    chapterId: "ch20",
+    prompt: "ツリー というキーワードで dnf コマンドによる検索を行い、tree パッケージがヒットすることを確認してください。",
+    referenceSolution: "dnf search ツリー",
+    hints: [
+      "tree の説明文は「ディレクトリ構造をツリー表示するコマンド」です。",
+      "パッケージ名の英単語 tree と、説明文中の日本語「ツリー」は別物として扱われます(検索キーワード自体が日本語)。",
+    ],
+    explanation:
+      "tree パッケージの説明文「ディレクトリ構造をツリー表示するコマンド」に含まれる「ツリー」という" +
+      "キーワードで検索すると、他のパッケージの名前・説明文にはこの単語が含まれないため、tree だけがヒットします。",
+  },
+  {
+    id: "ch20-ex61",
+    chapterId: "ch20",
+    prompt:
+      "json とすべて小文字のキーワードで dnf コマンドによる検索を行い、説明文中の大文字表記「JSON」を含む" +
+      "jq パッケージがヒットすることを確認してください(大文字・小文字は区別されません)。",
+    referenceSolution: "dnf search json",
+    hints: [
+      "jq の説明文は「コマンドラインで動作するJSONプロセッサ」で、JSONの部分は大文字で書かれています。",
+      "検索語・説明文のどちらも小文字化してから比較されるため、大文字・小文字の食い違いは結果に影響しません。",
+    ],
+    explanation:
+      "jq の説明文「コマンドラインで動作するJSONプロセッサ」には大文字の「JSON」が含まれていますが、" +
+      "dnf search は検索語・比較対象の両方を小文字化してから比較するため、すべて小文字の json という" +
+      "検索語でも問題なくヒットします。",
+  },
+  {
+    id: "ch20-ex62",
+    chapterId: "ch20",
+    prompt: "server というキーワードで dnf コマンドによる検索を行い、mysql-server と redis-server の両方がヒットすることを確認してください。",
+    referenceSolution: "dnf search server",
+    hints: [
+      "mysql-server・redis-server はどちらも名前の末尾に「-server」を含んでいます。",
+      "nginxの説明文「Webサーバー」は日本語のカタカナ表記のため、英単語の「server」とは一致しません。",
+    ],
+    explanation:
+      "server という検索語は、名前の末尾に「-server」を含む mysql-server・redis-server の2つにヒットします。" +
+      "nginx の説明文には「サーバー」というカタカナ表記はありますが、英単語の「server」という文字列そのものは" +
+      "含まれていないため、nginx はこの検索にはヒットしません。",
+  },
+  {
+    id: "ch20-ex63",
+    chapterId: "ch20",
+    prompt: "プロセス というキーワードで dnf コマンドによる検索を行い、htop パッケージが説明文からヒットすることを確認してください。",
+    referenceSolution: "dnf search プロセス",
+    hints: [
+      "htop の説明文は「対話型のプロセスビューア」です。",
+      "jq の説明文には「プロセッサ」という似た単語がありますが、「プロセス」とは異なる文字列です。",
+    ],
+    explanation:
+      "htop の説明文「対話型のプロセスビューア」に含まれる「プロセス」というキーワードで検索すると、" +
+      "htop だけがヒットします。jq の説明文にある「プロセッサ」は似ていますが「プロセス」という文字列そのものを" +
+      "含んでいないため、この検索にはヒットしません。",
+  },
+  {
+    id: "ch20-ex64",
+    chapterId: "ch20",
+    prompt:
+      "kubernetes というキーワードで dnf コマンドによる検索を行い、該当するパッケージが1つも無く" +
+      "「No matches found.」と表示されることを確認してください。",
+    referenceSolution: "dnf search kubernetes",
+    hints: [
+      "この仮想リポジトリには固定の15種類程度のパッケージしか登録されていません。",
+      "一致するパッケージが無い場合はエラーにはならず、「No matches found.」という1行が表示されるだけで正常終了します。",
+    ],
+    explanation:
+      "dnf search は、一致するパッケージが1つも無い場合でもエラー終了はせず、「No matches found.」という" +
+      "1行を表示して正常終了(終了コード0)します。kubernetes はこの仮想リポジトリに登録されていないため、" +
+      "この結果になります。",
+  },
+  {
+    id: "ch20-ex65",
+    chapterId: "ch20",
+    prompt:
+      "VIM とすべて大文字のキーワードで dnf コマンドによる検索を行い、該当するパッケージが無く" +
+      "「No matches found.」と表示されることを確認してください。",
+    referenceSolution: "dnf search VIM",
+    hints: [
+      "大文字・小文字を区別しない仕様であっても、そもそも仮想リポジトリに登録されていないパッケージ名は" +
+        "ヒットしません。",
+      "vim はこの章の仮想パッケージリポジトリには含まれていません。",
+    ],
+    explanation:
+      "dnf search は大文字・小文字を区別しませんが、そもそも仮想リポジトリに登録されていないパッケージ名を" +
+      "検索した場合は、大文字・小文字にかかわらず該当なしとなり「No matches found.」と表示されます。",
+  },
+
   // ---------------------------------------------------------------------
   // 付録: SSH接続・infoコマンド・日本語入力
   // ---------------------------------------------------------------------
