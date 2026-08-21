@@ -19253,6 +19253,231 @@ const exercisesPart2: Exercise[] = [
       "検索した場合は、大文字・小文字にかかわらず該当なしとなり「No matches found.」と表示されます。",
   },
 
+  {
+    id: "ch20-ex66",
+    chapterId: "ch20",
+    prompt: "wget パッケージの詳細情報を dnf コマンドで表示してください。",
+    referenceSolution: "dnf info wget",
+    hints: [
+      "dnf info パッケージ名 で、そのパッケージの詳細情報を表示できます。",
+      "wget はまだインストールされていないため、見出しは「Available Packages」になります。",
+    ],
+    explanation:
+      "dnf info wget を実行すると、Name/Version/Architecture/Size/Source/Repository/Summary の各項目が" +
+      "表示されます。wget はサイズが936KBのため、Size欄には「936 k」と表示されます" +
+      "(1000KB未満のパッケージはk単位で表示されます)。",
+  },
+  {
+    id: "ch20-ex67",
+    chapterId: "ch20",
+    prompt: "tmux パッケージの詳細情報を dnf コマンドで表示してください。",
+    referenceSolution: "dnf info tmux",
+    hints: [
+      "dnf info パッケージ名 で詳細情報を表示できます。",
+      "tmux はターミナルマルチプレクサと呼ばれる種類のツールです。",
+    ],
+    explanation:
+      "dnf info tmux を実行すると、Summary欄に「ターミナルマルチプレクサ」という説明が表示されます。" +
+      "tmux はサイズが429KBのため、Size欄には「429 k」と表示されます。",
+  },
+  {
+    id: "ch20-ex68",
+    chapterId: "ch20",
+    prompt: "jq パッケージの詳細情報を dnf コマンドで表示してください。",
+    referenceSolution: "dnf info jq",
+    hints: [
+      "dnf info パッケージ名 で詳細情報を表示できます。",
+      "jq はコマンドラインで動作するJSONプロセッサです。",
+    ],
+    explanation:
+      "dnf info jq を実行すると、Summary欄に「コマンドラインで動作するJSONプロセッサ」という説明が" +
+      "表示されます。jq はサイズが213KBのため、Size欄には「213 k」と表示されます。",
+  },
+  {
+    id: "ch20-ex69",
+    chapterId: "ch20",
+    prompt:
+      "redis-server パッケージの詳細情報を dnf コマンドで表示し、サイズが1000KBを超えるため" +
+      "「2.1 M」のようにM単位で表示されることを確認してください。",
+    referenceSolution: "dnf info redis-server",
+    hints: [
+      "1000KB未満のパッケージはk単位、1000KB以上のパッケージはMB単位(小数第1位まで)で表示されます。",
+      "redis-server のサイズは2100KBです。",
+    ],
+    explanation:
+      "dnf info のSize欄は、1000KB未満なら「◯◯ k」、1000KB以上なら1000で割った値を小数第1位までの" +
+      "「◯.◯ M」という表記で表示されます。redis-server は2100KBのため、2100÷1000=2.1より" +
+      "「2.1 M」と表示されます。",
+  },
+  {
+    id: "ch20-ex70",
+    chapterId: "ch20",
+    prompt:
+      "python3 パッケージの詳細情報を dnf コマンドで表示し、サイズが「27.5 M」とMB単位で表示される" +
+      "大きなパッケージであることを確認してください。",
+    referenceSolution: "dnf info python3",
+    hints: [
+      "python3 はサイズが27500KBあり、この章の仮想リポジトリの中でも大きい部類のパッケージです。",
+      "1000KB以上のパッケージはMB単位(小数第1位まで)で表示されます。",
+    ],
+    explanation:
+      "python3 はサイズが27500KBのため、Size欄には27500÷1000=27.5より「27.5 M」と表示されます。" +
+      "python3 は python3-libs という依存パッケージを持ち、実際にインストールする際(dnf install python3)には" +
+      "この依存パッケージも自動的に一緒にインストールされます。",
+  },
+  {
+    id: "ch20-ex71",
+    chapterId: "ch20",
+    prompt: "mysql-server パッケージの詳細情報を dnf コマンドで表示してください。",
+    referenceSolution: "dnf info mysql-server",
+    hints: [
+      "dnf info パッケージ名 で詳細情報を表示できます。",
+      "mysql-server のサイズは40200KBです。",
+    ],
+    explanation:
+      "dnf info mysql-server を実行すると、Size欄には40200÷1000=40.2より「40.2 M」と表示されます。" +
+      "mysql-server は mysql-common という依存パッケージを持ち、dnf install mysql-server を実行すると" +
+      "この依存パッケージも自動的に一緒にインストールされます。",
+  },
+  {
+    id: "ch20-ex72",
+    chapterId: "ch20",
+    prompt: "curl が依存する libcurl4 パッケージ自体の詳細情報を dnf コマンドで単体で確認してください。",
+    referenceSolution: "dnf info libcurl4",
+    hints: [
+      "libcurl4はcurlの依存パッケージですが、libcurl4自体はさらに他のパッケージに依存していないため、" +
+        "単体でも検索・確認・インストールが可能です。",
+      "dnf info はインストール状況に関わらず、指定したパッケージ単体の情報のみを表示します。",
+    ],
+    explanation:
+      "libcurl4はcurlパッケージをインストールする際に自動的に一緒にインストールされる依存パッケージですが、" +
+      "libcurl4自体はさらに別のパッケージに依存していないため、dnf install libcurl4 のように単体で直接" +
+      "インストールすることもできます。dnf info libcurl4 を実行すると、curlとは無関係にlibcurl4単体の情報" +
+      "(Size: 382 k など)が表示されます。",
+  },
+  {
+    id: "ch20-ex73",
+    chapterId: "ch20",
+    prompt: "python3 が依存する python3-libs パッケージ自体の詳細情報を dnf コマンドで単体で確認してください。",
+    referenceSolution: "dnf info python3-libs",
+    hints: [
+      "python3-libsはpython3の依存パッケージですが、python3-libs自体はさらに他のパッケージに依存していません。",
+      "dnf info python3-libs は、python3をインストールしているかどうかに関わらず実行できます。",
+    ],
+    explanation:
+      "python3-libsはpython3をインストールする際に自動的に一緒にインストールされる依存パッケージですが、" +
+      "python3-libs自体はさらに別のパッケージに依存していないため、単体でインストール・確認することもできます。" +
+      "サイズは21300KBのため、Size欄には「21.3 M」と表示されます。",
+  },
+  {
+    id: "ch20-ex74",
+    chapterId: "ch20",
+    prompt: "docker-ce が依存する containerd パッケージ自体の詳細情報を dnf コマンドで単体で確認してください。",
+    referenceSolution: "dnf info containerd",
+    hints: [
+      "containerdはdocker-ceの依存パッケージですが、containerd自体はさらに他のパッケージに依存していません。",
+      "サイズは29800KBあります。",
+    ],
+    explanation:
+      "containerdはdocker-ceをインストールする際に自動的に一緒にインストールされる依存パッケージですが、" +
+      "containerd自体はさらに別のパッケージに依存していないため、単体でインストール・確認することもできます。" +
+      "サイズは29800KBのため、Size欄には「29.8 M」と表示されます。",
+  },
+  {
+    id: "ch20-ex75",
+    chapterId: "ch20",
+    prompt: "mysql-server が依存する mysql-common パッケージ自体の詳細情報を dnf コマンドで単体で確認してください。",
+    referenceSolution: "dnf info mysql-common",
+    hints: [
+      "mysql-commonはmysql-serverの依存パッケージですが、mysql-common自体はさらに他のパッケージに依存していません。",
+      "サイズは620KBです。",
+    ],
+    explanation:
+      "mysql-commonはmysql-serverをインストールする際に自動的に一緒にインストールされる依存パッケージですが、" +
+      "mysql-common自体はさらに別のパッケージに依存していないため、単体でインストール・確認することもできます。" +
+      "サイズは620KBのため、Size欄には「620 k」と表示されます。",
+  },
+  {
+    id: "ch20-ex76",
+    chapterId: "ch20",
+    prompt:
+      "sudo を使って nodejs パッケージを dnf コマンドでインストールしたうえで、dnf info でインストール済み" +
+      "(Installed Packages)になったことを確認してください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "sudo を使って nodejs パッケージを dnf コマンドでインストールしてください。",
+      "dnf info でインストール済み(Installed Packages)になったことを確認してください" +
+        "(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "sudo dnf install nodejs; dnf info nodejs",
+    hints: [
+      "インストール前は「Available Packages」、インストール後は「Installed Packages」という見出しに変わります。",
+      "nodejsはサイズが33200KBと大きいため、Size欄は「33.2 M」と表示されます。",
+    ],
+    explanation:
+      "インストールが完了すると、以後の dnf info nodejs の見出しは「Available Packages」から" +
+      "「Installed Packages」に変わります。nodejsはサイズが33200KBあるため、Size欄には33200÷1000=33.2より" +
+      "「33.2 M」と表示されます。",
+  },
+  {
+    id: "ch20-ex77",
+    chapterId: "ch20",
+    prompt:
+      "sudo を使って htop パッケージを dnf コマンドでインストールしたうえで、dnf info でインストール済み" +
+      "になったことを確認してください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "sudo を使って htop パッケージを dnf コマンドでインストールしてください。",
+      "dnf info でインストール済みになったことを確認してください(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "sudo dnf install htop; dnf info htop",
+    hints: [
+      "インストール前は「Available Packages」、インストール後は「Installed Packages」という見出しに変わります。",
+      "htopはサイズが158KBのため、Size欄は「158 k」というk単位の表示になります。",
+    ],
+    explanation:
+      "インストールが完了すると、以後の dnf info htop の見出しは「Available Packages」から" +
+      "「Installed Packages」に変わります。htopはサイズが158KBと小さいため、nodejs(33.2 M)とは異なり" +
+      "「158 k」というk単位の表示になります。",
+  },
+  {
+    id: "ch20-ex78",
+    chapterId: "ch20",
+    prompt:
+      "存在しないパッケージ名(foobar)を指定して dnf info コマンドを実行し、「No matching Packages to list」" +
+      "というエラーになることを確認してください。",
+    referenceSolution: "dnf info foobar",
+    hints: [
+      "この仮想リポジトリに登録されていないパッケージ名を指定すると、dnf info はエラーになります。",
+      "エラーメッセージは「No matching Packages to list」です。",
+    ],
+    explanation:
+      "dnf info パッケージ名 に、この仮想リポジトリ(固定の15種類程度のパッケージ)に登録されていない名前を" +
+      "指定すると、「Error: No matching Packages to list」というエラーメッセージが表示されます。" +
+      "dnf search が該当なしでも正常終了(終了コード0)するのに対し、dnf info は該当パッケージが無いと" +
+      "エラー終了する点が異なります。",
+  },
+  {
+    id: "ch20-ex79",
+    chapterId: "ch20",
+    prompt:
+      "tree パッケージと nodejs パッケージの詳細情報を dnf コマンドで続けて表示し、サイズ表示の単位が" +
+      "それぞれ「k」「M」のどちらになるかを見比べてください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "tree パッケージの詳細情報を dnf コマンドで表示してください。",
+      "続けて nodejs パッケージの詳細情報も dnf コマンドで表示してください" +
+        "(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "dnf info tree; dnf info nodejs",
+    hints: [
+      "サイズが1000KB未満のパッケージは「◯◯ k」、1000KB以上のパッケージは小数第1位までの「◯.◯ M」という" +
+        "表記になります。",
+      "treeは47KB、nodejsは33200KBです。",
+    ],
+    explanation:
+      "dnf info のSize欄は、1000KB未満であれば「◯◯ k」、1000KB以上であれば1000で割った値を小数第1位までの" +
+      "「◯.◯ M」という表記になります。treeは47KBのため「47 k」、nodejsは33200KBのため33200÷1000=33.2より" +
+      "「33.2 M」と表示され、同じdnf infoコマンドでもパッケージによって表示単位が異なることを確認できます。",
+  },
+
   // ---------------------------------------------------------------------
   // 付録: SSH接続・infoコマンド・日本語入力
   // ---------------------------------------------------------------------
