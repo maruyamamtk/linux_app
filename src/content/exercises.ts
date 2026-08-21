@@ -20158,7 +20158,7 @@ const exercisesPart3: Exercise[] = [
     initialCwd: "/home/study/practice/ch19_git/sync-practice",
     referenceSolution: 'git init; git add memo.txt; git commit -m "Add memo"; git push',
     hints: [
-      "git pushは引数を省略するとorigimnという名前のリモートを対象にします。",
+      "git pushは引数を省略するとoriginという名前のリモートを対象にします。",
       "origin という名前のリモートを1度も登録していない場合、その名前自体が見つからずエラーになります。",
     ],
     explanation:
