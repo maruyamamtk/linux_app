@@ -20526,6 +20526,236 @@ const exercisesPart2: Exercise[] = [
       "「containerd is already the newest version (1.6.24).」と表示され、依存パッケージとして扱われることが" +
       "多いcontainerdでも、単体インストール時の冪等性は他のパッケージと同じであることが確認できます。",
   },
+  {
+    id: "ch20-ex139",
+    chapterId: "ch20",
+    prompt:
+      "sudo を使って vim パッケージを apt コマンドでインストールしようとし、このパッケージが仮想リポジトリに" +
+      "存在しないことを確認してください。",
+    referenceSolution: "sudo apt install vim",
+    hints: [
+      "この演習用の仮想リポジトリに登録されているのは16種類のパッケージのみで、vimは含まれていません。",
+      "存在しないパッケージ名を指定すると「E: Unable to locate package パッケージ名」という結果になります。",
+    ],
+    explanation:
+      "apt install パッケージ名 に指定した名前が仮想リポジトリに存在しない場合、root権限があっても" +
+      "「E: Unable to locate package vim」というエラーになりインストールは行われません。dnf installの" +
+      "「Error: Unable to find a match: vim」とは文言が異なりますが、存在しないパッケージ名を弾く点は" +
+      "共通しています。",
+  },
+  {
+    id: "ch20-ex140",
+    chapterId: "ch20",
+    prompt:
+      "sudo を使って emacs パッケージを apt コマンドでインストールしようとし、このパッケージが仮想リポジトリに" +
+      "存在しないことを確認してください。",
+    referenceSolution: "sudo apt install emacs",
+    hints: [
+      "vimと同様、emacsもこの演習用の仮想リポジトリには登録されていません。",
+      "存在しないパッケージ名を指定すると「E: Unable to locate package パッケージ名」という結果になります。",
+    ],
+    explanation:
+      "emacs も仮想リポジトリの16パッケージには含まれていないため、apt install emacs は" +
+      "「E: Unable to locate package emacs」というエラーになります。root権限で実行していても、リポジトリに" +
+      "存在しないパッケージ名そのものは解決できません。",
+  },
+  {
+    id: "ch20-ex141",
+    chapterId: "ch20",
+    prompt:
+      "sudo を使って nodejs パッケージを apt コマンドでインストールしたうえで、node というキーワードで" +
+      "apt search を実行し、検索結果にnodejsが含まれることを確認してください(1行のコマンドとして ; で" +
+      "つないでください)。",
+    promptSteps: [
+      "sudo を使って nodejs パッケージを apt コマンドでインストールしてください。",
+      "node というキーワードで apt search を実行し、検索結果にnodejsが含まれることを確認してください" +
+        "(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "sudo apt install nodejs; apt search node",
+    hints: [
+      "apt search はパッケージ名や説明文の一部分にキーワードが一致する場合もヒットします。",
+      "nodejs は node という文字列を含むため、キーワードが完全一致でなくてもヒットします。",
+    ],
+    explanation:
+      "apt search キーワード は、パッケージ名や説明文にキーワードを部分文字列として含むパッケージすべてを" +
+      "対象とするため、「node」のような部分一致でも nodejs にマッチします。なお apt search の検索結果は" +
+      "インストール状態に関わらず同じ内容が表示されるため、インストール前に検索しても結果は変わりません" +
+      "(インストール状態を区別したい場合でも、apt info には dnf info のような" +
+      "「Available/Installed Packages」の見出しの区別はありません)。",
+  },
+  {
+    id: "ch20-ex142",
+    chapterId: "ch20",
+    prompt:
+      "sudo を使って curl パッケージを apt コマンドでインストールしたうえで、apt info curl を実行し、" +
+      "インストール後も依存パッケージ(Depends)としてlibcurl4が表示され続けることを確認してください" +
+      "(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "sudo を使って curl パッケージを apt コマンドでインストールしてください。",
+      "apt info curl を実行し、インストール後も依存パッケージ(Depends)としてlibcurl4が表示され続けることを" +
+        "確認してください(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "sudo apt install curl; apt info curl",
+    hints: [
+      "apt info の出力内容は、そのパッケージがインストール済みかどうかによって変化しません。",
+      "dnf info はインストール済みかどうかで見出しが「Available Packages」「Installed Packages」に" +
+        "切り替わりますが、apt info にはそのような見出し自体がありません。",
+    ],
+    explanation:
+      "apt info パッケージ名 は Package/Version/Installed-Size/Depends/Description を表示しますが、" +
+      "そのパッケージがインストール済みかどうかを示す見出しは持ちません。そのため sudo apt install curl の" +
+      "前後どちらで apt info curl を実行しても、「Depends: libcurl4」を含む出力内容は変わりません。この点は" +
+      "見出しがAvailable/Installedで切り替わる dnf info とは異なる、apt info特有の性質です。",
+  },
+  {
+    id: "ch20-ex143",
+    chapterId: "ch20",
+    prompt:
+      "sudo を使って mysql-server パッケージを apt コマンドでインストールしたうえで、mysql というキーワードで" +
+      "apt search を実行し、mysql-server と mysql-common の両方が検索結果に含まれることを確認してください" +
+      "(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "sudo を使って mysql-server パッケージを apt コマンドでインストールしてください。",
+      "mysql というキーワードで apt search を実行し、mysql-server と mysql-common の両方が検索結果に" +
+        "含まれることを確認してください(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "sudo apt install mysql-server; apt search mysql",
+    hints: [
+      "mysql-server をインストールすると、依存パッケージのmysql-commonも一緒にインストールされます。",
+      "apt search の結果はパッケージ名のアルファベット順に並ぶため、mysql-common がmysql-serverより先に" +
+        "表示されます。",
+    ],
+    explanation:
+      "mysql-server と mysql-common はどちらも名前・説明文に「mysql」という文字列を含むため、" +
+      "apt search mysql を実行すると両方がヒットします。結果はパッケージ名の昇順に並ぶため、" +
+      "「mysql-common/stable ...」が先に、「mysql-server/stable ...」が後に表示されます。",
+  },
+  {
+    id: "ch20-ex144",
+    chapterId: "ch20",
+    prompt:
+      "sudo を使って libcurl4 パッケージを単体でインストールしたうえで、続けて curl パッケージをインストール" +
+      "し、依存パッケージ(libcurl4)が既にインストール済みのため「追加パッケージ」の行が表示されないことを" +
+      "確認してください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "sudo を使って libcurl4 パッケージを単体で apt コマンドでインストールしてください。",
+      "続けて curl パッケージを apt コマンドでインストールし、依存パッケージ(libcurl4)が既にインストール" +
+        "済みのため「The following additional packages will be installed:」の行が表示されないことを" +
+        "確認してください(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "sudo apt install libcurl4; sudo apt install curl",
+    hints: [
+      "apt install は、依存パッケージが既にインストール済みであれば、そのパッケージを重ねてインストール" +
+        "しようとはしません。",
+      "このため2回目の出力には「The following NEW packages will be installed:」にcurlのみが表示され、" +
+        "「The following additional packages will be installed:」の行自体が現れません。",
+    ],
+    explanation:
+      "通常 curl をインストールすると依存パッケージのlibcurl4も一緒にインストールされ、" +
+      "「The following additional packages will be installed:」の行が表示されます(ch20-ex133参照)。" +
+      "しかし今回のように先にlibcurl4を単体でインストールしておくと、curlインストール時には依存関係が" +
+      "既に満たされているため、そのセクション自体が出力から省かれ、「The following NEW packages will be " +
+      "installed:」にはcurlのみが表示されます。",
+  },
+  {
+    id: "ch20-ex145",
+    chapterId: "ch20",
+    prompt:
+      "sudo を使って python3-libs パッケージを単体でインストールしたうえで、続けて python3 パッケージを" +
+      "インストールし、依存パッケージ(python3-libs)が既にインストール済みのため「追加パッケージ」の行が" +
+      "表示されないことを確認してください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "sudo を使って python3-libs パッケージを単体で apt コマンドでインストールしてください。",
+      "続けて python3 パッケージを apt コマンドでインストールし、依存パッケージ(python3-libs)が既に" +
+        "インストール済みのため「The following additional packages will be installed:」の行が表示されない" +
+        "ことを確認してください(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "sudo apt install python3-libs; sudo apt install python3",
+    hints: [
+      "ch20-ex134では何もインストールされていない状態からpython3をインストールし、python3-libsが" +
+        "「追加パッケージ」として一緒にインストールされる様子を確認しました。",
+      "今回は先にpython3-libsだけを単体でインストールしておくため、python3インストール時には依存関係が" +
+        "既に満たされています。",
+    ],
+    explanation:
+      "ch20-ex134のように何もインストールされていない状態から python3 をインストールすると、依存する" +
+      "python3-libsが「The following additional packages will be installed:」として一緒に表示されます。" +
+      "しかし今回のように先にpython3-libsを単体でインストールしておくと、python3インストール時には依存関係が" +
+      "既に満たされているため、そのセクション自体が出力から省かれ、「The following NEW packages will be " +
+      "installed:」にはpython3のみが表示されます。",
+  },
+  {
+    id: "ch20-ex146",
+    chapterId: "ch20",
+    prompt:
+      "su コマンドでrootユーザーに切り替えたうえで、mysql-common パッケージ単体を apt コマンドでインストール" +
+      "してください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "su コマンドでrootユーザーに切り替えてください。",
+      "mysql-common パッケージ単体を apt コマンドでインストールしてください" +
+        "(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "su root; apt install mysql-common",
+    hints: [
+      "su root で実行ユーザーをrootに切り替えたあとは、sudo を付けずに apt install を実行できます。",
+      "mysql-common は mysql-server が依存するパッケージですが、mysql-common自体は他のパッケージに" +
+        "依存していないため、単体でインストールしても「追加パッケージ」の行は表示されません。",
+    ],
+    explanation:
+      "su root で実行ユーザーをrootに切り替えたあとは、sudo を付けなくてもroot権限が必要なコマンドを" +
+      "実行できます。mysql-common は mysql-server から依存される側のパッケージですが、mysql-common自体は" +
+      "他のどのパッケージにも依存していないため、単体でインストールしても「The following additional " +
+      "packages will be installed:」の行は現れず、「Setting up mysql-common (8.0.35) ...」で完了します。",
+  },
+  {
+    id: "ch20-ex147",
+    chapterId: "ch20",
+    prompt: "su コマンドでrootユーザーに切り替えたうえで、redis-server パッケージを apt コマンドで" +
+      "インストールしてください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "su コマンドでrootユーザーに切り替えてください。",
+      "redis-server パッケージを apt コマンドでインストールしてください(1行のコマンドとして ; で" +
+        "つないでください)。",
+    ],
+    referenceSolution: "su root; apt install redis-server",
+    hints: [
+      "sudo は1つのコマンドだけをroot権限で実行しますが、su root は以後すべてのコマンドの実行ユーザーを" +
+        "root に切り替えます。",
+      "redis-server は依存パッケージを持たないため、「追加パッケージ」の行は表示されません。",
+    ],
+    explanation:
+      "ch20-ex10ではsudoを使ってredis-serverの冪等性を確認しましたが、今回はsuでrootに切り替えたうえで" +
+      "同じredis-serverをインストールします。redis-server は依存パッケージを持たないため、「The following " +
+      "additional packages will be installed:」の行は現れず、「Setting up redis-server (7.2.3) ...」で" +
+      "完了します。",
+  },
+  {
+    id: "ch20-ex148",
+    chapterId: "ch20",
+    prompt:
+      "su コマンドでrootユーザーに切り替えたうえで、docker というパッケージ名(docker-ce ではなく docker)を" +
+      "apt コマンドでインストールしようとし、このパッケージ名では仮想リポジトリに存在しないことを確認して" +
+      "ください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "su コマンドでrootユーザーに切り替えてください。",
+      "docker というパッケージ名(docker-ce ではなく docker)を apt コマンドでインストールしようとし、" +
+        "このパッケージ名では仮想リポジトリに存在しないことを確認してください" +
+        "(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "su root; apt install docker",
+    hints: [
+      "この仮想リポジトリに登録されているコンテナ実行エンジンのパッケージ名は docker ではなく docker-ce です" +
+        "(ch20-ex09参照)。",
+      "root権限があっても、リポジトリに存在しないパッケージ名そのものは解決できず" +
+        "「E: Unable to locate package docker」というエラーになります。",
+    ],
+    explanation:
+      "root権限で実行していても、apt install に指定した名前が仮想リポジトリに登録されていなければ" +
+      "インストールはできません。この仮想リポジトリに登録されているのは docker-ce という名前のパッケージ" +
+      "であり、docker という名前では登録されていないため、su root; apt install docker は" +
+      "「E: Unable to locate package docker」というエラーになります。実際のUbuntu環境でもパッケージ名を" +
+      "正確に指定する必要がある点は同じです。",
+  },
   // ---------------------------------------------------------------------
   // 付録: SSH接続・infoコマンド・日本語入力
   // ---------------------------------------------------------------------
