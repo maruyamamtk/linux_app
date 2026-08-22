@@ -24389,6 +24389,318 @@ const exercisesPart4: Exercise[] = [
       "ように同じポート番号を指定する必要があります(なお、このアプリの仮想端末ではオプション解析には" +
       "対応しておらず、`ssh [ユーザー名@]ホスト名` の書式のみをterminal型演習として扱います)。",
   },
+  {
+    id: "appendix-ex36",
+    chapterId: "appendix",
+    prompt:
+      "study@webserver にSSH接続したうえで、サーバー側のSSH設定ファイル(/etc/ssh/sshd_config)の内容を" +
+      "確認してください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "study@webserver にSSH接続してください。",
+      "サーバー側のSSH設定ファイル(/etc/ssh/sshd_config)の内容を確認してください" +
+        "(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "ssh study@webserver; cat /etc/ssh/sshd_config",
+    hints: ["絶対パス /etc/ssh/sshd_config を指定して cat コマンドで表示します。"],
+    explanation:
+      "/etc/ssh/sshd_configはsshdデーモンの設定ファイルです。今回のサンプルにはPort 22 /" +
+      "PermitRootLogin no / PasswordAuthentication no / PubkeyAuthentication yes という4行が" +
+      "書かれており、パスワード認証を禁止して公開鍵認証のみを許可する設定になっていることが確認できます。",
+  },
+  {
+    id: "appendix-ex37",
+    chapterId: "appendix",
+    prompt:
+      "study@webserver にSSH接続したうえで、ホームディレクトリ直下の .ssh ディレクトリの内容を、" +
+      "パーミッションを含めて詳しく一覧表示してください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "study@webserver にSSH接続してください。",
+      "ホームディレクトリ直下の .ssh ディレクトリの内容を、パーミッションを含めて詳しく一覧表示して" +
+        "ください(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "ssh study@webserver; ls -la .ssh",
+    hints: [
+      "接続直後のカレントディレクトリはホームディレクトリなので、相対パス .ssh を指定します。",
+      "ls -la で、隠しファイルも含めてパーミッション付きの詳細な一覧を表示できます。",
+    ],
+    explanation:
+      "ls -la .ssh を実行すると、known_hosts(644)とauthorized_keys(600)という2つのファイルの" +
+      "パーミッションを確認できます。authorized_keysが所有者以外読み書きできない600になっているのは、" +
+      "他人がこのファイルを書き換えてなりすましログインできてしまうことを防ぐためです。",
+  },
+  {
+    id: "appendix-ex38",
+    chapterId: "appendix",
+    prompt:
+      "study@webserver にSSH接続したうえで、~/.ssh/known_hosts の内容を確認してください" +
+      "(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "study@webserver にSSH接続してください。",
+      "ホームディレクトリの .ssh/known_hosts の内容を確認してください(1行のコマンドとして ; でつないで" +
+        "ください)。",
+    ],
+    referenceSolution: "ssh study@webserver; cat .ssh/known_hosts",
+    hints: ["接続直後のカレントディレクトリから見た相対パス .ssh/known_hosts を指定します。"],
+    explanation:
+      "known_hostsには、このwebserverというホスト名とそのホスト鍵(ECDSA鍵)の組が1行記録されています。" +
+      "これは、初回接続時の確認で「yes」と答えた際に自動的に追記された内容です。",
+  },
+  {
+    id: "appendix-ex39",
+    chapterId: "appendix",
+    prompt:
+      "study@webserver にSSH接続したうえで、~/.ssh/authorized_keys の内容を確認してください" +
+      "(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "study@webserver にSSH接続してください。",
+      "ホームディレクトリの .ssh/authorized_keys の内容を確認してください(1行のコマンドとして ; で" +
+        "つないでください)。",
+    ],
+    referenceSolution: "ssh study@webserver; cat .ssh/authorized_keys",
+    hints: ["接続直後のカレントディレクトリから見た相対パス .ssh/authorized_keys を指定します。"],
+    explanation:
+      "authorized_keysには、studyユーザーとしてのログインを許可する公開鍵が1行登録されています。この" +
+      "公開鍵に対応する秘密鍵を持つクライアントは、パスワードなしで公開鍵認証によりログインできます。",
+  },
+  {
+    id: "appendix-ex40",
+    chapterId: "appendix",
+    prompt:
+      "study@webserver にSSH接続したうえで、sudo を使って認証ログ(/var/log/auth.log)の内容を確認して" +
+      "ください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "study@webserver にSSH接続してください。",
+      "sudo を使って認証ログ(/var/log/auth.log)の内容を確認してください" +
+        "(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "ssh study@webserver; sudo cat /var/log/auth.log",
+    hints: [
+      "/var/log/auth.log はroot所有・600の権限のため、studyユーザーのままcatすると権限エラーになります。",
+      "sudo cat /var/log/auth.log のように、sudoを付けてroot権限で実行してください。",
+    ],
+    explanation:
+      "/var/log/auth.logはroot:root所有・600(所有者のみ読み書き可)というパーミッションのため、一般" +
+      "ユーザーのstudyのままではPermission deniedになります。sudoを付けて一時的にroot権限で実行すると、" +
+      "sshdによる公開鍵認証成功のログ等を読むことができます。",
+  },
+  {
+    id: "appendix-ex41",
+    chapterId: "appendix",
+    prompt:
+      "study@webserver にSSH接続したうえで、deploy ディレクトリの内容をパーミッション付きで一覧表示して" +
+      "ください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "study@webserver にSSH接続してください。",
+      "deploy ディレクトリの内容をパーミッション付きで一覧表示してください" +
+        "(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "ssh study@webserver; ls -l deploy",
+    hints: ["ls -l deploy で、deployディレクトリ内のファイルのパーミッションを確認できます。"],
+    explanation:
+      "ls -l deploy を実行すると、README.md(644、実行不可)とrestart.sh(755、所有者・グループ・その他" +
+      "全員が実行可能)という2つのファイルのパーミッションを比較できます。restart.shに実行ビット(x)が" +
+      "立っているのは、これがデプロイ用の実行可能スクリプトだからです。",
+  },
+  {
+    id: "appendix-ex42",
+    chapterId: "appendix",
+    prompt:
+      "study@webserver にSSH接続したうえで、deploy/restart.sh の中身を確認してください" +
+      "(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "study@webserver にSSH接続してください。",
+      "deploy/restart.sh の中身を確認してください(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "ssh study@webserver; cat deploy/restart.sh",
+    hints: ["cat deploy/restart.sh で、スクリプトファイルの中身をそのままテキストとして表示できます。"],
+    explanation:
+      "deploy/restart.shは、systemctl restart nginx を実行してWebサーバーを再起動するためのデプロイ用" +
+      "スクリプトです。catコマンドはファイルの種類を問わずテキストとして中身を表示するため、実行権限の" +
+      "有無に関わらず内容を確認できます。",
+  },
+  {
+    id: "appendix-ex43",
+    chapterId: "appendix",
+    prompt:
+      "study@webserver にSSH接続したうえで、sudo を使って認証ログ(/var/log/auth.log)の中から" +
+      "publickeyという文字列を含む行だけを抽出してください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "study@webserver にSSH接続してください。",
+      "sudo を使って認証ログ(/var/log/auth.log)の中からpublickeyという文字列を含む行だけを抽出して" +
+        "ください(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "ssh study@webserver; sudo grep publickey /var/log/auth.log",
+    hints: [
+      "grep 検索文字列 ファイル名 で、指定した文字列を含む行だけを抽出できます。",
+      "auth.logはroot所有のためsudoが必要です。sudo grep publickey /var/log/auth.log のように実行します。",
+    ],
+    explanation:
+      "sudo grep publickey /var/log/auth.log を実行すると、auth.log内の「Accepted publickey for study" +
+      "...」という行が抽出されます。これは、studyユーザーが公開鍵認証でログインに成功したことを示す" +
+      "記録です。",
+  },
+  {
+    id: "appendix-ex44",
+    chapterId: "appendix",
+    prompt:
+      "study@webserver にSSH接続したうえで、sudo を使って認証ログ(/var/log/auth.log)の行数を数えて" +
+      "ください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "study@webserver にSSH接続してください。",
+      "sudo を使って認証ログ(/var/log/auth.log)の行数を数えてください" +
+        "(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "ssh study@webserver; sudo wc -l /var/log/auth.log",
+    hints: ["wc -l ファイル名 で、ファイルの行数を数えられます。sudoを付けるのを忘れないでください。"],
+    explanation:
+      "sudo wc -l /var/log/auth.log を実行すると、auth.logに記録された行数(このサンプルでは2行)が" +
+      "表示されます。root所有のファイルであっても、sudoを付けて実行すればwc等の他のコマンドと同様に" +
+      "内容を集計できます。",
+  },
+  {
+    id: "appendix-ex45",
+    chapterId: "appendix",
+    prompt:
+      "study@webserver にSSH接続したうえで、接続先ホストのホスト名(/etc/hostname)を確認し、続けて" +
+      "現在のカレントディレクトリも確認してください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "study@webserver にSSH接続してください。",
+      "接続先ホストのホスト名(/etc/hostname)を確認してください。",
+      "続けて現在のカレントディレクトリも確認してください(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "ssh study@webserver; cat /etc/hostname; pwd",
+    hints: [
+      "cat /etc/hostname でホスト名、pwd でカレントディレクトリを、それぞれ ; でつないで1行にまとめます。",
+    ],
+    explanation:
+      "cat /etc/hostname は「webserver」、pwd は接続直後のホームディレクトリである「/home/study」を" +
+      "それぞれ表示します。この2つを同時に確認することで、ホスト・カレントディレクトリの両方がsshに" +
+      "よってリモート側へ切り替わっていることがわかります。",
+  },
+  {
+    id: "appendix-ex46",
+    chapterId: "appendix",
+    prompt:
+      "study@webserver にSSH接続したうえで、.ssh ディレクトリへ移動し、カレントディレクトリと" +
+      "ディレクトリの中身をパーミッション付きで確認してください(1行のコマンドとして ; でつないで" +
+      "ください)。",
+    promptSteps: [
+      "study@webserver にSSH接続してください。",
+      ".ssh ディレクトリへ移動してください。",
+      "カレントディレクトリとディレクトリの中身をパーミッション付きで確認してください" +
+        "(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "ssh study@webserver; cd .ssh; pwd; ls -la",
+    hints: [
+      "cd .ssh で.sshディレクトリへ移動したあと、pwd と ls -la を続けて実行します。",
+    ],
+    explanation:
+      "cd .ssh で /home/study/.ssh へ移動すると、pwd はそのパスを表示します。続けて ls -la を実行すると、" +
+      "known_hostsとauthorized_keysに加え、カレントディレクトリ自体(.)の一覧にも700というパーミッション" +
+      "(所有者のみ読み書き実行可)が付いていることを確認できます。",
+  },
+  {
+    id: "appendix-ex47",
+    chapterId: "appendix",
+    prompt:
+      "study@webserver にSSH接続したうえで、ホームディレクトリの .bashrc の内容を確認してください" +
+      "(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "study@webserver にSSH接続してください。",
+      "ホームディレクトリの .bashrc の内容を確認してください(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "ssh study@webserver; cat .bashrc",
+    hints: ["cat .bashrc で、接続先ホスト上の.bashrcの内容を表示します。"],
+    explanation:
+      "webserver上の.bashrcには、ローカル環境とは異なるプロンプト設定(PS1)やエイリアス定義が書かれて" +
+      "います。ローカルの~/.bashrcとは別のファイルであり、これもssh接続によってVFSがリモートホスト側へ" +
+      "切り替わっていることを確認する材料の一つです。",
+  },
+  {
+    id: "appendix-ex48",
+    chapterId: "appendix",
+    prompt:
+      "study@webserver にSSH接続したうえで、sudo を使って認証ログ(/var/log/auth.log)を表示しつつ、" +
+      "sessionという文字列を含む行だけに絞り込んでください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "study@webserver にSSH接続してください。",
+      "sudo を使って認証ログ(/var/log/auth.log)を表示しつつ、sessionという文字列を含む行だけに絞り込んで" +
+        "ください(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "ssh study@webserver; sudo cat /var/log/auth.log | grep session",
+    hints: [
+      "sudo cat /var/log/auth.log の出力を、パイプ(|)でgrep sessionに渡して絞り込みます。",
+      "sudoはパイプの最初のコマンド(cat)にだけ付ければ十分です。",
+    ],
+    explanation:
+      "sudo cat /var/log/auth.log | grep session は、root権限で読み出したauth.logの内容をパイプで" +
+      "grepへ渡し、sessionという文字列を含む行(session opened for user study の行)だけに絞り込みます。" +
+      "sudoは最初のcatコマンドにだけ必要で、パイプでつないだ後段のgrep自体はroot権限を必要としません。",
+  },
+  {
+    id: "appendix-ex49",
+    chapterId: "appendix",
+    prompt:
+      "study@webserver にSSH接続したうえで、Webサーバーのアクセスログ(/var/log/nginx/access.log)から" +
+      "ステータスコード200のアクセスだけを抽出してください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "study@webserver にSSH接続してください。",
+      "Webサーバーのアクセスログ(/var/log/nginx/access.log)からステータスコード200のアクセスだけを" +
+        "抽出してください(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "ssh study@webserver; cat /var/log/nginx/access.log | grep 200",
+    hints: ["cat でログ全体を出力し、パイプ(|)でgrep 200に渡して絞り込みます。"],
+    explanation:
+      "cat /var/log/nginx/access.log | grep 200 を実行すると、HTTPステータスコード200(正常応答)を含む" +
+      "アクセスログの行だけが抽出されます。access.logにはこのアプリ用のサンプルとして200・404を含む複数" +
+      "行が用意されており、grepで特定のパターンを含む行だけに絞り込む典型的な使い方の確認になります。",
+  },
+  {
+    id: "appendix-ex50",
+    chapterId: "appendix",
+    prompt:
+      "study@webserver にSSH接続してdeploy/README.mdの内容を確認したあと、exitでローカル環境に戻り、" +
+      "pwdでホームディレクトリに戻っていることを確認してください(1行のコマンドとして ; でつないで" +
+      "ください)。",
+    promptSteps: [
+      "study@webserver にSSH接続し、deploy/README.mdの内容を確認してください。",
+      "exitでローカル環境に戻ってください。",
+      "pwdでホームディレクトリに戻っていることを確認してください(1行のコマンドとして ; でつないで" +
+        "ください)。",
+    ],
+    referenceSolution: "ssh study@webserver; cat deploy/README.md; exit; pwd",
+    hints: [
+      "リモートホスト上でファイルを確認したあとも、exitを実行すればローカル環境の状態にそのまま復帰" +
+        "します。",
+    ],
+    explanation:
+      "ssh接続中にdeploy/README.mdのようなリモート専用のファイルを確認したあとでも、exitを実行すれば" +
+      "ローカル環境のカレントディレクトリ・ファイルシステムの状態にそのまま復帰します。pwdの結果が" +
+      "接続前と同じホームディレクトリになっていることで、ログアウトが正しく行われたことを確認できます。",
+  },
+  {
+    id: "appendix-ex51",
+    chapterId: "appendix",
+    prompt:
+      "study@webserver にSSH接続したうえで、sudo を使ってSSH設定ファイル(/etc/ssh/sshd_config)の" +
+      "パーミッションを600に変更し、変更後のパーミッションを /etc/ssh ディレクトリの一覧から確認して" +
+      "ください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "study@webserver にSSH接続してください。",
+      "sudo を使ってSSH設定ファイル(/etc/ssh/sshd_config)のパーミッションを600に変更してください。",
+      "変更後のパーミッションを /etc/ssh ディレクトリの一覧から確認してください" +
+        "(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "ssh study@webserver; sudo chmod 600 /etc/ssh/sshd_config; ls -l /etc/ssh",
+    hints: [
+      "sshd_configはroot所有のため、chmodするにはsudoが必要です。",
+      "sudo chmod 600 /etc/ssh/sshd_config のあとに ls -l /etc/ssh を続けます。",
+    ],
+    explanation:
+      "sudo chmod 600 /etc/ssh/sshd_config を実行すると、root所有のsshd_configであってもパーミッション" +
+      "を変更できます。続けて ls -l /etc/ssh を実行すると、sshd_configのパーミッション表示が644から600" +
+      "(所有者のみ読み書き可)に変わっていることを確認できます。",
+  },
 ];
 
 export const exercises: Exercise[] = [
