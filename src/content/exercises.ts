@@ -24645,8 +24645,9 @@ const exercisesPart4: Exercise[] = [
     ],
     explanation:
       "cd .ssh で /home/study/.ssh へ移動すると、pwd はそのパスを表示します。続けて ls -la を実行すると、" +
-      "known_hostsとauthorized_keysに加え、カレントディレクトリ自体(.)の一覧にも700というパーミッション" +
-      "(所有者のみ読み書き実行可)が付いていることを確認できます。",
+      "known_hosts(644)とauthorized_keys(600)の2つのファイルが一覧表示されます。.sshディレクトリ" +
+      "自体も700(所有者のみ読み書き実行可)というパーミッションが設定されており、他人が公開鍵の登録先" +
+      "ディレクトリを勝手に操作できないようになっています。",
   },
   {
     id: "appendix-ex47",
@@ -24669,23 +24670,22 @@ const exercisesPart4: Exercise[] = [
     id: "appendix-ex48",
     chapterId: "appendix",
     prompt:
-      "study@webserver にSSH接続したうえで、sudo を使って認証ログ(/var/log/auth.log)を表示しつつ、" +
-      "sessionという文字列を含む行だけに絞り込んでください(1行のコマンドとして ; でつないでください)。",
+      "study@webserver にSSH接続したうえで、sudo を使って認証ログ(/var/log/auth.log)から" +
+      "sessionという文字列を含む行だけを抽出してください(1行のコマンドとして ; でつないでください)。",
     promptSteps: [
       "study@webserver にSSH接続してください。",
-      "sudo を使って認証ログ(/var/log/auth.log)を表示しつつ、sessionという文字列を含む行だけに絞り込んで" +
-        "ください(1行のコマンドとして ; でつないでください)。",
+      "sudo を使って認証ログ(/var/log/auth.log)からsessionという文字列を含む行だけを抽出してください" +
+        "(1行のコマンドとして ; でつないでください)。",
     ],
-    referenceSolution:
-      "ssh study@webserver; sudo cat /var/log/auth.log | grep session",
+    referenceSolution: "ssh study@webserver; sudo grep session /var/log/auth.log",
     hints: [
-      "sudo cat /var/log/auth.log の出力を、パイプ(|)でgrep sessionに渡して絞り込みます。",
-      "sudoはパイプの最初のコマンド(cat)にだけ付ければ十分です。",
+      "grep 検索文字列 ファイル名 で、指定した文字列を含む行だけを抽出できます。",
+      "auth.logはroot所有のためsudoが必要です。sudo grep session /var/log/auth.log のように実行します。",
     ],
     explanation:
-      "sudo cat /var/log/auth.log | grep session は、root権限で読み出したauth.logの内容をパイプで" +
-      "grepへ渡し、sessionという文字列を含む行(session opened for user study の行)だけに絞り込みます。" +
-      "sudoは最初のcatコマンドにだけ必要で、パイプでつないだ後段のgrep自体はroot権限を必要としません。",
+      "sudo grep session /var/log/auth.log は、root権限でauth.logを読み取りながら、sessionという" +
+      "文字列を含む行(session opened for user study の行)だけに絞り込みます。auth.logはroot所有・600の" +
+      "ため、study権限のままではPermission deniedになり、sudoが必要です。",
   },
   {
     id: "appendix-ex49",
@@ -24698,13 +24698,10 @@ const exercisesPart4: Exercise[] = [
       "Webサーバーのアクセスログ(/var/log/nginx/access.log)からステータスコード200のアクセスだけを" +
         "抽出してください(1行のコマンドとして ; でつないでください)。",
     ],
-    referenceSolution:
-      "ssh study@webserver; cat /var/log/nginx/access.log | grep 200",
-    hints: [
-      "cat でログ全体を出力し、パイプ(|)でgrep 200に渡して絞り込みます。",
-    ],
+    referenceSolution: "ssh study@webserver; grep 200 /var/log/nginx/access.log",
+    hints: ["grep 検索文字列 ファイル名 で、指定した文字列を含む行だけを抽出できます。"],
     explanation:
-      "cat /var/log/nginx/access.log | grep 200 を実行すると、HTTPステータスコード200(正常応答)を含む" +
+      "grep 200 /var/log/nginx/access.log を実行すると、HTTPステータスコード200(正常応答)を含む" +
       "アクセスログの行だけが抽出されます。access.logにはこのアプリ用のサンプルとして200・404を含む複数" +
       "行が用意されており、grepで特定のパターンを含む行だけに絞り込む典型的な使い方の確認になります。",
   },

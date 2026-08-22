@@ -171,7 +171,7 @@ export const REMOTE_HOSTS: Readonly<Record<string, RemoteHostDefinition>> = {
       "ECDSA key fingerprint is SHA256:x7fQdV3n2m1z9y0aK6bR8pW4tL5cJ2hU1sN3vE9oQr0.\n" +
       "Are you sure you want to continue connecting (yes/no/[fingerprint])? yes\n" +
       "Warning: Permanently added 'webserver' (ECDSA) to the list of known hosts.\n" +
-      "Last login: Mon Jan  1 09:00:00 2024 from 203.0.113.5\n",
+      "Last login: Fri Jan 12 09:00:00 2024 from 203.0.113.5\n",
     snapshot: buildWebserverSnapshot(),
     homeDir: "/home/study",
   },
