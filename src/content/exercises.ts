@@ -3755,8 +3755,8 @@ const exercisesPart1: Exercise[] = [
     explanation:
       "$HOME/.bashrc は「対話的な非ログインシェル」(既存のターミナルで新しく開いたシェルなど)が起動するたびに" +
       "読み込まれる設定ファイルです。ログインシェル(SSH接続時やmacOSのTerminal.appのデフォルト設定など)では" +
-      "本来 .bash_profile が読み込まれますが、多くの環境では .bash_profile が .bashrc を読み込む(source する)" +
-      "よう設定されているため、結果的に .bashrc の内容も反映されます。エイリアスや環境変数の設定を" +
+      "本来 .bash_profile や .profile が読み込まれますが、多くの環境ではそれらのファイルが .bashrc を読み込む" +
+      "(source する)よう設定されているため、結果的に .bashrc の内容も反映されます。エイリアスや環境変数の設定を" +
       ".bashrc に書いておくことで、新しいターミナルを開くたびに自分好みの環境を再現できます。",
   },
   {
