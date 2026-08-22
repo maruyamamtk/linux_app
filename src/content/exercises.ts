@@ -18666,16 +18666,23 @@ const exercisesPart2: Exercise[] = [
     type: "quiz",
     prompt: "書籍の作法として、dnf installコマンドを実行する際の権限の扱いとして最も適切なものはどれですか?",
     choices: [
-      "#プロンプト(root権限)を前提として、rootユーザーとしてコマンドを直接実行する",
+      "root権限が必要であり、書籍ではsuコマンドでrootユーザーに切り替えた#プロンプトの状態で実行する作法が" +
+        "基本とされている(sudoを付けて実行しても同様にroot権限で実行できる)",
       "$プロンプト(一般ユーザー)のまま、sudoを付けずに直接実行する",
       "rootユーザーでは絶対に実行できない",
       "GUIツールを使わない限り、実行そのものができない",
     ],
     correctChoiceIndex: 0,
-    hints: ["書籍ではdnfコマンドを、rootユーザーに切り替えた状態(#プロンプト)で実行する作法が基本とされています。"],
+    hints: [
+      "書籍ではdnfコマンドを、rootユーザーに切り替えた状態(#プロンプト)で実行する作法が基本とされています。",
+      "sudoを付けて一般ユーザーのまま実行しても、その1コマンドだけはroot権限で実行されるため、" +
+        "同じように成功します。",
+    ],
     explanation:
       "書籍の作法では、dnf installのようなシステムを変更するdnfコマンドは、あらかじめsuコマンドなどで" +
-      "rootユーザーに切り替えた#プロンプトの状態で実行することが前提とされています。",
+      "rootユーザーに切り替えた#プロンプトの状態で実行することが基本とされています。ただし、いずれの方法も" +
+      "「root権限でコマンドを実行する」という点では同じであり、sudoを付けて一般ユーザーのまま実行しても" +
+      "dnf installは成功します(このアプリの他の演習ではsudo dnf installの形も数多く使っています)。",
   },
   {
     id: "ch20-ex32",
@@ -18699,7 +18706,8 @@ const exercisesPart2: Exercise[] = [
     id: "ch20-ex33",
     chapterId: "ch20",
     type: "quiz",
-    prompt: "dnf search・dnf info(またはapt search・apt show)のような操作にroot権限が不要な理由として、最も適切なものはどれですか?",
+    prompt:
+      "dnf search・dnf info(またはapt search・apt info)のような操作にroot権限が不要な理由として、最も適切なものはどれですか?",
     choices: [
       "システムの状態を変更しない、読み取り専用の操作だから",
       "これらのコマンドは、そもそもroot権限という概念自体を持たないコマンドだから",
@@ -18709,8 +18717,10 @@ const exercisesPart2: Exercise[] = [
     correctChoiceIndex: 0,
     hints: ["root権限が必要かどうかは、そのコマンドがシステムに変更を加えるかどうかで決まります。"],
     explanation:
-      "dnf search/infoやapt search/showは、リポジトリの情報を照会するだけでシステムのファイルを変更しない" +
-      "読み取り専用の操作です。そのため一般ユーザーの権限のままで実行でき、root権限は不要です。",
+      "dnf search/infoやapt search/infoは、リポジトリの情報を照会するだけでシステムのファイルを変更しない" +
+      "読み取り専用の操作です。そのため一般ユーザーの権限のままで実行でき、root権限は不要です" +
+      "(なお本アプリのapt infoは、実際のaptコマンドにおけるapt show相当の機能を、dnfと名前を揃えて" +
+      "infoという名前で提供しているものです)。",
   },
   {
     id: "ch20-ex34",
@@ -18954,10 +18964,16 @@ const exercisesPart2: Exercise[] = [
       "大文字のNは「Never」を意味し、二度と同じ質問が表示されなくなる",
     ],
     correctChoiceIndex: 0,
-    hints: ["[y/N]のように大文字になっているほうの選択肢が、Enterキーだけを押した場合のデフォルト値です。"],
+    hints: [
+      "[y/N]のように大文字になっているほうの選択肢が、Enterキーだけを押した場合のデフォルト値です。",
+      "本アプリの仮想dnfコマンドはこの確認プロンプト自体を表示せず、常に即座にインストールを完了する" +
+        "簡略化した実装になっています。ここでは実際のdnfコマンドの仕様として覚えてください。",
+    ],
     explanation:
       "dnfの確認プロンプトは[y/N]という表記になっており、大文字のNがデフォルト値であることを示します。" +
-      "つまり、何も入力せずEnterキーだけを押すと「No」として扱われ、インストールは中止されます。",
+      "つまり、何も入力せずEnterキーだけを押すと「No」として扱われ、インストールは中止されます" +
+      "(本アプリの仮想dnfコマンドはこの確認プロンプト自体を再現しておらず、-yの有無にかかわらず即座に" +
+      "インストールが完了します)。",
   },
   {
     id: "ch20-ex48",
@@ -18971,12 +18987,17 @@ const exercisesPart2: Exercise[] = [
       "[Y/n]と[y/N]は表記が異なるだけで、意味する内容は同じである",
     ],
     correctChoiceIndex: 0,
-    hints: ["大文字になっている側の選択肢が、Enterキーだけを押した場合に採用されるデフォルト値です。"],
+    hints: [
+      "大文字になっている側の選択肢が、Enterキーだけを押した場合に採用されるデフォルト値です。",
+      "本アプリの仮想dnf/aptコマンドはこの確認プロンプト自体を表示せず、常に即座に処理を完了する" +
+        "簡略化した実装になっています。ここでは実際のコマンドの仕様として覚えてください。",
+    ],
     explanation:
       "apt installの確認プロンプトは[Y/n]と表記され、大文字のYがデフォルトのため、Enterキーだけを押すと" +
       "「Yes」(インストールする)として扱われます。一方dnf installの確認プロンプトは[y/N]と表記され、" +
       "大文字のNがデフォルトのため、Enterキーだけを押すと「No」(インストールしない)として扱われます。" +
-      "同じ確認プロンプトでも、dnfとaptでデフォルトの挙動が逆になっている点に注意が必要です。",
+      "同じ確認プロンプトでも、dnfとaptでデフォルトの挙動が逆になっている点に注意が必要です" +
+      "(本アプリの仮想コマンドはこの確認プロンプト自体を再現しておらず、常に即座に処理が完了します)。",
   },
   {
     id: "ch20-ex49",
@@ -18990,10 +19011,15 @@ const exercisesPart2: Exercise[] = [
       "検索対象はインストール済みパッケージのみで、未インストールのパッケージは検索されない",
     ],
     correctChoiceIndex: 0,
-    hints: ["dnf searchは何も付けない状態では比較的狭い範囲、--allを付けると広い範囲を検索します。"],
+    hints: [
+      "dnf searchは何も付けない状態では比較的狭い範囲、--allを付けると広い範囲を検索します。",
+      "本アプリの仮想dnfコマンドはこの--allによる検索範囲の違いまでは再現していないため、実際に--allを" +
+        "付けても付けなくても検索結果は変わりません。ここでは実際のdnfコマンドの仕様として覚えてください。",
+    ],
     explanation:
       "dnf searchは、デフォルトではパッケージ名と要約(summary)のみを検索対象とします。説明文(description)" +
-      "まで含めたより広い範囲を全文検索したい場合は、--allオプションを付けます。",
+      "まで含めたより広い範囲を全文検索したい場合は、--allオプションを付けます(本アプリの仮想dnfコマンドは" +
+      "この違いまでは再現していないため、--allの有無で検索結果が変わって見えるわけではありません)。",
   },
   {
     id: "ch20-ex50",
@@ -19017,7 +19043,9 @@ const exercisesPart2: Exercise[] = [
       "apt searchはデフォルトで説明文(description)まで含めた広い範囲を検索対象とし、パッケージ名だけに" +
       "絞り込みたい場合は--names-onlyオプションを付けます。一方dnf searchはデフォルトではパッケージ名と" +
       "要約(summary)のみを検索対象とし、説明文まで含めた全文検索をしたい場合は--allオプションを付けます。" +
-      "同じ「search」でも、dnfとaptではデフォルトの検索範囲の広さが逆になっている点に注意が必要です。",
+      "同じ「search」でも、dnfとaptではデフォルトの検索範囲の広さが逆になっている点に注意が必要です" +
+      "(本アプリの仮想コマンドはこの範囲の違いまでは再現していないため、実際にオプションを付け外ししても" +
+      "検索結果は変わりません。ここでは実際のdnf/aptコマンドの仕様として覚えてください)。",
   },
 
   {
@@ -19228,7 +19256,7 @@ const exercisesPart2: Exercise[] = [
       "「No matches found.」と表示されることを確認してください。",
     referenceSolution: "dnf search kubernetes",
     hints: [
-      "この仮想リポジトリには固定の15種類程度のパッケージしか登録されていません。",
+      "この仮想リポジトリには固定の16種類のパッケージしか登録されていません。",
       "一致するパッケージが無い場合はエラーにはならず、「No matches found.」という1行が表示されるだけで正常終了します。",
     ],
     explanation:
@@ -19358,11 +19386,12 @@ const exercisesPart2: Exercise[] = [
   {
     id: "ch20-ex73",
     chapterId: "ch20",
-    prompt: "python3 が依存する python3-libs パッケージ自体の詳細情報を dnf コマンドで単体で確認してください。",
+    prompt:
+      "python3 が依存する python3-libs パッケージ自体の詳細情報を dnf コマンドで単体で確認してください。",
     referenceSolution: "dnf info python3-libs",
     hints: [
       "python3-libsはpython3の依存パッケージですが、python3-libs自体はさらに他のパッケージに依存していません。",
-      "dnf info python3-libs は、python3をインストールしているかどうかに関わらず実行できます。",
+      "dnf info はインストール状況に関わらず、指定したパッケージ単体の情報のみを表示します。",
     ],
     explanation:
       "python3-libsはpython3をインストールする際に自動的に一緒にインストールされる依存パッケージですが、" +
@@ -19450,7 +19479,7 @@ const exercisesPart2: Exercise[] = [
       "エラーメッセージは「No matching Packages to list」です。",
     ],
     explanation:
-      "dnf info パッケージ名 に、この仮想リポジトリ(固定の15種類程度のパッケージ)に登録されていない名前を" +
+      "dnf info パッケージ名 に、この仮想リポジトリ(固定の16種類のパッケージ)に登録されていない名前を" +
       "指定すると、「Error: No matching Packages to list」というエラーメッセージが表示されます。" +
       "dnf search が該当なしでも正常終了(終了コード0)するのに対し、dnf info は該当パッケージが無いと" +
       "エラー終了する点が異なります。",
@@ -20015,7 +20044,7 @@ const exercisesPart2: Exercise[] = [
       "空文字列になり、正常終了(終了コード0)することを確認してください。",
     referenceSolution: "apt search ansible",
     hints: [
-      "この仮想リポジトリには固定の15種類程度のパッケージしか登録されていません。",
+      "この仮想リポジトリには固定の16種類のパッケージしか登録されていません。",
       "dnf search がマッチなしのとき「No matches found.」と表示するのに対し、apt search はマッチなしの場合" +
         "何も表示せず、標準出力が完全に空の文字列になります(それでも終了コードは0の正常終了です)。",
     ],
@@ -20235,7 +20264,7 @@ const exercisesPart2: Exercise[] = [
     referenceSolution: "apt info python3-libs",
     hints: [
       "python3-libsはpython3の依存パッケージですが、python3-libs自体はさらに他のパッケージに依存していません。",
-      "apt info python3-libs は、python3をインストールしているかどうかに関わらず実行できます。",
+      "apt info はpython3をインストールしているかどうかに関わらず、指定したパッケージ単体の情報のみを表示します。",
     ],
     explanation:
       "python3-libsはpython3をインストールする際に自動的に一緒にインストールされる依存パッケージですが、" +
@@ -20289,7 +20318,7 @@ const exercisesPart2: Exercise[] = [
         "指定したときと同じ文言です)。",
     ],
     explanation:
-      "apt info パッケージ名 に、この仮想リポジトリ(固定の15種類程度のパッケージ)に登録されていない名前を" +
+      "apt info パッケージ名 に、この仮想リポジトリ(固定の16種類のパッケージ)に登録されていない名前を" +
       "指定すると、「E: Unable to locate package foobar」というエラーメッセージが表示されます。" +
       "apt search が該当なしでも正常終了(終了コード0、出力は空文字列)するのに対し、apt info は該当" +
       "パッケージが無いとエラー終了する点が異なります。",
@@ -20605,7 +20634,8 @@ const exercisesPart2: Exercise[] = [
       "apt info パッケージ名 は Package/Version/Installed-Size/Depends/Description を表示しますが、" +
       "そのパッケージがインストール済みかどうかを示す見出しは持ちません。そのため sudo apt install curl の" +
       "前後どちらで apt info curl を実行しても、「Depends: libcurl4」を含む出力内容は変わりません。この点は" +
-      "見出しがAvailable/Installedで切り替わる dnf info とは異なる、apt info特有の性質です。",
+      "見出しがAvailable/Installedで切り替わる dnf info とは異なる、apt info特有の性質です" +
+      "(なお apt info は本アプリ独自のサブコマンド名で、実際のaptコマンドではapt showに相当します)。",
   },
   {
     id: "ch20-ex143",
