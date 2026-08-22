@@ -117,11 +117,15 @@ function buildWebserverSnapshot(): VfsSnapshot {
                     group: "study",
                     mode: 0o644,
                   }),
-                  authorized_keys: createFile("authorized_keys", AUTHORIZED_KEYS, {
-                    owner: "study",
-                    group: "study",
-                    mode: 0o600,
-                  }),
+                  authorized_keys: createFile(
+                    "authorized_keys",
+                    AUTHORIZED_KEYS,
+                    {
+                      owner: "study",
+                      group: "study",
+                      mode: 0o600,
+                    },
+                  ),
                 },
                 { owner: "study", group: "study", mode: 0o700 },
               ),
