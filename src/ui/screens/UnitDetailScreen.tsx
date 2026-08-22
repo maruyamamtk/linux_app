@@ -38,10 +38,7 @@ export function UnitDetailScreen({ navigation, route }: Props) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <View style={styles.headerRow}>
-          <Text style={styles.title}>{chapter.title}</Text>
-          <Text style={styles.phase}>Phase {chapter.phase}</Text>
-        </View>
+        <Text style={styles.title}>{chapter.title}</Text>
         <Text style={styles.description}>{chapter.description}</Text>
         {chapterExercises.length > 0 && (
           <>
@@ -112,9 +109,7 @@ function createStyles(colors: ThemeColors) {
       borderBottomWidth: StyleSheet.hairlineWidth,
       borderBottomColor: colors.border,
     },
-    headerRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
     title: { fontSize: 20, fontWeight: "700", color: colors.text },
-    phase: { fontSize: 12, color: colors.textMuted },
     description: { fontSize: 14, color: colors.textSecondary, lineHeight: 20 },
     progressLabel: { fontSize: 12, color: colors.textSecondary },
     list: { flexGrow: 1 },
