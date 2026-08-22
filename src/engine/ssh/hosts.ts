@@ -22,6 +22,28 @@ const DEPLOY_README = `# webserver デプロイ手順
 切り替わっていることを確認するためのファイルです。
 `;
 
+const RESTART_SH = `#!/bin/bash
+# webserver上でnginxを再起動するデプロイ用スクリプト
+systemctl restart nginx
+echo "nginx restarted"
+`;
+
+const SSHD_CONFIG = `Port 22
+PermitRootLogin no
+PasswordAuthentication no
+PubkeyAuthentication yes
+`;
+
+const KNOWN_HOSTS = `webserver ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBBx7fQdV3n2m1z9y0aK6bR8pW4tL5cJ2hU1sN3vE9oQr0
+`;
+
+const AUTHORIZED_KEYS = `ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGx7fQdV3n2m1z9y0aK6bR8pW4tL5cJ2hU1sN3vE9oQr0 study@local
+`;
+
+const AUTH_LOG = `Jan 12 09:00:00 webserver sshd[1234]: Accepted publickey for study from 203.0.113.5 port 51234 ssh2
+Jan 12 09:00:00 webserver sshd[1234]: pam_unix(sshd:session): session opened for user study
+`;
+
 function buildWebserverSnapshot(): VfsSnapshot {
   const root = createDirectory(
     "",
@@ -34,6 +56,17 @@ function buildWebserverSnapshot(): VfsSnapshot {
             group: "root",
             mode: 0o644,
           }),
+          ssh: createDirectory(
+            "ssh",
+            {
+              sshd_config: createFile("sshd_config", SSHD_CONFIG, {
+                owner: "root",
+                group: "root",
+                mode: 0o644,
+              }),
+            },
+            { owner: "root", group: "root", mode: 0o755 },
+          ),
         },
         { owner: "root", group: "root", mode: 0o755 },
       ),
@@ -54,6 +87,11 @@ function buildWebserverSnapshot(): VfsSnapshot {
                 },
                 { owner: "root", group: "root", mode: 0o755 },
               ),
+              "auth.log": createFile("auth.log", AUTH_LOG, {
+                owner: "root",
+                group: "root",
+                mode: 0o600,
+              }),
             },
             { owner: "root", group: "root", mode: 0o755 },
           ),
@@ -71,6 +109,22 @@ function buildWebserverSnapshot(): VfsSnapshot {
                 group: "study",
                 mode: 0o644,
               }),
+              ".ssh": createDirectory(
+                ".ssh",
+                {
+                  known_hosts: createFile("known_hosts", KNOWN_HOSTS, {
+                    owner: "study",
+                    group: "study",
+                    mode: 0o644,
+                  }),
+                  authorized_keys: createFile("authorized_keys", AUTHORIZED_KEYS, {
+                    owner: "study",
+                    group: "study",
+                    mode: 0o600,
+                  }),
+                },
+                { owner: "study", group: "study", mode: 0o700 },
+              ),
               deploy: createDirectory(
                 "deploy",
                 {
@@ -78,6 +132,11 @@ function buildWebserverSnapshot(): VfsSnapshot {
                     owner: "study",
                     group: "study",
                     mode: 0o644,
+                  }),
+                  "restart.sh": createFile("restart.sh", RESTART_SH, {
+                    owner: "study",
+                    group: "study",
+                    mode: 0o755,
                   }),
                 },
                 { owner: "study", group: "study", mode: 0o755 },
