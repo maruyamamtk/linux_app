@@ -38,10 +38,7 @@ export function MyPageScreen({ navigation }: Props) {
 
           return (
             <View style={styles.row}>
-              <View style={styles.rowHeader}>
-                <Text style={styles.title}>{chapter.title}</Text>
-                <Text style={styles.phase}>Phase {chapter.phase}</Text>
-              </View>
+              <Text style={styles.title}>{chapter.title}</Text>
               {chapterExercises.length > 0 ? (
                 <>
                   <ProgressBar progress={progress} />
@@ -120,13 +117,7 @@ function createStyles(colors: ThemeColors) {
       borderBottomColor: colors.border,
       gap: 6,
     },
-    rowHeader: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "center",
-    },
     title: { fontSize: 16, color: colors.text },
-    phase: { fontSize: 12, color: colors.textMuted },
     progressLabel: { fontSize: 12, color: colors.textSecondary },
     comingSoon: { fontSize: 12, color: colors.textMuted },
     reviewSection: { paddingBottom: 8 },

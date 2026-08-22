@@ -92,7 +92,7 @@
 - 各演習は上記シードデータの一部(または演習専用の小さな追加スナップショット)を初期状態として読み込む。
 
 ## 5. 画面構成(主要スクリーン)
-1. **ホーム/章一覧画面**: 章ごとの進捗率、Phase1/Phase2のバッジ
+1. **ホーム/章一覧画面**: 章ごとの進捗率(Phase1/Phase2は開発優先度の分類であり学習者向けには表示しない)
 2. **ユニット詳細画面**: 各章内の演習リスト、解説テキスト(教科書の要約を再構成したミニ解説)
 3. **ターミナル演習画面**: 仮想ターミナル+課題文+ヒントボタン+「実行」「答え合わせ」導線
 4. **スクリプト作成画面**: コードエディタ(シンタックスハイライト)+テストケース結果パネル
@@ -102,7 +102,7 @@
 8. **使い方(ヘルプ)画面**: ターミナル演習の基本操作・ヒント/解答解説の見方・進捗管理・演習種別ごとの違いを説明。章一覧画面ヘッダーから遷移
 
 ## 6. データモデル(概略)
-- `Chapter { id, title, phase }`
+- `Chapter { id, title, phase }` (`phase`は開発優先度の分類用フィールドで、UI表示には使わない)
 - `Exercise { id, chapterId, type(terminal|script|vim|git|quiz), prompt, initialVfsSnapshotId, referenceSolution, testCases?, hints[] }`
 - `VfsSnapshot { id, tree(JSON) }`
 - `Progress { exerciseId, status(未着手|正解|要復習), lastAttemptAt }`(端末ローカル保存, AsyncStorage or expo-sqlite)
