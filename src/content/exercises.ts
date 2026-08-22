@@ -23925,4 +23925,16 @@ const exercisesPart3: Exercise[] = [
   },
 ];
 
-export const exercises: Exercise[] = [...exercisesPart1, ...exercisesPart2, ...exercisesPart3];
+/**
+ * TypeScriptの単一配列の型チェック上限(TS2590)を回避するための4つ目の`Exercise[]`定数。
+ * appendix(付録: SSH接続・infoコマンド・日本語入力)演習をappendix-ex13以降として追加していく。
+ * `exercisesPart2`(appendix-ex01〜12を含む既存分)には一切手を加えない。
+ */
+const exercisesPart4: Exercise[] = [];
+
+export const exercises: Exercise[] = [
+  ...exercisesPart1,
+  ...exercisesPart2,
+  ...exercisesPart3,
+  ...exercisesPart4,
+];
