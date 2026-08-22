@@ -23925,4 +23925,1692 @@ const exercisesPart3: Exercise[] = [
   },
 ];
 
-export const exercises: Exercise[] = [...exercisesPart1, ...exercisesPart2, ...exercisesPart3];
+/**
+ * TypeScriptの単一配列の型チェック上限(TS2590)を回避するための4つ目の`Exercise[]`定数。
+ * appendix(付録: SSH接続・infoコマンド・日本語入力)演習をappendix-ex13以降として追加していく。
+ * `exercisesPart2`(appendix-ex01〜12を含む既存分)には一切手を加えない。
+ */
+const exercisesPart4: Exercise[] = [
+  {
+    id: "appendix-ex13",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt: "SSHについての説明として最も適切なものはどれですか?",
+    choices: [
+      "TCPの22番ポートを使って通信する、暗号化されたリモートログイン等のためのプロトコルの名前",
+      "特定のディストリビューションだけに搭載されている、Linux専用のシェルの名前",
+      "HTTPを暗号化するための拡張規格で、Webブラウザだけが利用するプロトコル",
+      "ファイルの圧縮率を高めるためのアーカイブ形式の名前",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["SSHはコマンド名である前に、ネットワークプロトコルの名前です。"],
+    explanation:
+      "SSH(Secure Shell)は、TCPの22番ポートを使って通信を行う、暗号化されたネットワークプロトコルの" +
+      "名前です。sshコマンドはこのプロトコルを使ってリモートログインを行うためのクライアントの一つに" +
+      "すぎず、SSHというプロトコル自体はリモートログイン以外の用途にも使われます。",
+  },
+  {
+    id: "appendix-ex14",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt: "SSHプロトコルの用途として適切でないものはどれですか?",
+    choices: [
+      "ローカルのファイルシステムを暗号化して保存すること",
+      "scpやsftpコマンドを使った、リモートホストとの間でのファイル転送",
+      "リモートホストの特定のポートへの通信を、暗号化された経路にトンネリングするポートフォワーディング",
+      "リモートホストへログインし、シェルを操作すること",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "SSHは「ネットワーク越しの通信」を安全にするための仕組みであり、ローカルディスクの暗号化とは" +
+        "別の話です。",
+    ],
+    explanation:
+      "SSHはリモートログインだけでなく、scp/sftpによるファイル転送や、ポートフォワーディング(あるポートへ" +
+      "の通信をSSHの暗号化された経路越しに転送する仕組み)など、幅広い用途で利用されます。一方、ローカルの" +
+      "ファイルシステムを暗号化して保存する機能はSSHとは無関係です。",
+  },
+  {
+    id: "appendix-ex15",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "SSHクライアントの利用環境についての説明として最も適切なものはどれですか?",
+    choices: [
+      "macOSは標準でsshコマンドが使えるが、古いWindowsでは標準搭載されておらずPuTTYやTera Term等の" +
+        "別ソフトが必要だった(近年のWindows10/11ではOpenSSHクライアントが標準搭載されている)",
+      "sshコマンドはmacOS専用であり、Windowsでは原理的に利用不可能である",
+      "sshコマンドはWindows専用であり、macOSやLinuxでは利用できない",
+      "sshコマンドはLinuxディストリビューションのうち、特定の1つにしか存在しない",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["OS標準搭載かどうかという観点で選択肢を見比べてみましょう。"],
+    explanation:
+      "macOSにはsshコマンドが標準で搭載されており、ターミナルからすぐに利用できます。一方、Windowsは" +
+      "従来sshコマンドを標準搭載しておらず、PuTTYやTera Termといった別ソフトウェアのインストールが必要" +
+      "でした。ただし近年のWindows10/11ではOpenSSHクライアントが標準機能として搭載されており、" +
+      "コマンドプロンプトやPowerShellから直接sshコマンドを使えるようになっています。",
+  },
+  {
+    id: "appendix-ex16",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "初めて接続するホストにsshした際、次のようなメッセージが表示されました。この直後にsshが求めている" +
+      "入力として最も適切なものはどれですか?\n" +
+      "「The authenticity of host 'webserver (203.0.113.10)' can't be established.\n" +
+      "ECDSA key fingerprint is SHA256:x7fQ....\n" +
+      "Are you sure you want to continue connecting (yes/no/[fingerprint])?」",
+    choices: [
+      "yes / no のいずれか、またはfingerprintそのものの入力",
+      "接続先ユーザーのパスワード",
+      "リモートホストのrootパスワード",
+      "接続先ホストの秘密鍵のパス",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "プロンプトの末尾に (yes/no/[fingerprint]) と表示されている部分がヒントです。",
+    ],
+    explanation:
+      "初回接続時にsshが表示するこの警告は、接続先ホストの公開鍵(ホスト鍵)がまだ~/.ssh/known_hostsに" +
+      "登録されておらず、真正性(なりすましでないか)を確認できないことを知らせるものです。プロンプトの" +
+      "指示どおり、yes/no、またはfingerprintの値そのものを入力して応答します。パスワードの入力は、この" +
+      "確認に「yes」と答えたあとに別途求められます。",
+  },
+  {
+    id: "appendix-ex17",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "前問の確認メッセージに対して yes と答えると、続けて次のようなメッセージが表示されました。" +
+      "「Warning: Permanently added 'webserver' (ECDSA) to the list of known hosts.」これが意味する" +
+      "こととして最も適切なものはどれですか?",
+    choices: [
+      "接続先ホストのホスト鍵が、手元の ~/.ssh/known_hosts に新しく記録された",
+      "接続先ホストのパスワードが手元のPCに保存された",
+      "接続先ホストが、手元のPCの公開鍵をauthorized_keysに登録した",
+      "接続がタイムアウトし、次回以降は接続できなくなった",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "「known hosts」は、この後sshが参照するファイル名そのものを指しています。",
+    ],
+    explanation:
+      "「Permanently added ... to the list of known hosts.」は、接続先ホストのホスト鍵が手元の" +
+      "~/.ssh/known_hostsファイルに新規追加されたことを知らせるメッセージです。次回以降、同じホストへ" +
+      "接続する際はこのファイルに記録された鍵と照合されるため、初回のような警告は表示されなくなります。",
+  },
+  {
+    id: "appendix-ex18",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "~/.ssh/known_hosts というファイルの役割として最も適切なものはどれですか?",
+    choices: [
+      "過去に接続したことのあるSSHサーバーのホスト名と、そのホスト鍵(公開鍵)の組を記録しておくファイル",
+      "サーバーへログインするための自分のパスワードを平文で保存しておくファイル",
+      "サーバー側に登録した自分の公開鍵の一覧を保存しておくファイル",
+      "SSHの接続ログ(誰がいつ接続したか)を記録するファイル",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "「known hosts」=「既知のホスト」という名前のとおり、接続実績のあるホストの情報を記録します。",
+      "サーバー側に登録する公開鍵の置き場所とは別のファイルです(そちらは authorized_keys)。",
+    ],
+    explanation:
+      "~/.ssh/known_hostsは、過去に一度でも接続したことのあるSSHサーバーについて、そのホスト名とホスト鍵" +
+      "(公開鍵)の組を記録しておくファイルです。2回目以降の接続時には、このファイルの内容とサーバーが" +
+      "提示する鍵を照合することで、なりすましのサーバーへ誤って接続していないかを確認しています。",
+  },
+  {
+    id: "appendix-ex19",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "VirtualBox上の仮想マシン(ゲストOS)へ、ホストOSからNATネットワーク経由でSSH接続したい場合に" +
+      "一般的に必要となる設定はどれですか?",
+    choices: [
+      "ホスト側の適当なポート(例: 2222番)から、ゲスト側の22番ポートへ転送するポートフォワーディング設定",
+      "ゲストOS側のsshdサービスを完全に無効化する設定",
+      "ホストOSのファイアウォールで、全てのポートへの通信を遮断する設定",
+      "ゲストOSのネットワークアダプタを取り外す設定",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "NATネットワークでは、ゲストOSは外部から直接見えないため、ホスト側の特定ポートを経由させる必要が" +
+        "あります。",
+    ],
+    explanation:
+      "VirtualBoxのNATネットワークは、ゲストOSを外部のネットワークから直接見えないように隠す方式のため、" +
+      "そのままではホストOSからゲストOSへsshで直接接続できません。そこで、ホスト側の任意のポート" +
+      "(例: 2222番)への通信を、ゲスト側の22番ポート(sshdの待受ポート)へ転送するポートフォワーディング" +
+      "設定を行うことで、ホストOSから `ssh -p 2222 user@localhost` のような形でゲストOSへ接続できるように" +
+      "なります。",
+  },
+  {
+    id: "appendix-ex20",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt: "SSHの公開鍵認証の仕組みとして最も適切なものはどれですか?",
+    choices: [
+      "ssh-keygenで秘密鍵と公開鍵のペアを生成し、公開鍵だけを接続先サーバーに登録することで、鍵の対応" +
+        "関係を使ってパスワードなしにログインできるようにする仕組み",
+      "サーバー側で生成した1つの共通パスワードを、全ユーザーで使い回す仕組み",
+      "接続のたびにサーバーが自動生成する使い捨てのワンタイムパスワードを、SMSで受け取る仕組み",
+      "クライアント側に一切の鍵を保存せず、毎回サーバー側で新しい鍵ペアを生成し直す仕組み",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["「公開」鍵と「秘密」鍵の2つがペアで生成される点がポイントです。"],
+    explanation:
+      "公開鍵認証では、ssh-keygenコマンドで秘密鍵・公開鍵のペアを生成し、公開鍵だけを接続先サーバーの" +
+      "~/.ssh/authorized_keysに登録します。ログイン時にはこの鍵ペアを使った暗号学的な確認が行われ、" +
+      "パスワードを入力しなくてもログインできるようになります。",
+  },
+  {
+    id: "appendix-ex21",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt: "公開鍵認証において、生成した公開鍵を登録すべき場所はどれですか?",
+    choices: [
+      "接続先サーバー上の、ログインしたいユーザーの ~/.ssh/authorized_keys",
+      "接続元(手元)のPC上の ~/.ssh/authorized_keys",
+      "接続先サーバーの /etc/passwd",
+      "接続元(手元)のPC上の ~/.ssh/known_hosts",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "「authorized(許可された)keys」というファイル名が、置き場所を示すヒントです。",
+    ],
+    explanation:
+      "公開鍵は接続先サーバー側の、ログインしたいユーザーのホームディレクトリにある" +
+      "~/.ssh/authorized_keysに登録します。これにより、対応する秘密鍵を持つクライアントからの接続だけが" +
+      "許可されるようになります。known_hostsは逆に、クライアント側で「接続したことのあるサーバー」を" +
+      "記録するためのファイルであり、役割が異なります。",
+  },
+  {
+    id: "appendix-ex22",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "SSHの公開鍵認証における「秘密鍵」の取り扱いとして最も適切なものはどれですか?",
+    choices: [
+      "秘密鍵は接続元のPCだけに保管し、他人に渡したりサーバーへ送信したりしてはならない",
+      "秘密鍵は接続先サーバーの authorized_keys に登録して初めて使えるようになる",
+      "秘密鍵は誰に共有しても安全性に影響しないため、チームで使い回してよい",
+      "秘密鍵は毎回の接続のたびにサーバーへ送信され、サーバー側で検証される",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["「秘密」鍵という名前のとおり、外部に漏らしてはいけない鍵です。"],
+    explanation:
+      "秘密鍵は本人であることを証明するための鍵であり、接続元のPC上だけに厳重に保管し、他人へ渡したり" +
+      "ネットワーク経由でサーバーへ送信したりしてはいけません。認証の際、秘密鍵そのものはネットワークに" +
+      "流れず、サーバー側には対になる公開鍵だけを登録します。秘密鍵が漏えいすると、なりすましログインが" +
+      "可能になってしまいます。",
+  },
+  {
+    id: "appendix-ex23",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "webserverのsshd_configには次の設定が書かれています。\n" +
+      "PasswordAuthentication no\n" +
+      "PubkeyAuthentication yes\n" +
+      "この設定の効果として最も適切なものはどれですか?",
+    choices: [
+      "パスワードによるログインを禁止し、公開鍵認証によるログインのみを許可する",
+      "公開鍵認証によるログインを禁止し、パスワードによるログインのみを許可する",
+      "すべてのユーザーのログインを禁止する",
+      "rootユーザーのみパスワードでログインできるようにする",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "PasswordAuthentication no は「パスワード認証を許可しない」という意味です。",
+    ],
+    explanation:
+      "PasswordAuthentication noはパスワードによる認証を禁止する設定、PubkeyAuthentication yesは" +
+      "公開鍵認証を許可する設定です。この2つを組み合わせることで、あらかじめ登録された公開鍵に対応する" +
+      "秘密鍵を持つクライアントからの接続のみを許可し、パスワードでのログインを一切受け付けないように" +
+      "できます。",
+  },
+  {
+    id: "appendix-ex24",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "サーバーの設定で「パスワード認証を禁止し、公開鍵認証のみを許可する」ことの主なメリットとして" +
+      "最も適切なものはどれですか?",
+    choices: [
+      "パスワードを次々に試すブルートフォース攻撃(総当たり攻撃)への耐性を高められる",
+      "サーバーのディスク使用量を削減できる",
+      "サーバーの起動時間を短縮できる",
+      "ネットワークの通信速度が向上する",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "パスワード認証には「弱いパスワードを推測・総当たりされる」というリスクがあります。",
+    ],
+    explanation:
+      "パスワード認証を無効化し公開鍵認証のみを許可すると、攻撃者が正しい秘密鍵を持たない限りログインが" +
+      "成立しなくなるため、パスワードを次々に試すブルートフォース攻撃に対する耐性が大きく高まります。" +
+      "サーバーの性能面(ディスク使用量や起動時間、通信速度)とは直接関係ありません。",
+  },
+  {
+    id: "appendix-ex25",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "sshd_configの設定項目 `PermitRootLogin no` の意味として最も適切なものはどれですか?",
+    choices: [
+      "rootユーザーによる直接のSSHログインを禁止する",
+      "root以外の全ユーザーによるSSHログインを禁止する",
+      "SSH接続そのものを一切禁止する",
+      "rootユーザーがsudoコマンドを使うことを禁止する",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "PermitRootLoginは「rootによるログインを許可するか」を表す設定項目です。",
+    ],
+    explanation:
+      "PermitRootLogin noは、rootユーザーがSSH経由で直接ログインすることを禁止する設定です。運用上は" +
+      "一般ユーザーでログインしたのちに必要に応じてsudoやsuで権限を昇格する運用が推奨されており、この" +
+      "設定はその方針を強制するために使われます。",
+  },
+  {
+    id: "appendix-ex26",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "sshd_configの設定項目 `Port 22` の意味として最も適切なものはどれですか?",
+    choices: [
+      "sshdデーモンが接続を待ち受けるTCPポート番号を22番に設定している",
+      "同時にSSH接続できる最大ユーザー数を22人に制限している",
+      "パスワードの最大文字数を22文字に制限している",
+      "ログイン試行を22回失敗すると接続を拒否する設定である",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "Portという項目名から、ネットワークのポート番号に関する設定だと推測できます。",
+    ],
+    explanation:
+      "sshd_configのPort項目は、sshdデーモンが接続を待ち受けるTCPポート番号を指定する設定です。22番は" +
+      "SSHの標準ポート(well-known port)であり、特に理由がなければこの値が使われます。セキュリティ対策" +
+      "として、この番号を標準以外に変更して運用する場合もあります。",
+  },
+  {
+    id: "appendix-ex27",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "SSH接続先のサーバー上でのプロセスの親子関係についての説明として最も適切なものはどれですか?",
+    choices: [
+      "接続を受け付けたsshdデーモンが、接続してきたユーザーのログインシェルを子プロセスとして起動する",
+      "接続してきたクライアント側のシェルが、サーバー上のsshdデーモンの親プロセスになる",
+      "サーバー上ではsshdとログインシェルの間に親子関係は一切生まれない",
+      "サーバー上ではログインのたびに新しいsshdデーモン本体そのものが再起動される",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "ps xf のようなコマンドでプロセスツリーを表示すると、親子関係を視覚的に確認できます。",
+    ],
+    explanation:
+      "SSH接続すると、接続を受け付けたサーバー側のsshdデーモンが、その接続ユーザーのログインシェル" +
+      "(bash等)を子プロセスとして起動します。ps xf のようにプロセスツリーを表示すると、sshdの下に" +
+      "ログインシェルがぶら下がっている様子を確認できます。",
+  },
+  {
+    id: "appendix-ex28",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "SSHが普及する以前に、リモートログインの用途で広く使われていた古いプロトコルはどれですか?",
+    choices: [
+      "telnetやrlogin、rshといった、通信内容を暗号化しないプロトコル",
+      "HTTPSやTLSといった、Webブラウザ向けの暗号化プロトコル",
+      "DNSやDHCPといった、ネットワークの名前解決・設定自動化のためのプロトコル",
+      "FTP以外のあらゆるファイル転送プロトコル",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "これらのプロトコルは通信内容が平文(暗号化なし)でやり取りされる点が共通しています。",
+    ],
+    explanation:
+      "SSHが普及する以前は、telnetやrlogin、rshといったプロトコルがリモートログインの用途で使われて" +
+      "いましたが、いずれも通信内容を暗号化しないため、経路上で盗聴されるとパスワードや実行内容が漏えい" +
+      "する危険がありました。SSHはこれらを安全に置き換えるプロトコルとして普及しました。",
+  },
+  {
+    id: "appendix-ex29",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "コマンド `ssh webserver`(ユーザー名を省略した場合)の動作として最も適切なものはどれですか?",
+    choices: [
+      "手元の環境で現在ログインしているユーザー名を使って、webserverへの接続を試みる",
+      "webserverへの接続に失敗し、必ずエラーになる",
+      "常にrootユーザーとしてwebserverへ接続する",
+      "webserver側の最初に登録されたユーザーとして自動的に接続する",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "`ssh [ユーザー名@]ホスト名` という書式で、ユーザー名部分は省略可能です。",
+    ],
+    explanation:
+      "`ssh ホスト名` のようにユーザー名を省略した場合、sshコマンドは手元の環境で現在ログインしている" +
+      "ユーザー名を使って接続を試みます。接続先に同名のユーザーが存在しない場合は認証に失敗するため、" +
+      "多くの場合は `ssh ユーザー名@ホスト名` のように明示的にユーザー名を指定します。",
+  },
+  {
+    id: "appendix-ex30",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "SSH接続時に表示される「ホスト鍵のfingerprint」の役割として最も適切なものはどれですか?",
+    choices: [
+      "接続先ホストが本当に意図したサーバーであり、なりすましでないかを利用者が確認するための手がかり",
+      "接続元ユーザーのパスワードを暗号化して保存するための鍵",
+      "ファイルの圧縮率を高めるために使われる識別子",
+      "サーバーのCPU使用率を表す指標",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "fingerprint(指紋)という名前のとおり、ホスト鍵を人間が識別・照合するための短い値です。",
+    ],
+    explanation:
+      "ホスト鍵のfingerprintは、接続先サーバーが提示する公開鍵(ホスト鍵)を要約した短い値です。初回接続" +
+      "時にこの値を確認することで、利用者は接続先が本当に意図したサーバーであり、経路の途中でなりすまし" +
+      "(中間者攻撃)が行われていないかを(理論上は)照合できます。",
+  },
+  {
+    id: "appendix-ex31",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "~/.ssh/authorized_keys の一般的なパーミッション設定として適切なものはどれですか?",
+    choices: [
+      "所有者(自分)だけが読み書きできる600のような、他ユーザーからは読めない権限",
+      "全ユーザーが自由に読み書きできる666のような権限",
+      "全ユーザーが実行できる777のような権限",
+      "所有者にも読み取り権限すら与えない000のような権限",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "このファイルには「ログインを許可する公開鍵」の一覧が書かれており、他人に書き換えられると" +
+        "セキュリティ上の重大な問題になります。",
+    ],
+    explanation:
+      "authorized_keysには、そのユーザーとしてのログインを許可する公開鍵の一覧が書かれています。他人が" +
+      "このファイルに自分の公開鍵を書き加えられると、パスワードなしで不正にログインされてしまうため、" +
+      "所有者以外は読み書きできない600のような厳格なパーミッションが設定されるのが一般的です。",
+  },
+  {
+    id: "appendix-ex32",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "~/.ssh/known_hosts に記録される情報として最も適切なものはどれですか?",
+    choices: [
+      "接続したことのあるホストの名前(またはIPアドレス)と、そのホストの公開鍵(ホスト鍵)の組",
+      "接続したことのあるホストで実行した全コマンドの履歴",
+      "自分がサーバーへ登録した公開鍵と、対応する秘密鍵の組",
+      "サーバー側で発行されたワンタイムパスワードの一覧",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "ファイルを開くと、1行が「ホスト名 鍵の種類 鍵の値」のような形式で並んでいます。",
+    ],
+    explanation:
+      "known_hostsの各行には、接続したことのあるホストの名前(またはIPアドレス)と、そのホストが提示した" +
+      "公開鍵(ホスト鍵)の種類・値が記録されています。2回目以降の接続時にはこの内容と照合することで、" +
+      "接続先が変わっていないか(なりすましでないか)を確認しています。",
+  },
+  {
+    id: "appendix-ex33",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt: "ssh-keygenコマンドの役割として最も適切なものはどれですか?",
+    choices: [
+      "公開鍵認証で使う秘密鍵・公開鍵のペアを新しく生成する",
+      "接続先サーバーへファイルを転送する",
+      "SSH接続そのものを開始する",
+      "サーバー上のパスワードを変更する",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["名前のとおり、鍵(key)を生成(generate)するコマンドです。"],
+    explanation:
+      "ssh-keygenは、公開鍵認証で使う秘密鍵・公開鍵のペアを新しく生成するコマンドです。生成した公開鍵を" +
+      "接続先サーバーのauthorized_keysに登録することで、以後はパスワードなしで公開鍵認証によるログインが" +
+      "できるようになります。ファイル転送(scp/sftp)や実際の接続(ssh)は別のコマンドの役割です。",
+  },
+  {
+    id: "appendix-ex34",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt: "scpコマンドについての説明として最も適切なものはどれですか?",
+    choices: [
+      "SSHのプロトコルを使って、リモートホストとの間でファイルをコピーするコマンド",
+      "リモートホストへログインし、対話的にコマンドを実行するためのコマンド",
+      "ローカルのファイルを暗号化して保存するためのコマンド",
+      "パッケージ管理システムからソフトウェアをインストールするためのコマンド",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "scpは「secure copy」の略で、cpコマンドのSSH版のようなものだとイメージしてください。",
+    ],
+    explanation:
+      "scpは「secure copy」の略で、SSHのプロトコルを使ってローカルとリモートホストの間(あるいはリモート" +
+      "ホスト同士の間)でファイルをコピーするコマンドです。sshコマンドがリモートログインに使われるのに" +
+      "対し、scpはファイル転送に特化している点が異なります(sftpという対話的なファイル転送コマンドも" +
+      "同様にSSHプロトコルを利用します)。",
+  },
+  {
+    id: "appendix-ex35",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "sshで接続する際に付けられることがある `-p` オプションの一般的な役割として最も適切なものはどれですか?",
+    choices: [
+      "接続先ポート番号を22番以外の値に指定する",
+      "接続先ホストのパスワードを直接コマンドラインで指定する",
+      "接続後に実行するプログラムの優先度(priority)を指定する",
+      "接続に使う秘密鍵ファイルのパスを指定する",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "sshd_configのPort設定を標準の22番以外に変更しているサーバーへ接続する場面を思い浮かべてください。",
+    ],
+    explanation:
+      "sshコマンドの-pオプションは、接続先ポート番号を指定するためのものです。サーバー側でsshd_configの" +
+      "Portが22番以外に変更されている場合、クライアント側でも `ssh -p ポート番号 ユーザー名@ホスト名` の" +
+      "ように同じポート番号を指定する必要があります(なお、このアプリの仮想端末ではオプション解析には" +
+      "対応しておらず、`ssh [ユーザー名@]ホスト名` の書式のみをterminal型演習として扱います)。",
+  },
+  {
+    id: "appendix-ex36",
+    chapterId: "appendix",
+    prompt:
+      "study@webserver にSSH接続したうえで、サーバー側のSSH設定ファイル(/etc/ssh/sshd_config)の内容を" +
+      "確認してください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "study@webserver にSSH接続してください。",
+      "サーバー側のSSH設定ファイル(/etc/ssh/sshd_config)の内容を確認してください" +
+        "(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "ssh study@webserver; cat /etc/ssh/sshd_config",
+    hints: [
+      "絶対パス /etc/ssh/sshd_config を指定して cat コマンドで表示します。",
+    ],
+    explanation:
+      "/etc/ssh/sshd_configはsshdデーモンの設定ファイルです。今回のサンプルにはPort 22 /" +
+      "PermitRootLogin no / PasswordAuthentication no / PubkeyAuthentication yes という4行が" +
+      "書かれており、パスワード認証を禁止して公開鍵認証のみを許可する設定になっていることが確認できます。",
+  },
+  {
+    id: "appendix-ex37",
+    chapterId: "appendix",
+    prompt:
+      "study@webserver にSSH接続したうえで、ホームディレクトリ直下の .ssh ディレクトリの内容を、" +
+      "パーミッションを含めて詳しく一覧表示してください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "study@webserver にSSH接続してください。",
+      "ホームディレクトリ直下の .ssh ディレクトリの内容を、パーミッションを含めて詳しく一覧表示して" +
+        "ください(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "ssh study@webserver; ls -la .ssh",
+    hints: [
+      "接続直後のカレントディレクトリはホームディレクトリなので、相対パス .ssh を指定します。",
+      "ls -la で、隠しファイルも含めてパーミッション付きの詳細な一覧を表示できます。",
+    ],
+    explanation:
+      "ls -la .ssh を実行すると、known_hosts(644)とauthorized_keys(600)という2つのファイルの" +
+      "パーミッションを確認できます。authorized_keysが所有者以外読み書きできない600になっているのは、" +
+      "他人がこのファイルを書き換えてなりすましログインできてしまうことを防ぐためです。",
+  },
+  {
+    id: "appendix-ex38",
+    chapterId: "appendix",
+    prompt:
+      "study@webserver にSSH接続したうえで、~/.ssh/known_hosts の内容を確認してください" +
+      "(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "study@webserver にSSH接続してください。",
+      "ホームディレクトリの .ssh/known_hosts の内容を確認してください(1行のコマンドとして ; でつないで" +
+        "ください)。",
+    ],
+    referenceSolution: "ssh study@webserver; cat .ssh/known_hosts",
+    hints: [
+      "接続直後のカレントディレクトリから見た相対パス .ssh/known_hosts を指定します。",
+    ],
+    explanation:
+      "known_hostsには、このwebserverというホスト名とそのホスト鍵(ECDSA鍵)の組が1行記録されています。" +
+      "これは、初回接続時の確認で「yes」と答えた際に自動的に追記された内容です。",
+  },
+  {
+    id: "appendix-ex39",
+    chapterId: "appendix",
+    prompt:
+      "study@webserver にSSH接続したうえで、~/.ssh/authorized_keys の内容を確認してください" +
+      "(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "study@webserver にSSH接続してください。",
+      "ホームディレクトリの .ssh/authorized_keys の内容を確認してください(1行のコマンドとして ; で" +
+        "つないでください)。",
+    ],
+    referenceSolution: "ssh study@webserver; cat .ssh/authorized_keys",
+    hints: [
+      "接続直後のカレントディレクトリから見た相対パス .ssh/authorized_keys を指定します。",
+    ],
+    explanation:
+      "authorized_keysには、studyユーザーとしてのログインを許可する公開鍵が1行登録されています。この" +
+      "公開鍵に対応する秘密鍵を持つクライアントは、パスワードなしで公開鍵認証によりログインできます。",
+  },
+  {
+    id: "appendix-ex40",
+    chapterId: "appendix",
+    prompt:
+      "study@webserver にSSH接続したうえで、sudo を使って認証ログ(/var/log/auth.log)の内容を確認して" +
+      "ください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "study@webserver にSSH接続してください。",
+      "sudo を使って認証ログ(/var/log/auth.log)の内容を確認してください" +
+        "(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "ssh study@webserver; sudo cat /var/log/auth.log",
+    hints: [
+      "/var/log/auth.log はroot所有・600の権限のため、studyユーザーのままcatすると権限エラーになります。",
+      "sudo cat /var/log/auth.log のように、sudoを付けてroot権限で実行してください。",
+    ],
+    explanation:
+      "/var/log/auth.logはroot:root所有・600(所有者のみ読み書き可)というパーミッションのため、一般" +
+      "ユーザーのstudyのままではPermission deniedになります。sudoを付けて一時的にroot権限で実行すると、" +
+      "sshdによる公開鍵認証成功のログ等を読むことができます。",
+  },
+  {
+    id: "appendix-ex41",
+    chapterId: "appendix",
+    prompt:
+      "study@webserver にSSH接続したうえで、deploy ディレクトリの内容をパーミッション付きで一覧表示して" +
+      "ください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "study@webserver にSSH接続してください。",
+      "deploy ディレクトリの内容をパーミッション付きで一覧表示してください" +
+        "(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "ssh study@webserver; ls -l deploy",
+    hints: [
+      "ls -l deploy で、deployディレクトリ内のファイルのパーミッションを確認できます。",
+    ],
+    explanation:
+      "ls -l deploy を実行すると、README.md(644、実行不可)とrestart.sh(755、所有者・グループ・その他" +
+      "全員が実行可能)という2つのファイルのパーミッションを比較できます。restart.shに実行ビット(x)が" +
+      "立っているのは、これがデプロイ用の実行可能スクリプトだからです。",
+  },
+  {
+    id: "appendix-ex42",
+    chapterId: "appendix",
+    prompt:
+      "study@webserver にSSH接続したうえで、deploy/restart.sh の中身を確認してください" +
+      "(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "study@webserver にSSH接続してください。",
+      "deploy/restart.sh の中身を確認してください(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "ssh study@webserver; cat deploy/restart.sh",
+    hints: [
+      "cat deploy/restart.sh で、スクリプトファイルの中身をそのままテキストとして表示できます。",
+    ],
+    explanation:
+      "deploy/restart.shは、systemctl restart nginx を実行してWebサーバーを再起動するためのデプロイ用" +
+      "スクリプトです。catコマンドはファイルの種類を問わずテキストとして中身を表示するため、実行権限の" +
+      "有無に関わらず内容を確認できます。",
+  },
+  {
+    id: "appendix-ex43",
+    chapterId: "appendix",
+    prompt:
+      "study@webserver にSSH接続したうえで、sudo を使って認証ログ(/var/log/auth.log)の中から" +
+      "publickeyという文字列を含む行だけを抽出してください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "study@webserver にSSH接続してください。",
+      "sudo を使って認証ログ(/var/log/auth.log)の中からpublickeyという文字列を含む行だけを抽出して" +
+        "ください(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution:
+      "ssh study@webserver; sudo grep publickey /var/log/auth.log",
+    hints: [
+      "grep 検索文字列 ファイル名 で、指定した文字列を含む行だけを抽出できます。",
+      "auth.logはroot所有のためsudoが必要です。sudo grep publickey /var/log/auth.log のように実行します。",
+    ],
+    explanation:
+      "sudo grep publickey /var/log/auth.log を実行すると、auth.log内の「Accepted publickey for study" +
+      "...」という行が抽出されます。これは、studyユーザーが公開鍵認証でログインに成功したことを示す" +
+      "記録です。",
+  },
+  {
+    id: "appendix-ex44",
+    chapterId: "appendix",
+    prompt:
+      "study@webserver にSSH接続したうえで、sudo を使って認証ログ(/var/log/auth.log)の行数を数えて" +
+      "ください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "study@webserver にSSH接続してください。",
+      "sudo を使って認証ログ(/var/log/auth.log)の行数を数えてください" +
+        "(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "ssh study@webserver; sudo wc -l /var/log/auth.log",
+    hints: [
+      "wc -l ファイル名 で、ファイルの行数を数えられます。sudoを付けるのを忘れないでください。",
+    ],
+    explanation:
+      "sudo wc -l /var/log/auth.log を実行すると、auth.logに記録された行数(このサンプルでは2行)が" +
+      "表示されます。root所有のファイルであっても、sudoを付けて実行すればwc等の他のコマンドと同様に" +
+      "内容を集計できます。",
+  },
+  {
+    id: "appendix-ex45",
+    chapterId: "appendix",
+    prompt:
+      "study@webserver にSSH接続したうえで、接続先ホストのホスト名(/etc/hostname)を確認し、続けて" +
+      "現在のカレントディレクトリも確認してください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "study@webserver にSSH接続してください。",
+      "接続先ホストのホスト名(/etc/hostname)を確認してください。",
+      "続けて現在のカレントディレクトリも確認してください(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "ssh study@webserver; cat /etc/hostname; pwd",
+    hints: [
+      "cat /etc/hostname でホスト名、pwd でカレントディレクトリを、それぞれ ; でつないで1行にまとめます。",
+    ],
+    explanation:
+      "cat /etc/hostname は「webserver」、pwd は接続直後のホームディレクトリである「/home/study」を" +
+      "それぞれ表示します。この2つを同時に確認することで、ホスト・カレントディレクトリの両方がsshに" +
+      "よってリモート側へ切り替わっていることがわかります。",
+  },
+  {
+    id: "appendix-ex46",
+    chapterId: "appendix",
+    prompt:
+      "study@webserver にSSH接続したうえで、.ssh ディレクトリへ移動し、カレントディレクトリと" +
+      "ディレクトリの中身をパーミッション付きで確認してください(1行のコマンドとして ; でつないで" +
+      "ください)。",
+    promptSteps: [
+      "study@webserver にSSH接続してください。",
+      ".ssh ディレクトリへ移動してください。",
+      "カレントディレクトリとディレクトリの中身をパーミッション付きで確認してください" +
+        "(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "ssh study@webserver; cd .ssh; pwd; ls -la",
+    hints: [
+      "cd .ssh で.sshディレクトリへ移動したあと、pwd と ls -la を続けて実行します。",
+    ],
+    explanation:
+      "cd .ssh で /home/study/.ssh へ移動すると、pwd はそのパスを表示します。続けて ls -la を実行すると、" +
+      "known_hosts(644)とauthorized_keys(600)の2つのファイルが一覧表示されます。.sshディレクトリ" +
+      "自体も700(所有者のみ読み書き実行可)というパーミッションが設定されており、他人が公開鍵の登録先" +
+      "ディレクトリを勝手に操作できないようになっています。",
+  },
+  {
+    id: "appendix-ex47",
+    chapterId: "appendix",
+    prompt:
+      "study@webserver にSSH接続したうえで、ホームディレクトリの .bashrc の内容を確認してください" +
+      "(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "study@webserver にSSH接続してください。",
+      "ホームディレクトリの .bashrc の内容を確認してください(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "ssh study@webserver; cat .bashrc",
+    hints: ["cat .bashrc で、接続先ホスト上の.bashrcの内容を表示します。"],
+    explanation:
+      "webserver上の.bashrcには、ローカル環境とは異なるプロンプト設定(PS1)やエイリアス定義が書かれて" +
+      "います。ローカルの~/.bashrcとは別のファイルであり、これもssh接続によってVFSがリモートホスト側へ" +
+      "切り替わっていることを確認する材料の一つです。",
+  },
+  {
+    id: "appendix-ex48",
+    chapterId: "appendix",
+    prompt:
+      "study@webserver にSSH接続したうえで、sudo を使って認証ログ(/var/log/auth.log)から" +
+      "sessionという文字列を含む行だけを抽出してください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "study@webserver にSSH接続してください。",
+      "sudo を使って認証ログ(/var/log/auth.log)からsessionという文字列を含む行だけを抽出してください" +
+        "(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "ssh study@webserver; sudo grep session /var/log/auth.log",
+    hints: [
+      "grep 検索文字列 ファイル名 で、指定した文字列を含む行だけを抽出できます。",
+      "auth.logはroot所有のためsudoが必要です。sudo grep session /var/log/auth.log のように実行します。",
+    ],
+    explanation:
+      "sudo grep session /var/log/auth.log は、root権限でauth.logを読み取りながら、sessionという" +
+      "文字列を含む行(session opened for user study の行)だけに絞り込みます。auth.logはroot所有・600の" +
+      "ため、study権限のままではPermission deniedになり、sudoが必要です。",
+  },
+  {
+    id: "appendix-ex49",
+    chapterId: "appendix",
+    prompt:
+      "study@webserver にSSH接続したうえで、Webサーバーのアクセスログ(/var/log/nginx/access.log)から" +
+      "ステータスコード200のアクセスだけを抽出してください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "study@webserver にSSH接続してください。",
+      "Webサーバーのアクセスログ(/var/log/nginx/access.log)からステータスコード200のアクセスだけを" +
+        "抽出してください(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution: "ssh study@webserver; grep 200 /var/log/nginx/access.log",
+    hints: ["grep 検索文字列 ファイル名 で、指定した文字列を含む行だけを抽出できます。"],
+    explanation:
+      "grep 200 /var/log/nginx/access.log を実行すると、HTTPステータスコード200(正常応答)を含む" +
+      "アクセスログの行だけが抽出されます。access.logにはこのアプリ用のサンプルとして200・404を含む複数" +
+      "行が用意されており、grepで特定のパターンを含む行だけに絞り込む典型的な使い方の確認になります。",
+  },
+  {
+    id: "appendix-ex50",
+    chapterId: "appendix",
+    prompt:
+      "study@webserver にSSH接続してdeploy/README.mdの内容を確認したあと、exitでローカル環境に戻り、" +
+      "pwdでホームディレクトリに戻っていることを確認してください(1行のコマンドとして ; でつないで" +
+      "ください)。",
+    promptSteps: [
+      "study@webserver にSSH接続し、deploy/README.mdの内容を確認してください。",
+      "exitでローカル環境に戻ってください。",
+      "pwdでホームディレクトリに戻っていることを確認してください(1行のコマンドとして ; でつないで" +
+        "ください)。",
+    ],
+    referenceSolution: "ssh study@webserver; cat deploy/README.md; exit; pwd",
+    hints: [
+      "リモートホスト上でファイルを確認したあとも、exitを実行すればローカル環境の状態にそのまま復帰" +
+        "します。",
+    ],
+    explanation:
+      "ssh接続中にdeploy/README.mdのようなリモート専用のファイルを確認したあとでも、exitを実行すれば" +
+      "ローカル環境のカレントディレクトリ・ファイルシステムの状態にそのまま復帰します。pwdの結果が" +
+      "接続前と同じホームディレクトリになっていることで、ログアウトが正しく行われたことを確認できます。",
+  },
+  {
+    id: "appendix-ex51",
+    chapterId: "appendix",
+    prompt:
+      "study@webserver にSSH接続したうえで、sudo を使ってSSH設定ファイル(/etc/ssh/sshd_config)の" +
+      "パーミッションを600に変更し、変更後のパーミッションを /etc/ssh ディレクトリの一覧から確認して" +
+      "ください(1行のコマンドとして ; でつないでください)。",
+    promptSteps: [
+      "study@webserver にSSH接続してください。",
+      "sudo を使ってSSH設定ファイル(/etc/ssh/sshd_config)のパーミッションを600に変更してください。",
+      "変更後のパーミッションを /etc/ssh ディレクトリの一覧から確認してください" +
+        "(1行のコマンドとして ; でつないでください)。",
+    ],
+    referenceSolution:
+      "ssh study@webserver; sudo chmod 600 /etc/ssh/sshd_config; ls -l /etc/ssh",
+    hints: [
+      "sshd_configはroot所有のため、chmodするにはsudoが必要です。",
+      "sudo chmod 600 /etc/ssh/sshd_config のあとに ls -l /etc/ssh を続けます。",
+    ],
+    explanation:
+      "sudo chmod 600 /etc/ssh/sshd_config を実行すると、root所有のsshd_configであってもパーミッション" +
+      "を変更できます。続けて ls -l /etc/ssh を実行すると、sshd_configのパーミッション表示が644から600" +
+      "(所有者のみ読み書き可)に変わっていることを確認できます。",
+  },
+  {
+    id: "appendix-ex52",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "infoコマンドの表示画面で、Spaceキー・Backspaceキーを押したときの動作として最も適切なものはどれですか?",
+    choices: [
+      "Spaceキーで画面を1つ先へ、Backspaceキーで画面を1つ前へスクロールする",
+      "Spaceキーで次のノードへ、Backspaceキーで前のノードへ移動する",
+      "Spaceキーでinfoを終了し、Backspaceキーでヘルプ画面を表示する",
+      "SpaceキーとBackspaceキーはinfo画面では何も反応しない",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["manページのスクロール操作と同じキーが使われます。"],
+    explanation:
+      "infoの表示中は、manページと同様にSpaceキーで次の画面へ、Backspaceキーで前の画面へスクロール" +
+      "できます。ノード自体の移動(n/p/u)とは別の操作です。",
+  },
+  {
+    id: "appendix-ex53",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "infoコマンドでSpaceキー・Backspaceキーによる画面スクロールの代わりに使える、Emacs風の" +
+      "キー操作の組み合わせはどれですか?",
+    choices: [
+      "Ctrl-v(次の画面へ)とMeta-v(前の画面へ)",
+      "Ctrl-c(次の画面へ)とCtrl-z(前の画面へ)",
+      "Ctrl-d(次の画面へ)とCtrl-u(前の画面へ)",
+      "Tab(次の画面へ)とShift-Tab(前の画面へ)",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "Emacsエディタで画面をスクロールする際のキー操作と同じ組み合わせです。",
+    ],
+    explanation:
+      "infoはEmacs由来の操作体系を多く取り入れており、画面スクロールについてもSpace/Backspaceの代わりに" +
+      "Ctrl-v(次の画面)・Meta-v(前の画面)というEmacs風のキー操作が使えます。",
+  },
+  {
+    id: "appendix-ex54",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "infoコマンドの表示中に ] キーを押すと、どのような動作になりますか?",
+    choices: [
+      "現在のノードの階層(親子関係)を無視して、文書全体の中で単純に「次のノード」へ移動する",
+      "現在のノードの1つ上の階層のノードへ移動する",
+      "infoを終了する",
+      "直前に見ていたノードへ戻る",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "nキーが「同じ階層内の次のノード」へ移動するのに対し、]キーは階層を意識しません。",
+    ],
+    explanation:
+      "]キーは、メニューや階層構造を無視して、文書全体を線形に読み進めたときの「次のノード」へ単純に" +
+      "移動します。nキーが同じ階層内の兄弟ノードへの移動なのに対し、]キーはより機械的な移動です。",
+  },
+  {
+    id: "appendix-ex55",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "infoコマンドの表示中に [ キーを押すと、どのような動作になりますか?",
+    choices: [
+      "現在のノードの階層(親子関係)を無視して、文書全体の中で単純に「前のノード」へ移動する",
+      "現在のノードの1つ下の階層のノード(メニューの先頭)へ移動する",
+      "infoのヘルプ画面を表示する",
+      "現在のノードのTopノードへ移動する",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["]キーの逆方向の動作だと考えてください。"],
+    explanation:
+      "[キーは]キーの逆方向で、階層を意識せずに文書全体を線形に読み進めたときの「前のノード」へ単純に" +
+      "移動します。pキーが同じ階層内の兄弟ノードへの移動なのに対し、[キーはより機械的な移動です。",
+  },
+  {
+    id: "appendix-ex56",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "infoコマンドにおける n/p キーと ]/[ キーの違いとして最も適切なものはどれですか?",
+    choices: [
+      "n/pは同じ階層内の兄弟ノードへの移動、]/[は階層を無視した文書全体での単純な次/前ノードへの移動",
+      "n/pは画面のスクロール専用、]/[はリンクをたどるための専用キーである",
+      "n/pはメニュー項目のみに使え、]/[はメニュー以外のノードにしか使えない",
+      "n/pと]/[はまったく同じ動作をする、単なるキーの割り当て違いにすぎない",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["「階層を意識するかどうか」という観点で両者を比較してみましょう。"],
+    explanation:
+      "nキー・pキーは現在のノードと同じ階層にある兄弟ノード(次/前)へ移動するのに対し、]キー・[キーは" +
+      "階層構造を無視し、文書全体を通して読み進めたときに次/前にあたるノードへ単純に移動します。目的が" +
+      "近いキーですが、階層を意識するかどうかという点で挙動が異なります。",
+  },
+  {
+    id: "appendix-ex57",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "infoコマンドの表示中に u キーを押すと、どのような動作になりますか?",
+    choices: [
+      "現在のノードよりも1つ上の階層のノードへ移動する",
+      "現在のノードよりも1つ下の階層のノードへ移動する",
+      "画面を1つ上にスクロールする(Backspaceと同じ)",
+      "直前に見ていたノードの履歴を1つ戻る",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["「up」の頭文字だと考えると覚えやすいキーです。"],
+    explanation:
+      "uキーは、現在のノードよりも1つ上の階層のノード(親ノード)へ移動します。n/pが同じ階層内での" +
+      "水平方向の移動なのに対し、uは階層を1段上へさかのぼる垂直方向の移動です。",
+  },
+  {
+    id: "appendix-ex58",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "infoコマンドの表示中に、メニュー内のリンクへカーソルを移動するためのキーはどれですか?",
+    choices: [
+      "Tabキー(押すたびに次のリンクへカーソルが移動する)",
+      "Spaceキー(押すたびに画面がスクロールし、同時にリンクへも移動する)",
+      "qキー(押すとリンクへ移動したあとinfoが終了する)",
+      "uキー(押すと1つ上の階層のリンクへ移動する)",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "Webブラウザでリンクからリンクへフォーカスを移すときと同じキーです。",
+    ],
+    explanation:
+      "Tabキーを押すと、現在のノード内にあるリンク(メニュー項目)へ順にカーソルが移動します。カーソルを" +
+      "リンクの上に置いた状態でEnterキーを押すと、そのリンク先のノードへ移動できます。",
+  },
+  {
+    id: "appendix-ex59",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "infoコマンドで、Tabキーによってカーソルをリンク(メニュー項目)の上に移動させたあと、そのリンク先へ" +
+      "実際に移動するために押すキーはどれですか?",
+    choices: ["Enterキー", "Spaceキー", "Backspaceキー", "qキー"],
+    correctChoiceIndex: 0,
+    hints: ["Webページでリンクをクリックする操作に近い動作です。"],
+    explanation:
+      "カーソルがリンクの上にある状態でEnterキーを押すと、そのリンク先のノードへ移動します。Webページで" +
+      "リンクをクリックする操作をキーボードだけで行うイメージです。",
+  },
+  {
+    id: "appendix-ex60",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "infoコマンドで、Tabキーとは逆に「前のリンク」へカーソルを移動させたい場合に使うキーはどれですか?",
+    choices: [
+      "Meta-Tab(Alt-Tab)",
+      "Shift-Space",
+      "Ctrl-Tab",
+      "l(小文字のエル)",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["Metaキー(多くの環境ではAltキー)とTabキーの組み合わせです。"],
+    explanation:
+      "Meta-Tab(多くのキーボードではAlt-Tab)を押すと、Tabキーとは逆方向に、1つ前のリンクへカーソルが" +
+      "移動します。Tabキーで進みすぎたリンクへ戻りたいときに使います。",
+  },
+  {
+    id: "appendix-ex61",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "infoコマンドの表示中に l(小文字のエル)キーを押すと、どのような動作になりますか?",
+    choices: [
+      "直前に見ていたノードへ、履歴を1つ戻る(Webブラウザの「戻る」に近い動作)",
+      "現在のノードのリンク一覧を表示する",
+      "infoを終了し、シェルのプロンプトに戻る",
+      "現在のノードの内容をファイルへ保存する",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["「戻る」を意味する英単語の頭文字だと考えてみてください。"],
+    explanation:
+      "lキーは、これまでに閲覧したノードの履歴をたどって1つ前のノードへ戻る操作です。n/p/uのような文書" +
+      "構造上の移動とは異なり、Webブラウザの「戻る」ボタンのように、実際にたどってきた閲覧履歴を戻る点が" +
+      "特徴です。",
+  },
+  {
+    id: "appendix-ex62",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "infoコマンドの表示中に使える、bashの行編集と同じEmacs風のカーソル移動キーの組み合わせとして" +
+      "適切なものはどれですか?",
+    choices: [
+      "Ctrl-n/Ctrl-p(下/上)、Ctrl-f/Ctrl-b(右/左)",
+      "Ctrl-x/Ctrl-c(下/上)、Ctrl-v/Ctrl-z(右/左)",
+      "Ctrl-1/Ctrl-2(下/上)、Ctrl-3/Ctrl-4(右/左)",
+      "F1/F2(下/上)、F3/F4(右/左)",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "bashでコマンドラインを編集する際に使うEmacs風キーバインドを思い出してください。",
+    ],
+    explanation:
+      "infoの画面内では、Ctrl-n/Ctrl-p(next/previousの頭文字、下/上への移動)、Ctrl-f/Ctrl-b" +
+      "(forward/backwardの頭文字、右/左への移動)という、bashの行編集(readline)と同じEmacs風の" +
+      "カーソル移動キーが使えます。",
+  },
+  {
+    id: "appendix-ex63",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "infoコマンドの表示中に Ctrl-a と Ctrl-e を押すと、それぞれどのような動作になりますか?",
+    choices: [
+      "Ctrl-aで行頭へ、Ctrl-eで行末へカーソルを移動する",
+      "Ctrl-aですべてのノードを選択し、Ctrl-eで選択を解除する",
+      "Ctrl-aでinfo全体を終了し、Ctrl-eでヘルプ画面を表示する",
+      "Ctrl-aで次のノードへ、Ctrl-eで前のノードへ移動する",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["bashで行頭・行末へ移動する際に使うキーと同じです。"],
+    explanation:
+      "Ctrl-aは行頭(beginning)、Ctrl-eは行末(end)へカーソルを移動するキーです。これもbashの行編集" +
+      "(readline)と共通する、Emacs風のキーバインドです。",
+  },
+  {
+    id: "appendix-ex64",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt: "infoコマンドの表示中に H キー(大文字)を押すと、どうなりますか?",
+    choices: [
+      "infoの操作方法をまとめたヘルプ画面が表示される",
+      "現在のノードの内容がすべて削除される",
+      "infoが強制終了され、シェルへ戻る",
+      "現在のノードの内容がホームディレクトリへ保存される",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["「Help」の頭文字だと考えると覚えやすいキーです。"],
+    explanation:
+      "Hキー(大文字)を押すと、infoの主要な操作方法をまとめたヘルプ画面が表示されます。操作方法を" +
+      "忘れてしまった場合に、まず確認するとよい画面です。",
+  },
+  {
+    id: "appendix-ex65",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt: "infoコマンドを終了するためのキー操作として正しいものはどれですか?",
+    choices: [
+      "qキーだけでなく、Ctrl-x Ctrl-c(C-x C-c)というキー操作でも終了できる",
+      "Ctrl-cキーでのみ終了でき、それ以外のキーでは終了できない",
+      "infoには終了するためのキー操作が存在せず、ターミナルごと閉じるしかない",
+      "マウスで右クリックしないと終了できない",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "manページのqキーによる終了と同様の操作に加え、Emacsの終了操作と同じキー操作でも終了できます。",
+    ],
+    explanation:
+      "infoはmanページと同様にqキーで終了できますが、それに加えてEmacsの終了操作と同じCtrl-x Ctrl-c" +
+      "(C-x C-c)でも終了できます。xキー単体には終了の機能はない点に注意してください。どちらの操作を" +
+      "使っても、シェルのプロンプトに戻ります。",
+  },
+  {
+    id: "appendix-ex66",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt: "ターミナルで `info info` と実行すると、何が表示されますか?",
+    choices: [
+      "infoコマンド自体の使い方を説明した、Topというノードのチュートリアル文書",
+      "現在インストールされているすべてのinfo文書の一覧",
+      "infoコマンドのバージョン番号だけが1行表示される",
+      "何も表示されず、即座にシェルのプロンプトに戻る",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "「info コマンド名」という書式で、infoコマンド自身の説明書を開いていると考えてください。",
+    ],
+    explanation:
+      "`info info` は、「info」という名前のコマンド(=infoコマンド自身)の説明書を開く操作にあたり、" +
+      "infoコマンドの使い方をひととおり学べるチュートリアル文書(Topノード)が表示されます。infoの操作に" +
+      "不慣れな場合、最初に読むとよい文書です。",
+  },
+  {
+    id: "appendix-ex67",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "infoコマンドにおける「Topノード」の説明として最も適切なものはどれですか?",
+    choices: [
+      "その文書全体の中で最上位に位置するノードで、通常は目次のようなメニューを持つ",
+      "文書中で最後に読まれたノードのことを指す",
+      "manページには存在するが、infoコマンドには存在しない概念である",
+      "文書中で最も文字数が多いノードのことを指す",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "1つの文書(例: infoコマンド自体の説明書)を開いたときに、最初に表示されるノードです。",
+    ],
+    explanation:
+      "Topノードは、ある文書全体の中で最上位に位置するノードです。多くの場合、章や節へのリンクを含む" +
+      "メニューが置かれており、そこからuキーやTab/Enterでより下位のノードへたどっていく起点になります。",
+  },
+  {
+    id: "appendix-ex68",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "infoコマンドにおける (dir) というノードの説明として最も適切なものはどれですか?",
+    choices: [
+      "個々の文書のTopノードよりもさらに1つ上に位置する、システム内の全info文書への目次(メニュー)ノード",
+      "現在のディレクトリ(カレントディレクトリ)の内容を一覧表示する特殊なノード",
+      "infoコマンドのバージョン情報だけが書かれた特殊なノード",
+      "各文書のTopノードと完全に同じ内容を表示する、Topの別名にすぎないノード",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "個々の文書(例: infoコマンドの説明書)のTopノードから、さらにuキーで1つ上へ移動した先です。",
+    ],
+    explanation:
+      "(dir)は、システムにインストールされている全info文書への入口となる目次(メニュー)ノードです。" +
+      "個々の文書のTopノードからuキーで1つ上へ移動すると、この(dir)ノードにたどり着き、他のコマンドの" +
+      "info文書へも移動できます。",
+  },
+  {
+    id: "appendix-ex69",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "特定のコマンドについての詳しい説明をinfoで直接開きたい場合の書式として正しいものはどれですか?",
+    choices: [
+      "info コマンド名(例: info ls)",
+      "info --open コマンド名",
+      "コマンド名 --info",
+      "info -h コマンド名",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "man コマンド名 と同じ感覚で、infoコマンドの引数にコマンド名を指定します。",
+    ],
+    explanation:
+      "`info コマンド名` と実行すると、そのコマンドについてのinfo文書(用意されている場合)を直接開けます。" +
+      "manと同じ感覚で使えますが、GNU製コマンド(bashやgccなど)ではmanよりも詳しい説明がinfo側に" +
+      "用意されていることが多くあります。",
+  },
+  {
+    id: "appendix-ex70",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "manページとinfo文書の情報の新しさについての、書籍の著者の見解として最も適切なものはどれですか?",
+    choices: [
+      "manページの更新が止まっている場合があり、そのようなときはinfoの方が新しい情報を載せていることがある",
+      "infoは常にmanより古い情報しか載っておらず、実用上はmanだけを見ればよい",
+      "manとinfoは常に完全に同じ内容であり、情報の新旧に差が生まれることはない",
+      "infoはネットワーク上の最新情報を毎回取得するため、常にmanより新しい",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "「片方が更新されず、もう片方の方が実態に近い」という状況がありえる、という趣旨です。",
+    ],
+    explanation:
+      "manページとinfo文書は別々に管理されているドキュメントであるため、どちらか一方の更新が止まって" +
+      "しまう場合があります。特にmanページの方が更新が止まっているケースでは、infoの方がコマンドの現在の" +
+      "挙動に近い、新しい情報を載せていることがある、という点には注意が必要です。",
+  },
+  {
+    id: "appendix-ex71",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "manコマンドとinfoコマンドの使い分けについての説明として最も適切なものはどれですか?",
+    choices: [
+      "GNU製コマンド(bash、gcc等)は、manよりも詳しい説明がinfoに用意されていることが多い",
+      "info文書はLinuxディストリビューションを問わず、常にmanページより情報量が少ない",
+      "manコマンドはネットワーク経由でのみ動作し、infoコマンドはローカルのみで動作する",
+      "info文書はGUIアプリケーション専用で、CUIのコマンドには用意されていない",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "GNUプロジェクトが開発したコマンドは、info文書の整備に力を入れている傾向があります。",
+    ],
+    explanation:
+      "bashやgccのようなGNUプロジェクト製のコマンドは、manページよりも詳しい説明がinfo文書側に用意されて" +
+      "いることが多くあります。逆にGNU製でないコマンドでは、info文書が用意されていない(manしかない)" +
+      "場合も少なくありません。",
+  },
+  {
+    id: "appendix-ex72",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "infoコマンドの表示中に、あるノードのメニューから目的のリンクへ移動する一連の操作として最も適切な" +
+      "ものはどれですか?",
+    choices: [
+      "Tabキーを繰り返し押して目的のリンクにカーソルを合わせ、Enterキーを押してそのリンク先へ移動する",
+      "qキーを押してリンクを選択し、Spaceキーでそのリンク先へ移動する",
+      "uキーを押してリンクを選択し、Backspaceキーでそのリンク先へ移動する",
+      "マウスがなければリンクへは一切移動できない",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "キーボードだけでリンクを選んでたどる操作の組み合わせを考えてみましょう。",
+    ],
+    explanation:
+      "Tabキーで目的のリンクにカーソルを合わせ、Enterキーを押すことでそのリンク先のノードへ移動でき" +
+      "ます。マウスがなくても、キーボードだけでWebページのリンクをたどるのと同様の操作が可能です。",
+  },
+  {
+    id: "appendix-ex73",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "infoコマンドで、あるノードのリンクをたどって別のノードへ移動したあと、直前に見ていたノードへ" +
+      "戻りたい場合に押すキーとして最も適切なものはどれですか?",
+    choices: ["l(小文字のエル)キー", "uキー", "nキー", "Hキー"],
+    correctChoiceIndex: 0,
+    hints: [
+      "uキーは「1つ上の階層」へ移動するキーであり、「直前に見ていたノード」に戻るキーとは異なります。",
+    ],
+    explanation:
+      "リンクをたどって移動した先のノードから、直前に見ていたノードへ戻るにはlキーを使います。uキーは" +
+      "階層構造上の親ノードへ移動するキーであり、リンクをたどった実際の閲覧履歴を戻るlキーとは役割が" +
+      "異なる点に注意してください。",
+  },
+  {
+    id: "appendix-ex74",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt: "「IME」という略語が指す言葉として最も適切なものはどれですか?",
+    choices: [
+      "Input Method Editor(入力メソッド、かな漢字変換などを行うソフトウェア)",
+      "Internet Mail Exchange(電子メールの配送に関する仕組み)",
+      "Internal Memory Extension(メモリ容量を拡張する機能)",
+      "Image Media Encoder(画像や動画を変換するソフトウェア)",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["日本語入力の文脈で登場する略語です。"],
+    explanation:
+      "IMEはInput Method Editor(入力メソッド)の略で、ローマ字入力からひらがな・漢字への変換など、" +
+      "そのままでは入力できない文字体系を入力するためのソフトウェアを指します。",
+  },
+  {
+    id: "appendix-ex75",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "ibus-mozcやfcitx-mozcといったパッケージ名の構成についての説明として最も適切なものはどれですか?",
+    choices: [
+      "ibus/fcitxという入力メソッドフレームワークと、Mozcという日本語変換エンジンを組み合わせたもの",
+      "ibus/fcitxはキーボードのメーカー名、Mozcはそのキーボード専用のドライバ名である",
+      "ibus/fcitxはWebブラウザの名前、Mozcはその拡張機能の名前である",
+      "ibus/fcitxとMozcはまったく同じソフトウェアの別名にすぎない",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "ハイフンの前後で「土台となる仕組み」と「変換処理を行う部分」に役割が分かれています。",
+    ],
+    explanation:
+      "ibusやfcitxは入力メソッドを管理する土台となるフレームワークで、Mozcはその上で動く日本語のかな漢字" +
+      "変換エンジンです。ibus-mozc/fcitx-mozcという名前は「どのフレームワーク上でMozcを動かすか」という" +
+      "組み合わせを表しています。",
+  },
+  {
+    id: "appendix-ex76",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "GUI環境で日本語入力を新たに使えるようにする際の一般的な設定手順として最も適切なものはどれですか?",
+    choices: [
+      "「設定」アプリのキーボード関連の項目から、入力ソースとして「日本語(Anthy)」のような日本語入力を" +
+        "追加する",
+      "ターミナルからaptやdnfでソフトウェアをインストールするだけで、GUI側の設定は一切不要である",
+      "OSを再インストールしない限り、日本語入力を新たに追加することはできない",
+      "キーボード本体を日本語配列のものに交換しない限り、日本語入力は有効にならない",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "「設定」→「キーボード」のような画面から、入力ソース(入力言語)を追加するイメージです。",
+    ],
+    explanation:
+      "多くのLinuxディストリビューションでは、GUIの「設定」アプリのキーボード関連の項目から、入力ソース" +
+      "(入力言語)として日本語入力(例: 「日本語(Anthy)」)を追加する必要があります。ソフトウェアの" +
+      "インストールだけでなく、このGUI側の設定も必要になる点がポイントです。",
+  },
+  {
+    id: "appendix-ex77",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "日本語入力の設定手順について、書籍で説明されている注意点として最も適切なものはどれですか?",
+    choices: [
+      "ディストリビューションによって、具体的な追加手順や使われるIMEの名前が異なる",
+      "すべてのディストリビューションで、設定手順もIME名もまったく同一である",
+      "日本語入力はUbuntuというディストリビューションでしか利用できない",
+      "日本語入力の設定は、コマンドラインからのみ行うことができ、GUIでは行えない",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["「ディストリビューションによって」という言葉がヒントです。"],
+    explanation:
+      "日本語入力を有効にするための具体的な手順(設定画面の呼び方や項目名)や、実際に使われるIMEの名前は" +
+      "ディストリビューションによって異なります。そのため、書籍でも詳細な手順には深入りせず、概要のみが" +
+      "説明されています。",
+  },
+  {
+    id: "appendix-ex78",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "IMEのオン/オフを切り替えるキー操作として、環境によって使われることがあるものはどれですか?",
+    choices: [
+      "Super(Windowsキー)+Space",
+      "Ctrl+Alt+Delete",
+      "Alt+F4",
+      "Ctrl+Shift+Esc",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "Windowsキー(多くのキーボードの左下にあるロゴのキー)とSpaceキーの組み合わせです。",
+    ],
+    explanation:
+      "IMEのオン/オフを切り替えるキー操作は環境によって異なり、Super(Windowsキー)+Spaceが使われる" +
+      "デスクトップ環境もあります。半角/全角キーやCtrl+Spaceとあわせて、複数の切り替え方法があることを" +
+      "覚えておくとよいでしょう。",
+  },
+  {
+    id: "appendix-ex79",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "日本語配列キーボードで、IMEのオン/オフを切り替える専用キーとして一般的に用意されているものは" +
+      "どれですか?",
+    choices: ["半角/全角キー", "Insertキー", "PrintScreenキー", "NumLockキー"],
+    correctChoiceIndex: 0,
+    hints: ["日本語配列キーボードの左上、Escキーの近くにある専用キーです。"],
+    explanation:
+      "日本語配列キーボードには、IMEのオン/オフを1つのキーで切り替えられる専用の半角/全角キーが用意され" +
+      "ています。英語配列キーボードにはこのキーがないため、代わりにCtrl+SpaceやSuper+Spaceなどが割り当て" +
+      "られることがあります。",
+  },
+  {
+    id: "appendix-ex80",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "英語配列キーボードでIMEのオン/オフ切り替えによく割り当てられるキー操作はどれですか?",
+    choices: ["Ctrl+Space", "Ctrl+Alt+T", "Shift+F10", "Ctrl+Shift+N"],
+    correctChoiceIndex: 0,
+    hints: [
+      "日本語配列キーボードの半角/全角キーに相当する専用キーが存在しない環境向けの割り当てです。",
+    ],
+    explanation:
+      "英語配列キーボードには半角/全角キーが存在しないため、代わりにCtrl+SpaceがIMEのオン/オフ切り替えに" +
+      "よく割り当てられます。デスクトップ環境の設定でこのショートカットを変更できる場合もあります。",
+  },
+  {
+    id: "appendix-ex81",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "macOSをホストOSとして、VirtualBox上のLinux仮想マシン(ゲストOS)で日本語入力のショートカットキーを" +
+      "使おうとしたところ、意図通りに動作しませんでした。この状況の原因として最も考えられるものは" +
+      "どれですか?",
+    choices: [
+      "左のCommandキーがホストOS(macOS)側のショートカットに専有されており、ゲストOS側にキー入力が" +
+        "届いていない",
+      "VirtualBoxは日本語入力のキー操作を一切ゲストOSへ転送できない仕組みになっている",
+      "ゲストOS側でネットワーク設定を行っていないため、キーボード入力自体が無効になっている",
+      "ホストOSとゲストOSのキーボード配列がまったく同じであることが原因である",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "macOSでは左右のCommandキーの扱いに違いがある、という点を思い出してください。",
+    ],
+    explanation:
+      "VirtualBox上のゲストOSをmacOSホストで使う場合、左のCommandキーはホストOS(macOS)側のショート" +
+      "カットに専有されてしまい、ゲストOSまで届かないことがあります。日本語入力の切り替えなどで" +
+      "Commandキーを使いたい場合は、右のCommandキーを使う必要があります。",
+  },
+  {
+    id: "appendix-ex82",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "前問の状況(macOSホスト上のVirtualBoxで左CommandキーがゲストOSに届かない)への対処法として" +
+      "最も適切なものはどれですか?",
+    choices: [
+      "右のCommandキーを使う",
+      "ゲストOSを再インストールする",
+      "ホストOSのCommandキーを物理的に取り外す",
+      "VirtualBoxの代わりに必ず実機のLinux PCを用意する",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["左右どちらのCommandキーを使うかという、シンプルな対処法です。"],
+    explanation:
+      "左のCommandキーがホストOS側のショートカットに専有されてしまう場合、右のCommandキーを使うことで" +
+      "ゲストOS側へキー入力を届けられることがあります。実務上、覚えておくと役立つ小さなコツです。",
+  },
+  {
+    id: "appendix-ex83",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "日本語入力中に表示される変換候補の一覧から、候補を選ぶために使う一般的なキーはどれですか?",
+    choices: ["Spaceキー", "Deleteキー", "Tabキー", "Escキー"],
+    correctChoiceIndex: 0,
+    hints: ["ローマ字からひらがなへ変換したあと、候補を選ぶ操作です。"],
+    explanation:
+      "変換候補が一覧表示されている状態でSpaceキーを押すと、次の候補へ選択が移ります。目的の候補が選ば" +
+      "れた状態でEnterキーを押すと、その内容で入力が確定します。",
+  },
+  {
+    id: "appendix-ex84",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "日本語入力で、Spaceキーにより選んだ変換候補を確定するために使う一般的なキーはどれですか?",
+    choices: ["Enterキー", "Ctrl+Cキー", "Backspaceキー", "矢印キー(↑)"],
+    correctChoiceIndex: 0,
+    hints: [
+      "候補を「選ぶ」操作(Space)と「確定する」操作(Enter)は別のキーです。",
+    ],
+    explanation:
+      "Spaceキーで目的の変換候補を選んだあと、Enterキーを押すことでその内容が実際の入力として確定され" +
+      "ます。Enterキーを押す前であれば、Spaceキーで別の候補へ選択し直すこともできます。",
+  },
+  {
+    id: "appendix-ex85",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "日本語入力における、ローマ字入力から変換確定までの一連の操作として最も適切なものはどれですか?",
+    choices: [
+      "ローマ字を入力してひらがなに変換し、Spaceキーで目的の漢字などの候補を選び、Enterキーで確定する",
+      "ローマ字を入力した時点で、キーを押すたびに自動的にランダムな漢字へ変換・確定される",
+      "Enterキーを押して候補一覧を表示し、Spaceキーでその内容を確定する",
+      "変換候補の選択にはマウス操作しか使えず、キーボードだけでは選べない",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "「候補を選ぶ」Spaceキーと「確定する」Enterキーの順番に注目してください。",
+    ],
+    explanation:
+      "日本語入力では、ローマ字を入力してひらがなへの変換を行ったあと、Spaceキーで目的の漢字などの候補を" +
+      "選び、Enterキーでその内容を確定するという流れが一般的です。",
+  },
+  {
+    id: "appendix-ex86",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "Vimエディタで日本語を入力した場合の挙動として最も適切なものはどれですか?",
+    choices: [
+      "IMEによる変換候補のポップアップが、Vimの画面上に表示される",
+      "Vimは日本語入力に対応しておらず、日本語を一切入力できない",
+      "Vimでは変換候補が表示されず、常に最初の候補が自動的に確定される",
+      "Vimで日本語を入力すると、自動的にファイルの文字コードがShift_JISに変更される",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "IMEはVimというアプリケーションに特化した機能ではなく、OS全体で共通して使われる仕組みです。",
+    ],
+    explanation:
+      "Vimエディタで日本語入力を行うと、他のアプリケーションと同様にIMEによる変換候補のポップアップが" +
+      "Vimの画面上に表示されます。IME自体はエディタに依存せずOS(またはデスクトップ環境)側で動作する" +
+      "独立した仕組みであるため、Vimでも通常のGUIアプリと同じように日本語入力が行えます。",
+  },
+  {
+    id: "appendix-ex87",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "Vimエディタでも日本語入力の変換候補ポップアップが表示されるという事実から読み取れることとして" +
+      "最も適切なものはどれですか?",
+    choices: [
+      "IMEはエディタ固有の機能ではなく、OSやデスクトップ環境側で動作する独立した仕組みである",
+      "Vimは他のアプリケーションとは別に、独自の日本語変換エンジンを内蔵している",
+      "IMEはVim専用に開発されたプラグインであり、他のアプリケーションでは動作しない",
+      "日本語入力はVimのようなCUIエディタでは技術的に不可能である",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "Vim固有の機能だとすると、他の多くのアプリでも同じ挙動になる理由が説明できません。",
+    ],
+    explanation:
+      "IMEはVimのようなテキストエディタを含む、さまざまなアプリケーションに共通してかな漢字変換の機能を" +
+      "提供する、エディタに依存しない独立した仕組みです。Vim上でも変換候補が表示されるのは、この仕組みが" +
+      "アプリケーションを問わず動作しているためです。",
+  },
+  {
+    id: "appendix-ex88",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "書籍における日本語入力の解説の位置づけとして最も適切なものはどれですか?",
+    choices: [
+      "日本語入力の設定はLinux学習の本質的な内容ではないため、簡潔に触れるにとどめている",
+      "日本語入力の設定こそが本書全体で最も重点的に解説されているテーマである",
+      "日本語入力について本書では一切触れられていない",
+      "日本語入力の設定は、本書の中でセキュリティ対策の章として詳細に解説されている",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "巻末付録という位置づけで、簡単な紹介にとどめている、という趣旨です。",
+    ],
+    explanation:
+      "書籍では、日本語入力の設定はLinuxそのものの学習にとって本質的な内容ではない、という立場から、" +
+      "巻末付録として簡潔に触れるにとどめています。ディストリビューションごとの詳細な手順までは深入り" +
+      "していません。",
+  },
+  {
+    id: "appendix-ex89",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "IMEを一切導入していない状態のLinux環境で日本語を入力しようとした場合、どうなりますか?",
+    choices: [
+      "ローマ字からひらがな・漢字への変換ができず、日本語を入力できない",
+      "IMEがなくても、キーボードから直接ひらがな・漢字を入力できる",
+      "IMEがない場合、代わりにVimエディタが自動的に変換処理を行ってくれる",
+      "IMEがない場合、SSH接続時にのみ日本語入力が有効になる",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "IMEは「かな漢字変換」を行うためのソフトウェアであることを思い出してください。",
+    ],
+    explanation:
+      "IMEを導入していない環境では、ローマ字からひらがな・漢字への変換を行う仕組みそのものが存在しない" +
+      "ため、日本語を入力することができません。日本語入力にはIMEの導入が前提となります。",
+  },
+  {
+    id: "appendix-ex90",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "GUI環境で新しく日本語入力を追加する際に、一般的に最初に開くべき画面はどれですか?",
+    choices: [
+      "デスクトップ環境の「設定」アプリ",
+      "ターミナルのman コマンド",
+      "Webブラウザのブックマーク管理画面",
+      "ファイルマネージャのゴミ箱",
+    ],
+    correctChoiceIndex: 0,
+    hints: ["「キーボード」や「入力ソース」といった項目が含まれる画面です。"],
+    explanation:
+      "多くのデスクトップ環境では、「設定」アプリの中にキーボードや入力ソースに関する項目があり、" +
+      "そこから日本語入力(IME)を追加します。ターミナルからのソフトウェアインストールだけでは、GUI側の" +
+      "入力ソース設定までは自動的に反映されないことがあります。",
+  },
+  {
+    id: "appendix-ex91",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "デスクトップ環境の設定に登場する「入力ソース」という用語が指すものとして最も適切なものはどれですか?",
+    choices: [
+      "キーボードから入力した文字を、どの言語・方式で解釈・変換するかという設定項目",
+      "マウスやタッチパッドなど、入力に使うハードウェアデバイスの種類",
+      "インターネット接続に使うネットワークアダプタの種類",
+      "画面に表示するフォントの種類",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "「日本語(Anthy)」や「英語(US)」のように、言語ごとに切り替える設定項目です。",
+    ],
+    explanation:
+      "「入力ソース」は、キーボードからの入力をどの言語・入力方式で解釈するかを切り替えるための設定" +
+      "項目です。ここに日本語入力(IME)を追加することで、切り替えキーで日本語入力のオン/オフができる" +
+      "ようになります。",
+  },
+  {
+    id: "appendix-ex92",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "IMEのオン/オフ切り替えキーについての説明として最も適切なものはどれですか?",
+    choices: [
+      "半角/全角キー、Ctrl+Space、Super+Spaceなど、環境によって複数の割り当てが存在する",
+      "すべてのLinux環境で、切り替えキーは必ずF1キーに統一されている",
+      "IMEのオン/オフはキー操作では行えず、必ずマウスで切り替える必要がある",
+      "切り替えキーはOSの種類(macOS/Windows/Linux)にかかわらず、常に同一である",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "これまでの問題で登場したいくつかの切り替えキーの例を思い出してください。",
+    ],
+    explanation:
+      "IMEのオン/オフを切り替えるキー操作は環境によって異なり、半角/全角キーやCtrl+Space、" +
+      "Super+Spaceなど複数の割り当てが存在します。自分の環境でどのキーが割り当てられているかを、" +
+      "設定画面で確認しておくとよいでしょう。",
+  },
+  {
+    id: "appendix-ex93",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt: "Mozcというソフトウェアの役割として最も適切なものはどれですか?",
+    choices: [
+      "ローマ字入力をひらがな・漢字へ変換する、日本語入力用の変換エンジン",
+      "SSH接続を暗号化するためのライブラリ",
+      "パッケージ管理システムの一種",
+      "ディスプレイの解像度を変更するためのユーティリティ",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "ibus-mozcやfcitx-mozcという名前の、後半部分にあたるソフトウェアです。",
+    ],
+    explanation:
+      "Mozcは、ローマ字入力をひらがな・漢字へ変換する日本語入力用の変換エンジンです。ibusやfcitxという" +
+      "入力メソッドフレームワークと組み合わせて使われ、ibus-mozc/fcitx-mozcのような名前のパッケージとして" +
+      "提供されます。",
+  },
+  {
+    id: "appendix-ex94",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "ibusやfcitxというソフトウェアの役割として最も適切なものはどれですか?",
+    choices: [
+      "日本語などの入力メソッド(変換エンジン)を組み込んで動かすための、入力メソッドフレームワーク",
+      "Linuxカーネル自体の一部で、ハードウェアを直接制御するドライバ",
+      "Webサーバーが使うリバースプロキシソフトウェア",
+      "バージョン管理システムの一種",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "これ自体が変換処理を行うのではなく、Mozcのような変換エンジンを載せるための土台です。",
+    ],
+    explanation:
+      "ibusやfcitxは、日本語などの入力メソッド(Mozcのような変換エンジン)を組み込んで動かすための、" +
+      "入力メソッドフレームワークです。変換処理そのものはMozc等の変換エンジンが担当し、ibus/fcitxは" +
+      "アプリケーションとの橋渡し役を担います。",
+  },
+  {
+    id: "appendix-ex95",
+    chapterId: "appendix",
+    type: "quiz",
+    prompt:
+      "VirtualBox上の仮想マシンで日本語入力を使えるようにするまでの、一般的な流れとして最も適切なものは" +
+      "どれですか?",
+    choices: [
+      "IME(入力メソッド)を導入・設定し、切り替えキーでオンにしたうえで、ローマ字入力からの変換・確定を" +
+        "行う",
+      "VirtualBoxのネットワーク設定でポートフォワーディングを追加するだけで、自動的に日本語入力が有効になる",
+      "ゲストOSのキーボードドライバを削除すると、自動的に日本語入力に切り替わる",
+      "ホストOS側でのみ日本語入力を設定すればよく、ゲストOS側の設定は一切不要である",
+    ],
+    correctChoiceIndex: 0,
+    hints: [
+      "「IMEの導入・設定」→「切り替えキーでオン」→「変換・確定」という3段階の流れです。",
+    ],
+    explanation:
+      "VirtualBox上の仮想マシン(ゲストOS)で日本語入力を使えるようにするには、まずゲストOS側でIME" +
+      "(入力メソッド)を導入・設定し、半角/全角キーやCtrl+Spaceなどの切り替えキーでオンにしたうえで、" +
+      "ローマ字入力からの変換・確定操作を行う、という一般的なLinux環境と同じ流れになります。" +
+      "ポートフォワーディングはSSH接続のための設定であり、日本語入力とは無関係です。",
+  },
+];
+
+export const exercises: Exercise[] = [
+  ...exercisesPart1,
+  ...exercisesPart2,
+  ...exercisesPart3,
+  ...exercisesPart4,
+];
