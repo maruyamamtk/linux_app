@@ -26,5 +26,8 @@ android/
 # Claude Code project files
 .claude/
 
+# Claude Code作業メモ(todo/lessons)
+tasks/
+
 # Session handoff notes
 HANGOVER.md
